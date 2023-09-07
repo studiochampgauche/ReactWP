@@ -1,0 +1,9 @@
+wp-*
+.htaccess
+/index.php
+xmlrpc.php
+readme.html
+license.txt
+!src
+src/built/node_modules
+src/wp-config.php
