@@ -1,5 +1,5 @@
 # Our WordPress Boilerplate
-Build immersive 2D or 3D WordPress websites Awwwards in "no time" with our Boilerplate and Core Plugin.
+Build immersive 2D or 3D WordPress websites Awwwards in "no time" with our Boilerplate.
 
 
 ## Guide
@@ -18,12 +18,12 @@ Build immersive 2D or 3D WordPress websites Awwwards in "no time" with our Boile
 - GSAP
 
 
-# Our Core Plugin
+# Core Plugin
 
 ![required-yes](https://img.shields.io/badge/Required-yes-44cc11.svg)
 ![minimum-php](https://img.shields.io/badge/Minimum%20PHP-8.2-ff0000.svg)
 
-A plugin that handles repetitive needs in each project and our future add-ons. [Check it out here!](https://wpboilerplate.champgauche.studio)
+A plugin that handles repetitive needs in each project and its add-ons. [Check it out here!](https://wpboilerplate.champgauche.studio)
 
 
 > [!IMPORTANT]  
