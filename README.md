@@ -1,4 +1,2 @@
-# Our WordPress Boilerplate
-
 > [!IMPORTANT]  
-> This is a test
+> You need ACF Pro for play with this Boilerplate
