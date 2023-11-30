@@ -14,5 +14,7 @@ Build immersive 2D or 3D WordPress websites Awwwards in "no time" with our Boile
 
 ![required-no](https://img.shields.io/badge/Required-no-ff0000.svg)
 
+A plugin that handles repetitive needs in each project.
+
 > [!IMPORTANT]  
 > You'll need ACF Pro to play with our Core Plugin. Get it [here](https://www.advancedcustomfields.com/pro/).
