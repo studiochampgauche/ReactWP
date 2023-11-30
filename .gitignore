@@ -7,9 +7,3 @@ license.txt
 !src
 src/built/node_modules
 src/wp-config.php
-!wp-content
-wp-content/languages
-wp-content/themes
-wp-content/upgrade
-wp-content/uploads
-wp-content/plugins/cg-*
