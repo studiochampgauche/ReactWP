@@ -5,5 +5,6 @@ xmlrpc.php
 readme.html
 license.txt
 !src
+!src/wp-config-sample.php
 src/built/node_modules
 src/wp-config.php
