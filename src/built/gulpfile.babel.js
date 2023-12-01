@@ -190,26 +190,3 @@ gulp.task('prod-watch', gulp.series(
     'prod',
     'default',
 ));
-
-/*gulp.task('optimize', gulp.series(
-    'theme-images',
-    'theme-fonts',
-));
-
-gulp.task('includes', gulp.series(
-    'theme-js-includes',
-));
-
-gulp.task('prod', gulp.series(
-    'wp-config',
-    'includes',
-    'optimize',
-    'theme-template',
-    'theme-scss',
-    'theme-js',
-));
-
-gulp.task('prod-watch', gulp.series(
-    'prod',
-    'default',
-));*/
