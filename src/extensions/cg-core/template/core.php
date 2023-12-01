@@ -617,6 +617,24 @@ class StudioChampGauche{
 		return;
 	}
     
+    static function inc($file_path = null, $url = false){
+		return self::template_directory('inc/' . $file_path, $url);
+	}
+
+	static function tp($file_path = null, $url = false){
+		return self::template_directory('inc/template-parts/' . $file_path, $url);
+	}
+
+	static function assets($file_path = null, $url = false){
+		return self::template_directory('assets/' . $file_path, $url);
+	}
+
+	static function template_directory($file_path = null, $url = false){
+        
+        return $url ? ((get_template_directory() === get_stylesheet_directory() ? get_template_directory_uri() : get_stylesheet_directory_uri()) . '/' . $file_path) : ((get_template_directory() === get_stylesheet_directory() ? get_template_directory() : get_stylesheet_directory()) . '/' . $file_path);
+        
+	}
+    
 }
 
 class_alias('StudioChampGauche', 'scg');
