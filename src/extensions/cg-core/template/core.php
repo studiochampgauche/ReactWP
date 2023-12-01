@@ -564,6 +564,46 @@ class StudioChampGauche{
             
         });
         
+        
+        /*
+        * Shot Events on template_redirect
+        */
+        add_action('template_redirect', function(){
+            
+            $user = wp_get_current_user();
+            $roles = $user->ID ? $user->roles : null;
+            
+            if(
+                self::field('maintenance_mode')
+                
+                &&
+                
+                !is_home()
+                
+                &&
+                
+                !is_front_page()
+                
+                &&
+                
+                (
+                    !$roles
+                    
+                    ||
+                    
+                    !in_array('administrator', $roles)
+                )
+            ){
+                
+                wp_redirect(home_url());
+                
+                exit;
+                
+            }
+            
+        });
+        
+        
     }
     
     
