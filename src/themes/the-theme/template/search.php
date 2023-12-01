@@ -3,7 +3,7 @@
 $search_query = isset($_GET['s']) ? $_GET['s'] : false;
 
 if(!$search_query){
-	header('location: ' . get_bloginfo('url'));
+	wp_redirect(home_url());
 	exit;
 }
 
