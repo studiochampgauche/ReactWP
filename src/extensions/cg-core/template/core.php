@@ -39,6 +39,7 @@ class StudioChampGauche{
             if(!self::field('top_bar'))
                 add_filter('show_admin_bar', '__return_false');
             
+            
             /*
             * Manage Front End Source Code
             */
