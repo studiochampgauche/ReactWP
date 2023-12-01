@@ -16,7 +16,6 @@ Domain Path: /langs
 if(!defined('ABSPATH') || !class_exists('ACF')) return;
 
 
-
 class StudioChampGauche{
     
     function __construct(){
@@ -248,8 +247,8 @@ class StudioChampGauche{
 	}
     
 }
-class_alias('StudioChampGauche', 'scg');
 
+class_alias('StudioChampGauche', 'scg');
 
 new scg();
 
