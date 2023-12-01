@@ -29,6 +29,12 @@ class StudioChampGauche{
         add_action('init', function(){
             
             /*
+			* Load Languages
+			*/
+			load_plugin_textdomain('cg-core-plugin', false, __DIR__ . '/langs/');
+            
+            
+            /*
             * Top Bar
             */
             if(!self::field('top_bar'))
