@@ -127,6 +127,16 @@ class StudioChampGauche{
                 
             }
             
+            
+            /*
+            * Remove Upload Resizes
+            */
+            if(!self::field('resize_images')){
+                add_filter('intermediate_image_sizes_advanced', function($size, $metadata){
+                    return [];
+                }, 10, 2);
+            }
+            
         });
         
         
