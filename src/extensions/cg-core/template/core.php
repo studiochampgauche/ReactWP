@@ -570,14 +570,12 @@ class StudioChampGauche{
         */
         add_action('template_redirect', function(){
             
+            if(!self::field('maintenance_mode')) return;
+            
             $user = wp_get_current_user();
             $roles = $user->ID ? $user->roles : null;
             
             if(
-                self::field('maintenance_mode')
-                
-                &&
-                
                 !is_home()
                 
                 &&
