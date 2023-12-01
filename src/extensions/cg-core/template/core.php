@@ -13,7 +13,7 @@ Domain Path: /langs
 */
 
 
-if(!defined('ABSPATH') || !class_exists('ACF')) exit;
+if(!defined('ABSPATH') || !class_exists('ACF')) return;
 
 
 
