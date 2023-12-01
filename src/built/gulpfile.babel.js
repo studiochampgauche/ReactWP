@@ -181,6 +181,7 @@ gulp.task('prod', gulp.series(
     'plugin-template',
     'plugin-scss',
     'plugin-js',
+    'plugin-js-includes',
     'plugin-images',
     'plugin-fonts'
 ));
