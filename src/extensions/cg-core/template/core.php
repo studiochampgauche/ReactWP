@@ -617,6 +617,114 @@ class StudioChampGauche{
 		return;
 	}
     
+    static function cpt($post_type = 'post', $args = []){
+
+		$parameters = array(
+			'posts_per_page' => -1,
+			'paged' => 1
+		);
+
+		if(!empty($args)){
+			foreach($args as $arg_key => $arg){
+				$parameters[$arg_key] = $arg;
+			}
+		}
+
+		$parameters['post_type'] = $post_type;
+
+		$result = new WP_Query($parameters);
+
+
+		return $result;
+	}
+
+	static function menu($theme_location = null, $args = []){
+
+		$parameters = array( 
+			'menu' => '',
+			'container' => false,
+			'container_class' => '', 
+			'container_id' => '', 
+			'menu_class' => '',
+			'menu_id' => '',
+			'echo' => false, 
+			'fallback_cb' => 'wp_page_menu', 
+			'before' => '', 
+			'after' => '', 
+			'link_before' => '',
+			'link_after' => '', 
+			'items_wrap' => '<ul>%3$s</ul>', 
+			'item_spacing' => 'preserve',
+			'depth' => 0,
+			'walker' => ''
+		);
+
+		if(!empty($args)){
+			foreach($args as $arg_key => $arg){
+				$parameters[$arg_key] = $arg;
+			}
+		}
+
+		if(isset($parameters['add_mobile_bars']) && (int)$parameters['add_mobile_bars'] > 0){
+
+			$html = '<div class="ham-menu">';
+				$html .= '<div class="int">';
+				for ($i=0; $i < (int)$parameters['add_mobile_bars']; $i++) { 
+					$html .= '<span></span>';
+				}
+				$html .= '</div>';
+			$html .= '</div>';
+
+			$parameters['items_wrap'] = $parameters['items_wrap'] . $html;
+		}
+
+
+		$parameters['theme_location'] = $theme_location;
+
+
+		$result = wp_nav_menu($parameters);
+
+
+		return $result;
+	}
+
+	static function button($text = 'Aucun texte.', $args = []){
+
+		$href = isset($args['href']) && $args['href'] ? $args['href'] : null;
+		$class = isset($args['class']) && $args['class'] ? ' '. $args['class'] : null;
+		$attr = isset($args['attr']) && $args['attr'] ? ' '. $args['attr'] : null;
+		$before = isset($args['before']) && $args['before'] ? $args['before'] : null;
+		$after = isset($args['after']) && $args['after'] ? $args['after'] : null;
+		$text = $text ? '<span>'. $text .'</span>' : null;
+
+		if($href){
+			return '
+				<a href="'. $href .'" class="btn'. $class .'"'. $attr .'>
+
+				'. $before . $text . $after .'
+
+				</a>
+			';
+		} else {
+			return '
+				<button class="btn'. $class .'"'. $attr .'>
+
+				'. $before . $text . $after .'
+
+				</button>
+			';
+		}
+	}
+
+	static function id($code_base = 'abcdefghijABCDEFGHIJ', $substr = [0, 4]){
+		
+		$shuffle_code = str_shuffle($code_base);
+		$code = substr($shuffle_code, $substr[0], $substr[1]);
+
+
+		return 'g_id-' . $code;
+	}
+    
     static function inc($file_path = null, $url = false){
 		return self::td('inc/' . $file_path, $url);
 	}
