@@ -232,6 +232,328 @@ class StudioChampGauche{
             
         });
         
+        
+        /*
+        * Shot Events on admin_menu
+        */
+        add_action('admin_menu', function(){
+            
+            /*
+            * Remove Menu Items if Change Appearance is true
+            */
+            if(self::field('change_appearance')){
+                
+                remove_menu_page('tools.php');
+				remove_menu_page('upload.php');
+				remove_menu_page('themes.php');
+				remove_menu_page('plugins.php');
+				remove_menu_page('edit-comments.php');
+				remove_menu_page('users.php');
+				remove_menu_page('edit.php?post_type=acf-field-group');
+
+				remove_submenu_page('options-general.php', 'options-privacy.php');
+				remove_submenu_page('options-general.php', 'options-media.php');
+				remove_submenu_page('options-general.php', 'options-writing.php');
+				remove_submenu_page('options-general.php', 'options-discussion.php');
+                
+            }
+            
+        });
+        
+        
+        /*
+        * Shot Events on admin_bar_menu
+        */
+        add_action('admin_bar_menu', function(){
+            
+            global $wp_admin_bar;
+            
+            /*
+            * Remove Menu Items if Change Appearance is true
+            */
+            if(self::field('change_appearance')){
+                
+                $admin_url = admin_url();
+                
+                $wp_admin_bar->remove_node('wp-logo');
+				$wp_admin_bar->remove_node('site-name');
+				$wp_admin_bar->remove_node('comments');
+				$wp_admin_bar->remove_node('new-content');
+                
+                if(
+                    !current_user_can('update_core')
+                    
+                    ||
+                    
+                    !current_user_can('update_plugins')
+                    
+                    ||
+                    
+                    !current_user_can('update_themes')
+                    
+                ) $wp_admin_bar->remove_node( 'updates' );
+                
+                
+                /*
+                * Add Home URL
+                */
+                $args = array(
+					'id' => 'is-website',
+					'title' => get_bloginfo('name'),
+					'href' => home_url(),
+					'target' => '_blank',
+					'meta' => array(
+						'class' => 'is-website'
+					)
+				);
+				$wp_admin_bar->add_node($args);
+                
+                
+                /*
+                * Navigations Management
+                */
+                $args = array(
+					'id' => 'is-menus',
+					'title' => __('Menus', 'cg-core-plugin'),
+					'href' => $admin_url . 'nav-menus.php',
+					'meta' => array(
+						'class' => 'is-menus'
+					)
+				);
+				if(current_user_can('edit_theme_options'))
+					$wp_admin_bar->add_node($args);
+                
+                
+                /*
+				* Files Management
+				*/
+				$args = array(
+					'id' => 'is-files',
+					'title' => __('Images et fichiers', 'cg-core-plugin'),
+					'href' => $admin_url . 'upload.php',
+					'meta' => array(
+						'class' => 'is-files'
+					)
+				);
+				if(current_user_can('upload_files'))
+				    $wp_admin_bar->add_node($args);
+                
+                
+                
+                /*
+                * User List and Personal Profile
+                */
+                if(current_user_can('list_users')){
+                    
+                    $args = array(
+                        'id' => 'is-users-list',
+                        'title' => __('Utilisateurs', 'cg-core-plugin'),
+                        'href' => $admin_url . 'users.php',
+                        'meta' => array(
+                            'class' => 'is-users-list'
+                        )
+                    );
+                    
+                    $wp_admin_bar->add_node($args);
+                    
+                    $args = array(
+                        'id' => 'is-users-profile',
+                        'title' => __('Profil', 'cg-core-plugin'),
+                        'href' => $admin_url . 'profile.php',
+                        'parent' => 'is-users-list',
+                        'meta' => array(
+                            'class' => 'is-users-profile'
+                        )
+                    );
+                    $wp_admin_bar->add_node($args);
+                    
+                } else {
+                    
+                    $args = array(
+                        'id' => 'is-users-profile',
+                        'title' => __('Profil', 'cg-core-plugin'),
+                        'href' => $admin_url . 'profile.php',
+                        'meta' => array(
+                            'class' => 'is-users-profile'
+                        )
+                    );
+                    $wp_admin_bar->add_node($args);
+                    
+                }
+                
+                
+                /*
+                * Site web Tab
+                */
+                if(current_user_can('edit_theme_options')){
+                    
+                    /*
+                    * The Tab
+                    */
+                    $args = array(
+						'id' => 'is-site',
+						'title' => __('Configurations', 'cg-core-plugin'),
+						'meta' => array(
+							'class' => 'is-site'
+						)
+					);
+					$wp_admin_bar->add_node($args);
+                    
+                    
+                    /*
+                    * Configurations
+                    */
+                    $args = array(
+						'id' => 'is-site-settings',
+						'title' => __('Générales', 'cg-core-plugin'),
+						'href' => $admin_url . 'admin.php?page=site-settings',
+						'parent' => 'is-site',
+						'meta' => array(
+							'class' => 'is-site-settings'
+						)
+					);
+					$wp_admin_bar->add_node($args);
+                    
+                    
+                    /*
+					* Themes Management
+					*/
+                    if(current_user_can('switch_themes')){
+                        $args = array(
+                            'id' => 'is-site-themes',
+                            'title' => __('Thèmes', 'cg-core-plugin'),
+                            'href' => $admin_url . 'themes.php',
+                            'parent' => 'is-site',
+                            'meta' => array(
+                                'class' => 'is-site-themes'
+                            )
+                        );
+                        $wp_admin_bar->add_node($args);
+
+
+
+                        /*
+                        * Add Theme Editor Management
+                        */
+                        $args = array(
+                            'id' => 'is-site-themes-editor',
+                            'title' => __('Éditeur', 'cg-core-plugin'),
+                            'href' => $admin_url . 'theme-editor.php',
+                            'parent' => 'is-site-themes',
+                            'meta' => array(
+                                'class' => 'is-site-themes-editor'
+                            )
+                        );
+                        if(current_user_can('edit_themes'))
+                            $wp_admin_bar->add_node($args);
+                        
+                    }
+                    
+                    
+                    /*
+                    * Plugins Management
+                    */
+                    if(current_user_can('activate_plugins')){
+                        
+                        $args = array(
+                            'id' => 'is-site-plugins',
+                            'title' => __('Extensions', 'cg-core-plugin'),
+                            'href' => $admin_url . 'plugins.php',
+                            'parent' => 'is-site',
+                            'meta' => array(
+                                'class' => 'is-site-plugins'
+                            )
+                        );
+                        $wp_admin_bar->add_node($args);
+                        
+                        
+                        /*
+                        * Add Plugin Editor Management
+                        */
+                        $args = array(
+                            'id' => 'is-site-plugin-editor',
+                            'title' => __('Éditeur', 'cg-core-plugin'),
+                            'href' => $admin_url . 'plugin-editor.php',
+                            'parent' => 'is-site-plugins',
+                            'meta' => array(
+                                'class' => 'is-site-plugins-editor'
+                            )
+                        );
+                        if(current_user_can('edit_plugins'))
+                            $wp_admin_bar->add_node($args);
+                        
+                        
+                        /*
+                        * ACF PRO Management
+                        */
+                        $args = array(
+                            'id' => 'is-acf',
+                            'title' => __('ACF', 'cg-core-plugin'),
+                            'href' => $admin_url . 'edit.php?post_type=acf-field-group',
+                            'parent' => 'is-site',
+                            'meta' => array(
+                                'class' => 'is-acf'
+                            )
+                        );
+                        $wp_admin_bar->add_node($args);
+                        
+                        
+                        /*
+                        * Add Import Management
+                        */
+                        $args = array(
+                            'id' => 'is-site-import',
+                            'title' => __('Importer', 'cg-core-plugin'),
+                            'href' => $admin_url . 'import.php',
+                            'parent' => 'is-site',
+                            'meta' => array(
+                                'class' => 'is-site-import'
+                            )
+                        );
+                        if(current_user_can('import'))
+                            $wp_admin_bar->add_node($args);
+                        
+                        
+                        /*
+                        * Add Export Management
+                        */
+                        $args = array(
+                            'id' => 'is-site-export',
+                            'title' => __('Exporter', 'cg-core-plugin'),
+                            'href' => $admin_url . 'export.php',
+                            'parent' => 'is-site',
+                            'meta' => array(
+                                'class' => 'is-site-export'
+                            )
+                        );
+                        if(current_user_can('export'))
+                            $wp_admin_bar->add_node($args);
+
+                    }
+                    
+                }
+                
+            }
+            
+        }, 99);
+        
+        
+        /*
+        * Shot Events on admin_head
+        */
+        add_action('admin_head', function(){
+            
+            /*
+            * Add some Admin Styles when Change Appearance is true
+            */
+            if(self::field('change_appearance')){
+                
+                echo '<style type="text/css">#toplevel_page_site-settings{display: none !important;}</style>';
+                
+            }
+            
+        });
+        
     }
     
     
