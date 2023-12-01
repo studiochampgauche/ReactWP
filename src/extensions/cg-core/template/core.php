@@ -137,6 +137,22 @@ class StudioChampGauche{
                 }, 10, 2);
             }
             
+            
+            /*
+            * Register Theme Locations
+            */
+			$locations = self::field('theme_locations');
+			
+			if($locations){
+                
+				foreach ($locations as $l) {
+					$__locations[$l['slug']] = $l['name'];
+				}
+                
+				register_nav_menus($__locations);
+                
+			}
+            
         });
         
         
@@ -330,7 +346,7 @@ class StudioChampGauche{
 						'class' => 'is-menus'
 					)
 				);
-				if(current_user_can('edit_theme_options'))
+				if(current_user_can('edit_theme_options') && self::field('theme_locations'))
 					$wp_admin_bar->add_node($args);
                 
                 
