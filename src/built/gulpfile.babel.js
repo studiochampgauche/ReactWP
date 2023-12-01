@@ -45,7 +45,7 @@ gulp.task('theme-scss', () =>
 gulp.task('theme-js', () =>
     gulp.src([
         SRC_PATH + 'themes/'+ THEME_NAME +'/js/**/*.js',
-        '!' + SRC_PATH + 'themes/'+ THEME_NAME +'js/inc/**/*.js',
+        '!' + SRC_PATH + 'themes/'+ THEME_NAME +'/js/inc/**/*.js',
     ])
     .pipe(uglify())
     .pipe(gulp.dest(DIST_PATH_THEME + 'assets/js'))
@@ -175,6 +175,7 @@ gulp.task('prod', gulp.series(
     'theme-template',
     'theme-scss',
     'theme-js',
+    'theme-js-includes',
     'theme-images',
     'theme-fonts',
     'plugin-template',
