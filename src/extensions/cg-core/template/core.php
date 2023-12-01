@@ -409,7 +409,7 @@ class StudioChampGauche{
                 
                 
                 /*
-                * Site web Tab
+                * Configurations Tab
                 */
                 if(current_user_can('edit_theme_options')){
                     
