@@ -4,12 +4,6 @@
 </div>
 </div>
 </div>
-<?php
-wp_footer();
-
-if(scg::field('html_tags_before_close_body'))
-	echo scg::field('html_tags_before_close_body');
-
-?>
+<?php wp_footer(); ?>
 </body>
 </html>
