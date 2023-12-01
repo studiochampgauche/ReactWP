@@ -16,7 +16,9 @@ const DIST_PATH_PLUGIN = DIST_PATH_BASE + 'wp-content/plugins/' + PLUGIN_NAME + 
 const SRC_PATH = '../';
 
 
-
+/*
+* wp-config.php Tasks
+*/
 gulp.task('wp-config', () =>
     gulp.src([SRC_PATH + 'wp-config.php'], {
         allowEmpty: true
@@ -136,11 +138,16 @@ gulp.task('plugin-fonts', () =>
 
 gulp.task('default', function () {
     
+    
+    /*
+    * Watch wp-config.php
+    */
+    gulp.watch([SRC_PATH + 'wp-config.php'], gulp.series('wp-config'));
+    
+    
     /*
     * Watch Theme
     */
-    gulp.watch([SRC_PATH + 'wp-config.php'], gulp.series('wp-config'));
-
     gulp.watch([SRC_PATH + 'themes/'+ THEME_NAME +'/template/**/*'], gulp.series('theme-template'));
 
     gulp.watch([SRC_PATH + 'themes/'+ THEME_NAME +'/scss/**/*.scss'], gulp.series('theme-scss'));
