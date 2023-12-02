@@ -1,6 +1,7 @@
 # Our WordPress Boilerplate
 Build immersive 2D or 3D WordPress websites Awwwards in "no time" with our Boilerplate.
 
+![minimum-php](https://img.shields.io/badge/Minimum%20PHP-8.2-ff0000.svg)
 
 ## Guide
 1. Put the WordPress Production Files on root
@@ -21,9 +22,8 @@ Build immersive 2D or 3D WordPress websites Awwwards in "no time" with our Boile
 # Core Plugin
 
 ![required-yes](https://img.shields.io/badge/Required-yes-44cc11.svg)
-![minimum-php](https://img.shields.io/badge/Minimum%20PHP-8.2-ff0000.svg)
 
-A plugin that handles repetitive needs in each project and its add-ons. [Check it out here!](https://wpboilerplate.champgauche.studio)
+We build a plugin that help us to handle repetitive needs in each project. [Check it out here!](https://wpboilerplate.champgauche.studio)
 
 
 > [!IMPORTANT]  
