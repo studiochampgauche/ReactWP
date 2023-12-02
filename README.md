@@ -23,7 +23,7 @@ Build immersive 2D or 3D WordPress websites Awwwards in "no time" with our Boile
 
 ![required-yes](https://img.shields.io/badge/Required-yes-44cc11.svg)
 
-We build a plugin that help us to handle repetitive needs in each project. [Check it out here!](https://wpboilerplate.champgauche.studio)
+We have build a plugin that help us to handle repetitive needs in each project. [Check it out here!](https://wpboilerplate.champgauche.studio)
 
 
 > [!IMPORTANT]  
