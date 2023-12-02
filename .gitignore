@@ -8,3 +8,13 @@ license.txt
 !src/wp-config-sample.php
 src/built/node_modules
 src/wp-config.php
+
+# Share ACF JSON Folder while development
+!wp-content
+wp-content/**
+!wp-content/themes/
+wp-content/themes/**
+!wp-content/themes/the-theme
+wp-content/themes/the-theme/**
+!wp-content/themes/the-theme/datas
+!wp-content/themes/the-theme/datas/**
