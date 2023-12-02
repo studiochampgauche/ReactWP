@@ -18,9 +18,20 @@ if(!defined('ABSPATH') || !class_exists('ACF')) return;
 
 class StudioChampGauche{
     
+    private $acf_path;
+    
     function __construct(){
         
+        /*
+        * Make sure you have all you need for the plugin
+        */
         require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        
+        /*
+        * ACF Path
+        */
+        $this->acf_path = get_stylesheet_directory() . '/datas/acf';
+        
         
         /*
         * Shot Events on init
@@ -255,6 +266,15 @@ class StudioChampGauche{
             */
             if(!self::field('editor_and_gutenberg_post_editor'))
                 remove_post_type_support('post', 'editor');
+            
+            
+            /*
+            * Create ACF JSON Area
+            */
+            if(!file_exists($this->acf_path)){
+				mkdir($this->acf_path, 0777, true);
+				fopen($this->acf_path . '/index.php', 'w');
+			}
             
         });
         
@@ -617,6 +637,33 @@ class StudioChampGauche{
             
         });
         
+        
+        
+        
+        
+        /*
+		* Save ACF in JSON
+		*/
+		add_filter('acf/settings/save_json', function($path){
+
+			return $this->acf_path;
+
+		});
+        
+        
+        /*
+		* Load ACF in JSON
+		*/
+		add_filter('acf/settings/load_json', function($paths){
+
+			// Remove original path
+			unset( $paths[0] );
+
+			// Append our new path
+			$paths[] = $this->acf_path;
+
+			return $paths;
+		});
         
     }
     
