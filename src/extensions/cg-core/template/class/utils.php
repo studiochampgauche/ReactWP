@@ -28,4 +28,34 @@
         }
         
     }
+    
+    class CustomPostType{
+        
+        public static $configs = [];
+        
+        public static function get($post_type = 'post', $args = []){
+            
+            if(!is_array(self::$configs)) return;
+            
+            if($args && is_array($args)){
+                foreach($args as $arg_key => $arg){
+                    self::$configs[$arg_key] = $arg;
+                }
+            }
+
+            self::$configs['post_type'] = $post_type;
+            
+            
+            return new \WP_Query(self::$configs);
+            
+        }
+        
+        public static function default($parameter, $value){
+            
+            self::$configs[$parameter] = $value;
+            
+        }
+        
+    }
+
 ?>

@@ -675,24 +675,9 @@ class StudioChampGauche{
 	}
     
     static function cpt($post_type = 'post', $args = []){
-
-		$parameters = array(
-			'posts_per_page' => -1,
-			'paged' => 1
-		);
-
-		if(!empty($args)){
-			foreach($args as $arg_key => $arg){
-				$parameters[$arg_key] = $arg;
-			}
-		}
-
-		$parameters['post_type'] = $post_type;
-
-		$result = new WP_Query($parameters);
-
-
-		return $result;
+        
+		return StudioChampGauche\Utils\CustomPostType::get($post_type, $args);
+        
 	}
 
 	static function menu($theme_location = null, $args = []){
