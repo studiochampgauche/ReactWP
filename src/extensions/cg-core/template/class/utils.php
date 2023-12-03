@@ -152,9 +152,9 @@
     class Source{
         
         public static $configs = [
+            'base' => '/',
             'path' => null,
-            'url' => false,
-            'base' => '/'
+            'url' => false
         ];
         
         public static function get($args = []){

@@ -41,7 +41,6 @@
             * Set defaults when you call scg::source() or StudioChampGauche\Utils\Source::get();
             *
             * StudioChampGauche\Utils\Source::default('base', '/');
-            * StudioChampGauche\Utils\Source::default('path', 'x');
             * StudioChampGauche\Utils\Source::default('url', true);
             */
             
