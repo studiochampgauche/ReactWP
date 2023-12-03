@@ -38,7 +38,7 @@
             
             
             /*
-            * Set defaults when you call scg::td(), scg::tp(), scg::inc() scg::assets() or StudioChampGauche\Utils\Source::get();
+            * Set defaults when you call scg::source() or StudioChampGauche\Utils\Source::get();
             *
             * StudioChampGauche\Utils\Source::default('path', 'x');
             * StudioChampGauche\Utils\Source::default('url', true);
