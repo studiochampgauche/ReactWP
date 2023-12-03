@@ -686,32 +686,10 @@ class StudioChampGauche{
         
 	}
 
-	static function button($text = 'Aucun texte.', $args = []){
-
-		$href = isset($args['href']) && $args['href'] ? $args['href'] : null;
-		$class = isset($args['class']) && $args['class'] ? ' '. $args['class'] : null;
-		$attr = isset($args['attr']) && $args['attr'] ? ' '. $args['attr'] : null;
-		$before = isset($args['before']) && $args['before'] ? $args['before'] : null;
-		$after = isset($args['after']) && $args['after'] ? $args['after'] : null;
-		$text = $text ? '<span>'. $text .'</span>' : null;
-
-		if($href){
-			return '
-				<a href="'. $href .'" class="btn'. $class .'"'. $attr .'>
-
-				'. $before . $text . $after .'
-
-				</a>
-			';
-		} else {
-			return '
-				<button class="btn'. $class .'"'. $attr .'>
-
-				'. $before . $text . $after .'
-
-				</button>
-			';
-		}
+	static function button($text = null, $args = []){
+        
+        return StudioChampGauche\Utils\Button::get($text, $args);
+        
 	}
 
 	static function id($code_base = 'abcdefghijABCDEFGHIJ', $substr = [0, 4]){

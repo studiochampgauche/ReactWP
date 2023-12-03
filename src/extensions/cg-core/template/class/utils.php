@@ -102,4 +102,54 @@
         
     }
 
+    class Button{
+        
+        public static $configs = [
+            'href' => null,
+            'class' => null,
+            'attr' => null,
+            'before' => null,
+            'after' => null
+        ];
+        
+        public static function get($text = null, $args = []){
+            
+            if(!is_array(self::$configs)) return;
+            
+            
+            if($args && is_array($args)){
+                foreach($args as $arg_key => $arg){
+                    self::$configs[$arg_key] = $arg;
+                }
+            }
+            
+            
+            
+            self::$configs['text'] = $text;
+            
+            
+            return self::$configs['href'] ? '
+                <a href="'. self::$configs['href'] .'" class="btn'. (self::$configs['class'] ? ' ' . self::$configs['class'] : null) .'"'. (self::$configs['attr'] ? ' ' . self::$configs['attr'] : null) .'>
+
+				'. self::$configs['before'] . (self::$configs['text'] ? '<span>'. self::$configs['text'] .'</span>' : null) . self::$configs['after'] .'
+
+				</a>
+            ' : '
+                <button class="btn'. (self::$configs['class'] ? ' ' . self::$configs['class'] : null) .'"'. (self::$configs['attr'] ? ' ' . self::$configs['attr'] : null) .'>
+
+				'. self::$configs['before'] . (self::$configs['text'] ? '<span>'. self::$configs['text'] .'</span>' : null) . self::$configs['after'] .'
+
+				</button>
+            ';
+            
+        }
+        
+        public static function default($parameter, $value){
+            
+            self::$configs[$parameter] = $value;
+            
+        }
+        
+    }
+
 ?>

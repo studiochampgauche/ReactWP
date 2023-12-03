@@ -25,6 +25,17 @@
             StudioChampGauche\Utils\Menu::default('items_wrap', '<ul>%3$s</ul>');
             
             
+            /*
+            * Set defaults when you call scg::button() or StudioChampGauche\Utils\Button::get();
+            *
+            * StudioChampGauche\Utils\Button::default('href', 'x');
+            * StudioChampGauche\Utils\Button::default('class', 'x');
+            * StudioChampGauche\Utils\Button::default('attr', 'x');
+            * StudioChampGauche\Utils\Button::default('before', 'x');
+            * StudioChampGauche\Utils\Button::default('after', 'x');
+            */
+            
+            
 			/*
 			* Enqueue Scripts
 			*/
