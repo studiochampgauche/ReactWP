@@ -28,6 +28,7 @@
             /*
             * Set defaults when you call scg::button() or StudioChampGauche\Utils\Button::get();
             *
+            * StudioChampGauche\Utils\Button::default('text', 'x');
             * StudioChampGauche\Utils\Button::default('href', 'x');
             * StudioChampGauche\Utils\Button::default('class', 'x');
             * StudioChampGauche\Utils\Button::default('attr', 'x');

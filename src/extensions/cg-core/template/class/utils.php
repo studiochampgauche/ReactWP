@@ -105,6 +105,7 @@
     class Button{
         
         public static $configs = [
+            'text' => null,
             'href' => null,
             'class' => null,
             'attr' => null,
@@ -112,7 +113,7 @@
             'after' => null
         ];
         
-        public static function get($text = null, $args = []){
+        public static function get($args = []){
             
             if(!is_array(self::$configs)) return;
             
@@ -122,10 +123,6 @@
                     self::$configs[$arg_key] = $arg;
                 }
             }
-            
-            
-            
-            self::$configs['text'] = $text;
             
             
             return self::$configs['href'] ? '
