@@ -691,15 +691,6 @@ class StudioChampGauche{
         return StudioChampGauche\Utils\Button::get($text, $args);
         
 	}
-
-	static function id($code_base = 'abcdefghijABCDEFGHIJ', $substr = [0, 4]){
-		
-		$shuffle_code = str_shuffle($code_base);
-		$code = substr($shuffle_code, $substr[0], $substr[1]);
-
-
-		return 'g_id-' . $code;
-	}
     
     static function inc($file_path = null, $url = false){
 		return self::td('inc/' . $file_path, $url);
