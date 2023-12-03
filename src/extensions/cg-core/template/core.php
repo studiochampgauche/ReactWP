@@ -641,9 +641,6 @@ class StudioChampGauche{
         });
         
         
-        
-        
-        
         /*
 		* Save ACF in JSON
 		*/
