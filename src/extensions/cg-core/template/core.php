@@ -33,7 +33,7 @@ class StudioChampGauche{
         /*
         * ACF Path
         */
-        $this->acf_path = get_stylesheet_directory() . '/datas/acf';
+        $this->acf_path = self::source(['path' => 'datas/acf', 'url' => false]);
         
         
         /*
