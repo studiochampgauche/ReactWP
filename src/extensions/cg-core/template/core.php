@@ -686,27 +686,15 @@ class StudioChampGauche{
         
 	}
 
-	static function button($text = null, $args = []){
+	static function button($args = []){
         
-        return StudioChampGauche\Utils\Button::get($text, $args);
+        return StudioChampGauche\Utils\Button::get($args);
         
-	}
-    
-    static function inc($file_path = null, $url = false){
-		return self::td('inc/' . $file_path, $url);
 	}
 
-	static function tp($file_path = null, $url = false){
-		return self::td('inc/template-parts/' . $file_path, $url);
-	}
-
-	static function assets($file_path = null, $url = false){
-		return self::td('assets/' . $file_path, $url);
-	}
-
-	static function td($file_path = null, $url = false){
+	static function source($args = []){
         
-        return $url ? ((get_template_directory() === get_stylesheet_directory() ? get_template_directory_uri() : get_stylesheet_directory_uri()) . '/' . $file_path) : ((get_template_directory() === get_stylesheet_directory() ? get_template_directory() : get_stylesheet_directory()) . '/' . $file_path);
+        return StudioChampGauche\Utils\Source::get($args);
         
 	}
     

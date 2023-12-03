@@ -149,4 +149,35 @@
         
     }
 
+    class Source{
+        
+        public static $configs = [
+            'path' => null,
+            'url' => false
+        ];
+        
+        public static function get($args = []){
+            
+            if(!is_array(self::$configs)) return;
+            
+            
+            if($args && is_array($args)){
+                foreach($args as $arg_key => $arg){
+                    self::$configs[$arg_key] = $arg;
+                }
+            }
+            
+            
+            return self::$configs['url'] ? ((get_template_directory() === get_stylesheet_directory() ? get_template_directory_uri() : get_stylesheet_directory_uri()) . '/' . self::$configs['path']) : ((get_template_directory() === get_stylesheet_directory() ? get_template_directory() : get_stylesheet_directory()) . '/' . self::$configs['path']);
+            
+        }
+        
+        public static function default($parameter, $value){
+            
+            self::$configs[$parameter] = $value;
+            
+        }
+        
+    }
+
 ?>
