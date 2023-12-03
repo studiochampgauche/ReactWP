@@ -5,7 +5,7 @@
 		function __construct(){
             
             /*
-            * str_replace all your fields
+            * str_replace all your return when you use scg::field();
             *
             * StudioChampGauche\Utils\Field::replace(['{MAIN_EMAIL}'], [scg::field('contact_email_main')]);
             */
