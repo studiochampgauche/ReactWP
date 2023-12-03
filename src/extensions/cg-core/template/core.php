@@ -16,6 +16,9 @@ Domain Path: /langs
 if(!defined('ABSPATH') || !class_exists('ACF')) return;
 
 
+require_once 'class/utils.php';
+
+
 class StudioChampGauche{
     
     private $acf_path;
@@ -670,14 +673,8 @@ class StudioChampGauche{
     
     static function field($field = null, $id = null){
 		
-        if($field && $id)
-			return get_field($field, $id);
-
-		elseif($field)
-			return !empty(get_field($field, 'option')) ? get_field($field, 'option') : get_field($field);
-
-
-		return;
+        return StudioChampGauche\Utils\Field::get($field, $id);
+        
 	}
     
     static function cpt($post_type = 'post', $args = []){
@@ -805,6 +802,7 @@ class StudioChampGauche{
         return $url ? ((get_template_directory() === get_stylesheet_directory() ? get_template_directory_uri() : get_stylesheet_directory_uri()) . '/' . $file_path) : ((get_template_directory() === get_stylesheet_directory() ? get_template_directory() : get_stylesheet_directory()) . '/' . $file_path);
         
 	}
+    
     
 }
 

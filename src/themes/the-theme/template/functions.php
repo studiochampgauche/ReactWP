@@ -1,22 +1,14 @@
 <?php
-	
+
 	class helloChamp{
 
 		function __construct(){
-
-
-			/*
-			* Preload
-			
-			add_action('wp_head', function(){
-
-				echo '<link rel="preload" as="font" href="" type="font/woff2" crossorigin />';
-
-				echo '<link rel="preload" as="image" href="">';
-				
-			}, 3);
+            
+            /*
+            * str_replace all your fields
+            *
+            * StudioChampGauche\Utils\Field::replace(['{MAIN_EMAIL}'], [scg::field('contact_email_main')]);
             */
-			
 
 			/*
 			* Enqueue Scripts
