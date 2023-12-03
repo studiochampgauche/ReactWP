@@ -153,7 +153,8 @@
         
         public static $configs = [
             'path' => null,
-            'url' => false
+            'url' => false,
+            'base' => '/'
         ];
         
         public static function get($args = []){
@@ -168,7 +169,7 @@
             }
             
             
-            return self::$configs['url'] ? ((get_template_directory() === get_stylesheet_directory() ? get_template_directory_uri() : get_stylesheet_directory_uri()) . '/' . self::$configs['path']) : ((get_template_directory() === get_stylesheet_directory() ? get_template_directory() : get_stylesheet_directory()) . '/' . self::$configs['path']);
+            return self::$configs['url'] ? ((get_template_directory() === get_stylesheet_directory() ? get_template_directory_uri() : get_stylesheet_directory_uri()) . self::$configs['base'] . self::$configs['path']) : ((get_template_directory() === get_stylesheet_directory() ? get_template_directory() : get_stylesheet_directory()) . self::$configs['base'] . self::$configs['path']);
             
         }
         
