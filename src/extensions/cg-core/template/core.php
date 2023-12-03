@@ -682,52 +682,8 @@ class StudioChampGauche{
 
 	static function menu($theme_location = null, $args = []){
 
-		$parameters = array( 
-			'menu' => '',
-			'container' => false,
-			'container_class' => '', 
-			'container_id' => '', 
-			'menu_class' => '',
-			'menu_id' => '',
-			'echo' => false, 
-			'fallback_cb' => 'wp_page_menu', 
-			'before' => '', 
-			'after' => '', 
-			'link_before' => '',
-			'link_after' => '', 
-			'items_wrap' => '<ul>%3$s</ul>', 
-			'item_spacing' => 'preserve',
-			'depth' => 0,
-			'walker' => ''
-		);
-
-		if(!empty($args)){
-			foreach($args as $arg_key => $arg){
-				$parameters[$arg_key] = $arg;
-			}
-		}
-
-		if(isset($parameters['add_mobile_bars']) && (int)$parameters['add_mobile_bars'] > 0){
-
-			$html = '<div class="ham-menu">';
-				$html .= '<div class="int">';
-				for ($i=0; $i < (int)$parameters['add_mobile_bars']; $i++) { 
-					$html .= '<span></span>';
-				}
-				$html .= '</div>';
-			$html .= '</div>';
-
-			$parameters['items_wrap'] = $parameters['items_wrap'] . $html;
-		}
-
-
-		$parameters['theme_location'] = $theme_location;
-
-
-		$result = wp_nav_menu($parameters);
-
-
-		return $result;
+		return StudioChampGauche\Utils\Menu::get($theme_location, $args);
+        
 	}
 
 	static function button($text = 'Aucun texte.', $args = []){

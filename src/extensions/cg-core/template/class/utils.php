@@ -57,5 +57,49 @@
         }
         
     }
+    
+    class Menu{
+        
+        public static $configs = [];
+        
+        public static function get($theme_location = null, $args = []){
+            
+            if(!is_array(self::$configs)) return;
+            
+            if($args && is_array($args)){
+                foreach($args as $arg_key => $arg){
+                    self::$configs[$arg_key] = $arg;
+                }
+            }
+            
+            
+            if(isset(self::$configs['mobile_bars']) && (int)self::$configs['mobile_bars'] > 0){
+
+                $html = '<div class="ham-menu">';
+                    $html .= '<div class="inner">';
+                    for ($i=0; $i < (int)self::$configs['mobile_bars']; $i++) {
+                        $html .= '<span></span>';
+                    }
+                    $html .= '</div>';
+                $html .= '</div>';
+
+                self::$configs['items_wrap'] = self::$configs['items_wrap'] . $html;
+                
+            }
+            
+            self::$configs['theme_location'] = $theme_location;
+            
+            
+            return wp_nav_menu(self::$configs);
+            
+        }
+        
+        public static function default($parameter, $value){
+            
+            self::$configs[$parameter] = $value;
+            
+        }
+        
+    }
 
 ?>
