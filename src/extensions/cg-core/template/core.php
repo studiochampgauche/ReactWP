@@ -17,6 +17,7 @@ if(!defined('ABSPATH') || !class_exists('ACF')) return;
 
 
 require_once 'class/utils.php';
+require_once 'class/seo.php';
 
 
 class StudioChampGauche{
