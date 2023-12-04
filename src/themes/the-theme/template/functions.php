@@ -46,10 +46,16 @@
 			
 			
 			/*
-            * Add to wp_head();
+            * Add to wp_head() just after SEO Return
             *
+			* Go to yoursite.com/wp-admin/admin.php?page=site-settings
+			* for add quick HTML tags right after <head> & <body> and before </head> & </body>
+			*
             * StudioChampGauche\Render\Render::addToHeadTag('<link rel="preload" as="font" href="" type="font/woff2" crossorigin />');
             * StudioChampGauche\Render\Render::addToHeadTag('<link rel="preload" as="image" href="" />');
+			*
+			* OR, you can play with the array
+			* StudioChampGauche\Render\Render::$wp_heads;
             */
             
             
