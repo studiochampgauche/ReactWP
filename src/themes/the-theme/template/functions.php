@@ -47,15 +47,29 @@
 			
 			/*
             * Add to wp_head() just after SEO Returns
-            *
-			* Go to yoursite.com/wp-admin/admin.php?page=site-settings
-			* for add quick HTML tags right after <head> & <body> and before </head> & </body>
 			*
-            * StudioChampGauche\Render\Render::addToHeadTag('<link rel="preload" as="font" href="" type="font/woff2" crossorigin />');
+			* StudioChampGauche\Render\Render::addToHeadTag('<link rel="preload" as="font" href="" type="font/woff2" crossorigin />');
             * StudioChampGauche\Render\Render::addToHeadTag('<link rel="preload" as="image" href="" />');
 			*
-			* OR, you can play with the array
+            *
+			* NOTE #1
+			* You can play/modify the final datas
 			* StudioChampGauche\Render\Render::$wp_heads;
+			*
+			* NOTE #2
+			* You can go to yoursite.com/wp-admin/admin.php?page=site-settings
+			* for add quick HTML tags right after <head> & <body> and before </head> & </body>
+			*
+			* Note #3
+			* you can use wp_head hook too in priority 1 or 3 for place your codes before or after SEO Returns.
+			* Seo Return is on priority 2.
+			*
+			* Use priority 8 for place it after scg-main-css.
+			* 
+			* add_action('wp_head', function(){
+			* 	echo '<link rel="preload" as="font" href="" type="font/woff2" crossorigin />';
+			* }, 1);
+			* 
             */
             
             
