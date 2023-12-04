@@ -1,184 +1,184 @@
 <?php
     
-    namespace StudioChampGauche\Utils;
+namespace StudioChampGauche\Utils;
 
-    class Field{
-        
-        public static $elementsToReplace = [];
-        
-        public static function get($field = null, $id = null){
-            
-            if(!is_array(self::$elementsToReplace)) return;
-            
-            
-            $return = ($field && $id ? get_field($field, $id) : ($field ? (!empty(get_field($field, 'option')) ? get_field($field, 'option') : get_field($field)) : null));
-            
-            
-            return $return && self::$elementsToReplace ? str_replace(self::$elementsToReplace[0], self::$elementsToReplace[1], $return) : $return;
-            
-        }
-        
-        public static function replace($elementToReplace, $replacedElement){
-            
-            self::$elementsToReplace = [
-                $elementToReplace,
-                $replacedElement
-            ];
-            
-        }
-        
+class Field{
+
+    public static $elementsToReplace = [];
+
+    public static function get($field = null, $id = null){
+
+        if(!is_array(self::$elementsToReplace)) return;
+
+
+        $return = ($field && $id ? get_field($field, $id) : ($field ? (!empty(get_field($field, 'option')) ? get_field($field, 'option') : get_field($field)) : null));
+
+
+        return $return && self::$elementsToReplace ? str_replace(self::$elementsToReplace[0], self::$elementsToReplace[1], $return) : $return;
+
     }
-    
-    class CustomPostType{
-        
-        public static $configs = [];
-        
-        public static function get($post_type = 'post', $args = []){
-            
-            if(!is_array(self::$configs)) return;
-            
-            if($args && is_array($args)){
-                foreach($args as $arg_key => $arg){
-                    self::$configs[$arg_key] = $arg;
-                }
-            }
 
-            self::$configs['post_type'] = $post_type;
-            
-            
-            return new \WP_Query(self::$configs);
-            
-        }
-        
-        public static function default($parameter, $value){
-            
-            self::$configs[$parameter] = $value;
-            
-        }
-        
+    public static function replace($elementToReplace, $replacedElement){
+
+        self::$elementsToReplace = [
+            $elementToReplace,
+            $replacedElement
+        ];
+
     }
-    
-    class Menu{
-        
-        public static $configs = [];
-        
-        public static function get($theme_location = null, $args = []){
-            
-            if(!is_array(self::$configs)) return;
-            
-            if($args && is_array($args)){
-                foreach($args as $arg_key => $arg){
-                    self::$configs[$arg_key] = $arg;
-                }
-            }
-            
-            
-            if(isset(self::$configs['mobile_bars']) && (int)self::$configs['mobile_bars'] > 0){
 
-                $html = '<div class="ham-menu">';
-                    $html .= '<div class="inner">';
-                    for ($i=0; $i < (int)self::$configs['mobile_bars']; $i++) {
-                        $html .= '<span></span>';
-                    }
-                    $html .= '</div>';
+}
+
+class CustomPostType{
+
+    public static $configs = [];
+
+    public static function get($post_type = 'post', $args = []){
+
+        if(!is_array(self::$configs)) return;
+
+        if($args && is_array($args)){
+            foreach($args as $arg_key => $arg){
+                self::$configs[$arg_key] = $arg;
+            }
+        }
+
+        self::$configs['post_type'] = $post_type;
+
+
+        return new \WP_Query(self::$configs);
+
+    }
+
+    public static function default($parameter, $value){
+
+        self::$configs[$parameter] = $value;
+
+    }
+
+}
+
+class Menu{
+
+    public static $configs = [];
+
+    public static function get($theme_location = null, $args = []){
+
+        if(!is_array(self::$configs)) return;
+
+        if($args && is_array($args)){
+            foreach($args as $arg_key => $arg){
+                self::$configs[$arg_key] = $arg;
+            }
+        }
+
+
+        if(isset(self::$configs['mobile_bars']) && (int)self::$configs['mobile_bars'] > 0){
+
+            $html = '<div class="ham-menu">';
+                $html .= '<div class="inner">';
+                for ($i=0; $i < (int)self::$configs['mobile_bars']; $i++) {
+                    $html .= '<span></span>';
+                }
                 $html .= '</div>';
+            $html .= '</div>';
 
-                self::$configs['items_wrap'] = self::$configs['items_wrap'] . $html;
-                
-            }
-            
-            self::$configs['theme_location'] = $theme_location;
-            
-            
-            return wp_nav_menu(self::$configs);
-            
+            self::$configs['items_wrap'] = self::$configs['items_wrap'] . $html;
+
         }
-        
-        public static function default($parameter, $value){
-            
-            self::$configs[$parameter] = $value;
-            
-        }
-        
+
+        self::$configs['theme_location'] = $theme_location;
+
+
+        return wp_nav_menu(self::$configs);
+
     }
 
-    class Button{
-        
-        public static $configs = [
-            'text' => null,
-            'href' => null,
-            'class' => null,
-            'attr' => null,
-            'before' => null,
-            'after' => null
-        ];
-        
-        public static function get($args = []){
-            
-            if(!is_array(self::$configs)) return;
-            
-            
-            if($args && is_array($args)){
-                foreach($args as $arg_key => $arg){
-                    self::$configs[$arg_key] = $arg;
-                }
-            }
-            
-            
-            return self::$configs['href'] ? '
-                <a href="'. self::$configs['href'] .'" class="btn'. (self::$configs['class'] ? ' ' . self::$configs['class'] : null) .'"'. (self::$configs['attr'] ? ' ' . self::$configs['attr'] : null) .'>
+    public static function default($parameter, $value){
 
-				'. self::$configs['before'] . (self::$configs['text'] ? '<span>'. self::$configs['text'] .'</span>' : null) . self::$configs['after'] .'
+        self::$configs[$parameter] = $value;
 
-				</a>
-            ' : '
-                <button class="btn'. (self::$configs['class'] ? ' ' . self::$configs['class'] : null) .'"'. (self::$configs['attr'] ? ' ' . self::$configs['attr'] : null) .'>
-
-				'. self::$configs['before'] . (self::$configs['text'] ? '<span>'. self::$configs['text'] .'</span>' : null) . self::$configs['after'] .'
-
-				</button>
-            ';
-            
-        }
-        
-        public static function default($parameter, $value){
-            
-            self::$configs[$parameter] = $value;
-            
-        }
-        
     }
 
-    class Source{
-        
-        public static $configs = [
-            'base' => '/',
-            'path' => null,
-            'url' => false
-        ];
-        
-        public static function get($args = []){
-            
-            if(!is_array(self::$configs)) return;
-            
-            
-            if($args && is_array($args)){
-                foreach($args as $arg_key => $arg){
-                    self::$configs[$arg_key] = $arg;
-                }
+}
+
+class Button{
+
+    public static $configs = [
+        'text' => null,
+        'href' => null,
+        'class' => null,
+        'attr' => null,
+        'before' => null,
+        'after' => null
+    ];
+
+    public static function get($args = []){
+
+        if(!is_array(self::$configs)) return;
+
+
+        if($args && is_array($args)){
+            foreach($args as $arg_key => $arg){
+                self::$configs[$arg_key] = $arg;
             }
-            
-            
-            return self::$configs['url'] ? ((get_template_directory() === get_stylesheet_directory() ? get_template_directory_uri() : get_stylesheet_directory_uri()) . self::$configs['base'] . self::$configs['path']) : ((get_template_directory() === get_stylesheet_directory() ? get_template_directory() : get_stylesheet_directory()) . self::$configs['base'] . self::$configs['path']);
-            
         }
-        
-        public static function default($parameter, $value){
-            
-            self::$configs[$parameter] = $value;
-            
-        }
-        
+
+
+        return self::$configs['href'] ? '
+            <a href="'. self::$configs['href'] .'" class="btn'. (self::$configs['class'] ? ' ' . self::$configs['class'] : null) .'"'. (self::$configs['attr'] ? ' ' . self::$configs['attr'] : null) .'>
+
+            '. self::$configs['before'] . (self::$configs['text'] ? '<span>'. self::$configs['text'] .'</span>' : null) . self::$configs['after'] .'
+
+            </a>
+        ' : '
+            <button class="btn'. (self::$configs['class'] ? ' ' . self::$configs['class'] : null) .'"'. (self::$configs['attr'] ? ' ' . self::$configs['attr'] : null) .'>
+
+            '. self::$configs['before'] . (self::$configs['text'] ? '<span>'. self::$configs['text'] .'</span>' : null) . self::$configs['after'] .'
+
+            </button>
+        ';
+
     }
+
+    public static function default($parameter, $value){
+
+        self::$configs[$parameter] = $value;
+
+    }
+
+}
+
+class Source{
+
+    public static $configs = [
+        'base' => '/',
+        'path' => null,
+        'url' => false
+    ];
+
+    public static function get($args = []){
+
+        if(!is_array(self::$configs)) return;
+
+
+        if($args && is_array($args)){
+            foreach($args as $arg_key => $arg){
+                self::$configs[$arg_key] = $arg;
+            }
+        }
+
+
+        return self::$configs['url'] ? ((get_template_directory() === get_stylesheet_directory() ? get_template_directory_uri() : get_stylesheet_directory_uri()) . self::$configs['base'] . self::$configs['path']) : ((get_template_directory() === get_stylesheet_directory() ? get_template_directory() : get_stylesheet_directory()) . self::$configs['base'] . self::$configs['path']);
+
+    }
+
+    public static function default($parameter, $value){
+
+        self::$configs[$parameter] = $value;
+
+    }
+
+}
 
 ?>
