@@ -43,6 +43,15 @@
             * StudioChampGauche\Utils\Source::default('base', '/');
             * StudioChampGauche\Utils\Source::default('url', true);
             */
+			
+			
+			/*
+            * Add to wp_head();
+            *
+            * StudioChampGauche\Render\Render::addToHeadTag('<link rel="preload" as="font" href="" type="font/woff2" crossorigin />');
+            * StudioChampGauche\Render\Render::addToHeadTag('<link rel="preload" as="image" href="" />');
+            */
+            
             
             
 			/*
