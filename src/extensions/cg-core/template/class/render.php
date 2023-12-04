@@ -13,7 +13,7 @@ class Render{
 			if(self::$wp_heads)
             	echo implode('', self::$wp_heads);
 			
-        }, 1);
+        }, 2);
         
     }
     
