@@ -3,17 +3,42 @@
 namespace StudioChampGauche\Seo;
 
 class Seo{
-    
+	
     function __construct(){
-        
-		\StudioChampGauche\Render\Render::addToHeadTag('<meta charset="'. get_bloginfo('charset') .'">');
-		\StudioChampGauche\Render\Render::addToHeadTag('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
-		\StudioChampGauche\Render\Render::addToHeadTag('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">');
+		
+		
         
     }
-    
+	
+	/*public static function site_name(){
+		
+		return \StudioChampGauche\Utils\Field::get('site_name');
+		
+	}
+	
+	public static function type(){
+		
+		if(is_singular(['post', 'product']))
+			return 'article';
+		
+		return 'website';
+		
+	}
+	
+	public static function title(){
+		
+		
+		return null;
+		
+	}
+	
+	public static function description(){
+		
+		
+		return null;
+		
+	}*/
 }
-
 new Seo();
 
 ?>
