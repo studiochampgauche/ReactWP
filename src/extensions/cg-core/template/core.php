@@ -15,8 +15,17 @@ Domain Path: /langs
 
 if(!defined('ABSPATH') || !class_exists('ACF')) return;
 
+/*
+* Make sure you have all you need for the plugin
+*/
+require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
+
+/*
+* Classes
+*/
 require_once 'class/utils.php';
+require_once 'class/render.php';
 require_once 'class/seo.php';
 
 
@@ -26,10 +35,7 @@ class StudioChampGauche{
     
     function __construct(){
         
-        /*
-        * Make sure you have all you need for the plugin
-        */
-        require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        
         
         /*
         * ACF Path
