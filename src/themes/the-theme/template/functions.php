@@ -72,7 +72,7 @@
 			* 
 			* add_action('wp_head', function(){
 			* 	echo '<link rel="preload" as="font" href="" type="font/woff2" crossorigin />';
-			* }, 1);
+			* }, 3);
 			* 
             */
             
