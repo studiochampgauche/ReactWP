@@ -53,8 +53,12 @@
 			*
             *
 			* NOTE #1
-			* You can play/modify the final datas
+			* You can play/modify the datas
 			* StudioChampGauche\Render\Render::$wp_heads;
+			*
+			* e.g. you can clear the returns and redo it
+			* StudioChampGauche\Render\Render::$wp_heads = [];
+			* StudioChampGauche\Render\Render::addToHeadTag('<title></title>');
 			*
 			* NOTE #2
 			* You can go to yoursite.com/wp-admin/admin.php?page=site-settings
