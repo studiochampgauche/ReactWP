@@ -46,7 +46,7 @@
 			
 			
 			/*
-            * Add to wp_head() just after SEO Return
+            * Add to wp_head() just after SEO Returns
             *
 			* Go to yoursite.com/wp-admin/admin.php?page=site-settings
 			* for add quick HTML tags right after <head> & <body> and before </head> & </body>
