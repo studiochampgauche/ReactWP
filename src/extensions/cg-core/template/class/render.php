@@ -8,20 +8,14 @@ class Render{
     
     function __construct(){
 		
-		add_action('wp_head', function(){
-			
-			if(self::$wp_heads)
-            	echo implode('', self::$wp_heads);
-			
-			
-        }, 2);
+		add_action('wp_head', [$this, 'wp_head'], 2);
         
     }
     
     
-    public static function headTag($key, $value){
+    public function wp_head(){
 
-        self::$wp_heads[$key] = $value;
+        
 
     }
     
