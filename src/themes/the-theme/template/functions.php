@@ -43,6 +43,18 @@
             * StudioChampGauche\Utils\Source::default('base', '/');
             * StudioChampGauche\Utils\Source::default('url', true);
             */
+			
+			
+			/*
+			* Modify SCG Part in wp_head
+			*
+			* add_filter('scg_wp_head', function($wp_heads){
+			*
+			* 	//$wp_heads = [];
+			*
+			* 	return $wp_heads;
+			*
+			* });
             
             
             
