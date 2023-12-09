@@ -20,4 +20,10 @@ $results = new WP_Query([
 $posts_count = $results->found_posts;
 $number_of_pages = (int)ceil($posts_count / $posts_per_page);
 
+
+get_header();
+
+
+
+get_footer();
 ?>
