@@ -47,21 +47,25 @@
 			
 			/*
 			* Modify SCG Part in wp_head
-			*/
+			*
 			add_filter('scg_wp_head', function($wp_heads){
 				
 				/*
-				* Remove Author URL on singular 'product'
+				* Add Open Graph article:section and article:tag on Post Type 'post'
 				*
-				* og_article_author is displayed on 'post' and 'product' Post Type
-				*/
-				if(is_singular(['product']))
-					$wp_heads['og_article_author'] = null;
+				
+				if(is_singular(['post'])){
+				
+					$wp_heads['og_article_section'] = <meta property="article:section" content="" />';
+					
+					$wp_heads['og_article_tag'] = <meta property="article:tag" content="" />';
+					
+				}
 			
 			 	return $wp_heads;
 			
 			});
-            
+            */
             
             
 			/*

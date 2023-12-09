@@ -83,13 +83,13 @@ class Seo{
 				
 				$wp_heads['og_article_modified_time'] = '<meta property="article:modified_time" content="'. $obj->post_modified_gmt .'" />';
 				
-				//$wp_heads['og_article_expiration_time'] = '<meta property="article:expiration_time" content="" />';
+				$wp_heads['og_article_expiration_time'] = ''; //'<meta property="article:expiration_time" content="" />';
 				
 				$wp_heads['og_article_author'] = '<meta property="article:author" content="'. get_author_posts_url($obj->post_author) .'" />';
 				
-				//$wp_heads['og_article_section'] = '<meta property="article:section" content="" />';
+				$wp_heads['og_article_section'] = ''; //'<meta property="article:section" content="" />';
 				
-				//$wp_heads['og_article_tag'] = '<meta property="article:tag" content="" />';
+				$wp_heads['og_article_tag'] = ''; //'<meta property="article:tag" content="" />';
 				
 			}
 			
@@ -158,15 +158,19 @@ class Seo{
 		
 		elseif((is_category() || is_tag()) && \StudioChampGauche\Utils\Field::get('search_engine_description', 'term_' . $obj->term_id))
 			return \StudioChampGauche\Utils\Field::get('search_engine_description', 'term_' . $obj->term_id);
+		
+		elseif($obj && $obj->ID && \StudioChampGauche\Utils\Field::get('search_engine_description', $obj->ID))
+			return \StudioChampGauche\Utils\Field::get('search_engine_description', $obj->ID);
+		
+		
 			
-			
-		return '';
+		return \StudioChampGauche\Utils\Field::get('search_engine_description');
 		
 	}
 	
 	public static function og_type(){
 		
-		if(is_singular(['post', 'product']))
+		if(is_singular(['post']))
 			return 'article';
 		elseif(is_author())
 			return 'profile';
