@@ -47,14 +47,20 @@
 			
 			/*
 			* Modify SCG Part in wp_head
-			*
-			* add_filter('scg_wp_head', function($wp_heads){
-			*
-			* 	//$wp_heads = [];
-			*
-			* 	return $wp_heads;
-			*
-			* });
+			*/
+			add_filter('scg_wp_head', function($wp_heads){
+				
+				/*
+				* Remove Author URL on singular 'product'
+				*
+				* og_article_author is displayed on 'post' and 'product' Post Type
+				*/
+				if(is_singular(['product']))
+					$wp_heads['og_article_author'] = null;
+			
+			 	return $wp_heads;
+			
+			});
             
             
             
