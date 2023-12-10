@@ -107,6 +107,24 @@ class Seo{
 			
 			if(self::og_image())
 				$wp_heads['og_image'] = '<meta property="og:image" content="'. self::og_image() .'" />';
+			
+			
+			$fav = \StudioChampGauche\Utils\Field::get('favicon');
+			
+			if(isset($fav['ie_32x32']) && $fav['ie_32x32'])
+				$wp_heads['fav_ie_32x32'] = '<!--[if IE]><link rel="shortcut icon" href="'. $fav['ie_32x32'] .'"><![endif]-->';
+			
+			
+			if(isset($fav['apple_touch_180x180']) && $fav['apple_touch_180x180'])
+				$wp_heads['fav_apple_touch_180x180'] = '<link rel="apple-touch-icon" sizes="180x180" href="'. $fav['apple_touch_180x180'] .'">';
+			
+			
+			if(isset($fav['all_browsers_192x192']) && $fav['all_browsers_192x192'])
+				$wp_heads['fav_all_browsers_192x192'] = '<link rel="icon" sizes="192x192" href="'. $fav['all_browsers_192x192'] .'">';
+			
+			
+			if(isset($fav['ms_tile_270x270']) && $fav['ms_tile_270x270'])
+				$wp_heads['fav_ms_tile_270x270'] = '<meta name="msapplication-TileImage" content="'. $fav['ms_tile_270x270'] .'">';
 				
 			
 			return $wp_heads;

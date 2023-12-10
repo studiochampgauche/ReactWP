@@ -1069,6 +1069,124 @@
             "endpoint": 0
         },
         {
+            "key": "field_65762346c5f3b",
+            "label": "Favicon",
+            "name": "favicon",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_65762351c5f3c",
+                    "label": "Internet Explorer.ico (32x32)",
+                    "name": "ie_32x32",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "url",
+                    "library": "all",
+                    "min_width": 32,
+                    "min_height": 32,
+                    "min_size": "",
+                    "max_width": 32,
+                    "max_height": 32,
+                    "max_size": "",
+                    "mime_types": ".ico",
+                    "preview_size": "full"
+                },
+                {
+                    "key": "field_6576242fc5f3d",
+                    "label": "Tous les navigateurs (192x192)",
+                    "name": "all_browsers_192x192",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "url",
+                    "library": "all",
+                    "min_width": 192,
+                    "min_height": 192,
+                    "min_size": "",
+                    "max_width": 192,
+                    "max_height": 192,
+                    "max_size": "",
+                    "mime_types": ".png, .jpg, .jpeg, .gif, .svg",
+                    "preview_size": "full"
+                },
+                {
+                    "key": "field_65762486c5f3e",
+                    "label": "Apple Touch (180x180)",
+                    "name": "apple_touch_180x180",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "url",
+                    "library": "all",
+                    "min_width": 180,
+                    "min_height": 180,
+                    "min_size": "",
+                    "max_width": 180,
+                    "max_height": 180,
+                    "max_size": "",
+                    "mime_types": ".png, .jpg, .jpeg, .gif, .svg",
+                    "preview_size": "full"
+                },
+                {
+                    "key": "field_657624cec5f3f",
+                    "label": "msapplication-TileImage",
+                    "name": "ms_tile_270x270",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "url",
+                    "library": "all",
+                    "min_width": 270,
+                    "min_height": 270,
+                    "min_size": "",
+                    "max_width": 270,
+                    "max_height": 270,
+                    "max_size": "",
+                    "mime_types": ".png, .jpg, .jpeg, .gif, .svg",
+                    "preview_size": "full"
+                }
+            ]
+        },
+        {
             "key": "field_6574b08eef4c1",
             "label": "Moteurs de recherche",
             "name": "seo_search_engine",
@@ -1203,5 +1321,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1702236506
+    "modified": 1702241601
 }
