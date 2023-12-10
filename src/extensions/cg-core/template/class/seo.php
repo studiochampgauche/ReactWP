@@ -249,7 +249,20 @@ class Seo{
 	public static function og_image(){
 		
 		
-		return null;
+		$obj = get_queried_object();
+		
+		if(is_author() && \StudioChampGauche\Utils\Field::get('seo_social_medias_image', 'user_' . $obj->ID))
+			return \StudioChampGauche\Utils\Field::get('seo_social_medias_image', 'user_' . $obj->ID);
+		
+		elseif((is_category() || is_tag()) && \StudioChampGauche\Utils\Field::get('seo_social_medias_image', 'term_' . $obj->term_id))
+			return \StudioChampGauche\Utils\Field::get('seo_social_medias_image', 'term_' . $obj->term_id);
+		
+		elseif($obj && $obj->ID && \StudioChampGauche\Utils\Field::get('seo_social_medias_image', $obj->ID))
+			return \StudioChampGauche\Utils\Field::get('seo_social_medias_image', $obj->ID);
+		
+
+			
+		return \StudioChampGauche\Utils\Field::get('seo_social_medias_image');
 		
 	}
 	
