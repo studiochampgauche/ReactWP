@@ -1071,7 +1071,7 @@
         {
             "key": "field_6574b08eef4c1",
             "label": "Moteurs de recherche",
-            "name": "search_engine",
+            "name": "seo_search_engine",
             "aria-label": "",
             "type": "group",
             "instructions": "",
@@ -1125,6 +1125,64 @@
                     "new_lines": ""
                 }
             ]
+        },
+        {
+            "key": "field_657610b75e284",
+            "label": "Médias sociaux",
+            "name": "seo_social_medias",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_657610b75e285",
+                    "label": "Titre",
+                    "name": "title",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_657610b75e286",
+                    "label": "Description",
+                    "name": "description",
+                    "aria-label": "",
+                    "type": "textarea",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "rows": 6,
+                    "placeholder": "",
+                    "new_lines": ""
+                }
+            ]
         }
     ],
     "location": [
@@ -1145,5 +1203,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1702153249
+    "modified": 1702236506
 }

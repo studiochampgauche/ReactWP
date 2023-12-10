@@ -15,20 +15,20 @@ class Seo{
 			$robots['index'] = true;
 			$robots['follow'] = true;
 			
-			if (
+			if(
 				is_404()
 				
 				||
 				
-				(is_author() && \StudioChampGauche\Utils\Field::get('search_engine_stop_indexing', 'user_' . $obj->ID))
+				(is_author() && \StudioChampGauche\Utils\Field::get('seo_search_engine_stop_indexing', 'user_' . $obj->ID))
 				
 				||
 				
-				((is_category() || is_tag()) && \StudioChampGauche\Utils\Field::get('search_engine_stop_indexing', 'term_' . $obj->term_id))
+				((is_category() || is_tag()) && \StudioChampGauche\Utils\Field::get('seo_search_engine_stop_indexing', 'term_' . $obj->term_id))
 				
 				||
 				
-				($obj && $obj->ID && \StudioChampGauche\Utils\Field::get('search_engine_stop_indexing', $obj->ID))
+				($obj && $obj->ID && \StudioChampGauche\Utils\Field::get('seo_search_engine_stop_indexing', $obj->ID))
 			) {
 				
 				$robots['noindex'] = true;
@@ -36,7 +36,7 @@ class Seo{
 				$robots['index'] = false;
 				$robots['follow'] = false;
 				
-			} elseif (is_search()) {
+			} elseif(is_search()) {
 				
 				$robots['noindex'] = true;
 				$robots['nofollow'] = false;
@@ -83,17 +83,18 @@ class Seo{
 				
 				$wp_heads['og_article_modified_time'] = '<meta property="article:modified_time" content="'. $obj->post_modified_gmt .'" />';
 				
-				$wp_heads['og_article_expiration_time'] = ''; //'<meta property="article:expiration_time" content="" />';
+				$wp_heads['og_article_expiration_time'] = '';
 				
 				$wp_heads['og_article_author'] = '<meta property="article:author" content="'. get_author_posts_url($obj->post_author) .'" />';
 				
-				$wp_heads['og_article_section'] = ''; //'<meta property="article:section" content="" />';
+				$wp_heads['og_article_section'] = '';
 				
-				$wp_heads['og_article_tag'] = ''; //'<meta property="article:tag" content="" />';
+				$wp_heads['og_article_tag'] = '';
 				
 			}
 			
-			$wp_heads['og_url'] = '<meta property="og:url" content="'. self::og_url() .'" />';
+			if(self::og_url())
+				$wp_heads['og_url'] = '<meta property="og:url" content="'. self::og_url() .'" />';
 			
 			if(self::og_site_name())
 				$wp_heads['og_site_name'] = '<meta property="og:site_name" content="'. self::og_site_name() .'" />';
@@ -116,7 +117,7 @@ class Seo{
 	
 	public static function site_name(){
 		
-		$siteName = \StudioChampGauche\Utils\Field::get('search_engine_site_name');
+		$siteName = \StudioChampGauche\Utils\Field::get('seo_search_engine_site_name');
 		
 		return $siteName ? $siteName : get_bloginfo('name');
 		
@@ -133,13 +134,13 @@ class Seo{
 			return __('Erreur 404', 'cg-core-plugin') . ' - ' . self::site_name();
 		
 		elseif(is_author())
-			return (\StudioChampGauche\Utils\Field::get('search_engine_title', 'user_' . $obj->ID) ? \StudioChampGauche\Utils\Field::get('search_engine_title', 'user_' . $obj->ID) : __('Publications de', 'cg-core-plugin') . ' ' . $obj->display_name . ' - ' . self::site_name());
+			return (\StudioChampGauche\Utils\Field::get('seo_search_engine_title', 'user_' . $obj->ID) ? \StudioChampGauche\Utils\Field::get('seo_search_engine_title', 'user_' . $obj->ID) : __('Publications de', 'cg-core-plugin') . ' ' . $obj->display_name . ' - ' . self::site_name());
 			
 		elseif(is_category() || is_tag())
-			return (\StudioChampGauche\Utils\Field::get('search_engine_title', 'term_' . $obj->term_id) ? \StudioChampGauche\Utils\Field::get('search_engine_title', 'term_' . $obj->term_id)  : $obj->name . ' - ' . self::site_name());
+			return (\StudioChampGauche\Utils\Field::get('seo_search_engine_title', 'term_' . $obj->term_id) ? \StudioChampGauche\Utils\Field::get('seo_search_engine_title', 'term_' . $obj->term_id)  : $obj->name . ' - ' . self::site_name());
 			
-		elseif($obj && $obj->ID && \StudioChampGauche\Utils\Field::get('search_engine_title', $obj->ID))
-			return \StudioChampGauche\Utils\Field::get('search_engine_title', $obj->ID);
+		elseif($obj && $obj->ID && \StudioChampGauche\Utils\Field::get('seo_search_engine_title', $obj->ID))
+			return \StudioChampGauche\Utils\Field::get('seo_search_engine_title', $obj->ID);
 		
 		elseif($obj && $obj->ID)
 			return get_the_title($obj->ID) . ' - ' . self::site_name();
@@ -153,18 +154,18 @@ class Seo{
 		
 		$obj = get_queried_object();
 		
-		if(is_author() && \StudioChampGauche\Utils\Field::get('search_engine_description', 'user_' . $obj->ID))
-			return \StudioChampGauche\Utils\Field::get('search_engine_description', 'user_' . $obj->ID);
+		if(is_author() && \StudioChampGauche\Utils\Field::get('seo_search_engine_description', 'user_' . $obj->ID))
+			return \StudioChampGauche\Utils\Field::get('seo_search_engine_description', 'user_' . $obj->ID);
 		
-		elseif((is_category() || is_tag()) && \StudioChampGauche\Utils\Field::get('search_engine_description', 'term_' . $obj->term_id))
-			return \StudioChampGauche\Utils\Field::get('search_engine_description', 'term_' . $obj->term_id);
+		elseif((is_category() || is_tag()) && \StudioChampGauche\Utils\Field::get('seo_search_engine_description', 'term_' . $obj->term_id))
+			return \StudioChampGauche\Utils\Field::get('seo_search_engine_description', 'term_' . $obj->term_id);
 		
-		elseif($obj && $obj->ID && \StudioChampGauche\Utils\Field::get('search_engine_description', $obj->ID))
-			return \StudioChampGauche\Utils\Field::get('search_engine_description', $obj->ID);
+		elseif($obj && $obj->ID && \StudioChampGauche\Utils\Field::get('seo_search_engine_description', $obj->ID))
+			return \StudioChampGauche\Utils\Field::get('seo_search_engine_description', $obj->ID);
 		
 		
 			
-		return \StudioChampGauche\Utils\Field::get('search_engine_description');
+		return \StudioChampGauche\Utils\Field::get('seo_search_engine_description');
 		
 	}
 	
@@ -187,8 +188,21 @@ class Seo{
 	
 	public static function og_title(){
 		
+		$obj = get_queried_object();
 		
-		return null;
+		
+		if(is_author())
+			return (\StudioChampGauche\Utils\Field::get('seo_social_medias_title', 'user_' . $obj->ID) ? \StudioChampGauche\Utils\Field::get('seo_social_medias_title', 'user_' . $obj->ID) : (\StudioChampGauche\Utils\Field::get('seo_social_medias_title') ? \StudioChampGauche\Utils\Field::get('seo_social_medias_title') : __('Publications de', 'cg-core-plugin') . ' ' . $obj->display_name . ' - ' . self::site_name()));
+			
+		elseif(is_category() || is_tag())
+			return (\StudioChampGauche\Utils\Field::get('seo_social_medias_title', 'term_' . $obj->term_id) ? \StudioChampGauche\Utils\Field::get('seo_social_medias_title', 'term_' . $obj->term_id)  : (\StudioChampGauche\Utils\Field::get('seo_social_medias_title') ? \StudioChampGauche\Utils\Field::get('seo_social_medias_title') : $obj->name . ' - ' . self::site_name()));
+			
+		elseif($obj && $obj->ID)
+			return (\StudioChampGauche\Utils\Field::get('seo_social_medias_title', $obj->ID) ? \StudioChampGauche\Utils\Field::get('seo_social_medias_title', $obj->ID) : (\StudioChampGauche\Utils\Field::get('seo_social_medias_title') ? \StudioChampGauche\Utils\Field::get('seo_social_medias_title') : self::title()));
+	
+		
+		
+		return self::title();
 		
 	}
 	
@@ -197,7 +211,20 @@ class Seo{
 	public static function og_description(){
 		
 		
-		return null;
+		$obj = get_queried_object();
+		
+		if(is_author() && \StudioChampGauche\Utils\Field::get('seo_social_medias_description', 'user_' . $obj->ID))
+			return \StudioChampGauche\Utils\Field::get('seo_social_medias_description', 'user_' . $obj->ID);
+		
+		elseif((is_category() || is_tag()) && \StudioChampGauche\Utils\Field::get('seo_social_medias_description', 'term_' . $obj->term_id))
+			return \StudioChampGauche\Utils\Field::get('seo_social_medias_description', 'term_' . $obj->term_id);
+		
+		elseif($obj && $obj->ID && \StudioChampGauche\Utils\Field::get('seo_social_medias_description', $obj->ID))
+			return \StudioChampGauche\Utils\Field::get('seo_social_medias_description', $obj->ID);
+		
+		
+			
+		return \StudioChampGauche\Utils\Field::get('seo_social_medias_description') ? \StudioChampGauche\Utils\Field::get('seo_social_medias_description') : self::description();
 		
 	}
 	
