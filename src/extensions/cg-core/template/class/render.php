@@ -523,7 +523,7 @@ class Render{
 					'sub_fields' => array(
 						array(
 							'key' => 'field_6569c287ecb18',
-							'label' => __('Après le &lt;head&gt;', 'cg-core'),
+							'label' => __('Après le', 'cg-core') . ' &lt;head&gt;',
 							'name' => 'after_head',
 							'aria-label' => '',
 							'type' => 'textarea',
@@ -543,7 +543,7 @@ class Render{
 						),
 						array(
 							'key' => 'field_6569c33e4d6bc',
-							'label' => __('Avant le &lt;/head&gt;', 'cg-core'),
+							'label' => __('Avant le', 'cg-core') . ' &lt;/head&gt;',
 							'name' => 'before_head',
 							'aria-label' => '',
 							'type' => 'textarea',
@@ -563,7 +563,7 @@ class Render{
 						),
 						array(
 							'key' => 'field_6569c3534d6bd',
-							'label' => __('Après le &lt;body&gt;', 'cg-core'),
+							'label' => __('Après le', 'cg-core') . ' &lt;body&gt;',
 							'name' => 'after_body',
 							'aria-label' => '',
 							'type' => 'textarea',
@@ -583,7 +583,7 @@ class Render{
 						),
 						array(
 							'key' => 'field_6569c3554d6be',
-							'label' => __('Avant le &lt;/body&gt;', 'cg-core'),
+							'label' => __('Avant le', 'cg-core') . ' &lt;/body&gt;',
 							'name' => 'before_body',
 							'aria-label' => '',
 							'type' => 'textarea',
