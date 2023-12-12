@@ -8,7 +8,7 @@ Description: A plugin that handles repetitive needs in each project and add-ons.
 Requires at least: 6.4.1
 Requires PHP: 8.2
 Version: 3.0.0
-Text Domain: cg-core-plugin
+Text Domain: cg-core
 Domain Path: /langs
 */
 
@@ -24,8 +24,8 @@ require_once ABSPATH . 'wp-admin/includes/plugin.php';
 /*
 * Classes
 */
-require_once 'class/utils.php';
 require_once 'class/render.php';
+require_once 'class/utils.php';
 require_once 'class/seo.php';
 
 
@@ -51,7 +51,7 @@ class StudioChampGauche{
             /*
 			* Load Languages
 			*/
-			load_plugin_textdomain('cg-core-plugin', false, __DIR__ . '/langs/');
+			load_plugin_textdomain('cg-core', false, __DIR__ . '/langs/');
             
             
             /*
@@ -370,7 +370,7 @@ class StudioChampGauche{
                 */
                 $args = array(
 					'id' => 'is-menus',
-					'title' => __('Menus', 'cg-core-plugin'),
+					'title' => __('Menus', 'cg-core'),
 					'href' => $admin_url . 'nav-menus.php',
 					'meta' => array(
 						'class' => 'is-menus'
@@ -385,7 +385,7 @@ class StudioChampGauche{
 				*/
 				$args = array(
 					'id' => 'is-files',
-					'title' => __('Images et fichiers', 'cg-core-plugin'),
+					'title' => __('Images et fichiers', 'cg-core'),
 					'href' => $admin_url . 'upload.php',
 					'meta' => array(
 						'class' => 'is-files'
@@ -403,7 +403,7 @@ class StudioChampGauche{
                     
                     $args = array(
                         'id' => 'is-users-list',
-                        'title' => __('Utilisateurs', 'cg-core-plugin'),
+                        'title' => __('Utilisateurs', 'cg-core'),
                         'href' => $admin_url . 'users.php',
                         'meta' => array(
                             'class' => 'is-users-list'
@@ -414,7 +414,7 @@ class StudioChampGauche{
                     
                     $args = array(
                         'id' => 'is-users-profile',
-                        'title' => __('Profil', 'cg-core-plugin'),
+                        'title' => __('Profil', 'cg-core'),
                         'href' => $admin_url . 'profile.php',
                         'parent' => 'is-users-list',
                         'meta' => array(
@@ -427,7 +427,7 @@ class StudioChampGauche{
                     
                     $args = array(
                         'id' => 'is-users-profile',
-                        'title' => __('Profil', 'cg-core-plugin'),
+                        'title' => __('Profil', 'cg-core'),
                         'href' => $admin_url . 'profile.php',
                         'meta' => array(
                             'class' => 'is-users-profile'
@@ -448,7 +448,7 @@ class StudioChampGauche{
                     */
                     $args = array(
 						'id' => 'is-site',
-						'title' => __('Configurations', 'cg-core-plugin'),
+						'title' => __('Configurations', 'cg-core'),
 						'meta' => array(
 							'class' => 'is-site'
 						)
@@ -461,7 +461,7 @@ class StudioChampGauche{
                     */
                     $args = array(
 						'id' => 'is-site-settings',
-						'title' => __('Générales', 'cg-core-plugin'),
+						'title' => __('Générales', 'cg-core'),
 						'href' => $admin_url . 'admin.php?page=site-settings',
 						'parent' => 'is-site',
 						'meta' => array(
@@ -477,7 +477,7 @@ class StudioChampGauche{
                     if(current_user_can('switch_themes')){
                         $args = array(
                             'id' => 'is-site-themes',
-                            'title' => __('Thèmes', 'cg-core-plugin'),
+                            'title' => __('Thèmes', 'cg-core'),
                             'href' => $admin_url . 'themes.php',
                             'parent' => 'is-site',
                             'meta' => array(
@@ -493,7 +493,7 @@ class StudioChampGauche{
                         */
                         $args = array(
                             'id' => 'is-site-themes-editor',
-                            'title' => __('Éditeur', 'cg-core-plugin'),
+                            'title' => __('Éditeur', 'cg-core'),
                             'href' => $admin_url . 'theme-editor.php',
                             'parent' => 'is-site-themes',
                             'meta' => array(
@@ -513,7 +513,7 @@ class StudioChampGauche{
                         
                         $args = array(
                             'id' => 'is-site-plugins',
-                            'title' => __('Extensions', 'cg-core-plugin'),
+                            'title' => __('Extensions', 'cg-core'),
                             'href' => $admin_url . 'plugins.php',
                             'parent' => 'is-site',
                             'meta' => array(
@@ -528,7 +528,7 @@ class StudioChampGauche{
                         */
                         $args = array(
                             'id' => 'is-site-plugin-editor',
-                            'title' => __('Éditeur', 'cg-core-plugin'),
+                            'title' => __('Éditeur', 'cg-core'),
                             'href' => $admin_url . 'plugin-editor.php',
                             'parent' => 'is-site-plugins',
                             'meta' => array(
@@ -544,7 +544,7 @@ class StudioChampGauche{
                         */
                         $args = array(
                             'id' => 'is-acf',
-                            'title' => __('ACF', 'cg-core-plugin'),
+                            'title' => __('ACF', 'cg-core'),
                             'href' => $admin_url . 'edit.php?post_type=acf-field-group',
                             'parent' => 'is-site',
                             'meta' => array(
@@ -559,7 +559,7 @@ class StudioChampGauche{
                         */
                         $args = array(
                             'id' => 'is-site-import',
-                            'title' => __('Importer', 'cg-core-plugin'),
+                            'title' => __('Importer', 'cg-core'),
                             'href' => $admin_url . 'import.php',
                             'parent' => 'is-site',
                             'meta' => array(
@@ -575,7 +575,7 @@ class StudioChampGauche{
                         */
                         $args = array(
                             'id' => 'is-site-export',
-                            'title' => __('Exporter', 'cg-core-plugin'),
+                            'title' => __('Exporter', 'cg-core'),
                             'href' => $admin_url . 'export.php',
                             'parent' => 'is-site',
                             'meta' => array(
