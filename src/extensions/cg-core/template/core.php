@@ -22,6 +22,12 @@ require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 
 /*
+* Load Languages
+*/
+load_plugin_textdomain('cg-core', false, basename(__DIR__) . '/langs/');
+
+
+/*
 * Classes
 */
 require_once 'class/render.php';
@@ -47,11 +53,6 @@ class StudioChampGauche{
         * Shot Events on init
         */
         add_action('init', function(){
-            
-            /*
-			* Load Languages
-			*/
-			load_plugin_textdomain('cg-core', false, basename(__DIR__) . '/langs/');
 			
             /*
             * Top Bar
