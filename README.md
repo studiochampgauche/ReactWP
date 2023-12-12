@@ -37,3 +37,7 @@ We have build a plugin that help us to handle repetitive needs in each project. 
 ***Default:*** French
 
 ***Translation:*** en_US, en_CA, en_GB, en_AU, en_NZ, en_ZA
+
+# Demo
+
+- [Plugin Manipulation Examples](/src/themes/the-theme/template/functions.php)
