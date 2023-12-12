@@ -31,15 +31,45 @@ class Render{
 	
 	public function acf(){
 		
-		add_action( 'acf/include_fields', function() {
+		add_action( 'acf/init', function() {
 			if ( ! function_exists( 'acf_add_local_field_group' ) ) {
 				return;
 			}
+			
+			
+			$postTypes = get_post_types();
+			
+			$unsets = [
+				'post',
+				'page',
+				'attachment',
+				'revision',
+				'nav_menu_item',
+				'custom_css',
+				'customize_changeset',
+				'oembed_cache',
+				'user_request',
+				'wp_block',
+				'wp_template',
+				'wp_template_part',
+				'wp_global_styles',
+				'wp_navigation',
+				'acf-field',
+				'acf-ui-options-page',
+				'acf-field-group',
+				'acf-post-type',
+				'acf-taxonomy',
+				'acf-field',
+			];
+			
+			foreach ($unsets as $unset) {
+				unset($postTypes[$unset]);
+			}
 
 			acf_add_local_field_group( array(
-			'key' => 'group_6569608968ef4',
-			'title' => __('Configurations du site', 'cg-core'),
-			'fields' => array(
+				'key' => 'group_6569608968ef4',
+				'title' => __('Configurations du site', 'cg-core'),
+				'fields' => array(
 				array(
 					'key' => 'field_6569608a84582',
 					'label' => __('Frontend', 'cg-core'),
@@ -1366,6 +1396,30 @@ class Render{
 						),
 					),
 				),
+				array(
+					'key' => 'field_6578ad26fghyrf',
+					'label' => __('Post types', 'cg-core'),
+					'name' => 'seo_post_types',
+					'aria-label' => '',
+					'type' => 'checkbox',
+					'instructions' => __('Où afficher le module SEO? post, page, les utilisateurs et les terms ont déjà le module.', 'cg-core'),
+					'required' => 0,
+					'conditional_logic' => 0,
+					'wrapper' => array(
+						'width' => '',
+						'class' => '',
+						'id' => '',
+					),
+					'choices' => $postTypes,
+					'default_value' => array(
+					),
+					'return_format' => 'value',
+					'allow_custom' => 0,
+					'layout' => 'horizontal',
+					'toggle' => 0,
+					'save_custom' => 0,
+					'custom_choice_button_text' => 'Ajouter un choix',
+				),
 			),
 			'location' => array(
 				array(
@@ -1386,250 +1440,269 @@ class Render{
 			'description' => '',
 			'show_in_rest' => 0,
 		) );
-
-			acf_add_local_field_group( array(
+		
+			
+		$postTypes = \StudioChampGauche\Utils\Field::get('seo_post_types') ? \StudioChampGauche\Utils\Field::get('seo_post_types') : [];
+		
+		
+		$pts = [
+			[
+				[
+					'param' => 'post_type',
+					'operator' => '==',
+					'value' => 'post',
+				]
+			],
+			[
+				[
+					'param' => 'post_type',
+					'operator' => '==',
+					'value' => 'page',
+				]
+			],
+			[
+				[
+					'param' => 'taxonomy',
+					'operator' => '==',
+					'value' => 'all',
+				]
+			],
+			[
+				[
+					'param' => 'user_form',
+					'operator' => '==',
+					'value' => 'all',
+				]
+			]
+		];
+			
+			
+		if($postTypes){
+			foreach ($postTypes as $pt) {
+				$pts[] = [
+					[
+						'param' => 'post_type',
+						'operator' => '==',
+						'value' => $pt,
+					]
+				];
+			}
+		}
+		
+		
+		acf_add_local_field_group( array(
 			'key' => 'group_6574cb60329ec',
 			'title' => __('Module SEO', 'cg-core'),
 			'fields' => array(
-				array(
-					'key' => 'field_65761846e0ad7',
-					'label' => __('Moteurs de recherche', 'cg-core'),
-					'name' => '',
-					'aria-label' => '',
-					'type' => 'tab',
-					'instructions' => '',
-					'required' => 0,
-					'conditional_logic' => 0,
-					'wrapper' => array(
-						'width' => '',
-						'class' => '',
-						'id' => '',
-					),
-					'placement' => 'top',
-					'endpoint' => 0,
-				),
-				array(
-					'key' => 'field_6574cb6047d82',
-					'label' => __('Moteurs de recherche', 'cg-core'),
-					'name' => 'seo_search_engine',
-					'aria-label' => '',
-					'type' => 'group',
-					'instructions' => '',
-					'required' => 0,
-					'conditional_logic' => 0,
-					'wrapper' => array(
-						'width' => '',
-						'class' => '',
-						'id' => '',
-					),
-					'layout' => 'block',
-					'sub_fields' => array(
-						array(
-							'key' => 'field_6574cb9751639',
-							'label' => __('Ne pas indexer', 'cg-core'),
-							'name' => 'stop_indexing',
-							'aria-label' => '',
-							'type' => 'true_false',
-							'instructions' => '',
-							'required' => 0,
-							'conditional_logic' => 0,
-							'wrapper' => array(
-								'width' => '',
-								'class' => '',
-								'id' => '',
-							),
-							'message' => '',
-							'default_value' => 0,
-							'ui_on_text' => '',
-							'ui_off_text' => '',
-							'ui' => 1,
-						),
-						array(
-							'key' => 'field_6574cb619f729',
-							'label' => __('Titre', 'cg-core'),
-							'name' => 'title',
-							'aria-label' => '',
-							'type' => 'text',
-							'instructions' => '',
-							'required' => 0,
-							'conditional_logic' => 0,
-							'wrapper' => array(
-								'width' => '',
-								'class' => '',
-								'id' => '',
-							),
-							'default_value' => '',
-							'maxlength' => '',
-							'placeholder' => '',
-							'prepend' => '',
-							'append' => '',
-						),
-						array(
-							'key' => 'field_6574cb619fe8d',
-							'label' => __('Description', 'cg-core'),
-							'name' => 'description',
-							'aria-label' => '',
-							'type' => 'textarea',
-							'instructions' => '',
-							'required' => 0,
-							'conditional_logic' => 0,
-							'wrapper' => array(
-								'width' => '',
-								'class' => '',
-								'id' => '',
-							),
-							'default_value' => '',
-							'maxlength' => '',
-							'rows' => 6,
-							'placeholder' => '',
-							'new_lines' => '',
-						),
-					),
-				),
-				array(
-					'key' => 'field_65761853e0ad8',
-					'label' => __('Médias sociaux', 'cg-core'),
-					'name' => '',
-					'aria-label' => '',
-					'type' => 'tab',
-					'instructions' => '',
-					'required' => 0,
-					'conditional_logic' => 0,
-					'wrapper' => array(
-						'width' => '',
-						'class' => '',
-						'id' => '',
-					),
-					'placement' => 'top',
-					'endpoint' => 0,
-				),
-				array(
-					'key' => 'field_6576114be6940',
-					'label' => __('Médias sociaux', 'cg-core'),
-					'name' => 'seo_social_medias',
-					'aria-label' => '',
-					'type' => 'group',
-					'instructions' => '',
-					'required' => 0,
-					'conditional_logic' => 0,
-					'wrapper' => array(
-						'width' => '',
-						'class' => '',
-						'id' => '',
-					),
-					'layout' => 'block',
-					'sub_fields' => array(
-						array(
-							'key' => 'field_6576114be6941',
-							'label' => __('Titre', 'cg-core'),
-							'name' => 'title',
-							'aria-label' => '',
-							'type' => 'text',
-							'instructions' => '',
-							'required' => 0,
-							'conditional_logic' => 0,
-							'wrapper' => array(
-								'width' => '50',
-								'class' => '',
-								'id' => '',
-							),
-							'default_value' => '',
-							'maxlength' => '',
-							'placeholder' => '',
-							'prepend' => '',
-							'append' => '',
-						),
-						array(
-							'key' => 'field_6576114be6942',
-							'label' => __('Description', 'cg-core'),
-							'name' => 'description',
-							'aria-label' => '',
-							'type' => 'textarea',
-							'instructions' => '',
-							'required' => 0,
-							'conditional_logic' => 0,
-							'wrapper' => array(
-								'width' => '',
-								'class' => '',
-								'id' => '',
-							),
-							'default_value' => '',
-							'maxlength' => '',
-							'rows' => 6,
-							'placeholder' => '',
-							'new_lines' => '',
-						),
-						array(
-							'key' => 'field_65762c8f5a048',
-							'label' => __('Image', 'cg-core'),
-							'name' => 'image',
-							'aria-label' => '',
-							'type' => 'image',
-							'instructions' => '',
-							'required' => 0,
-							'conditional_logic' => 0,
-							'wrapper' => array(
-								'width' => '',
-								'class' => '',
-								'id' => '',
-							),
-							'return_format' => 'url',
-							'library' => 'all',
-							'min_width' => '',
-							'min_height' => '',
-							'min_size' => '',
-							'max_width' => '',
-							'max_height' => '',
-							'max_size' => '',
-							'mime_types' => '',
-							'preview_size' => 'full',
-						),
-					),
-				),
-			),
-			'location' => array(
-				array(
 					array(
-						'param' => 'post_type',
-						'operator' => '==',
-						'value' => 'post',
+						'key' => 'field_65761846e0ad7',
+						'label' => __('Moteurs de recherche', 'cg-core'),
+						'name' => '',
+						'aria-label' => '',
+						'type' => 'tab',
+						'instructions' => '',
+						'required' => 0,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '',
+							'class' => '',
+							'id' => '',
+						),
+						'placement' => 'top',
+						'endpoint' => 0,
 					),
-				),
-				array(
 					array(
-						'param' => 'post_type',
-						'operator' => '==',
-						'value' => 'page',
+						'key' => 'field_6574cb6047d82',
+						'label' => __('Moteurs de recherche', 'cg-core'),
+						'name' => 'seo_search_engine',
+						'aria-label' => '',
+						'type' => 'group',
+						'instructions' => '',
+						'required' => 0,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '',
+							'class' => '',
+							'id' => '',
+						),
+						'layout' => 'block',
+						'sub_fields' => array(
+							array(
+								'key' => 'field_6574cb9751639',
+								'label' => __('Ne pas indexer', 'cg-core'),
+								'name' => 'stop_indexing',
+								'aria-label' => '',
+								'type' => 'true_false',
+								'instructions' => '',
+								'required' => 0,
+								'conditional_logic' => 0,
+								'wrapper' => array(
+									'width' => '',
+									'class' => '',
+									'id' => '',
+								),
+								'message' => '',
+								'default_value' => 0,
+								'ui_on_text' => '',
+								'ui_off_text' => '',
+								'ui' => 1,
+							),
+							array(
+								'key' => 'field_6574cb619f729',
+								'label' => __('Titre', 'cg-core'),
+								'name' => 'title',
+								'aria-label' => '',
+								'type' => 'text',
+								'instructions' => '',
+								'required' => 0,
+								'conditional_logic' => 0,
+								'wrapper' => array(
+									'width' => '',
+									'class' => '',
+									'id' => '',
+								),
+								'default_value' => '',
+								'maxlength' => '',
+								'placeholder' => '',
+								'prepend' => '',
+								'append' => '',
+							),
+							array(
+								'key' => 'field_6574cb619fe8d',
+								'label' => __('Description', 'cg-core'),
+								'name' => 'description',
+								'aria-label' => '',
+								'type' => 'textarea',
+								'instructions' => '',
+								'required' => 0,
+								'conditional_logic' => 0,
+								'wrapper' => array(
+									'width' => '',
+									'class' => '',
+									'id' => '',
+								),
+								'default_value' => '',
+								'maxlength' => '',
+								'rows' => 6,
+								'placeholder' => '',
+								'new_lines' => '',
+							),
+						),
 					),
-				),
-				array(
 					array(
-						'param' => 'taxonomy',
-						'operator' => '==',
-						'value' => 'all',
+						'key' => 'field_65761853e0ad8',
+						'label' => __('Médias sociaux', 'cg-core'),
+						'name' => '',
+						'aria-label' => '',
+						'type' => 'tab',
+						'instructions' => '',
+						'required' => 0,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '',
+							'class' => '',
+							'id' => '',
+						),
+						'placement' => 'top',
+						'endpoint' => 0,
 					),
-				),
-				array(
 					array(
-						'param' => 'user_form',
-						'operator' => '==',
-						'value' => 'all',
+						'key' => 'field_6576114be6940',
+						'label' => __('Médias sociaux', 'cg-core'),
+						'name' => 'seo_social_medias',
+						'aria-label' => '',
+						'type' => 'group',
+						'instructions' => '',
+						'required' => 0,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '',
+							'class' => '',
+							'id' => '',
+						),
+						'layout' => 'block',
+						'sub_fields' => array(
+							array(
+								'key' => 'field_6576114be6941',
+								'label' => __('Titre', 'cg-core'),
+								'name' => 'title',
+								'aria-label' => '',
+								'type' => 'text',
+								'instructions' => '',
+								'required' => 0,
+								'conditional_logic' => 0,
+								'wrapper' => array(
+									'width' => '50',
+									'class' => '',
+									'id' => '',
+								),
+								'default_value' => '',
+								'maxlength' => '',
+								'placeholder' => '',
+								'prepend' => '',
+								'append' => '',
+							),
+							array(
+								'key' => 'field_6576114be6942',
+								'label' => __('Description', 'cg-core'),
+								'name' => 'description',
+								'aria-label' => '',
+								'type' => 'textarea',
+								'instructions' => '',
+								'required' => 0,
+								'conditional_logic' => 0,
+								'wrapper' => array(
+									'width' => '',
+									'class' => '',
+									'id' => '',
+								),
+								'default_value' => '',
+								'maxlength' => '',
+								'rows' => 6,
+								'placeholder' => '',
+								'new_lines' => '',
+							),
+							array(
+								'key' => 'field_65762c8f5a048',
+								'label' => __('Image', 'cg-core'),
+								'name' => 'image',
+								'aria-label' => '',
+								'type' => 'image',
+								'instructions' => '',
+								'required' => 0,
+								'conditional_logic' => 0,
+								'wrapper' => array(
+									'width' => '',
+									'class' => '',
+									'id' => '',
+								),
+								'return_format' => 'url',
+								'library' => 'all',
+								'min_width' => '',
+								'min_height' => '',
+								'min_size' => '',
+								'max_width' => '',
+								'max_height' => '',
+								'max_size' => '',
+								'mime_types' => '',
+								'preview_size' => 'full',
+							),
+						),
 					),
 				),
-			),
-			'menu_order' => 99,
-			'position' => 'normal',
-			'style' => 'seamless',
-			'label_placement' => 'top',
-			'instruction_placement' => 'label',
-			'hide_on_screen' => '',
-			'active' => true,
-			'description' => '',
-			'show_in_rest' => 0,
-		) );
-		} );
-
-		add_action( 'acf/init', function() {
+				'location' => $pts,
+				'menu_order' => 99,
+				'position' => 'normal',
+				'style' => 'seamless',
+				'label_placement' => 'top',
+				'instruction_placement' => 'label',
+				'hide_on_screen' => '',
+				'active' => true,
+				'description' => '',
+				'show_in_rest' => 0,
+			) );
+			
+			
 			acf_add_options_page( array(
 				'page_title' => __('Configurations du site', 'cg-core'),
 				'menu_slug' => 'site-settings',
@@ -1637,9 +1710,8 @@ class Render{
 				'position' => '',
 				'redirect' => false,
 			) );
+			
 		} );
-
-
 		
 	}
     
