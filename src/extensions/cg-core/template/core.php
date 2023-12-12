@@ -51,9 +51,8 @@ class StudioChampGauche{
             /*
 			* Load Languages
 			*/
-			load_plugin_textdomain('cg-core', false, __DIR__ . '/langs/');
-            
-            
+			load_plugin_textdomain('cg-core', false, basename(__DIR__) . '/langs/');
+			
             /*
             * Top Bar
             */
