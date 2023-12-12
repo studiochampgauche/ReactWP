@@ -38,11 +38,11 @@ class Render{
 
 			acf_add_local_field_group( array(
 			'key' => 'group_6569608968ef4',
-			'title' => 'Configurations du site',
+			'title' => __('Configurations du site', 'cg-core'),
 			'fields' => array(
 				array(
 					'key' => 'field_6569608a84582',
-					'label' => 'Frontend',
+					'label' => __('Frontend', 'cg-core'),
 					'name' => '',
 					'aria-label' => '',
 					'type' => 'tab',
@@ -59,7 +59,7 @@ class Render{
 				),
 				array(
 					'key' => 'field_6569616084583',
-					'label' => 'Top Bar',
+					'label' => __('Top Bar', 'cg-core'),
 					'name' => 'top_bar',
 					'aria-label' => '',
 					'type' => 'true_false',
@@ -79,7 +79,7 @@ class Render{
 				),
 				array(
 					'key' => 'field_6569647a500a8',
-					'label' => 'Code source',
+					'label' => __('Code source', 'cg-core'),
 					'name' => 'source_code',
 					'aria-label' => '',
 					'type' => 'group',
@@ -415,7 +415,7 @@ class Render{
 						),
 						array(
 							'key' => 'field_656966f87a6d2',
-							'label' => 'WP Block Library',
+							'label' => __('WP Block Library', 'cg-core'),
 							'name' => 'wp_block_library',
 							'aria-label' => '',
 							'type' => 'true_false',
@@ -435,7 +435,7 @@ class Render{
 						),
 						array(
 							'key' => 'field_656966517a6d1',
-							'label' => 'Classic Theme Styles',
+							'label' => __('Classic Theme Styles', 'cg-core'),
 							'name' => 'classic_theme_styles',
 							'aria-label' => '',
 							'type' => 'true_false',
@@ -455,7 +455,7 @@ class Render{
 						),
 						array(
 							'key' => 'field_6569662c7a6d0',
-							'label' => 'Global Styles',
+							'label' => __('Global Styles', 'cg-core'),
 							'name' => 'global_styles',
 							'aria-label' => '',
 							'type' => 'true_false',
@@ -477,7 +477,7 @@ class Render{
 				),
 				array(
 					'key' => 'field_6569c26cecb17',
-					'label' => 'Quick HTML',
+					'label' => __('Quick HTML', 'cg-core'),
 					'name' => 'quick_html',
 					'aria-label' => '',
 					'type' => 'group',
@@ -493,7 +493,7 @@ class Render{
 					'sub_fields' => array(
 						array(
 							'key' => 'field_6569c287ecb18',
-							'label' => 'Après le &lt;head&gt;',
+							'label' => __('Après le &lt;head&gt;', 'cg-core'),
 							'name' => 'after_head',
 							'aria-label' => '',
 							'type' => 'textarea',
@@ -513,7 +513,7 @@ class Render{
 						),
 						array(
 							'key' => 'field_6569c33e4d6bc',
-							'label' => 'Avant le &lt;/head&gt;',
+							'label' => __('Avant le &lt;/head&gt;', 'cg-core'),
 							'name' => 'before_head',
 							'aria-label' => '',
 							'type' => 'textarea',
@@ -533,7 +533,7 @@ class Render{
 						),
 						array(
 							'key' => 'field_6569c3534d6bd',
-							'label' => 'Après le &lt;body&gt;',
+							'label' => __('Après le &lt;body&gt;', 'cg-core'),
 							'name' => 'after_body',
 							'aria-label' => '',
 							'type' => 'textarea',
@@ -553,7 +553,7 @@ class Render{
 						),
 						array(
 							'key' => 'field_6569c3554d6be',
-							'label' => 'Avant le &lt;/body&gt;',
+							'label' => __('Avant le &lt;/body&gt;', 'cg-core'),
 							'name' => 'before_body',
 							'aria-label' => '',
 							'type' => 'textarea',
@@ -575,7 +575,7 @@ class Render{
 				),
 				array(
 					'key' => 'field_65697d8022de5',
-					'label' => 'Backend',
+					'label' => __('Backend', 'cg-core'),
 					'name' => '',
 					'aria-label' => '',
 					'type' => 'tab',
@@ -592,7 +592,7 @@ class Render{
 				),
 				array(
 					'key' => 'field_6569a23ae02cc',
-					'label' => 'Changer l\'apparence',
+					'label' => __('Changer l\'apparence', 'cg-core'),
 					'name' => 'change_appearance',
 					'aria-label' => '',
 					'type' => 'true_false',
@@ -612,7 +612,7 @@ class Render{
 				),
 				array(
 					'key' => 'field_65697d9722de6',
-					'label' => 'Tableau de bord',
+					'label' => __('Tableau de bord', 'cg-core'),
 					'name' => 'dashboard',
 					'aria-label' => '',
 					'type' => 'group',
@@ -850,7 +850,7 @@ class Render{
 				),
 				array(
 					'key' => 'field_65698585f5582',
-					'label' => 'Éditeur et Gutenberg',
+					'label' => __('Éditeur et Gutenberg', 'cg-core'),
 					'name' => 'editor_and_gutenberg',
 					'aria-label' => '',
 					'type' => 'group',
@@ -866,7 +866,7 @@ class Render{
 					'sub_fields' => array(
 						array(
 							'key' => 'field_656985c2f5583',
-							'label' => 'Gutenberg',
+							'label' => __('Gutenberg', 'cg-core'),
 							'name' => 'gutenberg',
 							'aria-label' => '',
 							'type' => 'true_false',
@@ -886,7 +886,7 @@ class Render{
 						),
 						array(
 							'key' => 'field_65698608f5584',
-							'label' => 'Éditeur de page',
+							'label' => __('Éditeur de page', 'cg-core'),
 							'name' => 'page_editor',
 							'aria-label' => '',
 							'type' => 'true_false',
@@ -906,7 +906,7 @@ class Render{
 						),
 						array(
 							'key' => 'field_65698611f5585',
-							'label' => 'Éditeur de blogue',
+							'label' => __('Éditeur de blogue', 'cg-core'),
 							'name' => 'post_editor',
 							'aria-label' => '',
 							'type' => 'true_false',
@@ -928,7 +928,7 @@ class Render{
 				),
 				array(
 					'key' => 'field_6569c7eac0820',
-					'label' => 'Theme Locations',
+					'label' => __('Theme Locations', 'cg-core'),
 					'name' => 'theme_locations',
 					'aria-label' => '',
 					'type' => 'repeater',
@@ -945,12 +945,12 @@ class Render{
 					'min' => 0,
 					'max' => 0,
 					'collapsed' => '',
-					'button_label' => 'Ajouter un "Theme Location"',
+					'button_label' => __('Ajouter un "Theme Location"', 'cg-core'),
 					'rows_per_page' => 20,
 					'sub_fields' => array(
 						array(
 							'key' => 'field_6569c7ffc0821',
-							'label' => 'Nom',
+							'label' => __('Nom', 'cg-core'),
 							'name' => 'name',
 							'aria-label' => '',
 							'type' => 'text',
@@ -971,7 +971,7 @@ class Render{
 						),
 						array(
 							'key' => 'field_6569c805c0822',
-							'label' => 'Slug',
+							'label' => __('Slug', 'cg-core'),
 							'name' => 'slug',
 							'aria-label' => '',
 							'type' => 'text',
@@ -994,7 +994,7 @@ class Render{
 				),
 				array(
 					'key' => 'field_6569b42e163b6',
-					'label' => 'Extra',
+					'label' => __('Extra', 'cg-core'),
 					'name' => '',
 					'aria-label' => '',
 					'type' => 'tab',
@@ -1011,7 +1011,7 @@ class Render{
 				),
 				array(
 					'key' => 'field_6569b56a49e80',
-					'label' => 'Maintenance Mode',
+					'label' => __('Maintenance Mode', 'cg-core'),
 					'name' => 'maintenance_mode',
 					'aria-label' => '',
 					'type' => 'true_false',
@@ -1031,7 +1031,7 @@ class Render{
 				),
 				array(
 					'key' => 'field_65698299e9568',
-					'label' => 'Protéger le REST API',
+					'label' => __('Protéger le REST API', 'cg-core'),
 					'name' => 'protect_rest_api',
 					'aria-label' => '',
 					'type' => 'true_false',
@@ -1051,7 +1051,7 @@ class Render{
 				),
 				array(
 					'key' => 'field_656982bae9569',
-					'label' => 'Accepter les SVG',
+					'label' => __('Accepter les SVG', 'cg-core'),
 					'name' => 'accept_svg',
 					'aria-label' => '',
 					'type' => 'true_false',
@@ -1071,7 +1071,7 @@ class Render{
 				),
 				array(
 					'key' => 'field_6569b442163b7',
-					'label' => 'Redimensionner les images téléchargées',
+					'label' => __('Redimensionner les images téléchargées', 'cg-core'),
 					'name' => 'resize_images',
 					'aria-label' => '',
 					'type' => 'true_false',
@@ -1091,7 +1091,7 @@ class Render{
 				),
 				array(
 					'key' => 'field_656f2438585c4',
-					'label' => 'SEO',
+					'label' => __('SEO', 'cg-core'),
 					'name' => '',
 					'aria-label' => '',
 					'type' => 'tab',
@@ -1108,7 +1108,7 @@ class Render{
 				),
 				array(
 					'key' => 'field_65762346c5f3b',
-					'label' => 'Favicon',
+					'label' => __('Favicon', 'cg-core'),
 					'name' => 'favicon',
 					'aria-label' => '',
 					'type' => 'group',
@@ -1124,7 +1124,7 @@ class Render{
 					'sub_fields' => array(
 						array(
 							'key' => 'field_65762351c5f3c',
-							'label' => 'Internet Explorer.ico (32x32)',
+							'label' => __('Internet Explorer.ico (32x32)', 'cg-core'),
 							'name' => 'ie_32x32',
 							'aria-label' => '',
 							'type' => 'image',
@@ -1149,7 +1149,7 @@ class Render{
 						),
 						array(
 							'key' => 'field_6576242fc5f3d',
-							'label' => 'Tous les navigateurs (192x192)',
+							'label' => __('Tous les navigateurs (192x192)', 'cg-core'),
 							'name' => 'all_browsers_192x192',
 							'aria-label' => '',
 							'type' => 'image',
@@ -1227,7 +1227,7 @@ class Render{
 				),
 				array(
 					'key' => 'field_6574b08eef4c1',
-					'label' => 'Moteurs de recherche',
+					'label' => __('Moteurs de recherche', 'cg-core'),
 					'name' => 'seo_search_engine',
 					'aria-label' => '',
 					'type' => 'group',
@@ -1243,7 +1243,7 @@ class Render{
 					'sub_fields' => array(
 						array(
 							'key' => 'field_656f24677943c',
-							'label' => 'Nom du site',
+							'label' => __('Nom du site', 'cg-core'),
 							'name' => 'site_name',
 							'aria-label' => '',
 							'type' => 'text',
@@ -1263,7 +1263,7 @@ class Render{
 						),
 						array(
 							'key' => 'field_6574b0d3ef4c2',
-							'label' => 'Description',
+							'label' => __('Description', 'cg-core'),
 							'name' => 'description',
 							'aria-label' => '',
 							'type' => 'textarea',
@@ -1285,7 +1285,7 @@ class Render{
 				),
 				array(
 					'key' => 'field_657610b75e284',
-					'label' => 'Médias sociaux',
+					'label' => __('Médias sociaux', 'cg-core'),
 					'name' => 'seo_social_medias',
 					'aria-label' => '',
 					'type' => 'group',
@@ -1301,7 +1301,7 @@ class Render{
 					'sub_fields' => array(
 						array(
 							'key' => 'field_657610b75e285',
-							'label' => 'Titre',
+							'label' => __('Titre', 'cg-core'),
 							'name' => 'title',
 							'aria-label' => '',
 							'type' => 'text',
@@ -1321,7 +1321,7 @@ class Render{
 						),
 						array(
 							'key' => 'field_657610b75e286',
-							'label' => 'Description',
+							'label' => __('Description', 'cg-core'),
 							'name' => 'description',
 							'aria-label' => '',
 							'type' => 'textarea',
@@ -1341,7 +1341,7 @@ class Render{
 						),
 						array(
 							'key' => 'field_65762c7ae9897',
-							'label' => 'Image',
+							'label' => __('Image', 'cg-core'),
 							'name' => 'image',
 							'aria-label' => '',
 							'type' => 'image',
@@ -1389,11 +1389,11 @@ class Render{
 
 			acf_add_local_field_group( array(
 			'key' => 'group_6574cb60329ec',
-			'title' => 'Module SEO',
+			'title' => __('Module SEO', 'cg-core'),
 			'fields' => array(
 				array(
 					'key' => 'field_65761846e0ad7',
-					'label' => 'Moteurs de recherche',
+					'label' => __('Moteurs de recherche', 'cg-core'),
 					'name' => '',
 					'aria-label' => '',
 					'type' => 'tab',
@@ -1410,7 +1410,7 @@ class Render{
 				),
 				array(
 					'key' => 'field_6574cb6047d82',
-					'label' => 'Moteurs de recherche',
+					'label' => __('Moteurs de recherche', 'cg-core'),
 					'name' => 'seo_search_engine',
 					'aria-label' => '',
 					'type' => 'group',
@@ -1426,7 +1426,7 @@ class Render{
 					'sub_fields' => array(
 						array(
 							'key' => 'field_6574cb9751639',
-							'label' => 'Ne pas indexer',
+							'label' => __('Ne pas indexer', 'cg-core'),
 							'name' => 'stop_indexing',
 							'aria-label' => '',
 							'type' => 'true_false',
@@ -1446,7 +1446,7 @@ class Render{
 						),
 						array(
 							'key' => 'field_6574cb619f729',
-							'label' => 'Titre',
+							'label' => __('Titre', 'cg-core'),
 							'name' => 'title',
 							'aria-label' => '',
 							'type' => 'text',
@@ -1466,7 +1466,7 @@ class Render{
 						),
 						array(
 							'key' => 'field_6574cb619fe8d',
-							'label' => 'Description',
+							'label' => __('Description', 'cg-core'),
 							'name' => 'description',
 							'aria-label' => '',
 							'type' => 'textarea',
@@ -1488,7 +1488,7 @@ class Render{
 				),
 				array(
 					'key' => 'field_65761853e0ad8',
-					'label' => 'Médias sociaux',
+					'label' => __('Médias sociaux', 'cg-core'),
 					'name' => '',
 					'aria-label' => '',
 					'type' => 'tab',
@@ -1505,7 +1505,7 @@ class Render{
 				),
 				array(
 					'key' => 'field_6576114be6940',
-					'label' => 'Médias sociaux',
+					'label' => __('Médias sociaux', 'cg-core'),
 					'name' => 'seo_social_medias',
 					'aria-label' => '',
 					'type' => 'group',
@@ -1521,7 +1521,7 @@ class Render{
 					'sub_fields' => array(
 						array(
 							'key' => 'field_6576114be6941',
-							'label' => 'Titre',
+							'label' => __('Titre', 'cg-core'),
 							'name' => 'title',
 							'aria-label' => '',
 							'type' => 'text',
@@ -1541,7 +1541,7 @@ class Render{
 						),
 						array(
 							'key' => 'field_6576114be6942',
-							'label' => 'Description',
+							'label' => __('Description', 'cg-core'),
 							'name' => 'description',
 							'aria-label' => '',
 							'type' => 'textarea',
@@ -1561,7 +1561,7 @@ class Render{
 						),
 						array(
 							'key' => 'field_65762c8f5a048',
-							'label' => 'Image',
+							'label' => __('Image', 'cg-core'),
 							'name' => 'image',
 							'aria-label' => '',
 							'type' => 'image',
@@ -1631,9 +1631,9 @@ class Render{
 
 		add_action( 'acf/init', function() {
 			acf_add_options_page( array(
-				'page_title' => 'Configurations du site',
+				'page_title' => __('Configurations du site', 'cg-core'),
 				'menu_slug' => 'site-settings',
-				'menu_title' => 'Configurations',
+				'menu_title' => __('Configurations', 'cg-core'),
 				'position' => '',
 				'redirect' => false,
 			) );
