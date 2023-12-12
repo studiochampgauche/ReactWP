@@ -93,3 +93,12 @@ msgstr "Page Editor"
 
 msgid "Éditeur de blogue"
 msgstr "Blog Editor"
+
+msgid "Résultat(s) de recherche pour"
+msgstr "Search Result(s) for"
+
+msgid "Erreur 404"
+msgstr "Error 404"
+
+msgid "Publications de"
+msgstr "Posts of"
