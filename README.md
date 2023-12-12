@@ -31,5 +31,7 @@ We have build a plugin that help us to handle repetitive needs in each project. 
 > You'll need ACF Pro to play with our Core Plugin. [Get it here](https://www.advancedcustomfields.com/pro).
 
 # Admin Languages
+
 Default: French
+
 Translation: en_US, en_CA, en_GB, en_AU, en_NZ, en_ZA
