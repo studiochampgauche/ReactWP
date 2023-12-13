@@ -4,6 +4,8 @@
 
 		function __construct(){
             
+			if(!class_exists('scg')) return;
+			
             /*
             * str_replace your return when you use scg::field() or StudioChampGauche\Utils\Field::get();
             *
