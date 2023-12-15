@@ -24,7 +24,7 @@ class Seo{
 				
 				||
 				
-				((is_category() || is_tag()) && \StudioChampGauche\Utils\Field::get('seo_search_engine_stop_indexing', 'term_' . $obj->term_id))
+				((is_category() || is_tag() || is_tax()) && \StudioChampGauche\Utils\Field::get('seo_search_engine_stop_indexing', 'term_' . $obj->term_id))
 				
 				||
 				
@@ -154,7 +154,7 @@ class Seo{
 		elseif(is_author())
 			return (\StudioChampGauche\Utils\Field::get('seo_search_engine_title', 'user_' . $obj->ID) ? \StudioChampGauche\Utils\Field::get('seo_search_engine_title', 'user_' . $obj->ID) : __('Publications de', 'cg-core') . ' ' . $obj->display_name . ' - ' . self::site_name());
 			
-		elseif(is_category() || is_tag())
+		elseif(is_category() || is_tag() || is_tax())
 			return (\StudioChampGauche\Utils\Field::get('seo_search_engine_title', 'term_' . $obj->term_id) ? \StudioChampGauche\Utils\Field::get('seo_search_engine_title', 'term_' . $obj->term_id)  : $obj->name . ' - ' . self::site_name());
 			
 		elseif($obj && $obj->ID && \StudioChampGauche\Utils\Field::get('seo_search_engine_title', $obj->ID))
@@ -175,7 +175,7 @@ class Seo{
 		if(is_author() && \StudioChampGauche\Utils\Field::get('seo_search_engine_description', 'user_' . $obj->ID))
 			return \StudioChampGauche\Utils\Field::get('seo_search_engine_description', 'user_' . $obj->ID);
 		
-		elseif((is_category() || is_tag()) && \StudioChampGauche\Utils\Field::get('seo_search_engine_description', 'term_' . $obj->term_id))
+		elseif((is_category() || is_tag() || is_tax()) && \StudioChampGauche\Utils\Field::get('seo_search_engine_description', 'term_' . $obj->term_id))
 			return \StudioChampGauche\Utils\Field::get('seo_search_engine_description', 'term_' . $obj->term_id);
 		
 		elseif($obj && $obj->ID && \StudioChampGauche\Utils\Field::get('seo_search_engine_description', $obj->ID))
@@ -212,7 +212,7 @@ class Seo{
 		if(is_author())
 			return (\StudioChampGauche\Utils\Field::get('seo_social_medias_title', 'user_' . $obj->ID) ? \StudioChampGauche\Utils\Field::get('seo_social_medias_title', 'user_' . $obj->ID) : (\StudioChampGauche\Utils\Field::get('seo_social_medias_title') ? \StudioChampGauche\Utils\Field::get('seo_social_medias_title') : __('Publications de', 'cg-core-plugin') . ' ' . $obj->display_name . ' - ' . self::site_name()));
 			
-		elseif(is_category() || is_tag())
+		elseif(is_category() || is_tag() || is_tax())
 			return (\StudioChampGauche\Utils\Field::get('seo_social_medias_title', 'term_' . $obj->term_id) ? \StudioChampGauche\Utils\Field::get('seo_social_medias_title', 'term_' . $obj->term_id)  : (\StudioChampGauche\Utils\Field::get('seo_social_medias_title') ? \StudioChampGauche\Utils\Field::get('seo_social_medias_title') : $obj->name . ' - ' . self::site_name()));
 			
 		elseif($obj && $obj->ID)
@@ -234,7 +234,7 @@ class Seo{
 		if(is_author() && \StudioChampGauche\Utils\Field::get('seo_social_medias_description', 'user_' . $obj->ID))
 			return \StudioChampGauche\Utils\Field::get('seo_social_medias_description', 'user_' . $obj->ID);
 		
-		elseif((is_category() || is_tag()) && \StudioChampGauche\Utils\Field::get('seo_social_medias_description', 'term_' . $obj->term_id))
+		elseif((is_category() || is_tag() || is_tax()) && \StudioChampGauche\Utils\Field::get('seo_social_medias_description', 'term_' . $obj->term_id))
 			return \StudioChampGauche\Utils\Field::get('seo_social_medias_description', 'term_' . $obj->term_id);
 		
 		elseif($obj && $obj->ID && \StudioChampGauche\Utils\Field::get('seo_social_medias_description', $obj->ID))
@@ -254,7 +254,7 @@ class Seo{
 		if(is_author() && \StudioChampGauche\Utils\Field::get('seo_social_medias_image', 'user_' . $obj->ID))
 			return \StudioChampGauche\Utils\Field::get('seo_social_medias_image', 'user_' . $obj->ID);
 		
-		elseif((is_category() || is_tag()) && \StudioChampGauche\Utils\Field::get('seo_social_medias_image', 'term_' . $obj->term_id))
+		elseif((is_category() || is_tag() || is_tax()) && \StudioChampGauche\Utils\Field::get('seo_social_medias_image', 'term_' . $obj->term_id))
 			return \StudioChampGauche\Utils\Field::get('seo_social_medias_image', 'term_' . $obj->term_id);
 		
 		elseif($obj && $obj->ID && \StudioChampGauche\Utils\Field::get('seo_social_medias_image', $obj->ID))
