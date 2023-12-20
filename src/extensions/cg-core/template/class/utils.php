@@ -13,8 +13,13 @@ class Field{
 
         $return = ($field && $id ? get_field($field, $id) : ($field ? (!empty(get_field($field, 'option')) ? get_field($field, 'option') : get_field($field)) : null));
 
-
-        return $return && self::$elementsToReplace ? str_replace(self::$elementsToReplace[0], self::$elementsToReplace[1], $return) : $return;
+		
+		if($return && is_array($return) && self::$elementsToReplace)
+			self::recursive(self::$elementsToReplace[0], self::$elementsToReplace[1], $return);
+		elseif($return && is_string($return) && self::$elementsToReplace)
+			$return = str_replace(self::$elementsToReplace[0], self::$elementsToReplace[1], $return);
+		
+        return $return;
 
     }
 
@@ -26,6 +31,16 @@ class Field{
         ];
 
     }
+	
+	public static function recursive($search, $replace, &$array) {
+		foreach ($array as $key => &$value) {
+			if (is_array($value)) {
+				self::recursive($search, $replace, $array[$key]);
+			} else {
+				$array[$key] = str_replace($search, $replace, $value);
+			}
+		}
+	}
 
 }
 

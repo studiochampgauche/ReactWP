@@ -10,6 +10,8 @@
             * str_replace your return when you use scg::field() or StudioChampGauche\Utils\Field::get();
             *
             * StudioChampGauche\Utils\Field::replace(['{MAIN_EMAIL}'], [scg::field('contact_email_main')]);
+			*
+			* You need to use ::replace Method in acf/init hook if you play with acf Field
             */
             
             
