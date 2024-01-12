@@ -1,8 +1,8 @@
 @use 'sass:math';
 @function vw($value, $screen_dimension: 1920px){
-  @return (math.div($value, $screen_dimension) * 100) * 1vw;
+  @return (math.div($value, $screen_dimension) * 100) * 1svw;
 }
 
 @function vh($value, $screen_dimension: 1080px){
-  @return (math.div($value, $screen_dimension) * 100) * 1vh;
+  @return (math.div($value, $screen_dimension) * 100) * 1svh;
 }
