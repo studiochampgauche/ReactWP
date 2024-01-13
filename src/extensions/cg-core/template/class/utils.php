@@ -46,12 +46,15 @@ class Field{
 
 class CustomPostType{
 
+    public static $defaults = [];
     public static $configs = [];
 
     public static function get($post_type = 'post', $args = []){
 
         if(!is_array(self::$configs)) return;
-
+		
+		self::$configs = self::$defaults;
+		
         if($args && is_array($args)){
             foreach($args as $arg_key => $arg){
                 self::$configs[$arg_key] = $arg;
@@ -75,12 +78,15 @@ class CustomPostType{
 
 class Menu{
 
+    public static $defaults = [];
     public static $configs = [];
 
     public static function get($theme_location = null, $args = []){
 
         if(!is_array(self::$configs)) return;
-
+		
+		self::$configs = self::$defaults;
+		
         if($args && is_array($args)){
             foreach($args as $arg_key => $arg){
                 self::$configs[$arg_key] = $arg;
@@ -118,8 +124,8 @@ class Menu{
 }
 
 class Button{
-
-    public static $configs = [
+	
+	public static $defaults = [
         'text' => null,
         'href' => null,
         'class' => null,
@@ -127,11 +133,15 @@ class Button{
         'before' => null,
         'after' => null
     ];
+	
+	
+    public static $configs = [];
 
     public static function get($args = []){
 
         if(!is_array(self::$configs)) return;
-
+		
+		self::$configs = self::$defaults;
 
         if($args && is_array($args)){
             foreach($args as $arg_key => $arg){
@@ -158,7 +168,7 @@ class Button{
 
     public static function default($parameter, $value){
 
-        self::$configs[$parameter] = $value;
+        self::$defaults[$parameter] = $value;
 
     }
 
@@ -166,16 +176,19 @@ class Button{
 
 class Source{
 
-    public static $configs = [
+    public static $defaults = [
         'base' => '/',
         'path' => null,
         'url' => false
     ];
+		
+	public static $configs = [];
 
     public static function get($args = []){
 
         if(!is_array(self::$configs)) return;
-
+		
+		self::$configs = self::$defaults;
 
         if($args && is_array($args)){
             foreach($args as $arg_key => $arg){
