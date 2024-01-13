@@ -70,7 +70,7 @@ class CustomPostType{
 
     public static function default($parameter, $value){
 
-        self::$configs[$parameter] = $value;
+        self::$defaults[$parameter] = $value;
 
     }
 
@@ -117,7 +117,7 @@ class Menu{
 
     public static function default($parameter, $value){
 
-        self::$configs[$parameter] = $value;
+        self::$defaults[$parameter] = $value;
 
     }
 
@@ -203,7 +203,7 @@ class Source{
 
     public static function default($parameter, $value){
 
-        self::$configs[$parameter] = $value;
+        self::$defaults[$parameter] = $value;
 
     }
 
