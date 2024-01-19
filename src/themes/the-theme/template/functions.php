@@ -18,7 +18,7 @@
             /*
             * Set defaults when you call scg::cpt() or StudioChampGauche\Utils\CustomPostType::get();
             */
-            StudioChampGauche\Utils\CustomPostType::default('post_per_page', -1);
+            StudioChampGauche\Utils\CustomPostType::default('posts_per_page', -1);
             StudioChampGauche\Utils\CustomPostType::default('paged', 1);
             
             
