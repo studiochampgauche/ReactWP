@@ -82,6 +82,34 @@
 				]);
 				
 			}, 11);
+			
+			
+			/*
+			* Shot events on init
+			*/
+			add_action('init', function(){
+				
+				/*
+				* Remove default posts, pages
+				*/
+				$_ids = $ids = [1, 2, 3];
+				if(isset($_ids) && $_ids){
+
+					foreach($ids as $id){
+
+						if(!get_post_status($id)) continue;
+
+						wp_delete_post($id, true);
+
+					}
+
+					$phpFile = str_replace('$_ids = $ids = [1, 2, 3];', '$ids = [];', file_get_contents(__FILE__));
+
+					file_put_contents(__FILE__, $phpFile);
+
+				}
+				
+			});
 
 		}
 
