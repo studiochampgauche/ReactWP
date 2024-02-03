@@ -71,7 +71,16 @@
 			});
             */
             
-            
+            /*
+			* Preload
+			add_action('wp_head', function(){
+				echo '<link rel="preload" as="font" href="" type="font/woff2" crossorigin />';
+				echo '<link rel="preload" as="image" href="">';
+				
+			}, 3);
+			*/
+			
+			
 			/*
 			* Enqueue Scripts
 			*/
