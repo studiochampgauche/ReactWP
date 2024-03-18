@@ -7,9 +7,7 @@ import * as Barba from './barba/Barba.js';
 
 export default class PageTransitor{
     
-    constructor(gscroll){
-        
-        this.gscroll = gscroll;
+    constructor(){
         
         this.init();
         
@@ -21,7 +19,7 @@ export default class PageTransitor{
         
     }
     
-    onLeave(data){
+    onLeave(data)
             
         const tl = gsap.timeline();
 
@@ -35,8 +33,8 @@ export default class PageTransitor{
     
     onAfterLeave(){
         
-        this.gscroll.paused(true);
-        this.gscroll.scrollTop(0);
+        window.gscroll.paused(true);
+        window.gscroll.scrollTop(0);
         ScrollTrigger.refresh();
         ScrollTrigger.getAll().forEach(t => t.kill());
         
@@ -59,7 +57,7 @@ export default class PageTransitor{
     
     onAfterEnter(){
         
-        this.gscroll.paused(false);
+        window.gscroll.paused(false);
         
     }
     

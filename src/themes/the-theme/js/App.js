@@ -24,9 +24,9 @@ class App{
             
             await new Loader();
             
-            this.gscroll = new PageScroller();
+            new PageScroller();
             
-            new PageTransitor(this.gscroll);
+            new PageTransitor();
         }
         
     }

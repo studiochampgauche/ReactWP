@@ -11,7 +11,7 @@ export default class PageScroller{
         
         gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
-		return ScrollSmoother.create({
+		window.gscroll = ScrollSmoother.create({
 			wrapper: '#pageWrapper',
 			content: '#pageContent',
 			ignoreMobileResize: true,
