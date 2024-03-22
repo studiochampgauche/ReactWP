@@ -41,7 +41,7 @@ StudioChampGauche\Utils\CustomPostType::get($post_type = 'post', $args = []);
 
 - `$args` are defined by WordPress [here](https://developer.wordpress.org/reference/classes/wp_query/)
 
-### Set defaults
+### Set default arguments
 ```
 StudioChampGauche\Utils\CustomPostType::default($key, $value);
 ```
@@ -60,7 +60,7 @@ StudioChampGauche\Utils\Menu::get($theme_location = null, $args = []);
 
 - In `$args`, you can add the `mobile_bars` parameter with an integer value for add a hamburger Menu after your Items Wrapper.
 
-### Set defaults
+### Set default arguments
 ```
 StudioChampGauche\Utils\Menu::default($key, $value);
 ```
@@ -100,7 +100,7 @@ StudioChampGauche\Utils\Button::get($text = null, $args = []);
     
       `after` add html or something else right before your button end tag. After because is after your text span element.
       
-### Set defaults
+### Set default arguments
 ```
 StudioChampGauche\Utils\Button::default($key, $value);
 ```
@@ -127,7 +127,7 @@ StudioChampGauche\Utils\Source::get($args = []);
       `url` is bool, default is `false`. Do you want the URL or the Path?
 
 
-### Set defaults
+### Set default arguments
 ```
 StudioChampGauche\Utils\Source::default($key, $value);
 ```
