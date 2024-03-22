@@ -49,12 +49,8 @@ StudioChampGauche\Utils\CustomPostType::get($post_type = 'post', $args = []);
 - `$args` are defined by WordPress [here](https://developer.wordpress.org/reference/classes/wp_query/)
 
 ### Set defaults
-
-functions.php
-
 ```
-StudioChampGauche\Utils\CustomPostType::default('posts_per_page', -1);
-StudioChampGauche\Utils\CustomPostType::default('paged', 1);
+StudioChampGauche\Utils\CustomPostType::default($key, $value);
 ```
 
 
@@ -75,12 +71,8 @@ StudioChampGauche\Utils\Menu::get($theme_location = null, $args = []);
 - In `$args`, you can add the `mobile_bars` parameter with an integer value for add a hamburger Menu after your Items Wrapper.
 
 ### Set defaults
-
-functions.php
-
 ```
-StudioChampGauche\Utils\Menu::default('container', null);
-StudioChampGauche\Utils\Menu::default('items_wrap', '<ul>%3$s</ul>');
+StudioChampGauche\Utils\Menu::default($key, $value);
 ```
 
 
@@ -122,12 +114,8 @@ StudioChampGauche\Utils\Button::get($text = null, $args = []);
       `after` add html or something else right before your button end tag. After because is after your text span element.
       
 ### Set defaults
-
-functions.php
-
 ```
-StudioChampGauche\Utils\Button::default('attr', 'x');
-StudioChampGauche\Utils\Button::default('before', 'x');
+StudioChampGauche\Utils\Button::default($key, $value);
 ```
 
 
@@ -156,9 +144,6 @@ StudioChampGauche\Utils\Source::get($args = []);
 
 
 ### Set defaults
-
-functions.php
-
 ```
-StudioChampGauche\Utils\Source::default('url', false);
+StudioChampGauche\Utils\Source::default($key, $value);
 ```
