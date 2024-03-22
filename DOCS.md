@@ -17,9 +17,8 @@ StudioChampGauche\Utils\Field::get($field, $id = false, $format = true, $escape 
 - [More informations here](https://www.advancedcustomfields.com/resources/get_field/)
 
 
-### str_replace your values returned by `scg::field()`
+### Replace values returned by `scg::field()`
 ```
-// functions.php
 StudioChampGauche\Utils\Field::replace(['{MAIN_EMAIL}'], [scg::field('contact_email')]);
 ```
 
@@ -44,7 +43,6 @@ StudioChampGauche\Utils\CustomPostType::get($post_type = 'post', $args = []);
 
 ### Set defaults
 ```
-// functions.php
 StudioChampGauche\Utils\CustomPostType::default($key, $value);
 ```
 
@@ -64,7 +62,6 @@ StudioChampGauche\Utils\Menu::get($theme_location = null, $args = []);
 
 ### Set defaults
 ```
-// functions.php
 StudioChampGauche\Utils\Menu::default($key, $value);
 ```
 
@@ -105,7 +102,6 @@ StudioChampGauche\Utils\Button::get($text = null, $args = []);
       
 ### Set defaults
 ```
-// functions.php
 StudioChampGauche\Utils\Button::default($key, $value);
 ```
 
@@ -133,6 +129,5 @@ StudioChampGauche\Utils\Source::get($args = []);
 
 ### Set defaults
 ```
-// functions.php
 StudioChampGauche\Utils\Source::default($key, $value);
 ```
