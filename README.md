@@ -76,7 +76,7 @@ Use `scg::cpt($post_type, $args)` or `StudioChampGauche\Utils\CustomPostType::ge
 ### Call a menu
 Use `scg::menu($theme_location, $args)` or `StudioChampGauche\Utils\Menu::get($theme_location, $args)` to call a menu.
 
-- Default `$theme_location` is `null`. If your `$theme_location` is null or if no such location exists or no menu is assigned to it, the parameter fallback_cb will determine what is displayed. [More information here.](https://developer.wordpress.org/reference/functions/wp_nav_menu/#more-information)
+- Default `$theme_location` is `null`. If your `$theme_location` is null or if no such location exists or no menu is assigned to it, the parameter fallback_cb will determine what is displayed. [More information here](https://developer.wordpress.org/reference/functions/wp_nav_menu/#more-information).
 
 - You can conserve `$theme_location` to `null` and shot your `theme_location` parameter in `$args`.
 
