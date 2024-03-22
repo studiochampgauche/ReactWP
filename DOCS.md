@@ -48,7 +48,7 @@ StudioChampGauche\Utils\CustomPostType::get($post_type = 'post', $args = []);
 - `$args` are defined by WordPress [here](https://developer.wordpress.org/reference/classes/wp_query/)
 
 
-## Get a menu
+## Call a menu
 ```
 scg::menu($theme_location = null, $args = []);
 
