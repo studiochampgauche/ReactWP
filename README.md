@@ -96,10 +96,10 @@ Use `scg::button($text, $args)` or `StudioChampGauche\Utils\Button::get($text, $
 
 - You can conserve `$text` to `null` and shot your `text` parameter in `$args`.
 
-- Default `$args` are:
-    - text: null
-    - href: null
-    - class: null
-    - attr: null,
-    - before: null,
-    - after: null
+- `$args` parameters can be:
+    - text
+    - href
+    - class
+    - attr,
+    - before,
+    - after
