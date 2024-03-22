@@ -23,7 +23,7 @@ StudioChampGauche\Utils\Field::get($field, $id = false, $format = true, $escape 
 ### str_replace your values returned by `scg::field()`
 ```
 // functions.php
-StudioChampGauche\Utils\Field::replace(['{MAIN_EMAIL}'], [scg::field('contact_email')])
+StudioChampGauche\Utils\Field::replace(['{MAIN_EMAIL}'], [scg::field('contact_email')]);
 ```
 
 > [!WARNING]
