@@ -30,6 +30,7 @@ StudioChampGauche\Utils\Field::replace(['{MAIN_EMAIL}'], [scg::field('contact_em
 > When you replace your value by an ACF field like our example, you need to place your code in the `acf/init` hook.
 
 
+
 ## Play with `new WP_Query()`
 ```
 scg::cpt($post_type = 'post', $args = []);
@@ -47,6 +48,16 @@ StudioChampGauche\Utils\CustomPostType::get($post_type = 'post', $args = []);
 
 - `$args` are defined by WordPress [here](https://developer.wordpress.org/reference/classes/wp_query/)
 
+### Set defaults
+
+functions.php
+
+```
+StudioChampGauche\Utils\CustomPostType::default('posts_per_page', -1);
+StudioChampGauche\Utils\CustomPostType::default('paged', 1);
+```
+
+
 
 ## Call a menu
 ```
@@ -62,6 +73,16 @@ StudioChampGauche\Utils\Menu::get($theme_location = null, $args = []);
 - `$args` are based by WordPress [here](https://developer.wordpress.org/reference/functions/wp_nav_menu/)
 
 - In `$args`, you can add the `mobile_bars` parameter with an integer value for add a hamburger Menu after your Items Wrapper.
+
+### Set defaults
+
+functions.php
+
+```
+StudioChampGauche\Utils\Menu::default('container', null);
+StudioChampGauche\Utils\Menu::default('items_wrap', '<ul>%3$s</ul>');
+```
+
 
 
 ## Create an Hyperlink or a Button
@@ -99,6 +120,16 @@ StudioChampGauche\Utils\Button::get($text = null, $args = []);
     - ***after***
     
       `after` add html or something else right before your button end tag. After because is after your text span element.
+      
+### Set defaults
+
+functions.php
+
+```
+StudioChampGauche\Utils\Button::default('attr', 'x');
+StudioChampGauche\Utils\Button::default('before', 'x');
+```
+
 
 
 ## Get Path or URL
@@ -122,3 +153,12 @@ StudioChampGauche\Utils\Source::get($args = []);
     - ***url***
     
       `url` is bool, default is `false`. Do you want the URL or the Path?
+
+
+### Set defaults
+
+functions.php
+
+```
+StudioChampGauche\Utils\Source::default('url', false);
+```
