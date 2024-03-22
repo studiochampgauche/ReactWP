@@ -57,3 +57,18 @@ Use `scg::field($field_name, $id)` or `StudioChampGauche\Utils\Field::get($field
 
 > [!WARNING]  
 > `scg::field` use `get_field()`. It can't work for `get_sub_field()`.
+
+
+### Call the `new WP_Query()`
+Use `scg::cpt($post_type, $args)` or `StudioChampGauche\Utils\CustomPostType::get($post_type, $args)` to call a post type.
+
+- Default `$post_type` is `post`. You can pass it to `null` and shot your post_type parameter in `$args`.
+- `$args` are based by WordPress [here](https://developer.wordpress.org/reference/classes/wp_query/)
+- In `$args`, you can add the `mobile_bars` parameter with an integer value for add a hamburger Menu after your Items Wrapper.
+
+> [!TIP]  
+> If you when manage defaults when call `new WP_Query` with `::cpt` or `::get`, you can manage it from your functions.php file like this:
+> ```
+> StudioChampGauche\Utils\CustomPostType::default('posts_per_page', -1);
+> StudioChampGauche\Utils\CustomPostType::default('paged', 1);
+> ```
