@@ -64,11 +64,27 @@ Use `scg::cpt($post_type, $args)` or `StudioChampGauche\Utils\CustomPostType::ge
 
 - Default `$post_type` is `post`. You can pass it to `null` and shot your post_type parameter in `$args`.
 - `$args` are based by WordPress [here](https://developer.wordpress.org/reference/classes/wp_query/)
-- In `$args`, you can add the `mobile_bars` parameter with an integer value for add a hamburger Menu after your Items Wrapper.
 
 > [!TIP]  
 > If you want manage default arguments when you call `new WP_Query` with `::cpt` or `::get`, you can manage it from your functions.php file like this:
 > ```
 > StudioChampGauche\Utils\CustomPostType::default('posts_per_page', -1);
 > StudioChampGauche\Utils\CustomPostType::default('paged', 1);
+> ```
+
+
+### Call a menu
+Use `scg::menu($theme_location, $args)` or `StudioChampGauche\Utils\Menu::get($theme_location, $args)` to call a menu.
+
+- Default `$theme_location` is `null`. If your `$theme_location` is null or if no such location exists or no menu is assigned to it, the parameter fallback_cb will determine what is displayed. [More information here.](https://developer.wordpress.org/reference/functions/wp_nav_menu/#more-information)
+
+- `$args` are based by WordPress [here](https://developer.wordpress.org/reference/functions/wp_nav_menu/)
+
+- In `$args`, you can add the `mobile_bars` parameter with an integer value for add a hamburger Menu after your Items Wrapper.
+
+> [!TIP]  
+> If you want manage default arguments when you call a menu with `::menu` or `::get`, you can manage it from your functions.php file like this:
+> ```
+> StudioChampGauche\Utils\Menu::default('container', null);
+> StudioChampGauche\Utils\Menu::default('items_wrap', '<ul>%3$s</ul>');
 > ```
