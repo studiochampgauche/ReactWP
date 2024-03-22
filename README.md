@@ -51,3 +51,6 @@ Use `scg::field($field_name, $id)` or `StudioChampGauche\Utils\Field::get($field
 
 > [!TIP]  
 > You can use `StudioChampGauche\Utils\Field::replace()` in the `acf/init` hook for replace some parts returned from `::get` or `::field`. (e.g: `StudioChampGauche\Utils\Field::replace(['{MAIN_EMAIL}'], [scg::field('contact_email')])`)
+
+> [!WARNING]  
+> `scg::field` use `get_field()`. It can't work for `get_sub_field()`.
