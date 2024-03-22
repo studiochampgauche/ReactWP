@@ -39,10 +39,86 @@ scg::cpt($post_type = 'post', $args = []);
 StudioChampGauche\Utils\CustomPostType::get($post_type = 'post', $args = []);
 ```
 
-- `$post_type` is required. Default is `post`. You can pass it to `null` for 2 reasons:
+- `$post_type` is optional. Default is `post`. You can pass it to `null` for 2 reasons:
     
     - If you want play with the `post_type` parameter directly in `$args`.
     
     - If you want to respect the original behavior of WordPress. e.g. WordPress will give you the default post_type `any` instead of `post` if you play with tax_query`.
 
 - `$args` are defined by WordPress [here](https://developer.wordpress.org/reference/classes/wp_query/)
+
+
+## Get a menu
+```
+scg::menu($theme_location = null, $args = []);
+
+// OR
+
+StudioChampGauche\Utils\Menu::get($theme_location = null, $args = []);
+```
+
+- `$theme_location` is optional. Default is `null`.
+
+- `$args` are based by WordPress [here](https://developer.wordpress.org/reference/functions/wp_nav_menu/)
+
+- In `$args`, you can add the `mobile_bars` parameter with an integer value for add a hamburger Menu after your Items Wrapper.
+
+
+## Create an Hyperlink or a Button
+```
+scg::button($text = null, $args = []);
+
+// OR
+
+StudioChampGauche\Utils\Button::get($text = null, $args = []);
+```
+
+- `$text` is optional. Default is `null`.
+
+- `$args` parameters can be:
+    - ***text***
+    
+      `text` will add a span element with your text. Will work only if `$text` is `null`.
+    
+    - ***href***
+    
+      `href` turn your button element to a link element with href attribute.
+    
+    - ***class***
+    
+      `class` add your classes to .btn class.
+    
+    - ***attr***
+    
+      `attr` need to be a string. (e.g. 'attr' => 'data-one="" data-two=""'). This will be added to your button element.
+    
+    - ***before***
+    
+      `before` add html or something else right after your button opening tag. Before because is before your text span element.
+    
+    - ***after***
+    
+      `after` add html or something else right before your button end tag. After because is after your text span element.
+
+
+## Get Path or URL
+```
+scg::source($args = []);
+
+// OR
+
+StudioChampGauche\Utils\Source::get($args = []);
+```
+
+- `$args` parameters can be:
+    - ***base***
+    
+      `base` default is `/`, equal to theme root.
+    
+    - ***path***
+    
+      `path` to your source. Default is `null`.
+    
+    - ***url***
+    
+      `url` is bool, default is `false`. Do you want the URL or the Path?
