@@ -60,8 +60,9 @@ class CustomPostType{
                 self::$configs[$arg_key] = $arg;
             }
         }
-
-        self::$configs['post_type'] = $post_type;
+        
+        if($post_type)
+            self::$configs['post_type'] = $post_type;
 
 
         return new \WP_Query(self::$configs);
