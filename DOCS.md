@@ -87,3 +87,27 @@ Use `scg::button($text, $args)` or `StudioChampGauche\Utils\Button::get($text, $
 > StudioChampGauche\Utils\Button::default('attr', 'x');
 > StudioChampGauche\Utils\Button::default('before', 'x');
 > ```
+
+
+### Get path or url
+Use `scg::source($args)` or `StudioChampGauche\Utils\Source::get($args)`.
+
+- `$args` parameters can be:
+    - ***base***
+    
+      `base` default is `/`, equal to theme root.
+    
+    - ***path***
+    
+      `path` to your source. Default is `null`.
+    
+    - ***url***
+    
+      `url` is bool, default is `false`. Do you want the URL or the Path?
+      
+
+> [!TIP]  
+> If you want manage default arguments when you call a source with `::source` or `::get`, you can manage it from your functions.php file like this:
+> ```
+> StudioChampGauche\Utils\Source::default('url', false);
+> ```
