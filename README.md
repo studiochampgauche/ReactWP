@@ -38,15 +38,10 @@ We have build a plugin that help us to handle repetitive needs in each project. 
 
 ***Translation:*** en_US, en_CA, en_GB, en_AU, en_NZ, en_ZA
 
-# Demo
 
-- [Plugin Manipulation Examples](/src/themes/the-theme/template/functions.php)
+# PHP Utilities
 
-# Quick Docs
-
-## PHP
-
-### Call an ACF Field
+## Call an ACF Field
 Use `scg::field($field_name, $id)` or `StudioChampGauche\Utils\Field::get($field_name, $id)`.
 
 - Without `$field_name`, `null` is returned. Otherwise, the return is given by ACF.
@@ -61,7 +56,7 @@ Use `scg::field($field_name, $id)` or `StudioChampGauche\Utils\Field::get($field
 > `scg::field` use `get_field()`. It can't work for `get_sub_field()`.
 
 
-### Call the `new WP_Query()`
+## Call the `new WP_Query()`
 Use `scg::cpt($post_type, $args)` or `StudioChampGauche\Utils\CustomPostType::get($post_type, $args)`.
 
 - Default `$post_type` is `post`. You can pass it to `null` and shot your `post_type` parameter in `$args`.
@@ -75,7 +70,7 @@ Use `scg::cpt($post_type, $args)` or `StudioChampGauche\Utils\CustomPostType::ge
 > ```
 
 
-### Call a menu
+## Call a menu
 Use `scg::menu($theme_location, $args)` or `StudioChampGauche\Utils\Menu::get($theme_location, $args)`.
 
 - Default `$theme_location` is `null`. If your `$theme_location` is null or if no such location exists or no menu is assigned to it, the parameter fallback_cb will determine what is displayed. [More information here](https://developer.wordpress.org/reference/functions/wp_nav_menu/#more-information).
