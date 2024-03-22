@@ -17,4 +17,4 @@ StudioChampGauche\Utils\Field::get($field, $id = false, $format = true, $escape 
 
 - `$escape` is optional and boolean. Default is `false`.
 
-[More informations here](https://www.advancedcustomfields.com/resources/get_field/)
+- [More informations here](https://www.advancedcustomfields.com/resources/get_field/)
