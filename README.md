@@ -39,7 +39,7 @@ We have build a plugin that help us to handle repetitive needs in each project. 
 ***Translation:*** en_US, en_CA, en_GB, en_AU, en_NZ, en_ZA
 
 
-# PHP Utilities
+# Utils PHP
 
 ### Call an ACF Field
 Use `scg::field($field_name, $id)` or `StudioChampGauche\Utils\Field::get($field_name, $id)`.
