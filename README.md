@@ -98,8 +98,14 @@ Use `scg::button($text, $args)` or `StudioChampGauche\Utils\Button::get($text, $
 
 - `$args` parameters can be:
     - text
+    `text` will place a span element with your text inner your link or button element
+    
     - href
+    
     - class
+    
     - attr
+    
     - before
+    
     - after
