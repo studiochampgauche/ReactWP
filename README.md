@@ -100,6 +100,6 @@ Use `scg::button($text, $args)` or `StudioChampGauche\Utils\Button::get($text, $
     - text
     - href
     - class
-    - attr,
-    - before,
+    - attr
+    - before
     - after
