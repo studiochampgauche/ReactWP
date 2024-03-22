@@ -107,8 +107,9 @@ class Menu{
             self::$configs['items_wrap'] = self::$configs['items_wrap'] . $html;
 
         }
-
-        self::$configs['theme_location'] = $theme_location;
+        
+        if($theme_location)
+            self::$configs['theme_location'] = $theme_location;
 
 
         return wp_nav_menu(self::$configs);
