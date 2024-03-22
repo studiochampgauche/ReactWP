@@ -42,9 +42,11 @@ We have build a plugin that help us to handle repetitive needs in each project. 
 
 - [Plugin Manipulation Examples](/src/themes/the-theme/template/functions.php)
 
-# PHP Methods explanations
+# Quick Docs
 
-## Call an ACF Field
+## PHP
+
+### Call an ACF Field
 Use `scg::field($field_name, $id)` or `StudioChampGauche\Utils\Field::get($field_name, $id)` to call an ACF Field. `$field_name` is required. If you do not enter the `$id` parameter, the function will first look in 'option' and then look at the current page.
 
 > [!TIP]  
