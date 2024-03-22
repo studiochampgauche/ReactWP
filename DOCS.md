@@ -1,10 +1,22 @@
 # Utils PHP
 
 ### Call an ACF Field
-Use `scg::field($field_name, $id)` or `StudioChampGauche\Utils\Field::get($field_name, $id)`.
+```
+scg::field($field, $id = false, $format = true, $escape = false);
 
-- Without `$field_name`, `null` is returned. Otherwise, the return is given by ACF.
-- If you don't give the `$id` parameter, the method will first look in 'option' and then look at the current page or the current looped element.
+// OR
+
+StudioChampGauche\Utils\Field::get($field, $id = false, $format = true, $escape = false);
+```
+
+- `$field` is required. Need to be field name or field key.
+
+- `$id` is optional, default is `false` and can be (string) "option" or (string|int) {post_id}. On `false`, the method will first look in 'option' and then look at the current post.
+
+- `$format` is optional and boolean. Default is `true`.
+
+- `$escape` is optional and boolean. Default is `false`.
+
 
 > [!TIP]  
 > You can use `StudioChampGauche\Utils\Field::replace()` for replace some parts returned by `::field` or `::get`. (e.g: `StudioChampGauche\Utils\Field::replace(['{MAIN_EMAIL}'], [scg::field('contact_email')])`)
