@@ -3,9 +3,6 @@
 ## Use `get_field()` function of ACF differently.
 ```
 scg::field($field, $id = false, $format = true, $escape = false);
-
-// OR
-
 StudioChampGauche\Utils\Field::get($field, $id = false, $format = true, $escape = false);
 ```
 
@@ -34,9 +31,6 @@ StudioChampGauche\Utils\Field::replace(['{MAIN_EMAIL}'], [scg::field('contact_em
 ## Play with `new WP_Query()`
 ```
 scg::cpt($post_type = 'post', $args = []);
-
-// OR
-
 StudioChampGauche\Utils\CustomPostType::get($post_type = 'post', $args = []);
 ```
 
@@ -59,9 +53,6 @@ StudioChampGauche\Utils\CustomPostType::default($key, $value);
 ## Call a menu
 ```
 scg::menu($theme_location = null, $args = []);
-
-// OR
-
 StudioChampGauche\Utils\Menu::get($theme_location = null, $args = []);
 ```
 
@@ -82,9 +73,6 @@ StudioChampGauche\Utils\Menu::default($key, $value);
 ## Create an Hyperlink or a Button
 ```
 scg::button($text = null, $args = []);
-
-// OR
-
 StudioChampGauche\Utils\Button::get($text = null, $args = []);
 ```
 
@@ -126,9 +114,6 @@ StudioChampGauche\Utils\Button::default($key, $value);
 ## Get Path or URL
 ```
 scg::source($args = []);
-
-// OR
-
 StudioChampGauche\Utils\Source::get($args = []);
 ```
 
