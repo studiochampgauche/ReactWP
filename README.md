@@ -30,7 +30,7 @@ We have build a plugin that help us to handle repetitive needs in each project. 
 
 
 > [!IMPORTANT]  
-> You'll need ACF Pro to play with our Core Plugin. [Get it here](https://www.advancedcustomfields.com/pro).
+> You'll need ACF Pro 6.2.6 or higher to play with our Core Plugin. [Get it here](https://www.advancedcustomfields.com/pro).
 
 # Admin Languages
 
