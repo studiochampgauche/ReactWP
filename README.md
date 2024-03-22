@@ -47,7 +47,7 @@ We have build a plugin that help us to handle repetitive needs in each project. 
 ## PHP
 
 ### Call an ACF Field
-Use `scg::field($field_name, $id)` or `StudioChampGauche\Utils\Field::get($field_name, $id)` to call an ACF Field.
+Use `scg::field($field_name, $id)` or `StudioChampGauche\Utils\Field::get($field_name, $id)`.
 
 - Without `$field_name`, `null` is returned.
 - If you don't give the `$id` parameter, the method will first look in 'option' and then look at the current page or the current looped element.
@@ -62,7 +62,7 @@ Use `scg::field($field_name, $id)` or `StudioChampGauche\Utils\Field::get($field
 
 
 ### Call the `new WP_Query()`
-Use `scg::cpt($post_type, $args)` or `StudioChampGauche\Utils\CustomPostType::get($post_type, $args)` to call a post type.
+Use `scg::cpt($post_type, $args)` or `StudioChampGauche\Utils\CustomPostType::get($post_type, $args)`.
 
 - Default `$post_type` is `post`. You can pass it to `null` and shot your `post_type` parameter in `$args`.
 - `$args` are based by WordPress [here](https://developer.wordpress.org/reference/classes/wp_query/)
@@ -76,7 +76,7 @@ Use `scg::cpt($post_type, $args)` or `StudioChampGauche\Utils\CustomPostType::ge
 
 
 ### Call a menu
-Use `scg::menu($theme_location, $args)` or `StudioChampGauche\Utils\Menu::get($theme_location, $args)` to call a menu.
+Use `scg::menu($theme_location, $args)` or `StudioChampGauche\Utils\Menu::get($theme_location, $args)`.
 
 - Default `$theme_location` is `null`. If your `$theme_location` is null or if no such location exists or no menu is assigned to it, the parameter fallback_cb will determine what is displayed. [More information here](https://developer.wordpress.org/reference/functions/wp_nav_menu/#more-information).
 
