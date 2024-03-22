@@ -87,3 +87,19 @@ Use `scg::menu($theme_location, $args)` or `StudioChampGauche\Utils\Menu::get($t
 > StudioChampGauche\Utils\Menu::default('container', null);
 > StudioChampGauche\Utils\Menu::default('items_wrap', '<ul>%3$s</ul>');
 > ```
+
+
+### Call Hyperlink or Button
+Use `scg::button($text, $args)` or `StudioChampGauche\Utils\Button::get($text, $args)`.
+
+- Default `$text` is `null`.
+
+- You can conserve `$text` to `null` and shot your `text` parameter in `$args`.
+
+- Default `$args` are:
+    - text: null
+    - href: null
+    - class: null
+    - attr: null,
+    - before: null,
+    - after: null
