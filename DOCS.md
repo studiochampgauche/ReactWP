@@ -1,6 +1,6 @@
 # Utils PHP
 
-### Use `get_field()` function of ACF differently.
+## Use `get_field()` function of ACF differently.
 ```
 scg::field($field, $id = false, $format = true, $escape = false);
 
@@ -20,7 +20,7 @@ StudioChampGauche\Utils\Field::get($field, $id = false, $format = true, $escape 
 - [More informations here](https://www.advancedcustomfields.com/resources/get_field/)
 
 
-### str_replace your values returned by `scg::field()`
+## str_replace your values returned by `scg::field()`
 ```
 // functions.php
 StudioChampGauche\Utils\Field::replace(['{MAIN_EMAIL}'], [scg::field('contact_email')]);
@@ -30,7 +30,7 @@ StudioChampGauche\Utils\Field::replace(['{MAIN_EMAIL}'], [scg::field('contact_em
 > When you replace your value by an ACF field like our example, you need to place your code in the `acf/init` hook.
 
 
-### Play with `new WP_Query()`
+## Play with `new WP_Query()`
 ```
 scg::cpt($post_type = 'post', $args = []);
 
