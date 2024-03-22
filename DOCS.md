@@ -17,4 +17,14 @@ StudioChampGauche\Utils\Field::get($field, $id = false, $format = true, $escape 
 
 - `$escape` is optional and boolean. Default is `false`.
 
-- [More informations here](https://www.advancedcustomfields.com/resources/get_field/) 
+- [More informations here](https://www.advancedcustomfields.com/resources/get_field/)
+
+
+### str_replace your values returned by `scg::field()`
+```
+// functions.php
+StudioChampGauche\Utils\Field::replace(['{MAIN_EMAIL}'], [scg::field('contact_email')])
+```
+
+> [!WARNING]
+> When you use an ACF Field in your replace method like our example, you need to place your code in the `acf/init` hook.
