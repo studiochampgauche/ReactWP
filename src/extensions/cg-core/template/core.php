@@ -670,9 +670,9 @@ class StudioChampGauche{
     }
     
     
-    static function field($field = null, $id = null){
+    static function field($field, $id = false, $format = true, $escape = false){
 		
-        return StudioChampGauche\Utils\Field::get($field, $id);
+        return StudioChampGauche\Utils\Field::get($field, $id, $format, $escape);
         
 	}
     

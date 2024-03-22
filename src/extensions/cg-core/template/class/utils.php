@@ -6,12 +6,12 @@ class Field{
 
     public static $elementsToReplace = [];
 
-    public static function get($field = null, $id = null){
+    public static function get($field, $id = false, $format = true, $escape = false){
 
         if(!is_array(self::$elementsToReplace)) return;
 
 
-        $return = ($field && $id ? get_field($field, $id) : ($field ? (!empty(get_field($field, 'option')) ? get_field($field, 'option') : get_field($field)) : null));
+        $return = ($id ? get_field($field, $id, $format, $escape) : (!empty(get_field($field, 'option', $format, $escape)) ? get_field($field, 'option', $format, $escape) : get_field($field, $id, $format, $escape)));
 
 		
 		if($return && is_array($return) && self::$elementsToReplace)
