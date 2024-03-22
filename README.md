@@ -89,7 +89,7 @@ Use `scg::menu($theme_location, $args)` or `StudioChampGauche\Utils\Menu::get($t
 > ```
 
 
-### Call Hyperlink or Button
+### Call a hyperlink or a button
 Use `scg::button($text, $args)` or `StudioChampGauche\Utils\Button::get($text, $args)`.
 
 - Default `$text` is `null`.
