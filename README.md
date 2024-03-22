@@ -120,3 +120,11 @@ Use `scg::button($text, $args)` or `StudioChampGauche\Utils\Button::get($text, $
     - ***after***
     
       `after` add html or something else right before your button end tag. After because is after your text span element.
+      
+
+> [!TIP]  
+> If you want manage default arguments when you call a button with `::button` or `::get`, you can manage it from your functions.php file like this:
+> ```
+> StudioChampGauche\Utils\Button::default('attr', 'x');
+> StudioChampGauche\Utils\Button::default('before', 'x');
+> ```
