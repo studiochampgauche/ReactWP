@@ -67,7 +67,7 @@ Use `scg::cpt($post_type, $args)` or `StudioChampGauche\Utils\CustomPostType::ge
 - In `$args`, you can add the `mobile_bars` parameter with an integer value for add a hamburger Menu after your Items Wrapper.
 
 > [!TIP]  
-> If you want manage defaults when call `new WP_Query` with `::cpt` or `::get`, you can manage it from your functions.php file like this:
+> If you want manage default arguments when call `new WP_Query` with `::cpt` or `::get`, you can manage it from your functions.php file like this:
 > ```
 > StudioChampGauche\Utils\CustomPostType::default('posts_per_page', -1);
 > StudioChampGauche\Utils\CustomPostType::default('paged', 1);
