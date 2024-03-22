@@ -27,4 +27,4 @@ StudioChampGauche\Utils\Field::replace(['{MAIN_EMAIL}'], [scg::field('contact_em
 ```
 
 > [!WARNING]
-> When you use an ACF Field in your replace method like our example, you need to place your code in the `acf/init` hook.
+> When you replace your value by an ACF field like our example, you need to place your code in the `acf/init` hook.
