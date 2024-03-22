@@ -97,26 +97,26 @@ Use `scg::button($text, $args)` or `StudioChampGauche\Utils\Button::get($text, $
 - You can conserve `$text` to `null` and shot your `text` parameter in `$args`.
 
 - `$args` parameters can be:
-    - text
+    - ***text***
     
       `text` will add a span element with your text.
     
-    - href
+    - ***href***
     
       `href` turn your button element to a link element with href attribute.
     
-    - class
+    - ***class***
     
       `class` add your classes to .btn class.
     
-    - attr
+    - ***attr***
     
       `attr` need to be a string. (e.g. 'attr' => 'data-one="" data-two=""'). This will be added to your button element.
     
-    - before
+    - ***before***
     
       `before` add html or something else right after your button opening tag. Before because is before your text span element.
     
-    - after
+    - ***after***
     
       `after` add html or something else right before your button end tag. After because is after your text span element.
