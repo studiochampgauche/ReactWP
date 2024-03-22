@@ -28,3 +28,21 @@ StudioChampGauche\Utils\Field::replace(['{MAIN_EMAIL}'], [scg::field('contact_em
 
 > [!WARNING]
 > When you replace your value by an ACF field like our example, you need to place your code in the `acf/init` hook.
+
+
+### Play with `new WP_Query()`
+```
+scg::cpt($post_type = 'post', $args = []);
+
+// OR
+
+StudioChampGauche\Utils\CustomPostType::get($post_type = 'post', $args = []);
+```
+
+- `$post_type` is required. Default is `post`. You can pass it to `null` for 2 reasons:
+    
+    - If you want play with the `post_type` parameter directly in `$args`.
+    
+    - If you want to respect the original behavior of WordPress. e.g. WordPress will give you the default post_type `any` instead of `post` if you play with tax_query`.
+
+- `$args` are defined by WordPress [here](https://developer.wordpress.org/reference/classes/wp_query/)
