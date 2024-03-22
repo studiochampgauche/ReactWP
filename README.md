@@ -62,7 +62,7 @@ Use `scg::field($field_name, $id)` or `StudioChampGauche\Utils\Field::get($field
 ### Call the `new WP_Query()`
 Use `scg::cpt($post_type, $args)` or `StudioChampGauche\Utils\CustomPostType::get($post_type, $args)` to call a post type.
 
-- Default `$post_type` is `post`. You can pass it to `null` and shot your post_type parameter in `$args`.
+- Default `$post_type` is `post`. You can pass it to `null` and shot your `post_type` parameter in `$args`.
 - `$args` are based by WordPress [here](https://developer.wordpress.org/reference/classes/wp_query/)
 
 > [!TIP]  
@@ -77,6 +77,8 @@ Use `scg::cpt($post_type, $args)` or `StudioChampGauche\Utils\CustomPostType::ge
 Use `scg::menu($theme_location, $args)` or `StudioChampGauche\Utils\Menu::get($theme_location, $args)` to call a menu.
 
 - Default `$theme_location` is `null`. If your `$theme_location` is null or if no such location exists or no menu is assigned to it, the parameter fallback_cb will determine what is displayed. [More information here.](https://developer.wordpress.org/reference/functions/wp_nav_menu/#more-information)
+
+- You can conserve `$theme_location` to `null` and shot your `theme_location` parameter in `$args`.
 
 - `$args` are based by WordPress [here](https://developer.wordpress.org/reference/functions/wp_nav_menu/)
 
