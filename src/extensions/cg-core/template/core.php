@@ -688,9 +688,9 @@ class StudioChampGauche{
         
 	}
 
-	static function button($args = []){
+	static function button($text = null, $args = []){
         
-        return StudioChampGauche\Utils\Button::get($args);
+        return StudioChampGauche\Utils\Button::get($text, $args);
         
 	}
 
