@@ -49,7 +49,7 @@ We have build a plugin that help us to handle repetitive needs in each project. 
 ### Call an ACF Field
 Use `scg::field($field_name, $id)` or `StudioChampGauche\Utils\Field::get($field_name, $id)`.
 
-- Without `$field_name`, `null` is returned.
+- Without `$field_name`, `null` is returned. Otherwise, the return is given by ACF.
 - If you don't give the `$id` parameter, the method will first look in 'option' and then look at the current page or the current looped element.
 
 > [!TIP]  
