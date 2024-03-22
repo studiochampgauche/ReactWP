@@ -50,7 +50,7 @@ We have build a plugin that help us to handle repetitive needs in each project. 
 Use `scg::field($field_name, $id)` or `StudioChampGauche\Utils\Field::get($field_name, $id)` to call an ACF Field.
 
 - `$field_name` is required.
-- If you do not enter the `$id` parameter, the function will first look in 'option' and then look at the current page or the current looped element.
+- If you do not enter the `$id` parameter, the method will first look in 'option' and then look at the current page or the current looped element.
 
 > [!TIP]  
 > You can use `StudioChampGauche\Utils\Field::replace()` in the `acf/init` hook for replace some parts returned from `::get` or `::field`. (e.g: `StudioChampGauche\Utils\Field::replace(['{MAIN_EMAIL}'], [scg::field('contact_email')])`)
