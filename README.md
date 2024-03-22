@@ -53,7 +53,9 @@ Use `scg::field($field_name, $id)` or `StudioChampGauche\Utils\Field::get($field
 - If you don't enter the `$id` parameter, the method will first look in 'option' and then look at the current page or the current looped element.
 
 > [!TIP]  
-> You can use `StudioChampGauche\Utils\Field::replace()` in the `acf/init` hook for replace some parts returned by `::field` or `::get`. (e.g: `StudioChampGauche\Utils\Field::replace(['{MAIN_EMAIL}'], [scg::field('contact_email')])`)
+> You can use `StudioChampGauche\Utils\Field::replace()` for replace some parts returned by `::field` or `::get`. (e.g: `StudioChampGauche\Utils\Field::replace(['{MAIN_EMAIL}'], [scg::field('contact_email')])`)
+>
+> Just know, when you use an ACF Field in your replace method like our example, you need to place your code in the `acf/init` hook.
 
 > [!WARNING]  
 > `scg::field` use `get_field()`. It can't work for `get_sub_field()`.
