@@ -89,7 +89,7 @@ Use `scg::button($text, $args)` or `StudioChampGauche\Utils\Button::get($text, $
 > ```
 
 
-### Get path or url
+### Get Path or URL
 Use `scg::source($args)` or `StudioChampGauche\Utils\Source::get($args)`.
 
 - `$args` parameters can be:
