@@ -18,12 +18,13 @@ StudioChampGauche\Utils\Field::get($field, $id = false, $format = true, $escape 
 
 
 ### Replace values returned by `scg::field()`
+
+> [!WARNING]
+> When you replace your value by an ACF field like our example just below, you need to place your code in the `acf/init` hook.
+
 ```
 StudioChampGauche\Utils\Field::replace(['{MAIN_EMAIL}'], [scg::field('contact_email')]);
 ```
-
-> [!WARNING]
-> When you replace your value by an ACF field like our example, you need to place your code in the `acf/init` hook.
 
 
 
