@@ -161,7 +161,7 @@ StudioChampGauche\Utils\Source::default($key, $value);
 
 # SEO
 
-## Increase your SEO
+## Add, update or remove meta tags
 ```
 add_filter('scg_wp_head', function($wp_heads){
 				
@@ -180,6 +180,33 @@ add_filter('scg_wp_head', function($wp_heads){
 
 });
 ```
+
+### Existing keys
+
+- title
+- charset
+- compatible
+- viewport
+- description
+- og_type
+- og_profile_first_name
+- og_profile_last_name
+- og_profile_username
+- og_article_published_time
+- og_article_modified_time
+- og_article_expiration_time
+- og_article_author
+- og_article_section
+- og_article_tag
+- og_url
+- og_site_name
+- og_title
+- og_description
+- og_image
+- fav_ie_32x32
+- fav_apple_touch_180x180
+- fav_all_browsers_192x192
+- fav_ms_tile_270x270
 
 ## Get
 ```
@@ -206,4 +233,7 @@ add_filter('scg_wp_head', function($wp_heads){
 
 // Current OG Sharing Image URL
 \StudioChampGauche\Seo\Seo::og_image()
+
+// Current OG URL
+\StudioChampGauche\Seo\Seo::og_url()
 ```
