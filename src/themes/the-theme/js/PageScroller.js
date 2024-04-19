@@ -10,12 +10,37 @@ export default class PageScroller{
     constructor(){
         
         gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
-
-		window.gscroll = ScrollSmoother.create({
-			wrapper: '#pageWrapper',
-			content: '#pageContent',
-			ignoreMobileResize: true,
-			smooth: 1
+		
+		
+		const mm = gsap.matchMedia();
+		
+		mm.add({
+			isPointer: '(pointer: fine)',
+			isNotPointer: '(pointer: coarse), (pointer: none)'
+		}, (context) => {
+			
+			let { isPointer, isNotPointer } = context.conditions;
+			
+			window.gscroll = ScrollSmoother.create({
+				wrapper: '#pageWrapper',
+				content: '#pageContent',
+				ignoreMobileResize: true,
+				normalizeScroll: (isPointer ? true : false),
+				smooth: 1
+			});
+			
+			
+			return () => {
+				
+				if(window.gscroll){
+					
+					window.gscroll.kill();
+					window.gscroll = null;
+					
+				}
+				
+			}
+			
 		});
         
     }
