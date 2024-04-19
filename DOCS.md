@@ -196,8 +196,6 @@ add_filter('scg_wp_head', function($wp_heads){
 - og_article_modified_time
 - og_article_expiration_time
 - og_article_author
-- og_article_section
-- og_article_tag
 - og_url
 - og_site_name
 - og_title
