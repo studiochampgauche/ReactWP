@@ -87,10 +87,6 @@ class Seo{
 				
 				$wp_heads['og_article_author'] = '<meta property="article:author" content="'. get_author_posts_url($obj->post_author) .'" />';
 				
-				$wp_heads['og_article_section'] = '';
-				
-				$wp_heads['og_article_tag'] = '';
-				
 			}
 			
 			if(self::og_url())
