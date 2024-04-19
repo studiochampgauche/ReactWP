@@ -3,6 +3,11 @@
 ## Use `get_field()` function of ACF differently.
 ```
 scg::field($field, $id = false, $format = true, $escape = false);
+
+/*
+* OR
+*/
+
 StudioChampGauche\Utils\Field::get($field, $id = false, $format = true, $escape = false);
 ```
 
@@ -31,6 +36,11 @@ StudioChampGauche\Utils\Field::replace(['{MAIN_EMAIL}'], [scg::field('contact_em
 ## Play with `new WP_Query()`
 ```
 scg::cpt($post_type = 'post', $args = []);
+
+/*
+* OR
+*/
+
 StudioChampGauche\Utils\CustomPostType::get($post_type = 'post', $args = []);
 ```
 
@@ -52,6 +62,11 @@ StudioChampGauche\Utils\CustomPostType::default($key, $value);
 ## Call a menu
 ```
 scg::menu($theme_location = null, $args = []);
+
+/*
+* OR
+*/
+
 StudioChampGauche\Utils\Menu::get($theme_location = null, $args = []);
 ```
 
@@ -71,6 +86,11 @@ StudioChampGauche\Utils\Menu::default($key, $value);
 ## Create an Hyperlink or a Button
 ```
 scg::button($text = null, $args = []);
+
+/*
+* OR
+*/
+
 StudioChampGauche\Utils\Button::get($text = null, $args = []);
 ```
 
@@ -111,6 +131,11 @@ StudioChampGauche\Utils\Button::default($key, $value);
 ## Get Path or URL
 ```
 scg::source($args = []);
+
+/*
+* OR
+*/
+
 StudioChampGauche\Utils\Source::get($args = []);
 ```
 
@@ -131,4 +156,54 @@ StudioChampGauche\Utils\Source::get($args = []);
 ### Set default arguments
 ```
 StudioChampGauche\Utils\Source::default($key, $value);
+```
+
+
+# SEO
+
+## Increase your SEO
+```
+add_filter('scg_wp_head', function($wp_heads){
+				
+	/*
+	* Add Open Graph article:section and article:tag on Post Type 'post'
+	*/
+	if(is_singular(['post'])){
+
+		$wp_heads['og_article_section'] = '<meta property="article:section" content="" />';
+
+		$wp_heads['og_article_tag'] = '<meta property="article:tag" content="" />';
+
+	}
+
+	return $wp_heads;
+
+});
+```
+
+## Get
+```
+// Current Site Name
+\StudioChampGauche\Seo\Seo::site_name()
+
+// Current Title
+\StudioChampGauche\Seo\Seo::title()
+
+// Current Description
+\StudioChampGauche\Seo\Seo::description()
+
+// Current OG Type
+\StudioChampGauche\Seo\Seo::og_type()
+
+// Current OG Site Name
+\StudioChampGauche\Seo\Seo::og_site_name()
+
+// Current OG Title
+\StudioChampGauche\Seo\Seo::og_title()
+
+// Current OG Description
+\StudioChampGauche\Seo\Seo::og_description()
+
+// Current OG Sharing Image URL
+\StudioChampGauche\Seo\Seo::og_image()
 ```
