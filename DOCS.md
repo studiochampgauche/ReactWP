@@ -208,30 +208,57 @@ add_filter('scg_wp_head', function($wp_heads){
 
 ## Get
 ```
-// Current Site Name
+/*
+* Current Site Name
+*/
+
 \StudioChampGauche\Seo\Seo::site_name()
 
-// Current Title
+/*
+* Current Title
+*/
+
 \StudioChampGauche\Seo\Seo::title()
 
-// Current Description
+/*
+* Current Description
+*/
+
 \StudioChampGauche\Seo\Seo::description()
 
-// Current OG Type
+/*
+* Current OG Type
+*/
+
 \StudioChampGauche\Seo\Seo::og_type()
 
-// Current OG Site Name
+/*
+* Current OG Site Name
+*/
+
 \StudioChampGauche\Seo\Seo::og_site_name()
 
-// Current OG Title
+/*
+* Current OG Title
+*/
+
 \StudioChampGauche\Seo\Seo::og_title()
 
-// Current OG Description
+/*
+* Current OG Description
+*/
+
 \StudioChampGauche\Seo\Seo::og_description()
 
-// Current OG Sharing Image URL
+/*
+* Current OG Sharing Image URL
+*/
+
 \StudioChampGauche\Seo\Seo::og_image()
 
-// Current OG URL
+/*
+* Current OG URL
+*/
+
 \StudioChampGauche\Seo\Seo::og_url()
 ```
