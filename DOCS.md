@@ -211,54 +211,45 @@ add_filter('scg_wp_head', function($wp_heads){
 /*
 * Current Site Name
 */
-
-\StudioChampGauche\Seo\Seo::site_name()
+StudioChampGauche\Seo\Seo::site_name()
 
 /*
 * Current Title
 */
-
-\StudioChampGauche\Seo\Seo::title()
+StudioChampGauche\Seo\Seo::title()
 
 /*
 * Current Description
 */
-
-\StudioChampGauche\Seo\Seo::description()
+StudioChampGauche\Seo\Seo::description()
 
 /*
 * Current OG Type
 */
-
-\StudioChampGauche\Seo\Seo::og_type()
+StudioChampGauche\Seo\Seo::og_type()
 
 /*
 * Current OG Site Name
 */
-
-\StudioChampGauche\Seo\Seo::og_site_name()
+StudioChampGauche\Seo\Seo::og_site_name()
 
 /*
 * Current OG Title
 */
-
-\StudioChampGauche\Seo\Seo::og_title()
+StudioChampGauche\Seo\Seo::og_title()
 
 /*
 * Current OG Description
 */
-
-\StudioChampGauche\Seo\Seo::og_description()
+StudioChampGauche\Seo\Seo::og_description()
 
 /*
 * Current OG Sharing Image URL
 */
-
-\StudioChampGauche\Seo\Seo::og_image()
+StudioChampGauche\Seo\Seo::og_image()
 
 /*
 * Current OG URL
 */
-
-\StudioChampGauche\Seo\Seo::og_url()
+StudioChampGauche\Seo\Seo::og_url()
 ```
