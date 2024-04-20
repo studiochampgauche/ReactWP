@@ -161,7 +161,7 @@ StudioChampGauche\Utils\Source::default($key, $value);
 
 # SEO
 
-## Add, update or remove meta tags
+## Add, edit or remove meta tags
 ```
 add_filter('scg_wp_head', function($wp_heads){
 				
