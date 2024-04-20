@@ -19,7 +19,7 @@ export default class PageTransitor{
         
     }
     
-    onLeave(data)
+    onLeave(data){
             
         const tl = gsap.timeline();
 
