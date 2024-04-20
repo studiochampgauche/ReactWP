@@ -109,7 +109,7 @@ class StudioChampGauche{
                 add_filter('rest_authentication_errors', function($result) {
 
                     if (!current_user_can('manage_options'))
-                        return wp_send_json_error(['message' => 'JSON REST API IS PROTECTED.'], (is_user_logged_in ? 403 : 401));
+                        return wp_send_json_error(['message' => 'JSON REST API IS PROTECTED.'], (is_user_logged_in() ? 403 : 401));
 
                     return $result;
 
