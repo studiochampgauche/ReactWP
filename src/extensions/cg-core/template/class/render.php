@@ -56,6 +56,8 @@ class Render{
 			'acf-post-type',
 			'acf-taxonomy',
 			'acf-field',
+			'wp_font_family',
+			'wp_font_face'
 		];
 
 		foreach ($unsets as $unset) {
