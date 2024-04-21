@@ -1,6 +1,6 @@
 'use strict';
 
-export default class Loader{
+class Loader{
     
     constructor(){
         
@@ -12,3 +12,5 @@ export default class Loader{
     }
 
 }
+
+export default Loader;

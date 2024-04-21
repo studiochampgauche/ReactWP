@@ -1,11 +1,10 @@
 'use strict';
-import gsap from './gsap/index.js';
-import gsapCore from './gsap/gsap-core.js';
-import ScrollTrigger from './gsap/ScrollTrigger.js';
-import * as Barba from './barba/Barba.js';
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import barba from '@barba/core';
 
 
-export default class PageTransitor{
+class PageTransitor{
     
     constructor(){
         
@@ -83,3 +82,5 @@ export default class PageTransitor{
     }
 
 }
+
+export default PageTransitor;

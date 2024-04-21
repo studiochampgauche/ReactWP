@@ -1,20 +1,27 @@
 {
-  "name": "starter",
+  "name": "built",
   "version": "1.0.0",
-  "description": "production",
-  "main": "index.js",
+  "description": "",
   "type": "module",
   "scripts": {
-    "gulp": "gulp"
+    "prod": "gulp && webpack",
+    "watch": "webpack --watch",
+    "prod-watch": "gulp && webpack --watch"
   },
-  "dependencies": {
-    "@babel/register": "^7.18.9",
+  "devDependencies": {
+    "@barba/core": "^2.9.7",
+    "copy-webpack-plugin": "^12.0.2",
+    "file-loader": "^6.2.0",
+    "gsap": "npm:@gsap/shockingly@^3.12.5",
     "gulp": "^4.0.2",
-    "gulp-concat": "^2.6.1",
     "gulp-fontmin": "^0.7.4",
     "gulp-image": "^6.3.1",
-    "gulp-sass": "^5.1.0",
-    "gulp-uglify": "^3.0.2",
-    "sass": "^1.66.1"
+    "mini-css-extract-plugin": "^2.9.0",
+    "path": "^0.12.7",
+    "sass": "^1.75.0",
+    "sass-loader": "^14.2.1",
+    "url": "^0.11.3",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
   }
 }

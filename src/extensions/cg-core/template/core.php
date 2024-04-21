@@ -199,7 +199,7 @@ class StudioChampGauche{
 			/*
 			* Main Javascript
 			*/
-			wp_enqueue_script('scg-main', get_bloginfo('stylesheet_directory') .'/assets/js/App.js', null, null, true);
+			wp_enqueue_script('scg-main', get_bloginfo('stylesheet_directory') .'/assets/js/main.min.js', null, null, true);
             
             
             add_filter('script_loader_tag', function($tag, $handle, $src){

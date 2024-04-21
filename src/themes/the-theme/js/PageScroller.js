@@ -1,12 +1,11 @@
 'use strict';
-import gsap from './gsap/index.js';
-import gsapCore from './gsap/gsap-core.js';
-import ScrollTrigger from './gsap/ScrollTrigger.js';
-import ScrollSmoother from './gsap/ScrollSmoother.js';
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
 
 
-export default class PageScroller{
-    
+class PageScroller{
+	
     constructor(){
         
         gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
@@ -46,3 +45,5 @@ export default class PageScroller{
     }
 
 }
+
+export default PageScroller;
