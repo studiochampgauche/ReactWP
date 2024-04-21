@@ -1,3 +1,4 @@
+.npmrc
 wp-*
 .htaccess
 /index.php
