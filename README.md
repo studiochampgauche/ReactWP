@@ -33,7 +33,7 @@ Build pro WordPress websites Awwwards winning in "no time" with our Boilerplate.
 - Barba Page Transitions
 - Champ Gauche Core Plugin
 
-### Champ Gauche Core Plugin
+## Champ Gauche Core Plugin
 This plugin help us to handle repetitive needs in each project. It's based with ACF Pro.
 
 ![required-yes](https://img.shields.io/badge/Required-yes-ff0000.svg)
