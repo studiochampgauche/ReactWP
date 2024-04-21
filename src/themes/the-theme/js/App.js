@@ -1,7 +1,7 @@
 'use strict';
 import Loader from './Loader.js';
 import PageScroller from './PageScroller.js';
-//import PageTransitor from './PageTransitor.js';
+import PageTransitor from './PageTransitor.js';
 
 
 class App{
@@ -26,7 +26,7 @@ class App{
             
             new PageScroller();
             
-            //new PageTransitor();
+            new PageTransitor();
         }
         
     }
