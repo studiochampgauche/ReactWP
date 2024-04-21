@@ -10,16 +10,21 @@ Build immersive 2D or 3D WordPress websites Awwwards in "no time" with our Boile
 1. Put the WordPress Production Files on root
 2. Install your Node Modules in `src > built`
 3. In `src` directory, duplicate `wp-config-sample.php` to `wp-config.php` and setup it
-4. If is the first setup for your project, run `gulp prod-watch` or `gulp prod` in `src > built`. If not, continue watching by only use `gulp`.
+4. If is the first setup for your project, run `npm run prod` or `npm run prod-watch` in `src > built`. If not, continue watching with `npm run watch`.
 5. Start working
 
+## Requirements
+- NodeJS (tested with v20.12.2)
+- ACF Pro 6.2.6 or higher
+- A premium or commercial subscription to the GSAP Club. (Only if you conserve the Smooth Scroller of GSAP)
 
-## Ready Libraries to import
-- Pixi
-- Three
-- Barba
-- Granim
-- GSAP
+> [!WARNING]  
+> If you use the free version of GSAP or if your subscription level is other than "Premium", you need to uninstall the current GSAP module and reinstall GSAP by following the npm process [here](https://gsap.com/docs/v3/Installation/). If you don't change, don't forget to authenticate your GSAP account. You can put a look to the npm installation process for that.
+
+## Ready on start
+- Sources preloader
+- GSAP Smooth Scroller
+- Barba Page Transitions
 
 
 # Core Plugin
@@ -28,9 +33,6 @@ Build immersive 2D or 3D WordPress websites Awwwards in "no time" with our Boile
 
 We have build a plugin that help us to handle repetitive needs in each project. [Check it out here!](https://wpboilerplate.champgauche.studio)
 
-
-> [!IMPORTANT]  
-> You'll need ACF Pro 6.2.6 or higher to play with our Core Plugin. [Get it here](https://www.advancedcustomfields.com/pro).
 
 # Admin Languages
 
