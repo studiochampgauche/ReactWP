@@ -31,7 +31,9 @@ Build pro WordPress websites Awwwards winning in "no time" with our Boilerplate.
 - Sources preloader
 - GSAP Smooth Scroller
 - Barba Page Transitions
-- Champ Gauche Core Plugin
+- SASS/SCSS minify to CSS
+- JavaScript ESM/ES6+
+- Images/fonts compression
 
 ## Champ Gauche Core Plugin
 This plugin help us to handle repetitive needs in each project. It's based with ACF Pro.
