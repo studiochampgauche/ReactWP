@@ -36,10 +36,12 @@ Build pro WordPress websites Awwwards winning in "no time" with our Boilerplate.
 5. Start working
 
 
-## Champ Gauche Core Plugin
+# Champ Gauche Core Plugin
 This plugin help us to handle repetitive needs in each project. It's based with ACF Pro.
 
 ![required-yes](https://img.shields.io/badge/Required-yes-ff0000.svg)
+
+Manage:
 
 - SEO
 - Favicon
@@ -48,7 +50,7 @@ This plugin help us to handle repetitive needs in each project. It's based with 
 - Admin panel cleanup
 - REST API protection
 - SVG
-- Allow or not image resize
+- Image resize
 - Maintenance mode
 - Front-end Top Bar
 - and more..
