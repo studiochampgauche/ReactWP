@@ -9,6 +9,7 @@ Build pro WordPress websites Awwwards winning in "no time" with our Boilerplate.
 > [!CAUTION]  
 > We use Gulp for play with gulp-image and gulp-fontmin and you can't update gulp to the last version because it'll break gulp-fontmin.
 
+
 ## Guide
 1. Put the WordPress Production Files on root
 2. Install your Node Modules in `src > built`
@@ -30,13 +31,22 @@ Build pro WordPress websites Awwwards winning in "no time" with our Boilerplate.
 - Sources preloader
 - GSAP Smooth Scroller
 - Barba Page Transitions
+- Champ Gauche Core Plugin
 
+### Champ Gauche Core Plugin
+This plugin help us to handle repetitive needs in each project. It's based with ACF Pro.
 
-# Core Plugin
-
-![required-yes](https://img.shields.io/badge/Required-yes-ff0000.svg)
-
-We have build a plugin that help us to handle repetitive needs in each project. [Check it out here!](https://wpboilerplate.champgauche.studio)
+- SEO
+- Favicon
+- Theme locations
+- Code source cleanup
+- Admin panel cleanup
+- Rest API protection
+- SVG
+- Allow or not image resize
+- Maintenance mode
+- Front-end Top Bar
+- and more..
 
 
 # Admin Languages
