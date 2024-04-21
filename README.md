@@ -6,6 +6,8 @@ Build immersive 2D or 3D WordPress websites Awwwards in "no time" with our Boile
 ![en-ready](https://img.shields.io/badge/English%20Ready-yes-44cc11.svg)
 ![fr-ready](https://img.shields.io/badge/French%20Ready-yes-44cc11.svg)
 
+> [!CAUTION]  
+> We use Gulp for play with gulp-image and gulp-fontmin and you can't update gulp to the last version because it'll break gulp-fontmin.
 
 ## Guide
 1. Put the WordPress Production Files on root
