@@ -45,5 +45,13 @@ We have build a plugin that help us to handle repetitive needs in each project. 
 
 ***Translation:*** en_US, en_CA, en_GB, en_AU, en_NZ, en_ZA
 
+
 # Docs
 https://github.com/studiochampgauche/wordpress-boilerplate/blob/master/DOCS.md
+
+
+# What's new
+***2024-04-21***
+- v3 branch has take the place of Master branch. Master branch has been removed and the v3 has been renamed to master.
+- Webpack integration: we removed some tasks done by Gulp and gave them to Webpack. Now, you can import your node modules instead to be forced to place a JS file and call his path.
+- We stop managin plugin conception for concentred urself in theming. We will come back to this later.
