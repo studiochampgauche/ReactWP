@@ -41,7 +41,7 @@ This plugin help us to handle repetitive needs in each project. It's based with 
 - Theme locations
 - Code source cleanup
 - Admin panel cleanup
-- Rest API protection
+- REST API protection
 - SVG
 - Allow or not image resize
 - Maintenance mode
