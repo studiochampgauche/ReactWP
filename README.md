@@ -49,7 +49,7 @@ Manage:
 - Code source cleanup
 - Admin panel cleanup
 - REST API protection
-- SVG
+- SVG Acceptance
 - Image resize
 - Maintenance mode
 - Front-end Top Bar
