@@ -1,6 +1,8 @@
+# Our WordPress Boilerplate
+
 Check [the wiki](https://github.com/studiochampgauche/wordpress-boilerplate/wiki) for requirements, installation guide and more
 
-# What's new
+## What's new
 
 ***2024-04-21***
 - v3 branch has take the place of Master branch. Master branch has been removed and the v3 has been renamed to master.
