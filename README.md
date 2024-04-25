@@ -4,6 +4,9 @@ Check [the wiki](https://github.com/studiochampgauche/wordpress-boilerplate/wiki
 
 ## What's new
 
+***2024-04-25***
+The Webback mode has been change for `development` instead of `production`
+
 ***2024-04-22***
 - You can now install the latest version of WordPress directly with `npm run get-wordpress`
 
