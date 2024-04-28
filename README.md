@@ -4,6 +4,9 @@ Check [the wiki](https://github.com/studiochampgauche/wordpress-boilerplate/wiki
 
 ## What's new
 
+***2024-04-27***
+- You can now import images. E.g. `import myLogo from '../images/logo.svg';`
+
 ***2024-04-25***
 - The Webback mode has been change for `development` instead of `production`
 
