@@ -4,6 +4,16 @@ Check [the wiki](https://github.com/studiochampgauche/wordpress-boilerplate/wiki
 
 ## What's new
 
+***2024-05-18***
+- SCSS Mixin "break()" has upgraded. You can now manage your media queries like that:
+
+```
+@include break($type, $breaks...)
+
+
+@include break('screen, print', '(max-width: 1366px)', '(max-width: 1600px) and (orientation: landscape)')
+```
+
 ***2024-04-27***
 - You can now import images. E.g. `import myLogo from '../images/logo.svg';`
 
