@@ -14,6 +14,20 @@ Check [the wiki](https://github.com/studiochampgauche/wordpress-boilerplate/wiki
 @include break('screen, print', '(max-width: 1366px)', '(max-width: 1600px) and (orientation: landscape)')
 ```
 
+***2024-06-20***
+- Command lines has been updated:
+```
+npm run get:wp
+npm run build:dev
+npm run build:prod
+npm run watch:dev
+npm run watch:prod
+npm run build:watch:dev
+npm run build:watch:prod
+```
+Check the package.json for more informations.
+
+
 ***2024-04-27***
 - You can now import images. E.g. `import myLogo from '../images/logo.svg';`
 
