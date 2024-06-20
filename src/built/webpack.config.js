@@ -7,7 +7,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const main = {
-	mode: 'development',
 	entry: [
 		'../themes/the-theme/js/App.js',
 		'../themes/the-theme/scss/App.scss'
