@@ -15,7 +15,7 @@ npm run watch:prod
 npm run build:watch:dev
 npm run build:watch:prod
 ```
-Put a look on the package.json inner `src > built` for more informations.
+Put a look on the package.json file inner `src > built` for more informations.
 
 
 [More logs](https://github.com/studiochampgauche/wordpress-boilerplate/wiki/Changelog)
