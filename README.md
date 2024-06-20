@@ -2,7 +2,7 @@
 
 Check [the wiki](https://github.com/studiochampgauche/wordpress-boilerplate/wiki) for requirements, installation guide and more
 
-## Last Changelogs
+## Last Changelog
 
 ***2024-06-20***
 - Command lines has been updated. You can now use:
