@@ -5,7 +5,7 @@ Check [the wiki](https://github.com/studiochampgauche/wordpress-boilerplate/wiki
 ## What's new
 
 ***2024-06-20***
-- Command lines has been updated:
+- Command lines has been updated. You can now use:
 ```
 npm run get:wp
 npm run build:dev
