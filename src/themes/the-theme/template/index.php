@@ -12,11 +12,11 @@ if(scg::field('maintenance_mode')){
     $roles = $user->ID ? $user->roles : null;
     
     if(!$roles || !in_array('administrator', $roles))
-        include scg::source(['path' => 'inc/template-parts/maintenance.php']);
+        include scg::source(['path' => 'inc/template-parts/maintenance.php', 'url' => false]);
     else
-        include scg::source(['path' => 'inc/template-parts/front-page.php']);
+        include scg::source(['path' => 'inc/template-parts/front-page.php', 'url' => false]);
     
 } else
-    include scg::source(['path' => 'inc/template-parts/front-page.php']);
+    include scg::source(['path' => 'inc/template-parts/front-page.php', 'url' => false]);
 
 endwhile; get_footer(); ?>
