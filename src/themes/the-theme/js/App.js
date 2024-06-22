@@ -22,9 +22,9 @@ class App{
 
 		window.onload = async () => {
             
-            await new Loader();
-            
             new PageScroller();
+
+            await new Loader();
             
             new PageTransitor();
         }
