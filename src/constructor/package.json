@@ -23,7 +23,6 @@
     "imagemin-optipng": "^8.0.0",
     "imagemin-pngquant": "^10.0.0",
     "imagemin-svgo": "^11.0.1",
-    "imagemin-webp": "^8.0.0",
     "mini-css-extract-plugin": "^2.9.0",
     "path": "^0.12.7",
     "sass": "^1.77.6",
