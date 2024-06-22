@@ -26,5 +26,8 @@ npm run watch:prod
 
 - Modules added: image-minimizer-webpack-plugin, imagemin, imagemin-gifsicle, imagemin-jpegtran, imagemin-mozjpeg, imagemin-optipng, imagemin-pngquant, imagemin-svgo
 
+> [!NOTE]
+> Optimization work only with the production mode.
+
 
 [More logs](https://github.com/studiochampgauche/wordpress-boilerplate/wiki/Changelog)
