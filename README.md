@@ -4,22 +4,27 @@ Check [the wiki](https://github.com/studiochampgauche/wordpress-boilerplate/wiki
 
 ## Last Changelog
 
-***2024-06-20***
-- Fixed: when you set default for scg::source, the index.php and front-page.php files were affected by the change. We have added `'url' => false` to counter this fact.
+***2024-06-22***
+- Removed: Gulp has been deleted. Gulp was responsible for compressing images and fonts. Now, webpack will compress images (jpg, png, svg and gif... webp optimization will coming soon), but we've stopped compressing fonts.
 
-- Command lines has been updated. You can now use:
+- Removed: package-lock.json is no more shared.
+
+- Changed: Command lines. Now use:
 ```
 npm run get:wp
 npm run build:dev
 npm run build:prod
 npm run watch:dev
 npm run watch:prod
-npm run build:watch:dev
-npm run build:watch:prod
 ```
-Put a look on the package.json file inner `src > constructor` for more informations.
 
-- `built` directory has been renamed to `constructor`
+- Updated: Barba module updated to 2.10.0.
+
+- Updated: SASS module updated to 1.77.6.
+
+- Updated: Webpack module updated to 5.92.1.
+
+- Modules added: image-minimizer-webpack-plugin, imagemin, imagemin-gifsicle, imagemin-jpegtran, imagemin-mozjpeg, imagemin-optipng, imagemin-pngquant, imagemin-svgo
 
 
 [More logs](https://github.com/studiochampgauche/wordpress-boilerplate/wiki/Changelog)
