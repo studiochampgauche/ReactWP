@@ -5,6 +5,8 @@ Check [the wiki](https://github.com/studiochampgauche/wordpress-boilerplate/wiki
 ## Last Changelog
 
 ***2024-06-22***
+- ***Fixed:*** Dependabot alerts
+
 - ***Removed:*** Gulp has been deleted. Gulp was responsible for compressing images and fonts. Now, webpack will compress images (jpg, png, svg and gif... webp optimization will coming soon), but we've stopped compressing fonts.
 
 - ***Removed:*** package-lock.json is no more shared.
