@@ -1,6 +1,21 @@
 # Our WordPress Boilerplate
 
-Check [the wiki](https://github.com/studiochampgauche/wordpress-boilerplate/wiki) for requirements, installation guide and more
+Check [the wiki](https://github.com/studiochampgauche/wordpress-boilerplate/wiki) for requirements, installation guide and more.
+
+## What's for?
+Play fast around WordPress, ACF Pro and modules of Node.js by stopping waste time with the basics.
+
+- Barba Ready
+- GSAP Ready
+- GSAP SmoothScroller/ScrollTrigger ready and work's good with Barba
+- SCSS/SASS minification to CSS
+- JS minification
+- Image compression
+- SVG Acceptance
+- Source code cleanup
+- Stop getting multiple image files/dimensions when you upload an image
+- Maintenance mode
+- and more..
 
 ## Last Changelog
 
