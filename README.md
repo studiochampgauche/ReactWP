@@ -5,6 +5,7 @@ Check [the wiki](https://github.com/studiochampgauche/wordpress-boilerplate/wiki
 ## What's for?
 Play fast around WordPress, ACF Pro and modules of Node.js by stopping waste time with the basics.
 
+- Import your Node modules in ESM
 - Barba Ready
 - GSAP Ready
 - GSAP SmoothScroller/ScrollTrigger ready and work's good with Barba
