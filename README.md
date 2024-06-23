@@ -16,6 +16,7 @@ Play fast around WordPress, ACF Pro and modules of Node.js by stopping waste tim
 - Source code cleanup
 - Stop getting multiple image files/dimensions when you upload an image
 - Maintenance mode
+- SEO Management
 - and more..
 
 ## Last Changelog
