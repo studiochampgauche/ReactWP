@@ -1,7 +1,6 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import CopyPlugin from 'copy-webpack-plugin';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -21,29 +20,28 @@ const main = {
 	module: {
 		rules: [
 			{
-				test: /\.s[ac]ss$/,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: 'main.min.css',
-							outputPath: '../css/'
-						}
-					},
-					'sass-loader'
-				],
+				test: /\.s[ac]ss$/i,
+				use: ['sass-loader'],
+				type: 'asset/resource',
+				generator: {
+					filename: '../css/main.min.css'
+				}
 			},
 			{
-				test: /\.(png|jpg|jpeg|gif|svg)$/,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: '[name].[ext]',
-							outputPath: '../images/',
-						}
-					}
-				]
+				test: /\.(png|jpg|jpeg|gif|svg)$/i,
+				use: [],
+				type: 'asset/resource',
+				generator: {
+					filename: '../images/[name].[ext]'
+				}
+			},
+			{
+				test: /\.(woff|woff2|eot|ttf|otf)$/i,
+				use: [],
+				type: 'asset/resource',
+				generator: {
+					filename: '../fonts/[name].[ext]'
+				}
 			}
 		],
 	},
@@ -81,7 +79,7 @@ const main = {
 					noErrorOnMissing: true
 				}
 			]
-		}),
+		})
 	],
 	optimization: {
 		minimizer: [
