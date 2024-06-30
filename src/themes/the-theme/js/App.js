@@ -7,7 +7,7 @@ import PageTransitor from './PageTransitor.js';
 class App{
     
     constructor(){
-        
+    	
         window.scrollTo(0,0);
 
 		if ('scrollRestoration' in history)

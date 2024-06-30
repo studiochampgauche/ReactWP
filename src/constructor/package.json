@@ -13,6 +13,7 @@
   "devDependencies": {
     "@barba/core": "^2.10.0",
     "copy-webpack-plugin": "^12.0.2",
+    "file-loader": "^6.2.0",
     "gsap": "npm:@gsap/shockingly@^3.12.5",
     "image-minimizer-webpack-plugin": "^4.0.2",
     "imagemin": "^9.0.0",
