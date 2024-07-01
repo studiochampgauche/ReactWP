@@ -9,8 +9,8 @@ const __dirname = path.dirname(__filename);
 const main = {
 	entry: {
 		app: [
-			'../themes/the-theme/js/App.js',
-			'../themes/the-theme/scss/App.scss'
+			'../themes/the-theme/es/js/App.js',
+			'../themes/the-theme/es/scss/App.scss'
 		]
 	},
 	output: {
@@ -45,6 +45,30 @@ const main = {
 				]
 			},
 			{
+				test: /\.(mp4)$/i,
+				use: [
+					{
+						loader: 'file-loader',
+						options: {
+							name: '[name].[ext]',
+							outputPath: '../videos/',
+						}
+					}
+				]
+			},
+			{
+				test: /\.(mp3)$/i,
+				use: [
+					{
+						loader: 'file-loader',
+						options: {
+							name: '[name].[ext]',
+							outputPath: '../audios/',
+						}
+					}
+				]
+			},
+			{
 				test: /\.(woff|woff2|eot|ttf|otf)$/i,
 				use: [
 					{
@@ -72,12 +96,22 @@ const main = {
 					noErrorOnMissing: true
 				},
 				{
-					from: '../themes/the-theme/images',
+					from: '../themes/the-theme/medias/images',
 					to: path.resolve(__dirname, '../../wp-content/themes/the-theme/assets/images'),
 					noErrorOnMissing: true
 				},
 				{
-					from: '../themes/the-theme/fonts',
+					from: '../themes/the-theme/medias/audios',
+					to: path.resolve(__dirname, '../../wp-content/themes/the-theme/assets/audios'),
+					noErrorOnMissing: true
+				},
+				{
+					from: '../themes/the-theme/medias/videos',
+					to: path.resolve(__dirname, '../../wp-content/themes/the-theme/assets/videos'),
+					noErrorOnMissing: true
+				},
+				{
+					from: '../themes/the-theme/medias/fonts',
 					to: path.resolve(__dirname, '../../wp-content/themes/the-theme/assets/fonts'),
 					noErrorOnMissing: true
 				},
@@ -87,7 +121,7 @@ const main = {
 					noErrorOnMissing: true
 				},
 				{
-					from: '../themes/the-theme/scss/inc/fa/webfonts',
+					from: '../themes/the-theme/es/scss/inc/fa/webfonts',
 					to: path.resolve(__dirname, '../../wp-content/themes/the-theme/assets/css/inc/fa/webfonts'),
 					noErrorOnMissing: true
 				}
