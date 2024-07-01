@@ -7,6 +7,7 @@ Check [the wiki](https://github.com/studiochampgauche/wordpress-boilerplate/wiki
 
 ***2024-06-30***
 
+- ***Removed:*** mini-css-extract-plugin
 - ***Added:*** Font import from JS files
 - ***Added:*** Area for audio files
 - ***Added:*** Area for video files
