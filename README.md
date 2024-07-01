@@ -24,6 +24,3 @@
 - ***Added:*** `src > theme > the-theme > es` directory
 - ***Moved:*** "images/fonts/audios/videos" directories inner "medias" directory
 - ***Moved:*** "js/scss" directories inner "es" directory
-
-
-[More logs](https://github.com/studiochampgauche/wordpress-boilerplate/wiki/Changelog)
