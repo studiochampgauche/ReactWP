@@ -14,7 +14,7 @@
 
 ***2024-07-03***
 
-- ***Fixed:*** Recursive replacements turn numeric value to string. Fixed.
+- ***Fixed:*** Recursive replacements turn numeric value to string. Fixed. 731dcf7
 
 
 ***2024-06-30***
