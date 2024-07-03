@@ -14,7 +14,7 @@
 
 ***2024-07-03***
 
-- ***Fixed:*** Recursive replacements turn numeric value to string. Fixed. 731dcf7
+- ***Fixed:*** Recursive replacements turn numeric value to string. Fixed. [731dcf7](https://github.com/studiochampgauche/wordpress-boilerplate/commit/731dcf78c28b6f347109433136376ecff5b55e35)
 
 
 ***2024-06-30***
