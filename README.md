@@ -23,3 +23,7 @@
 
 > [!CAUTION]
 > If you don't conserve the Smooth Scroller, you need to remove PageScroller() from App.js and you need to remove all window.gscroll reference in PageTransitor.js
+
+## Changelog
+
+[Here](https://github.com/studiochampgauche/wordpress-boilerplate/blob/master/CHANGELOG.md)
