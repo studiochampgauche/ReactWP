@@ -10,6 +10,7 @@
 6. If is the first setup for your project, run `npm run build:dev` or `npm run watch:dev` in `src > constructor`. If not, continue watching with `npm run watch:dev`.
 7. Start working
 
+
 ## Requirements
 
 - NodeJS (tested with v20.12.2)
@@ -24,6 +25,19 @@
 > [!CAUTION]
 > If you don't conserve the Smooth Scroller, you need to remove PageScroller() from App.js and you need to remove all window.gscroll reference in PageTransitor.js
 
+
 ## Changelog
 
 [Here](https://github.com/studiochampgauche/wordpress-boilerplate/blob/master/CHANGELOG.md)
+
+
+## Multisite
+
+- On multisite, The JSON Save of ACF doesn't work.
+
+
+## Languages
+
+***Default:*** French
+
+***Translation:*** en_US, en_CA, en_GB, en_AU, en_NZ, en_ZA
