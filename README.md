@@ -27,8 +27,8 @@
 - ***Added:*** Import your video files from your JS files
 - ***Added:*** `src > theme > the-theme > medias` directory
 - ***Added:*** `src > theme > the-theme > es` directory
-- ***Moved:*** "images/fonts/audios/videos" directories inner "medias" directory
-- ***Moved:*** "js/scss" directories inner "es" directory
+- ***Moved:*** "images, fonts, audios, videos" directories inner "medias" directory
+- ***Moved:*** "js, scss" directories inner "es" directory
 
 ***2024-06-22***
 - ***Fixed:*** Dependabot alerts
