@@ -1,5 +1,15 @@
 # Our WordPress Boilerplate
 
+Our Boilerplate is done for help us to start theming fast around modules of Node and ACF Pro on installation instead of wasting time with basics, code source clean up and more.
+
+The project has a mentality that limits the use of plugins, keeping administration clean and consistent for clients. At the same time, an other mentality for automatisation with Webpack and Gulp that allow us to play with node modules in ESM, SASS/SCSS, codes minification and images/fonts compression.
+
+
+> [!NOTE]
+> Although our mentality is to use as few extensions as possible, you can install whatever you like without limitation. Just keep in mind that the project has only sense if you dev your own codes around ACF and some Node modules instead of use multiple differents WordPress plugins.
+
+
+
 ## Installation Guide
 
 1. Git clone this repo
