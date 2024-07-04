@@ -2,7 +2,7 @@
 
 Our Boilerplate is done for help us to start theming fast around modules of Node and ACF Pro on installation instead of wasting time with basics, code source clean up and more.
 
-The project has a mentality that limits the use of plugins, keeping administration clean and consistent for clients. At the same time, an other mentality for automatisation with Webpack and Gulp that allow us to play with node modules in ESM, SASS/SCSS, codes minification and images/fonts compression.
+The project has a mentality that limits the use of plugins, keeping administration clean and consistent for clients. At the same time, an other mentality for automatisation with Webpack that allow us to play with node modules in ESM, SASS/SCSS, codes minification and images compression.
 
 
 > [!NOTE]
