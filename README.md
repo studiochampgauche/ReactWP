@@ -23,7 +23,7 @@ The project has a mentality that limits the use of plugins, keeping administrati
 
 ## Requirements
 
-- NodeJS (tested with v20.12.2)
+- NodeJS (tested with v20.12.2, v20.15.0)
 - ACF Pro 6.2.6 or higher
 - PHP Version 8.2 or higher
 - Our Core plugin named "Champ Gauche Core" (included in the repo)
