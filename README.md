@@ -9,18 +9,6 @@ The project has a mentality that limits the use of plugins, keeping administrati
 > Although our mentality is to use as few extensions as possible, you can install whatever you like without limitation. Just keep in mind that the project has only sense if you dev your own codes around ACF and some Node modules instead of use multiple differents WordPress plugins.
 
 
-
-## Installation Guide
-
-1. Git clone this repo
-2. Go to `src > constructor`
-3. Install WordPress `npm run get:wp`
-4. Install the Node Modules `npm i`
-5. In `src` directory, duplicate `wp-config-sample.php` to `wp-config.php` and setup it
-6. If is the first setup for your project, run `npm run build:dev` or `npm run watch:dev` in `src > constructor`. If not, continue watching with `npm run watch:dev`.
-7. Start working
-
-
 ## Requirements
 
 - NodeJS (tested with v20.12.2, v20.15.0)
@@ -34,6 +22,17 @@ The project has a mentality that limits the use of plugins, keeping administrati
 
 > [!CAUTION]
 > If you don't conserve the Smooth Scroller, you need to remove PageScroller() from App.js and you need to remove all window.gscroll reference in PageTransitor.js
+
+
+## Installation Guide
+
+1. Git clone this repo
+2. Go to `src > constructor`
+3. Install WordPress `npm run get:wp`
+4. Install the Node Modules `npm i`
+5. In `src` directory, duplicate `wp-config-sample.php` to `wp-config.php` and setup it
+6. If is the first setup for your project, run `npm run build:dev` or `npm run watch:dev` in `src > constructor`. If not, continue watching with `npm run watch:dev`.
+7. Start working
 
 
 ## Changelog
