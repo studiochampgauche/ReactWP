@@ -1,6 +1,7 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import CopyPlugin from 'copy-webpack-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
 import ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -144,7 +145,8 @@ const main = {
 						],
 					},
 				},
-			})
+			}),
+			new TerserPlugin()
 		],
 	},
 	resolve: {
