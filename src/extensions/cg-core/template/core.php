@@ -7,7 +7,7 @@ Plugin URI: https://wpboilerplate.champgauche.studio
 Description: A plugin that handles repetitive needs in each project and add-ons.
 Requires at least: 6.4.1
 Requires PHP: 8.2
-Version: 3.0.0
+Version: 4.0.0
 Text Domain: cg-core
 Domain Path: /langs
 */
