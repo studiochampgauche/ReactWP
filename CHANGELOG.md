@@ -1,5 +1,9 @@
 ## Changelog
 
+***2024-08-07***
+
+- ***Added:*** Secure audios and videos directories by adding an index.php file.
+
 
 ***2024-07-16***
 
