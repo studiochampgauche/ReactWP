@@ -1,5 +1,11 @@
 ## Changelog
 
+***2024-08-08***
+
+- ***Moved:*** `js` and `scss` directories from `src` has been placed out of `es`.
+- ***Removed:*** `es` directory has been deleted
+
+
 ***2024-08-07***
 
 - ***Added:*** Secure audios and videos directories by adding an index.php file.

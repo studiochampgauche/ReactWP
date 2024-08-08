@@ -10,8 +10,8 @@ const __dirname = path.dirname(__filename);
 const main = {
 	entry: {
 		app: [
-			'../themes/the-theme/es/js/App.js',
-			'../themes/the-theme/es/scss/App.scss'
+			'../themes/the-theme/js/App.js',
+			'../themes/the-theme/scss/App.scss'
 		]
 	},
 	output: {
@@ -122,7 +122,7 @@ const main = {
 					noErrorOnMissing: true
 				},
 				{
-					from: '../themes/the-theme/es/scss/inc/fa/webfonts',
+					from: '../themes/the-theme/scss/inc/fa/webfonts',
 					to: path.resolve(__dirname, '../../wp-content/themes/the-theme/assets/css/inc/fa/webfonts'),
 					noErrorOnMissing: true
 				}
