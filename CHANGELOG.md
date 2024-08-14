@@ -2,8 +2,9 @@
 
 ***2024-08-14***
 
-- ***Fixed:*** Attribute target blank on link doesn't work with the v2.10.0 of Barba.js. Fixed.
-- ***Updated:*** Barba v2.10.0 to v2.10.3
+- ~~***Fixed:*** Attribute target blank on link doesn't work with the v2.10.0 of Barba.js. Fixed.~~
+- ~~***Updated:*** Barba v2.10.0 to v2.10.3~~
+- EDIT: ... In fact, we realize that it's not the version 2.10.0 the problem, but the v2.10.2
 
 ***2024-08-08***
 
