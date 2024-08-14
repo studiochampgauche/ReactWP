@@ -1,5 +1,10 @@
 ## Changelog
 
+***2024-08-14***
+
+- ***Fixed:*** Attribute target blank on link doesn't work with the v2.10.0 of Barba.js. Fixed.
+- ***Updated:*** Barba v2.10.0 to v2.10.3
+
 ***2024-08-08***
 
 - ***Moved:*** `js` and `scss` directories from `src` has been placed out of `es`.

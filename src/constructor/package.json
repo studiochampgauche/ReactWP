@@ -11,7 +11,7 @@
     "get:wp": "curl -LO http://wordpress.org/latest.zip && mv latest.zip ../../ && unzip -d ../../ ../../latest.zip && rm ../../latest.zip && mv ../../wordpress/* ../../ && rm -rf ../../wordpress"
   },
   "devDependencies": {
-    "@barba/core": "^2.10.0",
+    "@barba/core": "^2.10.3",
     "copy-webpack-plugin": "^12.0.2",
     "file-loader": "^6.2.0",
     "gsap": "npm:@gsap/shockingly@^3.12.5",
