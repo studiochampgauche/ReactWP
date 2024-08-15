@@ -9,3 +9,4 @@ license.txt
 src/wp-config.php
 node_modules
 .npmrc
+package-lock.json
