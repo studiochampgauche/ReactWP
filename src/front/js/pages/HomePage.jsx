@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import Metas from '../components/Metas';
 
 const HomePage = () => {
     
@@ -16,6 +17,10 @@ const HomePage = () => {
 	
 	return(
 		<>
+			<Metas
+				title='Mon titre'
+				description='Ma description'
+			/>
 			<section id="h__intro">
 				<div className="container">
 					

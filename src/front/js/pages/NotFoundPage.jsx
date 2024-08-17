@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import Metas from '../components/Metas';
 
 const NotFound = () => {
     
@@ -15,6 +16,10 @@ const NotFound = () => {
 	
 	return(
 		<>
+			<Metas
+				title='Page non trouvée.'
+				description='Ma description'
+			/>
 			<section id="not__intro">
                 <div className="container">
                     

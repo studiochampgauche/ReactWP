@@ -2,6 +2,7 @@ import React, { StrictMode } from 'react';
 //import ReactDOM from 'react-dom';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import Scroller from './components/Scroller'
 import Transitor from './components/Transitor'
 import Header from './components/Header'
@@ -38,6 +39,8 @@ const App = () => {
 
 root.render(
     <StrictMode>
-        <App />
+        <HelmetProvider>
+            <App />
+        </HelmetProvider>
     </StrictMode>
 );
