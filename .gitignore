@@ -6,7 +6,7 @@
 #license.txt
 #!src
 #!src/wp-config-sample.php
-#src/wp-config.php
+src/back/wp-config.php
 1-old
 dist
 node_modules
