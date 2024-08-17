@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import React, { useEffect } from 'react';
 
 const NotFound = () => {
     
@@ -26,4 +26,4 @@ const NotFound = () => {
 	
 }
 
-export default NotFound
+export default NotFound;
