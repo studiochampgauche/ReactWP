@@ -8,11 +8,7 @@
 #!src/wp-config-sample.php
 #src/wp-config.php
 1-old
-dist/*
-!dist/.gitkeep
-!dist/admin
-dist/admin/*
-!dist/admin/.gitkeep
+dist
 node_modules
 .npmrc
 package-lock.json
