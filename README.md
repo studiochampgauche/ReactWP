@@ -63,3 +63,8 @@ window.SYSTEM = {
 - WordPress Front-end (not the React Front-end, but the admin front-end part) redirect to the the wp-admin. You can delete the template_redirect action hook inner the functions.php if you don't want that.
 
 - The WordPress admin panel is still on v3. Some elements of the admin are useless.
+
+
+## My Files audios/videos/images/fonts/ does't transfert from `src` to `dist`
+
+- When you have a media file that isn't import by your main JS App files, webpack doesn't know you use it and he don't compile it. You need to force the import by use the JS file according to your needs. (e.g. if you play with an audio file, you need to go in `src > front > medias > audios` and import your file from the `audios.js` file.) 
