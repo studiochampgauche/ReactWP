@@ -6,7 +6,7 @@ The v4 isn't a following of the v3 but a totally new React Front-End SPA ecosyst
 ## Requirements
 
 - NodeJS (tested with v20.15.0)
-- ACF Pro 6.2.6 or higher
+- ACF Pro License Key
 - PHP Version 8.2 or higher
 - A premium or commercial subscription to the GSAP Club. (You need to add the .npmrc file in `constructor` directory for authenticate your account.)
 
