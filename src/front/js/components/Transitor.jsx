@@ -97,7 +97,7 @@ const Transitor = ({ children }) => {
                 if(!window.gscroll) return;
                 
                 window.gscroll.paused(true);
-                //window.gscroll.scrollTop(0);
+                window.gscroll.scrollTop(0);
                 ScrollTrigger.refresh();
                 ScrollTrigger.getAll().forEach(t => t.kill());
                 
@@ -135,7 +135,7 @@ const Transitor = ({ children }) => {
                 
                 if(!window.gscroll) return;
                 
-                //window.gscroll.scrollTop(0);
+                window.gscroll.scrollTop(0);
                 
             },
 			onComplete: () => {
