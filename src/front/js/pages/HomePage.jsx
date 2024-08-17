@@ -22,6 +22,7 @@ const HomePage = () => {
 				</div>
 			</section>
             <section style={{ background: '#00ff00', height: '100lvh' }}></section>
+            <section style={{ background: '#0000ff', height: '100lvh' }}></section>
 		</>
 	);
 	

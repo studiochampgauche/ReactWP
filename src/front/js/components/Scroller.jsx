@@ -26,7 +26,7 @@ const Scroller = ({ children }) => {
 				content: '#pageContent',
 				ignoreMobileResize: true,
 				normalizeScroll: (isPointer ? true : false),
-				smooth: 1
+				smooth: 2.25
 			});
 			
 			
