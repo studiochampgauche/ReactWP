@@ -43,9 +43,9 @@ const App = () => {
 };
 
 root.render(
-    <StrictMode>
+    //<StrictMode>
         <HelmetProvider>
             <App />
         </HelmetProvider>
-    </StrictMode>
+    //</StrictMode>
 );
