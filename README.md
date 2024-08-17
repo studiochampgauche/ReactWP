@@ -53,4 +53,4 @@ window.SYSTEM = {
 
 ## To know
 
-- WordPress Front-end (not the React Front-end, but the admin front-end part) redirect to the the wp-admin. You can delete the template_redirect inner the functions.php if you don't want that.
+- WordPress Front-end (not the React Front-end, but the admin front-end part) redirect to the the wp-admin. You can delete the template_redirect action hook inner the functions.php if you don't want that.
