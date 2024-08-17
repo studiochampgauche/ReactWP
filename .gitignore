@@ -7,6 +7,7 @@
 #!src
 #!src/wp-config-sample.php
 #src/wp-config.php
+dist
 node_modules
 .npmrc
 package-lock.json

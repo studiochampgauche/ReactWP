@@ -4,10 +4,15 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "build:dev": "webpack --mode development",
-    "build:prod": "webpack --mode production",
-    "watch:dev": "webpack --mode development --watch",
-    "watch:prod": "webpack --mode production --watch",
+    "build:front": "webpack --mode development --config front.config.js",
+    "watch:front": "webpack --mode development --config front.config.js --watch",
+    "build:back": "webpack --mode development --config back.config.js",
+    "watch:back": "webpack --mode development --config back.config.js --watch",
+    "build:front:back": "webpack --mode development --config front.config.js,back.config.js",
+    "watch:front:back": "webpack --mode development --config front.config.js,back.config.js --watch",
+    "prod:front": "webpack --mode production --config front.config.js",
+    "prod:back": "webpack --mode production --config back.config.js",
+    "prod:front:back": "webpack --mode production --config front.config.js,back.config.js",
     "get:wp": "curl -LO http://wordpress.org/latest.zip && mv latest.zip ../../ && unzip -d ../../ ../../latest.zip && rm ../../latest.zip && mv ../../wordpress/* ../../ && rm -rf ../../wordpress"
   },
   "devDependencies": {
@@ -31,5 +36,8 @@
     "url": "0.11.3",
     "webpack": "5.92.1",
     "webpack-cli": "5.1.4"
+  },
+  "dependencies": {
+    "react-router-dom": "^6.26.1"
   }
 }
