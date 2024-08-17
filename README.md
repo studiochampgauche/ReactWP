@@ -32,6 +32,13 @@ location / {
 ```
 
 
+## Installation Guide
+
+... Is coming
+
+
+
+
 ## How transition page work
 
 - Add attribute `data-transition="true"` to your link element. Without this attribute, the change'll be direct.
