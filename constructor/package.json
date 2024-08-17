@@ -12,7 +12,7 @@
     "watch:front:back": "webpack --mode development --config webpack.config.js --watch",
     "prod:front": "webpack --mode production --config front.config.js",
     "prod:back": "webpack --mode production --config back.config.js",
-    "prod:front:back": "webpack --mode production --config front.config.js,back.config.js",
+    "prod:front:back": "webpack --mode production --config webpack.config.js",
     "get:wp": "curl -LO http://wordpress.org/latest.zip && cd ../ && mkdir dist && cd dist && mkdir admin && cd ../constructor && mv latest.zip ../dist/admin/ && unzip -d ../dist/admin/ ../dist/admin/latest.zip && rm ../dist/admin/latest.zip && mv ../dist/admin/wordpress/* ../dist/admin/ && rm -rf ../dist/admin/wordpress"
   },
   "devDependencies": {
