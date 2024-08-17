@@ -15,6 +15,11 @@ const mainNode = document.getElementById('viewport');
 const root = createRoot(mainNode);
 
 
+window.SYSTEM = {
+    ajaxurl: '/admin/wp-admin/admin-ajax.php',
+    restBasePath: '/admin/wp-json/'
+};
+
 const App = () => {
     
     return (
