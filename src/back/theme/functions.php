@@ -70,15 +70,6 @@
 			
 			});
             */
-            
-            /*
-			* Preload
-			add_action('wp_head', function(){
-				echo '<link rel="preload" as="font" href="" type="font/woff2" crossorigin />';
-				echo '<link rel="preload" as="image" href="">';
-				
-			}, 3);
-			*/
 			
 			
 			/*
@@ -92,6 +83,21 @@
 				
 			}, 11);
 			
+
+
+
+			/*
+			* Protect Rest API
+			add_filter('rest_authentication_errors', function($result) {
+
+                if (!current_user_can('manage_options'))
+                    return wp_send_json_error(['message' => 'JSON REST API IS PROTECTED.'], (is_user_logged_in() ? 403 : 401));
+
+                return $result;
+
+            });
+			*/
+
 			
 			/*
 			* Shot events on init
