@@ -30,14 +30,12 @@
     "path": "0.12.7",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "react-router-dom": "^6.26.1",
     "sass": "1.77.6",
     "sass-loader": "14.2.1",
     "terser-webpack-plugin": "5.3.10",
     "url": "0.11.3",
     "webpack": "5.92.1",
     "webpack-cli": "5.1.4"
-  },
-  "dependencies": {
-    "react-router-dom": "^6.26.1"
   }
 }
