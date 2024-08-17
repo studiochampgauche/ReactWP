@@ -1,6 +1,6 @@
 v4 is new and not completed.
 
-The v4 isn't a following of the v3 but a totally new React Front-End SPA ecosystem and a separated WordPress Back-End.
+The v4 isn't a following of the v3 but a totally new React Front-End SPA ecosystem with a separated WordPress Back-End.
 
 
 ## Requirements
