@@ -37,3 +37,15 @@ location / {
 - Add attribute `data-transition="true"` to your link element. Without this attribute, the change'll be direct.
 
 - Checkout the component `Transitor.jsx` for edit your transition
+
+
+
+## Fetch
+
+We have set the ajaxurl and a basepath for the call to the REST inner a global object:
+```
+window.SYSTEM = {
+    ajaxurl: '/admin/wp-admin/admin-ajax.php',
+    restBasePath: '/admin/wp-json/'
+};
+```
