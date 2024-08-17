@@ -5,7 +5,7 @@ const MainNav = () => {
 	
 	const navItems = [
 		{title: 'Home', to: '/', 'data-transition': true},
-		{title: '404 error Page', to: '/test2', 'data-transition': true}
+		{title: '404 error Page', to: '/ok', 'data-transition': true}
 	];
 	
 	useEffect(() => {
