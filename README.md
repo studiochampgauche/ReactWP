@@ -15,9 +15,17 @@ RewriteRule ^ index.html [L]
 
 
 ## Nginx configuration
+
 (not tested)
 ```
 location / {
     try_files $uri /index.html;
 }
 ```
+
+
+## How transition page work
+
+- Add attribute `data-transition="true"` to your link element. Without this attribute, the change'll be direct.
+
+- Checkout the component `Transitor.jsx` for edit your transition

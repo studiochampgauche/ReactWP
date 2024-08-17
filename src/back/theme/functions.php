@@ -73,13 +73,17 @@
 
 
             /*
-			* Preload
-			add_action('wp_head', function(){
-				echo '<link rel="preload" as="font" href="" type="font/woff2" crossorigin />';
-				echo '<link rel="preload" as="image" href="">';
-				
-			}, 3);
-			*/
+            * Shot events on template_redirect
+            */
+            add_action('template_redirect', function(){
+
+            	if(is_admin()) return;
+
+            	wp_redirect(admin_url());
+
+            	exit;
+
+            });
 			
 			
 			/*
@@ -92,7 +96,6 @@
 				]);
 				
 			}, 11);
-			
 
 
 

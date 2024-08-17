@@ -6,7 +6,8 @@ const HomePage = () => {
     
 	useEffect(() => {
 		
-		
+
+
 		return () => {
             
             
@@ -18,8 +19,8 @@ const HomePage = () => {
 	return(
 		<>
 			<Metas
-				title='Mon titre'
-				description='Ma description'
+				title='My title'
+				description='My description'
 			/>
 			<section id="h__intro">
 				<div className="container">
