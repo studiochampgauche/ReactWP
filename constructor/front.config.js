@@ -11,7 +11,11 @@ const main = {
 	entry: {
 		app: [
 			'../src/front/js/App.jsx',
-			'../src/front/scss/App.scss'
+			'../src/front/scss/App.scss',
+			'../src/front/medias/audios/audios.js',
+			'../src/front/medias/fonts/fonts.js',
+			'../src/front/medias/images/images.js',
+			'../src/front/medias/videos/videos.js',
 		]
 	},
 	output: {
@@ -46,7 +50,7 @@ const main = {
 					{
 						loader: 'file-loader',
 						options: {
-							name: '[name].[ext]',
+							name: '[folder]/[name].[ext]',
 							outputPath: '../images/',
 						}
 					}
@@ -58,7 +62,7 @@ const main = {
 					{
 						loader: 'file-loader',
 						options: {
-							name: '[name].[ext]',
+							name: '[folder]/[name].[ext]',
 							outputPath: '../videos/',
 						}
 					}
@@ -70,7 +74,7 @@ const main = {
 					{
 						loader: 'file-loader',
 						options: {
-							name: '[name].[ext]',
+							name: '[folder]/[name].[ext]',
 							outputPath: '../audios/',
 						}
 					}
@@ -82,7 +86,7 @@ const main = {
 					{
 						loader: 'file-loader',
 						options: {
-							name: '[name].[ext]',
+							name: '[folder]/[name].[ext]',
 							outputPath: '../fonts/',
 						}
 					}
