@@ -3,6 +3,14 @@ v4 is new and not completed.
 The v4 isn't a following of the v3 but a totally new SPA ecosystem with a React Front-End and a separated WordPress Back-End.
 
 
+## Requirements
+
+- NodeJS (tested with v20.15.0)
+- ACF Pro 6.2.6 or higher
+- PHP Version 8.2 or higher
+- A premium or commercial subscription to the GSAP Club. (You need to and the .npmrc file in `constructor` directory for authenticate your account.)
+
+
 ## Apache configuration
 
 ```
