@@ -28,6 +28,16 @@ const mainBack = {
 						'**/App.js'
 						]
 					}
+				},
+				{
+					from: '../src/back/extensions',
+					to: path.resolve(__dirname, '../dist/admin/wp-content/plugins'),
+					noErrorOnMissing: true,
+					globOptions: {
+						ignore: [
+						'**/App.js'
+						]
+					}
 				}
 			]
 		}),
