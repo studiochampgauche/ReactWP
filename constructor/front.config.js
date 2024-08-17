@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 const main = {
 	entry: {
 		app: [
-			'../src/front/js/App.js',
+			'../src/front/js/App.jsx',
 			'../src/front/scss/App.scss'
 		]
 	},
@@ -19,7 +19,14 @@ const main = {
 		path: path.resolve(__dirname, '../dist/assets/js')
 	},
 	module: {
-		rules: [
+			rules: [
+				{
+					test: /\.jsx?$/,
+					exclude: /node_modules/,
+					use: {
+						loader: 'babel-loader',
+					},
+				},
 			{
 				test: /\.s[ac]ss$/i,
 				use: [
@@ -117,7 +124,8 @@ const main = {
 	resolve: {
 		modules: [
 			path.resolve(__dirname, 'node_modules')
-		]
+		],
+		extensions: ['.js', '.jsx']
 	}
 };
 
