@@ -9,7 +9,7 @@ const Header = () => {
 		<header>
 			<div className="plywood">
 				<div className="container">
-					<Link className="logo" to="/">
+					<Link className="logo" to="/" data-transition="true">
 						<MainLogo alt="Demo" />
 					</Link>
 					<MainNav />
