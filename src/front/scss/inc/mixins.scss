@@ -1,0 +1,12 @@
+@mixin break($type, $breaks...) {
+    $queries: ();
+
+    @each $break in $breaks {
+        $queries: append($queries, #{$break}, comma);
+    }
+
+
+    @media only #{$type} and #{$queries} {
+        @content;
+    }
+}
