@@ -41,7 +41,7 @@ location / {
 
 ## How transition page work
 
-- Add attribute `data-transition="true"` to your link element. Without this attribute, the change'll be direct.
+- Add attribute `data-transition="true"` to your link element. Without this attribute, the change'll be direct. (You need to use `<Link>`, not `<a ...>`)
 
 - Checkout the component `Transitor.jsx` for edit your transition
 
