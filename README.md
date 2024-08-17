@@ -61,3 +61,5 @@ window.SYSTEM = {
 ## To know
 
 - WordPress Front-end (not the React Front-end, but the admin front-end part) redirect to the the wp-admin. You can delete the template_redirect action hook inner the functions.php if you don't want that.
+
+- The WordPress admin panel is still on v3. Some elements of the admin are useless.
