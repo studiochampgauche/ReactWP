@@ -134,7 +134,7 @@ const Transitor = ({ children }) => {
 				
 				navigateRef.current(to.current);
                 
-                if(!window.gscroll){
+                if(window.gscroll){
 	                window.gscroll.paused(true);
 	                window.gscroll.scrollTop(0);
 	            }
