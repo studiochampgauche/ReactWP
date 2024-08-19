@@ -24,10 +24,7 @@ const Transitor = ({ children }) => {
 
 
         /*
-        * If SmoothScroller Plugin of GSAP not there,
-        * make sure you start on position 0 after a page change
-        *
-        * If Plugin there, it'll be managed after the leaving transition
+        * If no anchor, make sure you start at the position 0
         */
         if(!anchorRef.current)
         	window.gscroll ? window.gscroll.scrollTop(0) : window.scrollTo(0, 0);
