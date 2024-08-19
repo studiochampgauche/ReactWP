@@ -22,6 +22,9 @@ const Transitor = ({ children }) => {
 
 	useEffect(() => {
 
+		ScrollTrigger.refresh();
+
+
         /*
         * If SmoothScroller Plugin of GSAP not there,
         * make sure you start on position 0 after a page change
@@ -131,10 +134,11 @@ const Transitor = ({ children }) => {
 				
 				navigateRef.current(to.current);
                 
-                if(!window.gscroll) return;
-                
-                window.gscroll.paused(true);
-                window.gscroll.scrollTop(0);
+                if(!window.gscroll){
+	                window.gscroll.paused(true);
+	                window.gscroll.scrollTop(0);
+	            }
+	            
                 ScrollTrigger.refresh();
                 ScrollTrigger.getAll().forEach(t => t.kill());
                 
@@ -173,7 +177,6 @@ const Transitor = ({ children }) => {
 			onComplete: () => {
 				
 				setIsEntering(false);
-                
 
                 if(window.gscroll) window.gscroll.paused(false);
 
