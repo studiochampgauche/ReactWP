@@ -3,10 +3,13 @@ import Metas from '../components/Metas';
 
 const HomePage = () => {
     
+    const { isReady } = useForce();
     
 	useEffect(() => {
 		
+		if(!isReady) return;
 
+		//window.gscroll.paused(true)
 
 		return () => {
             
@@ -14,7 +17,7 @@ const HomePage = () => {
 			
 		}
 		
-	})
+	}, [isReady])
 	
 	return(
 		<>
