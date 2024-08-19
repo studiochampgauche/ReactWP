@@ -75,6 +75,12 @@ window.SYSTEM = {
 
 ## Changelog
 
+***2024-08-19***
+
+- ***Fixed:*** window.gscroll may not work with some useEffects, because some useEffects can be loaded before the scroller.
+- ***Added:*** "Force" Context for force some elements to be ready before use some Effects.
+
+
 ***2024-08-18***
 
 - ***Fixed:*** Anchor doesn't work with `Link` component of `react-router-dom` package
