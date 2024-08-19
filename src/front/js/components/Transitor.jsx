@@ -22,8 +22,6 @@ const Transitor = ({ children }) => {
 
 	useEffect(() => {
 
-		ScrollTrigger.refresh();
-
 
         /*
         * If SmoothScroller Plugin of GSAP not there,
@@ -31,12 +29,8 @@ const Transitor = ({ children }) => {
         *
         * If Plugin there, it'll be managed after the leaving transition
         */
-        if(!window.gscroll && !anchorRef.current)
-        	window.scrollTo(0, 0);
-
-        else if(anchorRef.current)
-        	window.gscroll ? window.gscroll.scrollTo(document.getElementById(anchorRef.current), (behaviorRef.current === 'instant' ? false : true), 'top top') : document.getElementById(anchorRef.current).scrollIntoView({behavior: behaviorRef.current});
-
+        if(!anchorRef.current)
+        	window.gscroll ? window.gscroll.scrollTop(0) : window.scrollTo(0, 0);
 
         /*
         * Prevent default behavior, create your own behavior
@@ -134,11 +128,8 @@ const Transitor = ({ children }) => {
 				
 				navigateRef.current(to.current);
                 
-                if(window.gscroll){
-	                window.gscroll.paused(true);
-	                window.gscroll.scrollTop(0);
-	            }
-	            
+                if(window.gscroll) window.gscroll.paused(true);
+
                 ScrollTrigger.refresh();
                 ScrollTrigger.getAll().forEach(t => t.kill());
                 
@@ -180,9 +171,10 @@ const Transitor = ({ children }) => {
 
                 if(window.gscroll) window.gscroll.paused(false);
 
+        
+		        if(anchorRef.current)
+		        	window.gscroll ? window.gscroll.scrollTo(document.getElementById(anchorRef.current), (behaviorRef.current === 'instant' ? false : true), 'top top') : document.getElementById(anchorRef.current).scrollIntoView({behavior: behaviorRef.current});
 
-                //if(anchorRef.current)
-                //	window.gscroll ? window.gscroll.scrollTo(document.getElementById(anchorRef.current), true, 'top top') : document.getElementById(anchorRef.current).scrollIntoView({behavior: 'smooth'});
 				
 
 			}
