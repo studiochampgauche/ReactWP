@@ -79,7 +79,7 @@ window.SYSTEM = {
 
 - ***Fixed:*** window.gscroll may not work with some useEffects, because some useEffects can be loaded before the scroller.
 - ~~***Added:*** `Force` Context for force some elements to be ready before use some Effects.~~
-- ***Modified:*** `Force` Context has ben changed for `Ready` Context. `Ready` Context regroupe all other contexts like the `GScrollReady` Context
+- ***Modified:*** `Force` Context has ben changed for `Ready` Context. `Ready` Context regroup all other contexts like the `GScrollReady` Context
 
 
 ***2024-08-18***
