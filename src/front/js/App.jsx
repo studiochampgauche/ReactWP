@@ -11,14 +11,15 @@ import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
 
 
-const mainNode = document.getElementById('viewport');
-const root = createRoot(mainNode);
-
-
 window.SYSTEM = {
     ajaxurl: '/admin/wp-admin/admin-ajax.php',
     restBasePath: '/admin/wp-json/'
 };
+
+window.gscroll = null;
+const mainNode = document.getElementById('viewport');
+const root = createRoot(mainNode);
+
 
 const App = () => {
     

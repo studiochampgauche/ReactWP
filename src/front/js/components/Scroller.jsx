@@ -5,8 +5,6 @@ import { ScrollSmoother } from 'gsap/ScrollSmoother';
 
 const Scroller = ({ children }) => {
 	
-    window.gscroll = null;
-	
 	useEffect(() => {
 		
         gsap.registerPlugin(ScrollTrigger, ScrollSmoother);

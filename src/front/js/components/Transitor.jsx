@@ -1,83 +1,120 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const Transitor = ({ children }) => {
 	
-	
+
+
+	const to = useRef(null);
+
+	const anchorRef = useRef(null);
+	const behaviorRef = useRef(null);
 	const navigateRef = useRef(useNavigate());
-	
+
+	const { pathname } = useLocation();
+
+
 	const [isLeaving, setIsLeaving] = useState(false);
 	const [isEntering, setIsEntering] = useState(false);
-	const canTransit = useRef(true);
-	const to = useRef(null);
-    
-    const { pathname } = useLocation();
-    
-    useEffect(() => {
-        
-        
+
+
+	useEffect(() => {
+
         /*
-        * Make sure you start on position 0 on transition
+        * If SmoothScroller Plugin of GSAP not there,
+        * make sure you start on position 0 after a page change
+        *
+        * If Plugin there, it'll be managed after the leaving transition
         */
-        window.gscroll ? window.gscroll.scrollTop(0) : window.scrollTo(0, 0);
-        
-		
+        if(!window.gscroll && !anchorRef.current)
+        	window.scrollTo(0, 0);
+
+        else if(anchorRef.current)
+        	window.gscroll ? window.gscroll.scrollTo(document.getElementById(anchorRef.current), (behaviorRef.current === 'instant' ? false : true), 'top top') : document.getElementById(anchorRef.current).scrollIntoView({behavior: behaviorRef.current});
+
+
         /*
-        * Create click events and call transition
+        * Prevent default behavior, create your own behavior
         */
-		const elements = document.querySelectorAll('[data-transition=true]');
-		if(!elements.length) return;
-		
-		
-		const clickEvents = [];
-		
-		elements.forEach(item => {
-			
-			const handleClick = (e) => {
-			
-				e.preventDefault();
+        const elements = document.querySelectorAll('a');
+        if(!elements.length) return;
 
-				if(!canTransit.current) return;
-				canTransit.current = false;
+        const events = [];
+
+        elements.forEach(item => {
+
+        	const handleClick = (e) => {
+
+        		e.preventDefault();
+
+        		if(!item.hasAttribute('href')) return;
 
 
-				to.current = item.getAttribute('href') || item.getAttribute('data-to');
+        		const href = item.getAttribute('href');
 
-				if(!to.current || to.current === pathname){
-                    canTransit.current = true;
-                    return;
-                }
+        		let path = null,
+        			anchor = null;
 
-				setIsLeaving(true);
-				
-			}
+        		try{
+
+        			const url = new URL(href);
+
+        			path = url.pathname;
+
+        			if(url.hash)
+        				anchor = url.hash;
+
+        		} catch(_){
+
+
+        			if(href.includes('#'))
+        				[path, anchor] = href.split('#');
+        			else
+        				path = href;
+
+        		}
+
+
+        		if(path === pathname && anchor)
+        			window.gscroll ? window.gscroll.scrollTo(document.getElementById(anchor), (item.hasAttribute('data-behavior') && item.getAttribute('data-behavior') === 'instant' ? false : true), 'top top') : document.getElementById(anchor).scrollIntoView({behavior: (item.hasAttribute('data-behavior') ? item.getAttribute('data-behavior') : 'auto')});
+        		else if(path !== pathname)
+        			item.hasAttribute('data-transition') && item.getAttribute('data-transition') === 'true' ? setIsLeaving(true) : navigateRef.current(path);
+
+
+        		to.current = path;
+        		anchorRef.current = anchor;
+        		behaviorRef.current = item.hasAttribute('data-behavior') ? item.getAttribute('data-behavior') : 'auto';
+
+
+        	}
+
+
+        	item.addEventListener('click', handleClick);
+			events.push({element: item, event: handleClick});
+
+        });
+
+
+        return () => {
+
+        	if(!events.length) return;
 			
-			
-			item.addEventListener('click', handleClick);
-			clickEvents.push({element: item, event: handleClick});
-			
-		});
-		
-		
-		return () => {
-			
-			if(!clickEvents.length) return;
-			
-			clickEvents.forEach(({ element, event }) => {
+			events.forEach(({ element, event }) => {
 				
 				element.removeEventListener('click', event);
 				
 			});
-			
-		}
-		
-		
+
+        }
+
+
+
 	}, [pathname]);
-	
-	
-    /*
+
+
+	/*
     * isLeaving transition
     */
 	useEffect(() => {
@@ -120,9 +157,11 @@ const Transitor = ({ children }) => {
 		
 		
 	}, [isLeaving]);
-	
-	
-    /*
+
+
+
+
+	/*
     * isEntering transition
     */
 	useEffect(() => {
@@ -131,24 +170,18 @@ const Transitor = ({ children }) => {
 		
 		
 		const tl = gsap.timeline({
-            onStart: () => {
-                
-                if(!window.gscroll) return;
-                
-                window.gscroll.scrollTop(0);
-                
-            },
 			onComplete: () => {
 				
 				setIsEntering(false);
-				canTransit.current = true;
                 
-                
-                
-                if(!window.gscroll) return;
-                
-                window.gscroll.paused(false);
+
+                if(window.gscroll) window.gscroll.paused(false);
+
+
+                //if(anchorRef.current)
+                //	window.gscroll ? window.gscroll.scrollTo(document.getElementById(anchorRef.current), true, 'top top') : document.getElementById(anchorRef.current).scrollIntoView({behavior: 'smooth'});
 				
+
 			}
 		});
 		
