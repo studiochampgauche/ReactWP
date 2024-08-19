@@ -3,7 +3,7 @@ import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import { ForceProvider } from './contexts/Force'
+import { ReadyProvider } from './contexts/Ready'
 import Scroller from './components/Scroller'
 import Transitor from './components/Transitor'
 import Header from './components/Header'
@@ -28,7 +28,7 @@ const App = () => {
     
     return (
         <Router>
-            <ForceProvider>
+            <ReadyProvider>
                 <Header />
                 <Scroller>
                     <Transitor>
@@ -43,7 +43,7 @@ const App = () => {
                         
                     </Transitor>
                 </Scroller>
-            </ForceProvider>
+            </ReadyProvider>
         </Router>
     );
     

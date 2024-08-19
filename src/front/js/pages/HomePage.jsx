@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 import Metas from '../components/Metas';
+import { useGScrollReady } from '../contexts/ready/Scroller';
 
 const HomePage = () => {
-    
-    const { isReady } = useForce();
+	
+    const { isGScrollReady } = useGScrollReady();
     
 	useEffect(() => {
 		
-		if(!isReady) return;
+		if(!isGScrollReady) return;
 
 		//window.gscroll.paused(true)
 
@@ -17,7 +18,7 @@ const HomePage = () => {
 			
 		}
 		
-	}, [isReady])
+	}, [isGScrollReady])
 	
 	return(
 		<>

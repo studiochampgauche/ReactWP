@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollSmoother } from 'gsap/ScrollSmoother';
-import { useForce } from '../contexts/Force';
+import { useGScrollReady } from '../contexts/ready/Scroller';
 
 const Scroller = ({ children }) => {
 	
-	const { setIsReady } = useForce();
+	const { setIsGScrollReady } = useGScrollReady();
 
 	useEffect(() => {
 		
@@ -31,7 +31,7 @@ const Scroller = ({ children }) => {
 			});
 
 
-			setIsReady(true);
+			setIsGScrollReady(true);
 			
 			
 			return () => {
@@ -41,7 +41,7 @@ const Scroller = ({ children }) => {
 					window.gscroll.kill();
 					window.gscroll = null;
 
-					setIsReady(false);
+					setIsGScrollReady(false);
 					
 				}
 				
