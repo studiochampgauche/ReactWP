@@ -17,6 +17,7 @@ window.SYSTEM = {
 };
 
 window.gscroll = null;
+
 const mainNode = document.getElementById('viewport');
 const root = createRoot(mainNode);
 
