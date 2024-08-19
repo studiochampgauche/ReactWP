@@ -80,3 +80,5 @@ window.SYSTEM = {
 - ***Fixed:*** Anchor doesn't work with `Link` component of `react-router-dom` package
 
 - ***Fixed:*** Scroll to an anchor doesn't work after a page transition
+
+- ***Fixed:*** ScrollTrigger.refresh() is called to fast on a page transition
