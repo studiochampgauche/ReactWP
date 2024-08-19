@@ -85,6 +85,10 @@ const Transitor = ({ children }) => {
         		behaviorRef.current = item.hasAttribute('data-behavior') ? item.getAttribute('data-behavior') : 'auto';
 
 
+        		if(window.gscroll && behaviorRef.current === 'instant' && path === pathname && anchor)
+					ScrollTrigger.refresh();
+
+
         	}
 
 
@@ -176,6 +180,8 @@ const Transitor = ({ children }) => {
 		        	window.gscroll ? window.gscroll.scrollTo(document.getElementById(anchorRef.current), (behaviorRef.current === 'instant' ? false : true), 'top top') : document.getElementById(anchorRef.current).scrollIntoView({behavior: behaviorRef.current});
 
 				
+				if(window.gscroll && behaviorRef.current === 'instant')
+					ScrollTrigger.refresh();
 
 			}
 		});
