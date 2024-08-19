@@ -69,4 +69,14 @@ window.SYSTEM = {
 
 #### My Files audios/videos/images/fonts/ doesn't transfer from `src` to `dist`
 
-- When you have a media file that isn't import by your main JS App files, webpack doesn't know you use it and he don't compile it. You need to force the import by use the JS file according to your needs. (e.g. if you play with an audio file, you need to go in `src > front > medias > audios` and import your file from the `audios.js` file.) 
+- When you have a media file that isn't import by your main JS App files, webpack doesn't know you use it and he don't compile it. You need to force the import by use the JS file according to your needs. (e.g. if you play with an audio file, you need to go in `src > front > medias > audios` and import your file from the `audios.js` file.)
+
+
+
+## Changelog
+
+***2024-08-18***
+
+- ***Fixed:*** Anchor doesn't work with `Link` component of `react-router-dom` package
+
+- ***Fixed:*** Scroll to an anchor doesn't work after a page transition
