@@ -16,10 +16,10 @@
     "get:wp": "curl -LO http://wordpress.org/latest.zip && cd ../ && mkdir dist && cd dist && mkdir admin && cd ../constructor && mv latest.zip ../dist/admin/ && unzip -d ../dist/admin/ ../dist/admin/latest.zip && rm ../dist/admin/latest.zip && mv ../dist/admin/wordpress/* ../dist/admin/ && rm -rf ../dist/admin/wordpress"
   },
   "devDependencies": {
-    "@babel/core": "^7.25.2",
-    "@babel/preset-env": "^7.25.3",
-    "@babel/preset-react": "^7.24.7",
-    "babel-loader": "^9.1.3",
+    "@babel/core": "7.25.2",
+    "@babel/preset-env": "7.25.3",
+    "@babel/preset-react": "7.24.7",
+    "babel-loader": "9.1.3",
     "copy-webpack-plugin": "12.0.2",
     "file-loader": "6.2.0",
     "gsap": "npm:@gsap/shockingly@3.12.5",
@@ -34,7 +34,7 @@
     "path": "0.12.7",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "react-helmet-async": "^2.0.5",
+    "react-helmet-async": "2.0.5",
     "react-router-dom": "6.26.1",
     "sass": "1.77.6",
     "sass-loader": "14.2.1",
