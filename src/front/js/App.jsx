@@ -9,7 +9,6 @@ import Transitor from './components/Transitor'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import HomePage from './pages/HomePage';
-import GetMySitePage from './pages/GetMySitePage';
 import NotFoundPage from './pages/NotFoundPage';
 
 
