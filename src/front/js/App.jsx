@@ -34,7 +34,6 @@ const App = () => {
                         
                         <Routes>
                             <Route path="/" exact element={<HomePage />} />
-                            <Route path="/obtenir-mon-site" element={<GetMySitePage />} />
                             <Route path="*" element={<NotFoundPage />} />
                         </Routes>
                         
