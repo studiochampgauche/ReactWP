@@ -13,7 +13,8 @@ import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
 
 
-Loader.start();
+Loader.init();
+Loader.download();
 
 
 window.SYSTEM = {

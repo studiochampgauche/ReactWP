@@ -20,15 +20,26 @@ const Transitor = ({ children }) => {
 	const [isEntering, setIsEntering] = useState(false);
 
 
-	
-	/*useEffect(() => {
 
-		const loadElement = document.querySelector('scg-load');
-		if(!loadElement || !loadElement.hasAttribute('data-value')) return;
+	useEffect(() => {
 
-		Loader.download(loadElement.getAttribute('data-value'));
+		/*
+        * If no anchor, make sure you start at the position 0
+        */
+        if(!anchorRef.current)
+        	window.gscroll ? window.gscroll.scrollTop(0) : window.scrollTo(0, 0);
 
 	}, [pathname]);
+
+
+
+	/*useEffect(() => {
+
+		const loadElementValue = document.querySelector('scg-load') && loadElement.hasAttribute('data-value') ? loadElement.getAttribute('data-value') : null;
+
+		Loader.download(loadElementValue);
+
+	}, [pathname]);*/
 
 
 	/*useEffect(() => {
