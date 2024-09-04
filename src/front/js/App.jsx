@@ -4,6 +4,7 @@ import React, { StrictMode, useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import Loader from './addons/Loader';
 import Scroller from './components/Scroller';
 import Transitor from './components/Transitor';
 import Header from './components/Header';
@@ -12,12 +13,16 @@ import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
 
 
+Loader.start();
+
+
 window.SYSTEM = {
     ajaxUrl: '/admin/wp-admin/admin-ajax.php',
     restBasePath: '/admin/wp-json/'
 };
 
 window.gscroll = null;
+
 
 const mainNode = document.getElementById('app');
 const root = createRoot(mainNode);
@@ -28,7 +33,7 @@ const App = () => {
         <Router>
             <Header />
             <Scroller>
-                {/*<Transitor>*/}
+                <Transitor>
                     
                     <Routes>
                         <Route path="/" exact element={<HomePage />} />
@@ -37,7 +42,7 @@ const App = () => {
                     
                     <Footer />
                     
-                {/*</Transitor>*/}
+                </Transitor>
             </Scroller>
         </Router>
     );

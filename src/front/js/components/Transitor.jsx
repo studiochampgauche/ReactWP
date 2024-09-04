@@ -1,6 +1,7 @@
 'use strict';
 import React, { useEffect, useState, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
+import Loader from '../addons/Loader';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -19,18 +20,29 @@ const Transitor = ({ children }) => {
 	const [isEntering, setIsEntering] = useState(false);
 
 
-	useEffect(() => {
+	
+	/*useEffect(() => {
+
+		const loadElement = document.querySelector('scg-load');
+		if(!loadElement || !loadElement.hasAttribute('data-value')) return;
+
+		Loader.download(loadElement.getAttribute('data-value'));
+
+	}, [pathname]);
+
+
+	/*useEffect(() => {
 
 
         /*
         * If no anchor, make sure you start at the position 0
-        */
+        
         if(!anchorRef.current)
         	window.gscroll ? window.gscroll.scrollTop(0) : window.scrollTo(0, 0);
 
         /*
         * Prevent default behavior, create your own behavior
-        */
+        
         const elements = document.querySelectorAll('a');
         if(!elements.length) return;
 
@@ -113,7 +125,7 @@ const Transitor = ({ children }) => {
 
 	/*
     * isLeaving transition
-    */
+    
 	useEffect(() => {
 		
 		if(!isLeaving) return;
@@ -158,7 +170,7 @@ const Transitor = ({ children }) => {
 
 	/*
     * isEntering transition
-    */
+    
 	useEffect(() => {
 		
 		if(!isEntering) return;
@@ -195,7 +207,7 @@ const Transitor = ({ children }) => {
 		}
 		
 		
-	}, [isEntering]);
+	}, [isEntering]);*/
 	
 	
 	return(<main>{children}</main>)
