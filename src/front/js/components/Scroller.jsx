@@ -21,6 +21,11 @@ const Scroller = ({ children }) => {
 			
 			let { isPointer, isNotPointer } = context.conditions;
 			
+			gsap.set('body', {
+				maxHeight: 'initial',
+				overflow: 'hidden'
+			});
+			
 			window.gscroll = await ScrollSmoother.create({
 				wrapper: '#pageWrapper',
 				content: '#pageContent',
@@ -28,6 +33,8 @@ const Scroller = ({ children }) => {
 				normalizeScroll: (isPointer ? true : false),
 				smooth: 2.25
 			});
+
+			window.gscroll.paused(true);
 
 			setIsReady(true);
 			

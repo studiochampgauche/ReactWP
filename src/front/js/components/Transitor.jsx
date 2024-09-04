@@ -4,8 +4,6 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const Transitor = ({ children }) => {
-	
-
 
 	const to = useRef(null);
 
