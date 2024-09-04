@@ -28,6 +28,7 @@ const Transitor = ({ children }) => {
         */
         if(!anchorRef.current)
         	window.gscroll ? window.gscroll.scrollTop(0) : window.scrollTo(0, 0);
+        
 
 	}, [pathname]);
 
