@@ -2,11 +2,10 @@ import React, { useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollSmoother } from 'gsap/ScrollSmoother';
-import { useGScrollReady } from '../contexts/ready/Scroller';
 
 const Scroller = ({ children }) => {
-	
-	const { setIsGScrollReady } = useGScrollReady();
+
+	const [isReady, setIsReady] = useState(false);
 
 	useEffect(() => {
 		
@@ -30,8 +29,7 @@ const Scroller = ({ children }) => {
 				smooth: 2.25
 			});
 
-
-			setIsGScrollReady(true);
+			setIsReady(true);
 			
 			
 			return () => {
@@ -40,8 +38,6 @@ const Scroller = ({ children }) => {
 					
 					window.gscroll.kill();
 					window.gscroll = null;
-
-					setIsGScrollReady(false);
 					
 				}
 				
@@ -62,7 +58,7 @@ const Scroller = ({ children }) => {
 		 <>
             <div id="pageWrapper">
                 <div id="pageContent">
-			        {children}
+			        {isReady ? children : null}
                 </div>
             </div>
 		</>

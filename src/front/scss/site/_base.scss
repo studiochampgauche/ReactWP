@@ -24,6 +24,11 @@ html{
 	font-size: 16px;
 }
 
+body{
+	max-height: 100lvh;
+	overflow: hidden;
+}
+
 a{
 	text-decoration: none;
 }

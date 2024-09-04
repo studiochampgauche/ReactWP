@@ -3,7 +3,6 @@ import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import { ReadyProvider } from './contexts/Ready'
 import Scroller from './components/Scroller'
 import Transitor from './components/Transitor'
 import Header from './components/Header'
@@ -27,21 +26,19 @@ const App = () => {
     
     return (
         <Router>
-            <ReadyProvider>
-                <Header />
-                <Scroller>
-                    <Transitor>
-                        
-                        <Routes>
-                            <Route path="/" exact element={<HomePage />} />
-                            <Route path="*" element={<NotFoundPage />} />
-                        </Routes>
-                        
-                        <Footer />
-                        
-                    </Transitor>
-                </Scroller>
-            </ReadyProvider>
+            <Header />
+            <Scroller>
+                <Transitor>
+                    
+                    <Routes>
+                        <Route path="/" exact element={<HomePage />} />
+                        <Route path="*" element={<NotFoundPage />} />
+                    </Routes>
+                    
+                    <Footer />
+                    
+                </Transitor>
+            </Scroller>
         </Router>
     );
     
