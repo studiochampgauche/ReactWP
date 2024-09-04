@@ -1,9 +1,3 @@
-> [!IMPORTANT]
-> v4 is coming and will work if you try it (really not completed). [Check it out here](https://github.com/studiochampgauche/wordpress-boilerplate/tree/v4.0)
->
-> The v4 isn't a following of the v3 but a totally new React Front-End SPA ecosystem with a separated WordPress Back-End.
-
-
 # Our WordPress Boilerplate
 
 Our Boilerplate is done for help us to start theming fast around modules of Node and ACF Pro on installation instead of wasting time with basics, code source clean up and more.
