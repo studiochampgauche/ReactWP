@@ -28,7 +28,7 @@ const App = () => {
         <Router>
             <Header />
             <Scroller>
-                <Transitor>
+                {/*<Transitor>*/}
                     
                     <Routes>
                         <Route path="/" exact element={<HomePage />} />
@@ -37,7 +37,7 @@ const App = () => {
                     
                     <Footer />
                     
-                </Transitor>
+                {/*</Transitor>*/}
             </Scroller>
         </Router>
     );
