@@ -5,9 +5,15 @@ import Metas from '../components/Metas';
 const HomePage = () => {
     
 	useEffect(() => {
+        
+        
+        return () => {
+            
+            
+            
+        }
 		
-		
-	})
+	});
 	
 	return(
 		<>

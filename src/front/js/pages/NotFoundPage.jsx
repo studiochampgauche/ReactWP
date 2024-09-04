@@ -13,7 +13,7 @@ const NotFound = () => {
             
         }
 		
-	})
+	});
 	
 	return(
 		<>

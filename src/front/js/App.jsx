@@ -1,19 +1,19 @@
 'use strict';
-import React, { StrictMode } from 'react';
+import React, { StrictMode, useEffect, useState } from 'react';
 //import ReactDOM from 'react-dom';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import Scroller from './components/Scroller'
-import Transitor from './components/Transitor'
-import Header from './components/Header'
-import Footer from './components/Footer'
+import Scroller from './components/Scroller';
+import Transitor from './components/Transitor';
+import Header from './components/Header';
+import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
 
 
 window.SYSTEM = {
-    ajaxurl: '/admin/wp-admin/admin-ajax.php',
+    ajaxUrl: '/admin/wp-admin/admin-ajax.php',
     restBasePath: '/admin/wp-json/'
 };
 
@@ -22,9 +22,8 @@ window.gscroll = null;
 const mainNode = document.getElementById('app');
 const root = createRoot(mainNode);
 
-
 const App = () => {
-    
+
     return (
         <Router>
             <Header />
