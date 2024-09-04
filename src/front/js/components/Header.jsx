@@ -1,3 +1,4 @@
+'use strict';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import MainNav from './Nav.jsx';

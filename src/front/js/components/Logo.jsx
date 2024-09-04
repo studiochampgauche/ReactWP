@@ -1,3 +1,4 @@
+'use strict';
 import React from 'react';
 import Logo from '../../medias/images/dev-tag.svg';
 

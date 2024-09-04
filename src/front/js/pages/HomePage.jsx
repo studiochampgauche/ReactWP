@@ -1,3 +1,4 @@
+'use strict';
 import React, { useEffect } from 'react';
 import Metas from '../components/Metas';
 

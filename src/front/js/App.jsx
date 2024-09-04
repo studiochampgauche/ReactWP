@@ -1,3 +1,4 @@
+'use strict';
 import React, { StrictMode } from 'react';
 //import ReactDOM from 'react-dom';
 import { createRoot } from 'react-dom/client';
@@ -18,7 +19,7 @@ window.SYSTEM = {
 
 window.gscroll = null;
 
-const mainNode = document.getElementById('viewport');
+const mainNode = document.getElementById('app');
 const root = createRoot(mainNode);
 
 

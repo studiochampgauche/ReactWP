@@ -1,3 +1,4 @@
+'use strict';
 import React, { useEffect, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -25,7 +26,7 @@ const Scroller = ({ children }) => {
 				maxHeight: 'initial',
 				overflow: 'hidden'
 			});
-			
+
 			window.gscroll = await ScrollSmoother.create({
 				wrapper: '#pageWrapper',
 				content: '#pageContent',
