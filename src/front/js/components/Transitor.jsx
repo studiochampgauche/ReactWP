@@ -213,8 +213,7 @@ const Transitor = ({ children }) => {
 		
 		tl
 		.to('main', .2, {
-			opacity: 1,
-			clearProps: 'all'
+			opacity: 1
 		});
 		
 		
