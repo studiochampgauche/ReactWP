@@ -10,6 +10,7 @@ import Transitor from './components/Transitor';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
+import WaitingPage from './pages/WaitingPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 
@@ -18,6 +19,7 @@ Loader.download();
 
 
 window.SYSTEM = {
+    adminUrl: 'https://wpp.test/admin/',
     ajaxUrl: '/admin/wp-admin/admin-ajax.php',
     restBasePath: '/admin/wp-json/'
 };
@@ -30,21 +32,83 @@ const root = createRoot(mainNode);
 
 const App = () => {
 
+    const [routes, setRoutes] = useState([]);
+    const [loaded, setLoaded] = useState(false);
+
+    useEffect(() => {
+
+
+        const fetchRoutes = async () => {
+
+            try{
+
+                const callPages = await fetch(window.SYSTEM.restBasePath + 'wp/v2/pages');
+                const callPosts = await fetch(window.SYSTEM.restBasePath + 'wp/v2/posts');
+
+                if(!callPages.ok) throw new Error('Pages can\'t be loaded');
+                if(!callPosts.ok) throw new Error('Posts can\'t be loaded');
+
+
+                const pages = await callPages.json();
+                const posts = await callPosts.json();
+
+
+                console.log(posts, 'true');
+
+                setRoutes([
+                    ...pages.map(page => ({ id: page.id, path: page.link.replace(window.SYSTEM.adminUrl, '/') })),
+                    ...posts.map(post => ({ id: post.id, path: post.link.replace(window.SYSTEM.adminUrl, '/') })),
+                ]);
+
+                setLoaded(true);
+
+            } catch(error){
+
+                console.error(error);
+
+            }
+
+        }
+
+        fetchRoutes();
+
+
+    }, []);
+
     return (
         <Router>
-            <Header />
-            <Scroller>
-                <Transitor>
-                    
-                    <Routes>
-                        <Route path="/" exact element={<HomePage />} />
-                        <Route path="*" element={<NotFoundPage />} />
-                    </Routes>
-                    
-                    <Footer />
-                    
-                </Transitor>
-            </Scroller>
+
+            {loaded ? (
+                <>
+                    <Header />
+                    <Scroller>
+                        <Transitor>
+                            
+                            <Routes>
+
+                                {routes.map(route => (
+                                    <Route 
+                                        key={route.id} 
+                                        path={route.path} 
+                                        element={<HomePage />}
+                                    />
+                                ))}
+
+                                <Route path="*" element={<NotFoundPage />} />
+
+                            </Routes>
+                            
+                            <Footer />
+                            
+                        </Transitor>
+                    </Scroller>
+                </>
+            ) : (
+                <Routes>
+                    <Route path="*" element={<WaitingPage />} />
+                </Routes>
+            )}
+
         </Router>
     );
     
