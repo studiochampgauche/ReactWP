@@ -54,8 +54,8 @@ Get Ajax basepath and Rest API basepath from the global object:
 window.SYSTEM = {
     baseUrl: 'https://wpp.test/',
     adminUrl: 'https://wpp.test/admin/',
-    ajaxBasePath: '/admin/wp-admin/admin-ajax.php',
-    restBasePath: '/admin/wp-json/'
+    ajaxPath: '/admin/wp-admin/admin-ajax.php',
+    restPath: '/admin/wp-json/'
 };
 ```
 
