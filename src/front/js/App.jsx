@@ -19,15 +19,18 @@ Loader.init();
 Loader.download();
 
 
-window.defaultMetas = {
-    siteName: 'My WordPress Project',
-    description: 'My description'
-};
-
 window.SYSTEM = {
+    baseUrl: 'https://wpp.test/',
     adminUrl: 'https://wpp.test/admin/',
     ajaxUrl: '/admin/wp-admin/admin-ajax.php',
     restBasePath: '/admin/wp-json/'
+};
+
+window.defaultMetas = {
+    robots: 'max-image-preview:large, noindex, nofollow',
+    siteName: 'My WordPress Project',
+    description: 'My WordPress Project a React Front-end with a back-end WordPress',
+    image: window.SYSTEM.baseUrl + 'assets/images/sharing.jpg'
 };
 
 window.gscroll = null;
@@ -76,7 +79,6 @@ const App = () => {
 
         fetchRoutes();
 
-
     }, []);
 
     return (
@@ -91,6 +93,8 @@ const App = () => {
                             <Routes>
 
                                 {routes.map(route => {
+
+                                    console.log(route)
                                     
                                     const Component = componentMap[route.acf.component_name];
 
@@ -105,6 +109,8 @@ const App = () => {
                                                         ogTitle={route.acf?.seo?.og_title || window.defaultMetas.siteName}
                                                         description={route.acf?.seo?.description || window.defaultMetas.description}
                                                         ogDescription={route.acf?.seo?.og_description || window.defaultMetas.description}
+                                                        robots={!route.acf?.seo?.stop_indexing ? 'max-image-preview:large, index, follow' : window.defaultMetas.robots}
+                                                        image={route.acf?.seo?.image || window.defaultMetas.images}
                                                     />
                                                     <Component acf={route.acf} />
                                                 </>
@@ -113,7 +119,17 @@ const App = () => {
                                     )
                                 })}
 
-                                <Route path="*" element={<NotFoundPage />} />
+                                <Route
+                                    path="*"
+                                    element={
+                                        <>
+                                            <Metas
+                                                title='Page not found'
+                                            /> 
+                                            <NotFoundPage />
+                                        </>
+                                    }
+                                />
 
                             </Routes>
                             

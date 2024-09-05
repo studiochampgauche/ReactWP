@@ -17,9 +17,6 @@ const NotFoundPage = () => {
 	
 	return(
 		<>
-			<Metas
-				title='Page not found'
-			/>
 			<section id="not__intro">
                 <div className="container">
                     
