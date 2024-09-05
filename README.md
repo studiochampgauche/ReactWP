@@ -40,7 +40,7 @@ location / {
 4. Authenticate your GSAP Account by adding the `.npmrc` file
 5. Install the Node Modules `npm i`
 6. In `src > back` directory, duplicate `wp-config-sample.php` to `wp-config.php` and setup it
-7. From your App.jsx file, change URLs inner the global variable `window.SYSTEM` for your current URL
+7. From your `App.jsx` file, change URLs inner the global variable `window.SYSTEM` for your current URL
 8. In `src > front > template` directory, add your server configuration file like your .htaccess for Apache
 9. If is the first setup for your project, run `npm run watch:front:back` or `npm run build:front:back` in `constructor`. After your first setup, you can continue watching or rebuild only the front or the back like this `npm run watch:front` or `npm run build:back`. When you are ready for production and you want compress, relace `watch` by `prod` in your command line. Put a look on your `package.json` for view command lines.
 10. Go to your WordPress admin and setup it (yourdomain.com/admin)
