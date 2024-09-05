@@ -57,49 +57,8 @@ class StudioChampGauche{
             /*
             * Top Bar
             */
-            if(!self::field('top_bar'))
-                add_filter('show_admin_bar', '__return_false');
+            add_filter('show_admin_bar', '__return_false');
             
-            
-            /*
-            * Manage Front End Source Code
-            */
-            $sourceCodeElements = self::field('source_code');
-            
-            if($sourceCodeElements){
-                $excludedElements = ['feed_links', 'feed_links_extra', 'wp_resource_hints', 'print_emoji_detection_script', 'print_emoji_styles', 'wp_shortlink_wp_head', 'wp_shortlink_header', 'wp_block_library', 'classic_theme_styles', 'global_styles'];
-
-                $elements = array_diff_key($sourceCodeElements, array_flip($excludedElements));
-
-                foreach($elements as $k => $v){
-
-                    if($v) continue;
-
-                    remove_action('wp_head', $k);
-
-                }
-
-                if(!$sourceCodeElements['wp_resource_hints'])
-                    remove_action('wp_head', 'wp_resource_hints', 2);
-
-                if(!$sourceCodeElements['feed_links'])
-                    remove_action('wp_head', 'feed_links', 2);
-
-                if(!$sourceCodeElements['feed_links_extra'])
-                    remove_action('wp_head', 'feed_links_extra', 3);
-
-                if(!$sourceCodeElements['print_emoji_detection_script'])
-                    remove_action('wp_head', 'print_emoji_detection_script', 7);
-
-                if(!$sourceCodeElements['print_emoji_styles'])
-                    remove_action('wp_print_styles', 'print_emoji_styles');
-
-                if(!$sourceCodeElements['wp_shortlink_wp_head'])
-                    remove_action('wp_head', 'wp_shortlink_wp_head', 10);
-
-                if(!$sourceCodeElements['wp_shortlink_header'])
-                    remove_action('template_redirect', 'wp_shortlink_header', 11);
-            }
             
             
             /*
@@ -155,50 +114,6 @@ class StudioChampGauche{
 			}
             
         });
-        
-        
-        /*
-        * Manage Styles & Scripts
-        */
-        add_action('wp_enqueue_scripts', function(){
-
-			/*
-			* Remove Basics Styles
-			*/
-			if(!self::field('source_code_global_styles'))
-				wp_dequeue_style('global-styles');
-			
-			if(!self::field('source_code_wp_block_library'))
-				wp_dequeue_style('wp-block-library');
-			
-			if(!self::field('source_code_classic_theme_styles'))
-				wp_dequeue_style('classic-theme-styles');
-            
-            
-            /*
-			* Main Style
-			*/
-			wp_enqueue_style('scg-main', get_bloginfo('stylesheet_directory').'/assets/css/main.min.css', null, null, null);
-
-
-			/*
-			* Main Javascript
-			*/
-			wp_enqueue_script('scg-main', get_bloginfo('stylesheet_directory') .'/assets/js/main.min.js', null, null, true);
-            
-            
-            add_filter('script_loader_tag', function($tag, $handle, $src){
-                if($handle !== 'scg-main')
-                    return $tag;
-
-                $tag = '<script type="module" src="' . esc_url( $src ) . '"></script>';
-
-                return $tag;
-
-            } , 10, 3);
-            
-            
-        }, 10);
         
         
         /*
@@ -336,7 +251,7 @@ class StudioChampGauche{
                 $args = array(
 					'id' => 'is-website',
 					'title' => get_bloginfo('name'),
-					'href' => home_url(),
+					'href' => '/',
 					'target' => '_blank',
 					'meta' => array(
 						'class' => 'is-website'
