@@ -50,7 +50,7 @@ const main = {
 					{
 						loader: 'file-loader',
 						options: {
-							name: '[folder]/[name].[ext]',
+							name: '[name].[ext]',
 							outputPath: '../images/',
 						}
 					}
@@ -62,7 +62,7 @@ const main = {
 					{
 						loader: 'file-loader',
 						options: {
-							name: '[folder]/[name].[ext]',
+							name: '[name].[ext]',
 							outputPath: '../videos/',
 						}
 					}
@@ -74,7 +74,7 @@ const main = {
 					{
 						loader: 'file-loader',
 						options: {
-							name: '[folder]/[name].[ext]',
+							name: '[name].[ext]',
 							outputPath: '../audios/',
 						}
 					}
@@ -86,7 +86,7 @@ const main = {
 					{
 						loader: 'file-loader',
 						options: {
-							name: '[folder]/[name].[ext]',
+							name: '[name].[ext]',
 							outputPath: '../fonts/',
 						}
 					}
