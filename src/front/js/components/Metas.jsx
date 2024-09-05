@@ -14,11 +14,11 @@ const Metas = ({ robots, title, ogTitle, description, ogDescription, image, ogSi
 		<Helmet>
 			<meta name="robots" content={robots || window.defaultMetas.robots} />
 			<title>{title || window.defaultMetas.siteName}</title>
+			<meta name="description" content={description || window.defaultMetas.description} />
 			<meta property="og:type" content={ogType || 'website'} />
 			<meta property="og:url" content={ogUrl || window.SYSTEM.baseUrl.slice(0, -1) + pathname + '/'} />
 			<meta property="og:site_name" content={ogSiteName || window.defaultMetas.siteName} />
 			<meta name="og:title" content={ogTitle || title || window.defaultMetas.siteName} />
-			<meta name="description" content={description || window.defaultMetas.description} />
 			<meta name="og:description" content={ogDescription || description || window.defaultMetas.description} />
 			<meta property="og:image" content={image || window.defaultMetas.image} />
 		</Helmet>
