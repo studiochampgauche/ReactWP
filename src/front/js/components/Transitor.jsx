@@ -5,7 +5,12 @@ import Loader from '../addons/Loader';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+
+let firstLoad = true;
+
+
 const Transitor = ({ children }) => {
+
 
 	const to = useRef(null);
 
@@ -23,39 +28,48 @@ const Transitor = ({ children }) => {
 
 	useEffect(() => {
 
-		/*
-        * If no anchor, make sure you start at the position 0
-        */
-        if(!anchorRef.current)
-        	window.gscroll ? window.gscroll.scrollTop(0) : window.scrollTo(0, 0);
-        
 
-	}, [pathname]);
+		if(!firstLoad){
 
 
 
-	/*useEffect(() => {
-
-		const loadElementValue = document.querySelector('scg-load') && loadElement.hasAttribute('data-value') ? loadElement.getAttribute('data-value') : null;
-
-		Loader.download(loadElementValue);
-
-	}, [pathname]);*/
+			/*
+			* When you change Page, pause the scroll if you smooth
+			*/
+			window.gscroll?.refresh();
+			ScrollTrigger?.refresh();
 
 
-	/*useEffect(() => {
+
+			/*
+	        * Start position
+	        */
+	        if(anchorRef.current){
+
+				window.gscroll?.scrollTo(document.getElementById(anchorRef.current), false, 'top top') || document.getElementById(anchorRef.current).scrollIntoView({ behavior: 'instant' })
+
+	        }
+			else
+	        	window.gscroll?.scrollTop(0) || window.scrollTo(0, 0);
 
 
-        /*
-        * If no anchor, make sure you start at the position 0
-        
-        if(!anchorRef.current)
-        	window.gscroll ? window.gscroll.scrollTop(0) : window.scrollTo(0, 0);
+
+		}
+
+
+
+		if(firstLoad)
+			firstLoad = false;
+
+
+
+
+
 
         /*
         * Prevent default behavior, create your own behavior
-        
-        const elements = document.querySelectorAll('a');
+        */
+        const elements = document.querySelectorAll('a, .goto');
         if(!elements.length) return;
 
         const events = [];
@@ -66,10 +80,11 @@ const Transitor = ({ children }) => {
 
         		e.preventDefault();
 
-        		if(!item.hasAttribute('href')) return;
+        		if(!item.hasAttribute('href') && !item.hasAttribute('data-href')) return;
 
 
-        		const href = item.getAttribute('href');
+        		const href = item.hasAttribute('href') ? item.getAttribute('href') : item.getAttribute('data-href');
+
 
         		let path = null,
         			anchor = null;
@@ -94,19 +109,27 @@ const Transitor = ({ children }) => {
         		}
 
 
-        		if(path === pathname && anchor)
+
+
+        		if(path === pathname && anchor){
+
         			window.gscroll ? window.gscroll.scrollTo(document.getElementById(anchor), (item.hasAttribute('data-behavior') && item.getAttribute('data-behavior') === 'instant' ? false : true), 'top top') : document.getElementById(anchor).scrollIntoView({behavior: (item.hasAttribute('data-behavior') ? item.getAttribute('data-behavior') : 'auto')});
-        		else if(path !== pathname)
+
+        			if(window.gscroll && item.hasAttribute('data-behavior') && item.getAttribute('data-behavior') === 'instant')
+        				ScrollTrigger.refresh();
+
+
+        		} else if(path !== pathname){
+
         			item.hasAttribute('data-transition') && item.getAttribute('data-transition') === 'true' ? setIsLeaving(true) : navigateRef.current(path);
+
+        		}
+
 
 
         		to.current = path;
         		anchorRef.current = anchor;
-        		behaviorRef.current = item.hasAttribute('data-behavior') ? item.getAttribute('data-behavior') : 'auto';
-
-
-        		if(window.gscroll && behaviorRef.current === 'instant' && path === pathname && anchor)
-					ScrollTrigger.refresh();
+        		behaviorRef.current = item.hasAttribute('data-behavior') ? item.getAttribute('data-behavior') : 'instant';
 
 
         	}
@@ -131,13 +154,12 @@ const Transitor = ({ children }) => {
         }
 
 
-
 	}, [pathname]);
 
 
 	/*
     * isLeaving transition
-    
+    */
 	useEffect(() => {
 		
 		if(!isLeaving) return;
@@ -146,17 +168,10 @@ const Transitor = ({ children }) => {
 		const tl = gsap.timeline({
 			onComplete: () => {
 				
+				navigateRef.current(to.current);
+				
 				setIsLeaving(false);
 				setIsEntering(true);
-				
-				
-				navigateRef.current(to.current);
-                
-                if(window.gscroll) window.gscroll.paused(true);
-
-                ScrollTrigger.refresh();
-                ScrollTrigger.getAll().forEach(t => t.kill());
-                
 				
 			}
 		});
@@ -182,7 +197,7 @@ const Transitor = ({ children }) => {
 
 	/*
     * isEntering transition
-    
+    */
 	useEffect(() => {
 		
 		if(!isEntering) return;
@@ -193,22 +208,14 @@ const Transitor = ({ children }) => {
 				
 				setIsEntering(false);
 
-                if(window.gscroll) window.gscroll.paused(false);
-
-        
-		        if(anchorRef.current)
-		        	window.gscroll ? window.gscroll.scrollTo(document.getElementById(anchorRef.current), (behaviorRef.current === 'instant' ? false : true), 'top top') : document.getElementById(anchorRef.current).scrollIntoView({behavior: behaviorRef.current});
-
-				
-				if(window.gscroll && behaviorRef.current === 'instant')
-					ScrollTrigger.refresh();
 
 			}
 		});
 		
 		tl
 		.to('main', .2, {
-			opacity: 1
+			opacity: 1,
+			clearProps: 'all'
 		});
 		
 		
@@ -219,7 +226,7 @@ const Transitor = ({ children }) => {
 		}
 		
 		
-	}, [isEntering]);*/
+	}, [isEntering]);
 	
 	
 	return(<main>{children}</main>)

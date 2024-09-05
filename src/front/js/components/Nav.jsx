@@ -5,8 +5,9 @@ import { Link } from 'react-router-dom';
 const MainNav = () => {
 	
 	const navItems = [
-		{title: 'Home', to: '/', 'data-transition': true},
-		{title: '404 error Page', to: '/ok', 'data-transition': true}
+		{title: 'Home', to: '/#h__intro', 'data-transition': true},
+		{title: '404 error Page', to: '/ok', 'data-transition': true},
+		{title: 'scrollTo', to: '/ok#not__me', 'data-transition': false},
 	];
 	
 	useEffect(() => {
