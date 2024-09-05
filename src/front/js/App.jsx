@@ -93,8 +93,6 @@ const App = () => {
                             <Routes>
 
                                 {routes.map(route => {
-
-                                    console.log(route)
                                     
                                     const Component = componentMap[route.acf.component_name];
 

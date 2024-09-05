@@ -1,13 +1,11 @@
 'use strict';
 import React, { useEffect } from 'react';
 
-const HomePage = ({ acf }) => {
+const HomePage = () => {
     
     
 
 	useEffect(() => {
-
-        console.log(acf);
 
         return () => {
             
