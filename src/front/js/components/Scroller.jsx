@@ -24,7 +24,7 @@ const Scroller = ({ children }) => {
 			
 			gsap.set('body', {
 				maxHeight: 'initial',
-				overflow: 'hidden'
+				overflow: 'initial'
 			});
 
 			window.gscroll = await ScrollSmoother.create({
