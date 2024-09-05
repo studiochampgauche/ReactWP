@@ -37,6 +37,15 @@ location / {
 ... Is coming
 
 
+## How transition page work
+
+- Add attribute `data-transition="true"` to your link element. Without this attribute, the change'll be direct. (You need to use `<Link>` component of `react-router-dom`, not `<a ...>`)
+
+- If your link has anchor, you can control the scroll behavior by adding `data-behavior="smooth|instant|auto"`. If GSAP SmoothScroller Plugin is active, the default is `smooth`. Without the plugin, default is `instant`.
+
+- Checkout the component `Transitor.jsx` for edit your transition
+
+
 
 ## Fetch
 
