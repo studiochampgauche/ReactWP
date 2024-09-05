@@ -22,8 +22,8 @@ Loader.download();
 window.SYSTEM = {
     baseUrl: 'https://wpp.test/',
     adminUrl: 'https://wpp.test/admin/',
-    ajaxBasePath: '/admin/wp-admin/admin-ajax.php',
-    restBasePath: '/admin/wp-json/'
+    ajaxPath: '/admin/wp-admin/admin-ajax.php',
+    restPath: '/admin/wp-json/'
 };
 
 window.defaultMetas = {
@@ -56,7 +56,7 @@ const App = () => {
 
             try{
 
-                const callPages = await fetch(window.SYSTEM.restBasePath + 'wp/v2/pages');
+                const callPages = await fetch(window.SYSTEM.restPath + 'wp/v2/pages');
 
                 if(!callPages.ok) throw new Error('Pages can\'t be loaded');
 
