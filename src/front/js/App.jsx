@@ -22,7 +22,7 @@ Loader.download();
 window.SYSTEM = {
     baseUrl: 'https://wpp.test/',
     adminUrl: 'https://wpp.test/admin/',
-    ajaxUrl: '/admin/wp-admin/admin-ajax.php',
+    ajaxBasePath: '/admin/wp-admin/admin-ajax.php',
     restBasePath: '/admin/wp-json/'
 };
 
