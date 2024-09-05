@@ -18,6 +18,11 @@ Loader.init();
 Loader.download();
 
 
+window.defaultMetas = {
+    siteName: 'My WordPress Project',
+    description: 'My description'
+};
+
 window.SYSTEM = {
     adminUrl: 'https://wpp.test/admin/',
     ajaxUrl: '/admin/wp-admin/admin-ajax.php',
@@ -51,6 +56,9 @@ const App = () => {
 
                 const pages = await callPages.json();
                 //const posts = await callPosts.json();
+
+
+                console.log(pages);
 
                 setRoutes([
                     ...pages.map(page => ({ id: page.id, path: page.link.replace(window.SYSTEM.adminUrl, '/') })),
