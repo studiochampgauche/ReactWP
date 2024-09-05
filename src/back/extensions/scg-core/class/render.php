@@ -440,7 +440,7 @@ class Render{
 				'min' => 0,
 				'max' => 0,
 				'collapsed' => '',
-				'button_label' => __('Ajouter un "Theme Location"', 'cg-core'),
+				'button_label' => __('Ajouter un Theme Location', 'cg-core'),
 				'rows_per_page' => 20,
 				'sub_fields' => array(
 					array(

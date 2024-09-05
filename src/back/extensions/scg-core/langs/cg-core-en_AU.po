@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Champ Gauche Core\n"
 "POT-Creation-Date: 2023-04-27 11:54-0400\n"
-"PO-Revision-Date: 2023-12-12 18:35-0500\n"
+"PO-Revision-Date: 2024-09-05 10:19-0400\n"
 "Last-Translator: Studio Champ Gauche <allo@champgauche.studio>\n"
 "Language-Team: Studio Champ Gauche\n"
 "Language: en_AU\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.1\n"
+"X-Generator: Poedit 3.5\n"
 "X-Poedit-Basepath: .\n"
 
 msgid "Images et fichiers"
@@ -102,3 +102,30 @@ msgstr "Error 404"
 
 msgid "Publications de"
 msgstr "Posts of"
+
+msgid "Nom du composant"
+msgstr "Component Name"
+
+msgid "Ne pas indexer"
+msgstr "Stop indexing"
+
+msgid "OG Titre"
+msgstr "OG Title"
+
+msgid "OG Description"
+msgstr "OG Description"
+
+msgid "Image"
+msgstr "Image"
+
+msgid "Ajouter un Theme Location"
+msgstr "Add Theme Location"
+
+msgid "Où afficher le module SEO? post et page ont déjà le module."
+msgstr "Where to display the SEO module? post and page already have the module."
+
+msgid "Où afficher le module Composant? post et page ont déjà le module."
+msgstr "Where to display the Component module? post and page already have the module."
+
+msgid "Composant"
+msgstr "Component"
