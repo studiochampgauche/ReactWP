@@ -52,9 +52,6 @@ const App = () => {
                 const pages = await callPages.json();
                 const posts = await callPosts.json();
 
-
-                console.log(posts, 'true');
-
                 setRoutes([
                     ...pages.map(page => ({ id: page.id, path: page.link.replace(window.SYSTEM.adminUrl, '/') })),
                     ...posts.map(post => ({ id: post.id, path: post.link.replace(window.SYSTEM.adminUrl, '/') })),
