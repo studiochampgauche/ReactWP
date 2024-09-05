@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import Metas from '../components/Metas';
 
-const NotFound = () => {
+const NotFoundPage = () => {
     
 	useEffect(() => {
         
@@ -37,4 +37,4 @@ const NotFound = () => {
 	
 }
 
-export default NotFound;
+export default NotFoundPage;
