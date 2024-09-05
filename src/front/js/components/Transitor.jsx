@@ -34,9 +34,8 @@ const Transitor = ({ children }) => {
 
 
 			/*
-			* When you change Page, pause the scroll if you smooth
+			* When you change Page, refresh Scroller
 			*/
-			window.gscroll?.refresh();
 			ScrollTrigger?.refresh();
 
 
