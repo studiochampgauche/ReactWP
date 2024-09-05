@@ -43,10 +43,10 @@ const App = () => {
             try{
 
                 const callPages = await fetch(window.SYSTEM.restBasePath + 'wp/v2/pages');
-                const callPosts = await fetch(window.SYSTEM.restBasePath + 'wp/v2/posts');
+                //const callPosts = await fetch(window.SYSTEM.restBasePath + 'wp/v2/posts');
 
                 if(!callPages.ok) throw new Error('Pages can\'t be loaded');
-                if(!callPosts.ok) throw new Error('Posts can\'t be loaded');
+                //if(!callPosts.ok) throw new Error('Posts can\'t be loaded');
 
 
                 const pages = await callPages.json();
@@ -54,7 +54,7 @@ const App = () => {
 
                 setRoutes([
                     ...pages.map(page => ({ id: page.id, path: page.link.replace(window.SYSTEM.adminUrl, '/') })),
-                    ...posts.map(post => ({ id: post.id, path: post.link.replace(window.SYSTEM.adminUrl, '/') })),
+                    //...posts.map(post => ({ id: post.id, path: post.link.replace(window.SYSTEM.adminUrl, '/') })),
                 ]);
 
                 setLoaded(true);
