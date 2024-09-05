@@ -17,13 +17,13 @@ const HomePage = () => {
 	
 	return(
 		<>
-			<section>
+			<section id="h__intro">
 				<div className="container">
 					
 				</div>
 			</section>
 			<section style={{ background: '#00ff00', height: '100lvh' }}></section>
-			<section id="h__intro" style={{ background: '#0000ff', height: '100lvh' }}></section>
+			<section style={{ background: '#000000', height: '100lvh' }}></section>
 		</>
 	);
 	
