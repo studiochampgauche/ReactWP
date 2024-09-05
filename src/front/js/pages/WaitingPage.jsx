@@ -18,7 +18,7 @@ const WaitingPage = () => {
 	return(
 		<>
 			<Metas
-				title='WordPress Project'
+				title={window.defaultMetas.siteName}
 			/>
 		</>
 	);

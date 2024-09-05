@@ -5,6 +5,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import Loader from './addons/Loader';
+import Metas from './components/Metas';
 import Scroller from './components/Scroller';
 import Transitor from './components/Transitor';
 import Header from './components/Header';
@@ -32,6 +33,11 @@ window.SYSTEM = {
 window.gscroll = null;
 
 
+const componentMap = {
+    HomePage
+};
+
+
 const mainNode = document.getElementById('app');
 const root = createRoot(mainNode);
 
@@ -54,11 +60,8 @@ const App = () => {
 
                 const pages = await callPages.json();
 
-
-                console.log(pages);
-
                 setRoutes([
-                    ...pages.map(page => ({ id: page.id, path: page.link.replace(window.SYSTEM.adminUrl, '/') }))
+                    ...pages.map(page => ({ id: page.id, path: page.link.replace(window.SYSTEM.adminUrl, '/'), acf: page.acf }))
                 ]);
 
                 setLoaded(true);
@@ -87,13 +90,28 @@ const App = () => {
                             
                             <Routes>
 
-                                {routes.map(route => (
-                                    <Route 
-                                        key={route.id} 
-                                        path={route.path} 
-                                        element={<HomePage />}
-                                    />
-                                ))}
+                                {routes.map(route => {
+                                    
+                                    const Component = componentMap[route.acf.component_name];
+
+                                    return (
+                                        <Route 
+                                            key={route.id} 
+                                            path={route.path} 
+                                            element={
+                                                <>
+                                                    <Metas
+                                                        title={route.acf?.seo?.title || window.defaultMetas.siteName}
+                                                        ogTitle={route.acf?.seo?.og_title || window.defaultMetas.siteName}
+                                                        description={route.acf?.seo?.description || window.defaultMetas.description}
+                                                        ogDescription={route.acf?.seo?.og_description || window.defaultMetas.description}
+                                                    />
+                                                    <Component acf={route.acf} />
+                                                </>
+                                            }
+                                        />
+                                    )
+                                })}
 
                                 <Route path="*" element={<NotFoundPage />} />
 

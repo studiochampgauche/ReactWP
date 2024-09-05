@@ -1,12 +1,14 @@
 'use strict';
 import React, { useEffect } from 'react';
-import Metas from '../components/Metas';
 
-const HomePage = () => {
+const HomePage = ({ acf }) => {
     
+    
+
 	useEffect(() => {
-        
-        
+
+        console.log(acf);
+
         return () => {
             
             
@@ -17,10 +19,6 @@ const HomePage = () => {
 	
 	return(
 		<>
-			<Metas
-				title='My title'
-				description='My description'
-			/>
 			<section>
 				<div className="container">
 					
