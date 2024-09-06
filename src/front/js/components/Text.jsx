@@ -1,24 +1,13 @@
 'use strict';
 import React, { Fragment } from 'react';
 
-const Text = ({ value, html = false }) => {
+const Text = ({ value }) => {
 	
 	return(
 		<div className="text">
 			{value.split('\r\n\r\n').map((paragraph, i) => (
 
-				<p key={i}>
-					
-					{paragraph.split('\r\n').map((line, j) => (
-
-						<Fragment key={j}>
-							{line}
-							{j < paragraph.split('\r\n').length - 1 && <br />}
-						</Fragment>
-
-					))}
-
-				</p>
+				<p key={i} {...({dangerouslySetInnerHTML: { __html: paragraph.split('\r\n').join('<br />') }})} />
 
 			))}
 		</div>
