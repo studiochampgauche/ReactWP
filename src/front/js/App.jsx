@@ -92,13 +92,13 @@ const App = () => {
                             
                             <Routes>
 
-                                {routes.map(route => {
+                                {routes.map((route, i) => {
                                     
                                     const Component = componentMap[route.acf.component_name];
 
                                     return (
                                         <Route 
-                                            key={route.id} 
+                                            key={i} 
                                             path={route.path} 
                                             element={
                                                 <>
