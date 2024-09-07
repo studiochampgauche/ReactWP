@@ -35,16 +35,6 @@
             	exit;
 
             });
-			
-			
-			/*
-			* Enqueue Scripts
-			*/
-			add_action('wp_enqueue_scripts', function(){
-
-				//wp_localize_script('scg-main', 'SYSTEM', []);
-				
-			}, 11);
 
 		}
 
