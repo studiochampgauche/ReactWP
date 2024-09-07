@@ -1,9 +1,13 @@
-v4 is new and not completed.
-
-The v4 isn't a following of the v3 but a totally new React Front-End SPA ecosystem with a separated WordPress Back-End.
-
-
 # Our React WordPress Boilerplate
+
+Our boilerplate is done for help us to start a frontend React SPA quickly with a robust PHP backend based on WordPress + ACF Pro.
+
+The project has a mentality that limits the use of plugins, keeping administration clean and consistent for clients. At the same time, an other mentality for automatisation with Webpack that allow us to play with node modules in ESM, React, SASS/SCSS, codes minification and images compression.
+
+
+> [!NOTE]
+> Although our mentality is to use as few plugins as possible, you can install whatever you like without limitation. Just keep in mind that the project has only sense if you dev your own codes around React, ACF and some Node modules instead of use multiple differents WordPress plugins.
+
 
 
 ## Requirements
@@ -55,8 +59,8 @@ location / {
 
 
 ## How frontend and backend work together
-
 ...
+
 
 ## How transition page work
 
@@ -83,6 +87,10 @@ window.SYSTEM = {
 ```
 
 
+## Lifecycle
+...
+
+
 ## To know
 
 - WordPress Front-end (not the React Front-end, but the admin front-end part) redirect to the the wp-admin. You can delete the template_redirect action hook inner the functions.php if you don't want that.
@@ -92,3 +100,5 @@ window.SYSTEM = {
 - For now, the project is not done for multisite
 
 - Using the admin side is not required. If you want use only the Front-end React part, you can stop fetching pages inner the `App.jsx` file.
+
+- You need to root the `dist` directory in your virtual host or you need to push files from this directory on your hosting. (`dist` directory is created when you install WordPress with the command line `get:wp` and is populate when trought your progress.)
