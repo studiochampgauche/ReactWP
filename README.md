@@ -1,6 +1,6 @@
 # Our React WordPress Boilerplate
 
-Our boilerplate is done for help us to start a frontend React SPA quickly with a robust PHP backend based on WordPress + ACF Pro.
+Our boilerplate is done for help us to start a frontend React SPA with a robust PHP backend based on WordPress + ACF Pro in "no time".
 
 The project has a mentality that limits the use of plugins, keeping administration clean and consistent for clients. At the same time, an other mentality for automatisation with Webpack that allow us to play with node modules in ESM, React, SASS/SCSS, codes minification and images compression.
 
