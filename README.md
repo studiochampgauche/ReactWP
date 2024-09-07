@@ -1,4 +1,4 @@
-# Our React WordPress Boilerplate
+# Our headless React WordPress Boilerplate
 
 Our boilerplate is done for help us to start a frontend React Single Page App (SPA) with a robust PHP backend based on WordPress + ACF Pro in "no time".
 
@@ -59,6 +59,8 @@ location / {
 
 
 ## How frontend and backend work together
+
+- If you don't know what is 
 
 - Each page, post, custom post type, some users if you have pages for authors, etc. that compose your routes, need to be associate to a Component. For do that, you need to have a field with each admin element that require a display for populate the component name and you need to map your Component in the ecosystem. Pages and posts already have the field to manage the component name. If you want this field for another custom post type, you can go to (yourdomain.com/admin/wp-admin/admin.php?page=site-settings) and select your CPT in the `Modules` tab, section `Component`. For other requirements, like get the field for users, you need edit where the field can be displayed in the `render.php` file of the Champ Gauche Core Plugin, around line 670.
 
