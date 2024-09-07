@@ -97,7 +97,8 @@ const App = () => {
                                     const Component = componentMap[route.acf.component_name];
 
                                     return (
-                                        <Route 
+                                        <Route
+                                            exact 
                                             key={i} 
                                             path={route.path} 
                                             element={
