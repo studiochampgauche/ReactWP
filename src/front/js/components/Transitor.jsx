@@ -77,6 +77,8 @@ const Transitor = ({ children }) => {
 
         	const handleClick = (e) => {
 
+        		if(item.hasAttribute('target')) return;
+
         		e.preventDefault();
 
         		if(!item.hasAttribute('href') && !item.hasAttribute('data-href')) return;
