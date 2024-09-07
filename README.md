@@ -101,4 +101,4 @@ window.SYSTEM = {
 
 - Using the admin side is not required. If you want use only the Front-end React part, you can stop fetching pages inner the `App.jsx` file.
 
-- You need to root the `dist` directory in your virtual host or you need to push files from this directory on your hosting. (`dist` directory is created when you install WordPress with the command line `get:wp` and is populate when trought your progress.)
+- You need to root the `dist` directory in your virtual host or you need to push files from this directory on your hosting. (`dist` directory is created when you install WordPress with the command line `get:wp` and is populate trought your progress.)
