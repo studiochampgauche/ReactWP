@@ -32,9 +32,7 @@ window.defaultMetas = {
 window.gscroll = null;
 
 
-
-Loader.init();
-Loader.download();
+window.loader = Loader.init();
 
 
 const componentMap = {
