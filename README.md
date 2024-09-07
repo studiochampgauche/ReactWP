@@ -41,7 +41,7 @@ location / {
 
 ## Installation Guide
 
-1. Git clone this branch
+1. Git clone this repo
 2. Go to `constructor`
 3. Install WordPress `npm run get:wp`
 4. Authenticate your GSAP Account by adding the `.npmrc` file
