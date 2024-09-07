@@ -65,7 +65,7 @@ location / {
 - For mapping your component in the ecosystem, just add it in the `componentMap` object from `App.jsx`
 
 > [!TIP]
-> Maybe you have too much posts, etc. and you don't want populate a Component on each. Just know, you can create a logic in your App.jsx or use some acf action hook for populate automatically the field.
+> Maybe you have too much posts, etc. and you don't want populate a Component on each. Just know, you can create a logic in your App.jsx or use some acf hooks for populate automatically the field.
 
 
 
