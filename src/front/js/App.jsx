@@ -15,10 +15,6 @@ import WaitingPage from './pages/WaitingPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 
-Loader.init();
-Loader.download();
-
-
 window.SYSTEM = {
     baseUrl: 'https://wpp.test/',
     adminUrl: 'https://wpp.test/admin/',
@@ -34,6 +30,11 @@ window.defaultMetas = {
 };
 
 window.gscroll = null;
+
+
+
+Loader.init();
+Loader.download();
 
 
 const componentMap = {
