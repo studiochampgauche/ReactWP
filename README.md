@@ -1,5 +1,5 @@
 > [!IMPORTANT]
-> v4 is coming and will work if you try it (really not completed). [Check it out here](https://github.com/studiochampgauche/wordpress-boilerplate/tree/v4.0)
+> v4 is coming and will work if you try it (not completed). [Check it out here](https://github.com/studiochampgauche/wordpress-boilerplate/tree/v4.0)
 >
 > The v4 isn't a following of the v3 but a totally new React Front-End SPA ecosystem with a separated WordPress Back-End.
 
