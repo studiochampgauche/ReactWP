@@ -20,56 +20,7 @@
             */
             StudioChampGauche\Utils\CustomPostType::default('posts_per_page', -1);
             StudioChampGauche\Utils\CustomPostType::default('paged', 1);
-            
-            
-            /*
-            * Set defaults when you call scg::menu() or StudioChampGauche\Utils\Menu::get();
-            */
-            StudioChampGauche\Utils\Menu::default('container', null);
-            StudioChampGauche\Utils\Menu::default('items_wrap', '<ul>%3$s</ul>');
-            
-            
-            /*
-            * Set defaults when you call scg::button() or StudioChampGauche\Utils\Button::get();
-            *
-            * StudioChampGauche\Utils\Button::default('text', 'x');
-            * StudioChampGauche\Utils\Button::default('href', 'x');
-            * StudioChampGauche\Utils\Button::default('class', 'x');
-            * StudioChampGauche\Utils\Button::default('attr', 'x');
-            * StudioChampGauche\Utils\Button::default('before', 'x');
-            * StudioChampGauche\Utils\Button::default('after', 'x');
-            */
-            
-            
-            /*
-            * Set defaults when you call scg::source() or StudioChampGauche\Utils\Source::get();
-            *
-            * StudioChampGauche\Utils\Source::default('base', '/');
-            * StudioChampGauche\Utils\Source::default('url', true);
-            */
 			
-			
-			/*
-			* Modify SCG Part in wp_head
-			*
-			add_filter('scg_wp_head', function($wp_heads){
-				
-				/*
-				* Add Open Graph article:section and article:tag on Post Type 'post'
-				*
-				
-				if(is_singular(['post'])){
-				
-					$wp_heads['og_article_section'] = <meta property="article:section" content="" />';
-					
-					$wp_heads['og_article_tag'] = <meta property="article:tag" content="" />';
-					
-				}
-			
-			 	return $wp_heads;
-			
-			});
-            */
 
 
             /*

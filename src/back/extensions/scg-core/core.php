@@ -32,7 +32,6 @@ load_plugin_textdomain('cg-core', false, basename(__DIR__) . '/langs/');
 */
 require_once 'class/render.php';
 require_once 'class/utils.php';
-require_once 'class/seo.php';
 
 
 class StudioChampGauche{

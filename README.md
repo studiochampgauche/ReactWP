@@ -3,6 +3,9 @@ v4 is new and not completed.
 The v4 isn't a following of the v3 but a totally new React Front-End SPA ecosystem with a separated WordPress Back-End.
 
 
+# Our React WordPress Boilerplate
+
+
 ## Requirements
 
 - NodeJS (tested with v20.15.0)
@@ -87,3 +90,5 @@ window.SYSTEM = {
 - When you have a media file that isn't import by your main JS App files, webpack doesn't know you use it and he don't compile it. You need to force the import by use the JS file according to your needs. (e.g. if you play with an audio file, you need to go in `src > front > medias > audios` and import your file from the `audios.js` file.)
 
 - For now, the project is not done for multisite
+
+- Using the admin side is not required. If you want use only the Front-end React part, you can stop fetching pages inner the `App.jsx` file.
