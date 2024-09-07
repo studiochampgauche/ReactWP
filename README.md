@@ -1,4 +1,4 @@
-# Our headless React WordPress Boilerplate
+# Our headless React-WordPress Boilerplate
 
 Our boilerplate is done for help us to start a frontend React Single Page App (SPA) with a robust PHP backend based on WordPress + ACF Pro in "no time".
 
