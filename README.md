@@ -59,7 +59,7 @@ location / {
 
 - Add attribute `data-transition="true"` to your link element. Without this attribute, the change'll be direct. (You need to use `<Link>` component of `react-router-dom`, not `<a ...>`)
 
-- If you want use `<a ...>` or another custom HTML element, you need to add the class name `goto` with the attribute `data-href=""` (you need to add this attribute only if it's not a `<a ...>` element. With this element, you use `href`). Just know, if your `data-href` (or `href`) attribute is an anchor, you need to add the path of your current page if you want stay on the same page and scroll to the anchor. (e.g. if your page is your home page, your probably on the path `/`... So you need to add `/` with your anchor, like `/#my-id`). You don't need to do that with `<Link>`.
+- If you want use `<a ...>` or another custom HTML element, you need to add the class name `goto` with the attribute `data-href=""` (you need to add this attribute only if it's not a `<a ...>` element. With this element, you use `href`). Just know, if your `data-href` (or `href`) attribute is an anchor, you need to add the path of your current page if you want stay on the same page and scroll to the anchor. (e.g. if your page is your home page, you are probably on the path `/`... So you need to add `/` with your anchor, like `/#my-id`). You don't need to do that with `<Link>`.
 
 - If your your element is an anchor, you can control the scroll behavior by adding `data-behavior="smooth|instant"`. If GSAP SmoothScroller Plugin is active, the default is `smooth`. Without the plugin, default is `instant`.
 
