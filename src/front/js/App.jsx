@@ -38,7 +38,7 @@ window.gscroll = null;
 window.loader = Loader.init();
 
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", () => {
 
     const cssLinkElement = document.getElementById('mainStyle');
 
@@ -48,13 +48,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
     } else {
 
-        cssLinkElement.onload = function() {
+        cssLinkElement.onload = () => {
 
             window.SYSTEM.loaded.css = true;
 
         };
 
-        cssLinkElement.onerror = function() {
+        cssLinkElement.onerror = () => {
 
             window.SYSTEM.loaded.css = false;
 
