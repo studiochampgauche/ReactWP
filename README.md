@@ -132,3 +132,13 @@ window.SYSTEM = {
 ### My page animation is done before the first loader has finished
 
 - The loader is made in a `Promise`. You can decide when the promise is done and you can call your animation inner this method `window.loader.then()`.
+
+
+## Changelog
+
+***2024-09-08***
+
+- Update boilerplate v3 to v4.
+
+> [!WARNING]
+> v4 isn't a following of the v3, but break changer with a new headless ecosystem. If you want the v3, [Download here](https://archives.champgauche.studio/wordpress-boilerplate-v3.zip)
