@@ -15,15 +15,15 @@ This project follows a philosophy of limiting plugin use to keep the administrat
 - Webpack
 - JavaScript minification with `terser-webpack-plugin`
 - SCSS or SASS with `sass` and `sass-loader`
-- Image Compression with `image-minimizer-webpack-plugin`, works good for gif, jpg, png and svg. (For now, it's not done for webp)
+- Image Compression with `image-minimizer-webpack-plugin`, (supports GIF, JPG, PNG, and SVG; WEBP support is not implemented yet)
 - App routing with `react-router-dom`
-- Helmet `src > front > js > components > Metas.jsx`
-- Font Awesome in `Individual Import`
-- Gsap and their SmoothScroller `src > front > js > components > Scroller.jsx`
-- Page transition animated with GSAP `src > front > js > components > PageTransition.jsx`
+- Helmet for managing document head `src > front > js > components > Metas.jsx`
+- Font Awesome with individual imports
+- GSAP and SmoothScroller `src > front > js > components > Scroller.jsx`
+- Page transitions animated with GSAP `src > front > js > components > PageTransition.jsx`
 - Preloader `src > front > js > addons > Loader.js`
-- Anchor by `PageTransition.jsx`
-- 404
+- Anchor scrolling by `PageTransition.jsx`
+- 404 handling
 
 
 ## Requirements
@@ -31,7 +31,7 @@ This project follows a philosophy of limiting plugin use to keep the administrat
 - NodeJS (tested with v20.15.0)
 - ACF Pro License Key
 - PHP Version 8.2 or higher
-- A premium or commercial subscription to the GSAP Club. (You need to add the .npmrc file in `constructor` directory for authenticate your account.)
+- A premium or commercial subscription to the GSAP Club (ensure to add the .npmrc file in the constructor directory to authenticate your account)
 
 
 ## Apache configuration
@@ -57,21 +57,21 @@ location / {
 
 ## Installation Guide
 
-1. Git clone this repo
-2. Go to `constructor`
-3. Install WordPress `npm run get:wp`
-4. Authenticate your GSAP Account by adding the `.npmrc` file
-5. Install the Node Modules `npm i`
-6. In `src > back` directory, duplicate `wp-config-sample.php` to `wp-config.php` and setup it
-7. From your `src > front > js > App.jsx` file, change URLs inner the global variable `window.SYSTEM` for your current URL
-8. In `src > front > template` directory, add your server configuration file like your .htaccess for Apache
-9. If is the first setup for your project, run `npm run watch:front:back` or `npm run build:front:back` in `constructor`. After your first setup, you can continue watching or rebuild only the front or the back like this `npm run watch:front` or `npm run build:back`. When you are ready for production and you want compress, relace `watch` by `prod` in your command line. Put a look on your `package.json` for view command lines.
-10. Go to your WordPress admin and setup it (yourdomain.com/admin)
-11. Active the Champ Gauche Core Theme, Champ Gauche Core Plugin and the ACF Plugin
-12. Clear other default plugins, themes, pages and posts
-13. Create your Home Page and setup it like a static page (here: yourdomain.com/admin/wp-admin/options-reading.php)
-14. Setup your permalink structure to other than `Plain` (the default option)
-15. Start Working!
+1. Clone this repository using Git.
+2. Navigate to the `constructor` directory.
+3. Install WordPress by running `npm run get:wp`.
+4. Authenticate your GSAP account by adding the `.npmrc` file.
+5. Install the Node modules with `npm i`.
+6. In the `src > back` directory, duplicate `wp-config-sample.php` to `wp-config.php` and set it up.
+7. In `src > front > js > App.jsx`, change the URLs within the global variable `window.SYSTEM` to reflect your current URL.
+8. In the `src > front > template` directory, add your server configuration file, such as your `.htaccess` for Apache.
+9. For the first setup of your project, run `npm run watch:front:back` or `npm run build:front:back` in `constructor` directory. After your first setup, you can continue watching or rebuild only the front or back with `npm run watch:front` or `npm run build:back`. When you are ready for production and want to compress, replace `watch` with `prod` in your command line. Check your `package.json` to see the available command lines.
+10. Go to your WordPress admin panel to complete the setup (e.g., yourdomain.com/admin).
+11. Activate the Champ Gauche Core Theme, Champ Gauche Core Plugin, and the ACF Plugin.
+12. Remove other default plugins, themes, pages, and posts.
+13. Create your Home Page and set it as a static page (e.g., yourdomain.com/admin/wp-admin/options-reading.php).
+14. Set your permalink structure to something other than Plain (the default option).
+15. Start working!
 
 
 ## How frontend and backend work together
