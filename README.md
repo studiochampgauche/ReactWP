@@ -134,6 +134,13 @@ window.SYSTEM = {
 - The preloader is implemented using a `Promise`. You can determine when the promise is resolved and call your animation inside this method: `window.loader.then()`.
 
 
+## Admin Languages
+
+***Default:*** French
+
+***Translation:*** en_US, en_CA, en_GB, en_AU, en_NZ, en_ZA
+
+
 ## Changelog
 
 ***2024-09-08***
@@ -142,10 +149,3 @@ window.SYSTEM = {
 
 > [!WARNING]
 > v4 is not a continuation of v3 but a breaking change with a new headless ecosystem. If you need v3, [Download here](https://archives.champgauche.studio/wordpress-boilerplate-v3.zip)
-
-
-## Admin Languages
-
-***Default:*** French
-
-***Translation:*** en_US, en_CA, en_GB, en_AU, en_NZ, en_ZA
