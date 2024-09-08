@@ -9,6 +9,17 @@ The project has a mentality that limits the use of plugins, keeping administrati
 > Although our mentality is to use as few plugins as possible, you can install whatever you like without limitation. Just keep in mind that the project has only sense if you dev your own codes around React, ACF and some Node modules instead of use multiple differents WordPress plugins.
 
 
+## Ready
+
+- App routing with `react-router-dom`
+- Helmet `src > front > js > components > Metas.jsx`
+- Font Awesome in `Individual Import`
+- Gsap and their SmoothScroller `src > front > js > components > Scroller.jsx`
+- Page transition `src > front > js > components > Transitor.jsx`
+- Preloader `src > front > js > addons > Loader.js`
+- Anchor
+- 404
+
 
 ## Requirements
 
@@ -101,18 +112,6 @@ window.SYSTEM = {
 
 ## Lifecycle
 ...
-
-
-## Ready
-
-- App routing with `react-router-dom`
-- Helmet `src > front > js > components > Metas.jsx`
-- Font Awesome in `Individual Import`
-- Gsap and their SmoothScroller `src > front > js > components > Scroller.jsx`
-- Page transition `src > front > js > components > Transitor.jsx`
-- Preloader `src > front > js > addons > Loader.js`
-- Anchor
-- 404
 
 
 ## To know
