@@ -19,7 +19,10 @@ window.SYSTEM = {
     baseUrl: 'https://wpp.test/',
     adminUrl: 'https://wpp.test/admin/',
     ajaxPath: '/admin/wp-admin/admin-ajax.php',
-    restPath: '/admin/wp-json/'
+    restPath: '/admin/wp-json/',
+    loaded: {
+        css: false
+    }
 };
 
 window.defaultMetas = {
@@ -33,6 +36,32 @@ window.gscroll = null;
 
 
 window.loader = Loader.init();
+
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    const cssLinkElement = document.getElementById('mainStyle');
+
+    if (cssLinkElement.sheet) {
+
+        window.SYSTEM.loaded.css = true;
+
+    } else {
+
+        cssLinkElement.onload = function() {
+
+            window.SYSTEM.loaded.css = true;
+
+        };
+
+        cssLinkElement.onerror = function() {
+
+            window.SYSTEM.loaded.css = false;
+
+        };
+
+    }
+});
 
 
 const componentMap = {

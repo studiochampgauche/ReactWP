@@ -41,7 +41,7 @@ const Loader = {
                 /*
                 * If medias not loaded, restart
                 */
-                if(!isLoaded || !window.gscroll){
+                if(!isLoaded || !window.gscroll || !window.SYSTEM.loaded.css){
 
                     tl.restart();
 
