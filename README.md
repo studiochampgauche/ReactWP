@@ -15,9 +15,9 @@ The project has a mentality that limits the use of plugins, keeping administrati
 - Helmet `src > front > js > components > Metas.jsx`
 - Font Awesome in `Individual Import`
 - Gsap and their SmoothScroller `src > front > js > components > Scroller.jsx`
-- Page transition `src > front > js > components > Transitor.jsx`
+- Page transition `src > front > js > components > PageTransition.jsx`
 - Preloader `src > front > js > addons > Loader.js`
-- Anchor by `Transitor.jsx`
+- Anchor by `PageTransition.jsx`
 - 404
 
 
@@ -93,7 +93,7 @@ location / {
 
 - If your element is an anchor, you can control the scroll behavior by adding `data-behavior="smooth|instant"`. If GSAP SmoothScroller Plugin is active, the default is `smooth`. Without the plugin, default is `instant`.
 
-- Checkout the component `Transitor.jsx` for edit your transition
+- Checkout the component `PageTransition.jsx` for edit your transition
 
 
 
