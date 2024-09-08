@@ -103,6 +103,16 @@ window.SYSTEM = {
 ...
 
 
+## Ready
+
+- App routing with `react-router-dom`
+- Font Awesome in `Individual Import`
+- Gsap SmoothScroller `src > front > js > components > Scroller.jsx`
+- Page transition `src > front > js > components > Transitor.jsx`
+- Preloader `src > front > js > addons > Loader.js`
+- Anchor
+
+
 ## To know
 
 - WordPress Front-end (not the React Front-end, but the admin front-end part) redirect to the the wp-admin. You can delete the template_redirect action hook inner the functions.php if you don't want that.
