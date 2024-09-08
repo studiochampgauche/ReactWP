@@ -115,6 +115,24 @@ window.SYSTEM = {
 ```
 
 
+## Lifecycle
+
+1. In most cases, the `main.min.css` file is loaded before the HTML body. However, with large files or slow connections, this may not always happen. If you suspect that your CSS file might not load before the body, it is advisable to use inline styles within your `<head>` element for the preloader. You can check if `window.SYSTEM.loaded.css` is `true` before closing your preloader animation.
+
+2. The preloader is the first child element of the body, ensuring it displays without delay. This is why you may need to use inline styles for your preloader to prevent Flash of Unstyled Content (FOUC).
+
+3. The `main.min.js` file is loaded.
+
+4. Loader initialization occurs, which includes the preloader animation and media download functionality. If you want to preload your media, you will need to implement your own download logic. Put a look on the file `src > front > js > addons > Loader.js`.
+
+5. The application is mounted.
+
+6. A waiting page is displayed to prevent errors while waiting for routes to load.
+
+7. Once the routes are ready, Scroller Component, PageTransition Component and your current page Component is initialized.
+
+
+
 ## Important Notes
 
 - The WordPress frontend (not the React frontend, but the admin frontend part) redirects to the wp-admin. You can delete the `template_redirect` action hook in `functions.php` if you don't want this behavior.
@@ -132,6 +150,7 @@ window.SYSTEM = {
 ### My Page Animation Completes Before the Preloader is Finished
 
 - The preloader is implemented using a `Promise`. You can determine when the promise is resolved and call your animation inside this method: `window.loader.then()`.
+
 
 
 ## Admin Languages
