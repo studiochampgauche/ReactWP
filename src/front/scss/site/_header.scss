@@ -1,0 +1,36 @@
+header{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 100;
+	.plywood{
+		.container{
+			display: flex;
+			width: 100%;
+			align-items: center;
+			justify-content: space-between;
+			& > a{
+				img{
+					width: 50px;
+					height: auto;
+				}
+			}
+			nav{
+				ul{
+					display: flex;
+					column-gap: 18px;
+					align-items: center;
+					li{
+						a{
+
+						}
+					}
+				}
+				.ham-menu{
+					display: none;
+				}
+			}
+		}
+	}
+}
