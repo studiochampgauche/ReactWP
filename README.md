@@ -131,7 +131,7 @@ window.SYSTEM = {
 
 ### My page animation is done before the first loader has finished
 
-- The loader is made in a `Promise`. You can decide when the promise is done and you can call your animation inner this method `window.loader.then()`.
+- The preloader is made in a `Promise`. You can decide when the promise is done and you can call your animation inner this method `window.loader.then()`.
 
 
 ## Changelog
