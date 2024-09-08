@@ -138,7 +138,7 @@ window.SYSTEM = {
 
 ***2024-09-08***
 
-- pdated boilerplate from v3 to v4.
+- Updated boilerplate from v3 to v4.
 
 > [!WARNING]
 > v4 is not a continuation of v3 but a breaking change with a new headless ecosystem. If you need v3, [Download here](https://archives.champgauche.studio/wordpress-boilerplate-v3.zip)
