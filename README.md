@@ -106,11 +106,13 @@ window.SYSTEM = {
 ## Ready
 
 - App routing with `react-router-dom`
+- Helmet `src > front > js > components > Metas.jsx`
 - Font Awesome in `Individual Import`
 - Gsap and their SmoothScroller `src > front > js > components > Scroller.jsx`
 - Page transition `src > front > js > components > Transitor.jsx`
 - Preloader `src > front > js > addons > Loader.js`
 - Anchor
+- 404
 
 
 ## To know
