@@ -29,7 +29,7 @@ The project has a mentality that limits the use of plugins, keeping administrati
 ## Requirements
 
 - NodeJS (tested with v20.15.0)
-- ACF Pro 6.2.6 or higher with a License Key
+- ACF Pro License Key
 - PHP Version 8.2 or higher
 - A premium or commercial subscription to the GSAP Club. (You need to add the .npmrc file in `constructor` directory for authenticate your account.)
 
