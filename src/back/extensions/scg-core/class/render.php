@@ -4,8 +4,6 @@ namespace StudioChampGauche\Render;
 
 class Render{
     
-    public static $wp_heads = [];
-    
     function __construct(){
 		
 		/*
