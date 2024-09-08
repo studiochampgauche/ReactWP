@@ -17,7 +17,7 @@ The project has a mentality that limits the use of plugins, keeping administrati
 - Gsap and their SmoothScroller `src > front > js > components > Scroller.jsx`
 - Page transition `src > front > js > components > Transitor.jsx`
 - Preloader `src > front > js > addons > Loader.js`
-- Anchor
+- Anchor by `Transitor.jsx`
 - 404
 
 

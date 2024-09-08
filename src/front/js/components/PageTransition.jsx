@@ -9,7 +9,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 let firstLoad = true;
 
 
-const Transitor = ({ children }) => {
+const PageTransition = ({ children }) => {
 
 
 	const to = useRef(null);
@@ -232,4 +232,4 @@ const Transitor = ({ children }) => {
 	return(<main>{children}</main>)
 	
 }
-export default Transitor;
+export default PageTransition;

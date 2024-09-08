@@ -7,7 +7,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import Loader from './addons/Loader';
 import Metas from './components/Metas';
 import Scroller from './components/Scroller';
-import Transitor from './components/Transitor';
+import PageTransition from './components/PageTransition';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -87,7 +87,7 @@ const App = () => {
                 <>
                     <Header />
                     <Scroller>
-                        <Transitor>
+                        <PageTransition>
                             
                             <Routes>
 
@@ -133,7 +133,7 @@ const App = () => {
                             
                             <Footer />
                             
-                        </Transitor>
+                        </PageTransition>
                     </Scroller>
                 </>
             ) : (
