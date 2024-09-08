@@ -1,12 +1,12 @@
 # Our headless React-WordPress Boilerplate
 
-Our boilerplate is done for help us to start a frontend React Single Page App (SPA) with a robust PHP backend based on WordPress + ACF Pro in "no time".
+Our boilerplate is designed to help us quickly start a React Single Page App (SPA) frontend with a robust PHP backend powered by WordPress and ACF Pro.
 
-The project has a mentality that limits the use of plugins, keeping administration clean and consistent for clients. At the same time, an other mentality for automatisation with Webpack that allow us to play with node modules in ESM, React, SASS/SCSS, codes minification and images compression.
+This project follows a philosophy of limiting plugin use to keep the administration clean and consistent for clients, while embracing automation with Webpack. This setup allows us to play with node modules in ESM format, React, SASS/SCSS, codes minification and images compression.
 
 
 > [!NOTE]
-> Although our mentality is to use as few plugins as possible, you can install whatever you like without limitation. Just keep in mind that the project has only sense if you dev your own codes around React, ACF and some Node modules instead of use multiple differents WordPress plugins.
+> Although our philosophy is to use as few plugins as possible, you are free to install whatever you like without limitations. However, keep in mind that the project only makes sense if you develop your own code around React, ACF, and certain Node modules, rather than relying on numerous different WordPress plugins.
 
 
 ## Ready
