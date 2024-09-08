@@ -11,11 +11,16 @@ The project has a mentality that limits the use of plugins, keeping administrati
 
 ## Ready
 
+- React
+- Webpack
+- JavaScript minification with `terser-webpack-plugin`
+- SCSS or SASS with `sass` and `sass-loader`
+- Image Compression with `image-minimizer-webpack-plugin`, works good for gif, jpg, png and svg. (For now, it's not done for webp)
 - App routing with `react-router-dom`
 - Helmet `src > front > js > components > Metas.jsx`
 - Font Awesome in `Individual Import`
 - Gsap and their SmoothScroller `src > front > js > components > Scroller.jsx`
-- Page transition `src > front > js > components > PageTransition.jsx`
+- Page transition animated with GSAP `src > front > js > components > PageTransition.jsx`
 - Preloader `src > front > js > addons > Loader.js`
 - Anchor by `PageTransition.jsx`
 - 404
@@ -125,6 +130,8 @@ window.SYSTEM = {
 - Using the admin side is not required. If you want use only the Front-end React part, you can stop fetching pages inner the `App.jsx` file.
 
 - You need to root the `dist` directory in your virtual host or you need to push files from this directory on your hosting. (`dist` directory is created when you install WordPress with the command line `get:wp` and is populate trought your progress.)
+
+- Minification and compression are done only in production.
 
 ### My page animation is done before the first loader has finished
 
