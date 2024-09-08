@@ -107,7 +107,7 @@ window.SYSTEM = {
 
 - App routing with `react-router-dom`
 - Font Awesome in `Individual Import`
-- Gsap SmoothScroller `src > front > js > components > Scroller.jsx`
+- Gsap and their SmoothScroller `src > front > js > components > Scroller.jsx`
 - Page transition `src > front > js > components > Transitor.jsx`
 - Preloader `src > front > js > addons > Loader.js`
 - Anchor
