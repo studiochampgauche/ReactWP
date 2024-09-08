@@ -141,4 +141,4 @@ window.SYSTEM = {
 - Update boilerplate v3 to v4.
 
 > [!WARNING]
-> v4 isn't a following of the v3, but break changer with a new headless ecosystem. If you want the v3, [Download here](https://archives.champgauche.studio/wordpress-boilerplate-v3.zip)
+> v4 isn't a following of the v3, but a break changer with a new headless ecosystem. If you want the v3, [Download here](https://archives.champgauche.studio/wordpress-boilerplate-v3.zip)
