@@ -48,6 +48,7 @@
             /*
             * Ajax Requests
             */
+            $this->ajaxRequests();
 
 		}
 
@@ -69,7 +70,7 @@
         }
 
 
-        function ajaxRequest(){
+        function ajaxRequests(){
 
             
 
