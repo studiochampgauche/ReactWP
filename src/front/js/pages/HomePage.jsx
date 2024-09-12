@@ -1,7 +1,7 @@
 'use strict';
 import React, { useEffect } from 'react';
 
-const HomePage = () => {
+const HomePage = ({ id, path, acf }) => {
     
     
 
