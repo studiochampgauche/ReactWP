@@ -84,7 +84,7 @@ const App = () => {
 
             try{
 
-                const callPages = await fetch(window.SYSTEM.restPath + 'wp/v2/pages');
+                const callPages = await fetch(window.SYSTEM.restPath + 'wp/v2/pages?_fields=id,link,acf');
 
                 if(!callPages.ok) throw new Error('Pages can\'t be loaded');
 
