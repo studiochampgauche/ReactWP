@@ -146,6 +146,7 @@ window.medias = Loader.download();
 - Medias are given by REST API `endpoint: /admin/wp-json/scg/v1/medias`. Put a look on REST Requests in your `functions.php` file
 - To link medias to a page, use the following code: `<scg-load data-value="YOUR_MEDIA_GROUP_KEY" />`
 - Don’t forget to replace `YOUR_MEDIA_GROUP_KEY` with the media group key you want call.
+- When medias are loaded, the `PageTransition.jsx` Component is responsible of displaying medias on the page.
 
 
 > [!NOTE]
