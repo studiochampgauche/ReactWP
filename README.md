@@ -164,7 +164,7 @@ window.SYSTEM = {
 
 ***2024-09-12***
 - ***Deleted:*** Text.jsx Component
-- ***Added:*** Rest and Ajax Request starter
+- ***Added:*** REST and Ajax Request starter
 - ***Updated:*** Short datas returned by pages for the routes 
 - ***Updated:*** Add path data to component composing the routes 
 - ***Updated:*** For demo, add in props to HomePage Component
