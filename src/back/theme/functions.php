@@ -64,6 +64,45 @@
 
             add_action('rest_api_init', function(){
 
+                /*
+                * Get Medias
+                */
+                register_rest_route('scg/v1', '/medias/', [
+                    'methods'  => 'GET',
+                    'callback' => function(){
+
+
+                        /*
+                        *    $data = [
+                        *        'home' => [
+                        *            [
+                        *                'type' => 'video',
+                        *                'target' => '',
+                        *                'src' => ''
+                        *            ],
+                        *            [
+                        *                'type' => 'image',
+                        *                'target' => '',
+                        *                'src' => ''
+                        *            ]
+                        *        ],
+                        *        'about' => [
+                        *            [
+                        *                'type' => 'video',
+                        *                'target' => '',
+                        *                'src' => ''
+                        *            ],
+                        *        ],
+                        *    ];
+                        */
+
+                        $data = [];
+
+                        return new WP_REST_Response($data, 200);
+
+                    },
+                ]);
+
 
             });
 

@@ -123,13 +123,33 @@ window.SYSTEM = {
 
 3. The `main.min.js` file is loaded.
 
-4. Loader initialization occurs, which includes the preloader animation and media download functionality. If you want to preload your media, you will need to implement your own download logic. Put a look on the file `src > front > js > addons > Loader.js`.
+4. Loader initialization occurs.
 
 5. The application is mounted.
 
 6. A waiting page is displayed to prevent errors while waiting for routes to load.
 
 7. Once the routes are ready, Scroller Component, PageTransition Component and your current page Component is initialized.
+
+
+## Preloader Animation + Media Download
+If you put a look on your App.jsx file, you can see this codes:
+```
+window.loader = Loader.init();
+window.medias = Loader.download();
+```
+
+- `Loader.init()` initializes the preloader animation.
+- `Loader.download()` handles the downloading of images and videos while the preloader is running.
+- The preloader and media download process work in tandem. The preloader won’t complete unless `Loader.download()` is set.
+- If you don’t need to fetch any media, you still need to include `Loader.download()`, but like this: `Loader.download(false)`.
+- Medias are given by REST API `endpoint: /admin/wp-json/scg/v1/medias`. Put a look on REST Requests in your `functions.php` file
+- To link media to a page, use the following code: `<scg-load data-value="YOUR_MEDIA_GROUP_KEY" />`
+- Don’t forget to replace `YOUR_MEDIA_GROUP_KEY` with the media group key you want call.
+
+
+> [!NOTE]
+> The preloader is implemented using a `Promise`. You can determine when the promise is resolved and call your page animation inside this method `window.loader.then()` if your page animation is done before the preloader has finish.
 
 
 
@@ -146,10 +166,6 @@ window.SYSTEM = {
 - You need to root the `dist` directory in your virtual host or push files from this directory to your hosting. The `dist` directory is created when you install WordPress with the `get:wp` command and is populated throughout your progress.
 
 - Minification and compression are only done in production.
-
-### My Page Animation Completes Before the Preloader is Finished
-
-- The preloader is implemented using a `Promise`. You can determine when the promise is resolved and call your animation inside this method: `window.loader.then()`.
 
 
 

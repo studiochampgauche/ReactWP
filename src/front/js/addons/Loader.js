@@ -10,8 +10,6 @@ const Loader = {
 
         return new Promise(done => {
 
-            Loader.download();
-
             /*
             * Create loading animation
             */
@@ -73,17 +71,99 @@ const Loader = {
         });
 
 	},
-	download: (what = null) => {
+	download: (use = true) => {
 
-		if(!what){
+		return new Promise(async (done, reject) => {
 
-			isLoaded = true;
 
-			return;
-		}
+            if(!use){
 
-		isLoaded = true;
+                isLoaded = true;
 
+                done([]);
+
+                return;
+            }
+
+
+            try{
+
+                const callMediaGroups = await fetch(window.SYSTEM.restPath + 'scg/v1/medias');
+
+                if(!callMediaGroups.ok) throw new Error('Image groups can\'t be loaded');
+
+
+                let mediaGroups = await callMediaGroups.json();
+                
+
+                if(Array.isArray(mediaGroups)){
+
+                    isLoaded = true;
+
+                    done([]);
+
+                    return;
+                }
+
+
+
+                let loadedCount = 0,
+                    totalToCount = 0;
+
+                for(let group in mediaGroups){
+
+                    const medias = mediaGroups[group];
+
+                    totalToCount += medias.length;
+
+                }
+
+                for(let group in mediaGroups){
+
+                    const medias = mediaGroups[group];
+
+                    medias.forEach((media, i) => {
+
+                        const srcElement = media.type === 'video' ? document.createElement('video') : new Image();
+                        srcElement.src = media.src;
+
+                        if(media.type === 'video'){
+                            
+                            srcElement.onloadedmetadata  = () => loaded(srcElement, group, i)
+                            
+                        } else {
+
+                            srcElement.onload  = () => loaded(srcElement, group, i)
+
+                        }
+
+                    });
+
+                }
+
+
+                const loaded = (srcElement, group, i) => {
+
+                    loadedCount += 1;
+
+                    mediaGroups[group][i].el = srcElement;
+
+                    if(loadedCount !== totalToCount) return;
+
+                    isLoaded = true;
+
+
+                    done(mediaGroups);
+
+                }
+
+            } catch(error){
+
+                reject(error);
+
+            }
+
+        });
 
 	}
 }
