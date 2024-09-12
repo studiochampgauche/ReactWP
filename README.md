@@ -144,7 +144,7 @@ window.medias = Loader.download();
 - The preloader and media download process work in tandem. The preloader won’t complete unless `Loader.download()` is set.
 - If you don’t need to fetch any media, you still need to include `Loader.download()`, but like this: `Loader.download(false)`.
 - Medias are given by REST API `endpoint: /admin/wp-json/scg/v1/medias`. Put a look on REST Requests in your `functions.php` file
-- To link media to a page, use the following code: `<scg-load data-value="YOUR_MEDIA_GROUP_KEY" />`
+- To link medias to a page, use the following code: `<scg-load data-value="YOUR_MEDIA_GROUP_KEY" />`
 - Don’t forget to replace `YOUR_MEDIA_GROUP_KEY` with the media group key you want call.
 
 
