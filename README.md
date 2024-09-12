@@ -181,6 +181,7 @@ window.medias = Loader.download();
 
 ***2024-09-12***
 - ***Deleted:*** Text.jsx Component
+- ***Added:*** Medias Download Management
 - ***Added:*** REST and Ajax Request starter
 - ***Updated:*** Short datas returned by pages for the routes 
 - ***Updated:*** Add path data to component composing the routes 
