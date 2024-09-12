@@ -36,7 +36,44 @@
 
             });
 
+
+
+            /*
+            * Rest API Requests
+            */
+            $this->restRequests();
+
+
+
+            /*
+            * Ajax Requests
+            */
+
 		}
+
+
+
+        function restRequests(){
+
+
+            add_filter( 'acf/settings/rest_api_format', function () {
+                return 'standard';
+            });
+
+
+            add_action('rest_api_init', function(){
+
+
+            });
+
+        }
+
+
+        function ajaxRequest(){
+
+            
+
+        }
 
 	}
 
