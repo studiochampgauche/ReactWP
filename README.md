@@ -133,7 +133,7 @@ window.SYSTEM = {
 
 
 ## Preloader Animation + Media Download
-If you put a look on your App.jsx file, you can see this codes:
+If you put a look on your `App.jsx` file, you can see this codes:
 ```
 window.loader = Loader.init();
 window.medias = Loader.download();
