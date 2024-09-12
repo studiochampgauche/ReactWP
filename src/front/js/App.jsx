@@ -139,7 +139,7 @@ const App = () => {
                                                         robots={!route.acf?.seo?.stop_indexing ? 'max-image-preview:large, index, follow' : window.defaultMetas.robots}
                                                         image={route.acf?.seo?.image || window.defaultMetas.images}
                                                     />
-                                                    <Component id={route.id} acf={route.acf} />
+                                                    <Component id={route.id} path={route.path} acf={route.acf} />
                                                 </>
                                             }
                                         />
