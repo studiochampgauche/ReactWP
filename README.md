@@ -150,7 +150,7 @@ window.medias = Loader.download();
 
 
 > [!NOTE]
-> The preloader is implemented using a `Promise`. You can determine when the promise is resolved and call your page animation inside this method `window.loader.then()` if your page animation is done before the preloader has finish.
+> The preloader is implemented using a `Promise`. You can determine when the promise is resolved and call your page animation inside this method `window.loader.then()` if your page animation is done before the preloader has finish. Put a look on your file `src > front > js > addons > Loader.js`.
 
 
 
