@@ -194,7 +194,6 @@ window.medias.init = window.medias.download.init();
 - ***Added***: REST contents replacement for acf returns when you use `StudioChampGauche\Utils\Field::replace($searh, $replace)`
 
 
-
 ***2024-09-12***
 - ***Deleted:*** Text.jsx Component
 - ***Added:*** Medias Download Management
@@ -202,6 +201,7 @@ window.medias.init = window.medias.download.init();
 - ***Updated:*** Short datas returned by pages for the routes 
 - ***Updated:*** Add path data to component composing the routes 
 - ***Updated:*** For demo, add props to HomePage Component
+
 
 ***2024-09-08***
 
