@@ -36,7 +36,11 @@ window.gscroll = null;
 
 
 window.loader = Loader.init();
-window.medias = Loader.download();
+
+window.medias = {
+    download: Loader.download(), 
+};
+window.medias.init = window.medias.download.init();
 
 
 document.addEventListener("DOMContentLoaded", () => {

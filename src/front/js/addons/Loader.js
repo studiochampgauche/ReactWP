@@ -71,101 +71,141 @@ const Loader = {
         });
 
 	},
-	download: (use = true) => {
+	download: () => {
 
-		return new Promise(async (done, reject) => {
+        return {
 
+            init: (use = true) => {
 
-            if(!use){
+                return new Promise(async (done, reject) => {
 
-                isLoaded = true;
+                    if(!use){
 
-                done([]);
+                        isLoaded = true;
 
-                return;
-            }
+                        done([]);
+                        
+                        return;
+                    }
 
+                    try{
 
-            try{
+                        const callMediaGroups = await fetch(window.SYSTEM.restPath + 'scg/v1/medias');
 
-                const callMediaGroups = await fetch(window.SYSTEM.restPath + 'scg/v1/medias');
-
-                if(!callMediaGroups.ok) throw new Error('Image groups can\'t be loaded');
-
-
-                let mediaGroups = await callMediaGroups.json();
-                
-
-                if(Array.isArray(mediaGroups)){
-
-                    isLoaded = true;
-
-                    done([]);
-
-                    return;
-                }
+                        if(!callMediaGroups.ok) throw new Error('Image groups can\'t be loaded');
 
 
+                        let mediaGroups = await callMediaGroups.json();
+                        
 
-                let loadedCount = 0,
-                    totalToCount = 0;
+                        if(Array.isArray(mediaGroups)){
 
-                for(let group in mediaGroups){
+                            isLoaded = true;
 
-                    const medias = mediaGroups[group];
+                            done([]);
 
-                    totalToCount += medias.length;
+                            return;
+                        }
 
-                }
 
-                for(let group in mediaGroups){
 
-                    const medias = mediaGroups[group];
+                        let loadedCount = 0,
+                            totalToCount = 0;
 
-                    medias.forEach((media, i) => {
+                        for(let group in mediaGroups){
 
-                        const srcElement = media.type === 'video' ? document.createElement('video') : new Image();
-                        srcElement.src = media.src;
+                            const medias = mediaGroups[group];
 
-                        if(media.type === 'video'){
-                            
-                            srcElement.onloadedmetadata  = () => loaded(srcElement, group, i)
-                            
-                        } else {
-
-                            srcElement.onload  = () => loaded(srcElement, group, i)
+                            totalToCount += medias.length;
 
                         }
 
+                        for(let group in mediaGroups){
+
+                            const medias = mediaGroups[group];
+
+                            medias.forEach((media, i) => {
+
+                                const srcElement = media.type === 'video' ? document.createElement('video') : new Image();
+                                srcElement.src = media.src;
+
+                                if(media.type === 'video'){
+
+                                    srcElement.preload = 'auto';
+                                    srcElement.loop = true;
+                                    srcElement.muted = true;
+                                    
+                                    srcElement.onloadedmetadata  = () => loaded(srcElement, group, i)
+                                    
+                                } else {
+
+                                    srcElement.onload  = () => loaded(srcElement, group, i)
+
+                                }
+
+                            });
+
+                        }
+
+
+                        const loaded = (srcElement, group, i) => {
+
+                            loadedCount += 1;
+
+                            mediaGroups[group][i].el = srcElement;
+
+                            if(loadedCount !== totalToCount) return;
+
+                            isLoaded = true;
+
+
+                            done(mediaGroups);
+
+                        }
+
+                    } catch(error){
+
+                        reject(error);
+
+                    }
+                });
+
+            },
+            display: () => {
+
+                return new Promise(done => {
+        
+                    const loadElement = document.querySelector('scg-load');
+                    if(!loadElement || !loadElement.hasAttribute('data-value')){
+
+                        done();
+
+                        return;
+                    }
+
+                    window.medias.init.then(mediaGroups => {
+
+                        mediaGroups?.[loadElement.getAttribute('data-value')]?.forEach((data, i) => {
+
+                            const target = document.querySelector(data.target);
+
+                            if(!target) return;
+
+                            target.replaceWith(data.el);
+
+                            if(i !== mediaGroups[loadElement.getAttribute('data-value')].length -1) return;
+
+                            done();
+
+                        });
+
                     });
 
-                }
-
-
-                const loaded = (srcElement, group, i) => {
-
-                    loadedCount += 1;
-
-                    mediaGroups[group][i].el = srcElement;
-
-                    if(loadedCount !== totalToCount) return;
-
-                    isLoaded = true;
-
-
-                    done(mediaGroups);
-
-                }
-
-            } catch(error){
-
-                reject(error);
+                });
 
             }
-
-        });
-
-	}
+        }
+    }
 }
 
 export default Loader;

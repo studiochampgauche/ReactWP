@@ -161,40 +161,6 @@ const PageTransition = ({ children }) => {
 	}, [pathname]);
 
 
-	/*
-	* Load medias
-	*/
-	useEffect(() => {
-
-		const loadElement = document.querySelector('scg-load');
-		if(!loadElement || !loadElement.hasAttribute('data-value')) return;
-
-		window.medias.then(mediaGroups => {
-
-			mediaGroups?.[loadElement.getAttribute('data-value')]?.forEach(data => {
-
-				const target = document.querySelector(data.target);
-
-				if(!target) return;
-
-            	target.replaceWith(data.el);
-
-			});
-
-		});
-
-
-
-		return () => {
-
-
-
-		}
-
-
-	}, [pathname]);
-
-
 
 	/*
     * isLeaving transition

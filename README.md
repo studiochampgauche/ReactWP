@@ -136,21 +136,26 @@ window.SYSTEM = {
 If you put a look on your `App.jsx` file, you can see this codes:
 ```
 window.loader = Loader.init();
-window.medias = Loader.download();
+
+window.medias = {
+    download: Loader.download(), 
+};
+window.medias.init = window.medias.download.init();
 ```
 
 - `Loader.init()` initializes the preloader animation.
-- `Loader.download()` handles the downloading of images and videos while the preloader is running.
-- The preloader and media download process work in tandem. The preloader won’t complete unless `Loader.download()` is set.
-- If you don’t need to fetch any media, you still need to include `Loader.download()`, but like this: `Loader.download(false)`.
+- `window.medias.download.init()` handles the downloading of images and videos while the preloader is running.
+- The preloader and media download process work in tandem. The preloader won’t complete unless `window.medias.download.init()` is set.
+- If you don’t need to fetch any media, you still need to include `window.medias.download.init()`, but like this: `window.medias.download.init(false)`.
 - Medias are given by REST API, endpoint: `/admin/wp-json/scg/v1/medias`. Put a look on REST Requests in your `functions.php` file
 - To link medias to a page, use the following code: `<scg-load data-value="YOUR_MEDIA_GROUP_KEY" />`
 - Don’t forget to replace `YOUR_MEDIA_GROUP_KEY` with the media group key you want call.
-- When medias are loaded, the `PageTransition.jsx` Component is responsible of displaying medias on the page.
+- For display your medias, use `window.medias.download.display()`.
 
 
 > [!NOTE]
-> The preloader is implemented using a `Promise`. You can determine when the promise is resolved and call your page animation inside this method `window.loader.then()` if your page animation is done before the preloader has finish. Put a look on your file `src > front > js > addons > Loader.js`.
+> - The preloader is implemented using a `Promise`. You can determine when the promise is resolved and call your page animation inside this method `window.medias.init.then()` if your page animation is done before the preloader has finish. Put a look on your file `src > front > js > addons > Loader.js`.
+> - The display method is implemented using a `Promise`. If media selector doesn't exist, call it when the promise is resolved with `.then()`
 
 
 
@@ -178,6 +183,11 @@ window.medias = Loader.download();
 
 
 ## Changelog
+
+***2024-09-12***
+
+- ***Changed***: How we display medias
+
 
 ***2024-09-12***
 - ***Deleted:*** Text.jsx Component
