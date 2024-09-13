@@ -7,7 +7,7 @@
 			if(!class_exists('scg')) return;
 			
             /*
-            * str_replace your return when you use scg::field() or StudioChampGauche\Utils\Field::get();
+            * str_replace your return when you use scg::field(), StudioChampGauche\Utils\Field::get() or ACF REST API;
             *
             * StudioChampGauche\Utils\Field::replace(['{MAIN_EMAIL}'], [scg::field('contact_email_main')]);
 			*
@@ -60,6 +60,23 @@
             add_filter( 'acf/settings/rest_api_format', function () {
                 return 'standard';
             });
+
+
+
+            add_filter('acf/rest/format_value_for_rest', function ($value_formatted, $post_id, $field, $value, $format){
+
+                $return = $value_formatted;
+
+                if($return && is_array($return) && \StudioChampGauche\Utils\Field::$elementsToReplace)
+                    \StudioChampGauche\Utils\Field::recursive(\StudioChampGauche\Utils\Field::$elementsToReplace[0], \StudioChampGauche\Utils\Field::$elementsToReplace[1], $return);
+                elseif($return && is_string($return) && \StudioChampGauche\Utils\Field::$elementsToReplace)
+                    $return = str_replace(\StudioChampGauche\Utils\Field::$elementsToReplace[0], \StudioChampGauche\Utils\Field::$elementsToReplace[1], $return);
+
+
+                return $return;
+                
+            }, 10, 5);
+
 
 
             add_action('rest_api_init', function(){
