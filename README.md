@@ -189,9 +189,10 @@ window.medias.init = window.medias.download.init();
 
 ## Changelog
 
-***2024-09-12***
+***2024-09-13***
 
-- ***Changed***: How we display medias
+- ***Added***: REST contents replacement for acf returns when you use `StudioChampGauche\Utils\Field::replace($searh, $replace)`
+
 
 
 ***2024-09-12***
