@@ -34,8 +34,9 @@ This project follows a philosophy of limiting plugin use to keep the administrat
 - A premium or commercial subscription to the GSAP Club (ensure to add the .npmrc file in the constructor directory to authenticate your account)
 
 
-## Apache Configuration
+## Server Configuration
 
+### Apache
 ```
 RewriteEngine On
 RewriteBase /
@@ -45,7 +46,7 @@ RewriteRule ^ index.html [L]
 ```
 
 
-## Nginx Configuration
+### Nginx
 
 (not tested)
 ```
