@@ -21,7 +21,7 @@ This project follows a philosophy of limiting plugin use to keep the administrat
 - Font Awesome with individual imports
 - GSAP and SmoothScroller `src > front > js > components > Scroller.jsx`
 - Page transitions animated with GSAP `src > front > js > components > PageTransition.jsx`
-- Preloader `src > front > js > addons > Loader.js`
+- Preloader + medias download `src > front > js > addons > Loader.js`, `src > back > theme > functions.php`
 - Anchor scrolling by `PageTransition.jsx`
 - 404 handling
 
@@ -155,7 +155,7 @@ window.medias.init = window.medias.download.init();
 
 > [!NOTE]
 > - The preloader is implemented using a `Promise`. You can determine when the promise is resolved and call your page animation inside this method `window.medias.init.then()` if your page animation is done before the preloader has finish. Put a look on your file `src > front > js > addons > Loader.js`.
-> - The display method is also implemented using a `Promise`. If the media selector (i.e., the element you are trying to target with `.querySelector`) does not exist because the display is not done, call the display method within the `.then()` block to ensure that the media is displayed properly after the promise is done.
+> - The display method is also implemented using a `Promise`. If the media selector (i.e., the element you are trying to target with `.querySelector`) does not exist because the display is not done, call the display method within the `.then()` to ensure that the media is displayed properly after the promise is done.
 
 > ```
 > const displayFunc = window.medias.download.display();
