@@ -150,12 +150,17 @@ window.medias.init = window.medias.download.init();
 - Medias are given by REST API, endpoint: `/admin/wp-json/scg/v1/medias`. Put a look on REST Requests in your `functions.php` file
 - To link medias to a page, use the following code: `<scg-load data-value="YOUR_MEDIA_GROUP_KEY" />`
 - Don’t forget to replace `YOUR_MEDIA_GROUP_KEY` with the media group key you want call.
-- For display your medias, use `window.medias.download.display()`.
+- To display your media, use `window.medias.download.display()`.
 
 
 > [!NOTE]
 > - The preloader is implemented using a `Promise`. You can determine when the promise is resolved and call your page animation inside this method `window.medias.init.then()` if your page animation is done before the preloader has finish. Put a look on your file `src > front > js > addons > Loader.js`.
-> - The display method is implemented using a `Promise`. If media selector doesn't exist, call it when the promise is resolved with `.then()`
+> - The display method is also implemented using a `Promise`. If the media selector (i.e., the element you are trying to target with `.querySelector`) does not exist because the display is not done, call the display method within the `.then()` block to ensure that the media is displayed properly after the promise is fulfilled.
+
+> ```
+> const displayFunc = window.medias.download.display();
+> displayFunc.then(() => {});
+> ```
 
 
 
