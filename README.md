@@ -179,7 +179,7 @@ window.medias.init = window.medias.download.init();
 
 - Minification and compression are only done in production mode.
 
-- Using `mailto:`, `tel:`, or other schemas/protocols that are not `http` or `https` may not work with the `<Link>` element. To resolve this issue, set `target="_self"`.  (Yeah, it's the default, but when you use target, you use the `<Link>` element as default.)
+- Using `mailto:`, `tel:`, or other schemas/protocols that are not `http` or `https` may not work with the `<Link>` or `<a>` elements. To resolve this issue, set `target="_self"`.  (Yeah, it's the default, but when you use target, you use the element as default.)
 
 - Use `<Wrapper value={my_value} />` for place HTML when you can't use `dangerouslySetInnerHTML`.
 
