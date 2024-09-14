@@ -18,7 +18,7 @@ This project follows a philosophy of limiting plugin use to keep the administrat
 - Image Compression with `image-minimizer-webpack-plugin`, (supports GIF, JPG, PNG, and SVG; WEBP support is not implemented yet)
 - App routing with `react-router-dom`
 - Helmet for managing document head `src > front > js > components > Metas.jsx`
-- Font Awesome with individual imports
+- Free Font Awesome with individual imports
 - GSAP and SmoothScroller `src > front > js > components > Scroller.jsx`
 - Page transitions animated with GSAP `src > front > js > components > PageTransition.jsx`
 - Preloader + medias download `src > front > js > addons > Loader.js`, `src > back > theme > functions.php`
