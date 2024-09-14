@@ -57,6 +57,10 @@ section{
 	position: relative;
 }
 
+scg-wrap{
+	display: contents;
+}
+
 #viewport{
     height: 100%;
     min-height: 100lvh;

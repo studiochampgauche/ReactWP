@@ -181,6 +181,8 @@ window.medias.init = window.medias.download.init();
 
 - Using `mailto:`, `tel:`, or other schemas/protocols that are not `http` or `https` may not work with the `<Link>` element. To resolve this issue, set `target="_self"`.  (Yeah, it's the default, but when you use target, you use the `<Link>` element as default.)
 
+- Use `<Wrapper value={my_value} />` for place HTML when you can't use `dangerouslySetInnerHTML`.
+
 
 
 
@@ -192,6 +194,11 @@ window.medias.init = window.medias.download.init();
 
 
 ## Changelog
+
+***2024-09-14***
+
+- ***Added***: `Wrapper.jsx` component
+
 
 ***2024-09-13***
 
