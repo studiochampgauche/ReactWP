@@ -177,7 +177,7 @@ window.medias.init = window.medias.download.init();
 
 - You need to root the `dist` directory in your virtual host or push files from this directory to your hosting. The `dist` directory is created when you install WordPress with the `get:wp` command and is populated throughout your progress.
 
-- Minification and compression are only done in production.
+- Minification and compression are only done in production mode.
 
 
 
