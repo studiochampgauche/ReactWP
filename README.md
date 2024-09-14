@@ -179,6 +179,9 @@ window.medias.init = window.medias.download.init();
 
 - Minification and compression are only done in production mode.
 
+- Using `mailto:`, `tel:`, or other schemas/protocols that are not `http` or `https` may not work with the `<Link>` element. To resolve this issue, set `target="_self"`.
+
+
 
 
 ## Admin Languages
