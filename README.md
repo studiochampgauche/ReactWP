@@ -93,9 +93,9 @@ location / {
 
 ## How Page Transitions Work
 
-- Add the attribute `data-transition="true"` to your link element. Without this attribute, the transition will be direct. (Use the `<Link>` component from `react-router-dom`, not `<a ...>`)
+- Add the attribute `data-transition="true"` to your `<Link>` element. Without this attribute, the transition will be direct.
 
-- If you want to use `<a ...>` or another custom HTML element, you need to add the class name `goto` with the attribute `data-href=""` (this attribute should only be added if it's not a `<a ...>` element; for `<a ...>`, use `href`). If your `data-href` (or `href`) attribute is an anchor, you need to include the path of your current page if you want to stay on the same page and scroll to the anchor (e.g., if your page is your home page, you should add `/` with your anchor, like `/#my-id`). You don't need to do this with `<Link>`.
+- If you want to use `<a ...>` or another custom HTML element instead of `<Link>`, you need to add the class name `goto` with the attribute `data-href=""` (this attribute should only be added if it's not a `<a ...>` element; for `<a ...>`, use `href`). If your `data-href` (or `href`) attribute is an anchor, you need to include the path of your current page if you want to stay on the same page and scroll to the anchor (e.g., if your page is your home page, you should add `/` with your anchor, like `/#my-id`). You don't need to do this with `<Link>`.
 
 - If your element is an anchor, you can control the scroll behavior by adding `data-behavior="smooth|instant"`. If the GSAP SmoothScroller Plugin is active, the default is `smooth`. Without the plugin, the default is `instant`.
 
