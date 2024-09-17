@@ -132,7 +132,7 @@ window.SYSTEM = {
 
 6. A waiting page is displayed to prevent errors while waiting for routes to load.
 
-7. Once the routes are ready, Scroller Component, PageTransition Component and your current page Component is initialized.
+7. Once the routes are ready, Scroller Component, PageTransition Component and your current page Component are initialized.
 
 
 ## Preloader Animation + Media Download
