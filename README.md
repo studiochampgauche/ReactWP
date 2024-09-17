@@ -161,7 +161,7 @@ window.medias.init = window.medias.download.init();
 
 > [!NOTE]
 > - The preloader is implemented using a `Promise`. You can determine when the promise is resolved and call your page animation inside this method `window.medias.init.then()` if your page animation is done before the preloader has finish. Put a look on your file `src > front > js > addons > Loader.js`.
-> - The display method is also implemented using a `Promise`. If the media selector (i.e., the element you are trying to target with `.querySelector`) does not exist because the display is not done, call the display method within the `.then()` to ensure that the media is displayed properly after the promise is done.
+> - The display method is also implemented using a `Promise`. If the media selector (i.e., the element you are trying to target with `.querySelector`) does not exist because the display is not done, touch your element within the `.then()` to ensure that the media is displayed properly before touch it.
 
 > ```
 > const displayFunc = window.medias.download.display();
