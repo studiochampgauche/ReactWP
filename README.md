@@ -175,7 +175,7 @@ window.medias.init = window.medias.download.init();
 
 - Currently, the project is not set up for multisite.
 
-- Using the admin side is not required. If you want to use only the frontend React part, you can stop fetching pages in the `App.jsx` file.
+- Using the admin side is not required. If you want to use only the frontend React part, you can stop fetching pages in the `App.jsx` file and use only this command lines: `npm run watch:front`, `npm run build:front`, `npm run prod:front`.
 
 - You need to root the `dist` directory in your virtual host or push files from this directory to your hosting. The `dist` directory is created when you install WordPress with the `get:wp` command and is populated throughout your progress.
 
