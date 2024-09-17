@@ -188,7 +188,7 @@ window.medias.init = window.medias.download.init();
 
 - Use `<Wrapper value={my_value} />` for place HTML when you can't use `dangerouslySetInnerHTML`.
 
-- If you prefer using `SASS` instead of `SCSS`, you only need to change your `.scss` extension to `.sass`. (And all brackets of course)
+- If you prefer using `SASS` instead of `SCSS`, you only need to change your `.scss` extension to `.sass`. (And remove all brackets of course)
 
 
 
