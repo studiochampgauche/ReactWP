@@ -81,7 +81,7 @@ location / {
 
 - Each page, post, custom post type, and some users (if you have pages for authors, etc.) that compose your routes need to be associated with a Component. To achieve this, you must have a field for each admin element that requires a display to populate the component name, and you need to map your Component in the ecosystem.
 
-- Pages and posts already have the field to manage the component name. If you want this field for another custom post type, you can go to (yourdomain.com/admin/wp-admin/admin.php?page=site-settings) and select your CPT in the `Modules` tab, under the `Component` section. For additional requirements, such as fetching the field for users, you need to edit where the field can be displayed in the `render.php` file of the Champ Gauche Core Plugin, around line 670.
+- Pages and posts already have the field to manage the component name. If you want this field for another custom post type, you can go to (yourdomain.com/admin/wp-admin/admin.php?page=site-settings) and select your CPT in the `Modules` tab, under the `Component` section. For additional requirements, such as fetching the field for users, you need to edit where the field can be displayed in the `render.php` file of the Champ Gauche Core Plugin, around line 655.
 
 - To map your component in the ecosystem, simply add it to the `componentMap` object in `App.jsx`.
 
@@ -208,6 +208,7 @@ window.medias.init = window.medias.download.init();
 
 
 ***2024-09-12***
+
 - ***Deleted:*** Text.jsx Component
 - ***Added:*** Medias Download Management
 - ***Added:*** REST and Ajax Request starter
