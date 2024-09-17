@@ -113,7 +113,10 @@ window.SYSTEM = {
     baseUrl: 'https://wpp.test/',
     adminUrl: 'https://wpp.test/admin/',
     ajaxPath: '/admin/wp-admin/admin-ajax.php',
-    restPath: '/admin/wp-json/'
+    restPath: '/admin/wp-json/',
+    loaded: {
+        css: false
+    }
 };
 ```
 
