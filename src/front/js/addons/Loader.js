@@ -130,10 +130,6 @@ const Loader = {
                                 srcElement.src = media.src;
 
                                 if(media.type === 'video'){
-
-                                    srcElement.preload = 'auto';
-                                    srcElement.loop = true;
-                                    srcElement.muted = true;
                                     
                                     srcElement.onloadedmetadata  = () => loaded(srcElement, group, i)
                                     
