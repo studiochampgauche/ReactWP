@@ -145,6 +145,7 @@ window.medias.init = window.medias.download.init();
 
 - Multisite isn't ready.
 - Minification and compression works only in production mode.
+- Image compression supports GIF, JPG, PNG, and SVG; WEBP support is not implemented yet.
 - Image compression works only for the frontend part. If you manage your medias via backend, you need to manage it at your hands.
 - Use `<Wrapper value={my_value} />` for insert HTML returns when you can't use `dangerouslySetInnerHTML`.
 - If you prefer using `Sass` instead of `Scss`, use `.sass` extension instead of `.scss` and remove all brackets.
