@@ -37,19 +37,33 @@ This boilerplate provides a fast way to set up a React Single Page Application (
 ## Installation Guide
 
 1. Clone the repository.
+
 2. Navigate to `constructor`.
+
 3. Run `npm run get:wp` to install WordPress.
+
 4. Add `.npmrc` for GSAP autentication.
+
 5. Run `npm i` to install Node modules.
+
 6. Duplicate `wp-config-sample.php` in `src > back` to `wp-config.php` and configure it.
+
 7. Update URLs in `src > front > js > App.jsx` within `window.SYSTEM`.
+
 8. Add your server configuration file in `src > front > template` directory. More explanations [here](https://github.com/studiochampgauche/headless-react-wordpress-boilerplate?tab=readme-ov-file#web-server-configuration).
+
 9. Run `npm run build:front:back` or `npm run watch:front:back` for initialize setup.
+
 10. Configure your WordPress backend `(yourdomain.com/admin)`.
+
 11. Activate the Champ Gauche Core Theme, Champ Gauche Core Plugin, and the ACF Plugin.
+
 12. Remove other default plugins, themes, pages, and posts.
+
 13. Create and set your Home Page as static.
+
 14. Update the permalink structure to anything other than the default Plain option.
+
 15. Start working!
 
 
@@ -114,11 +128,17 @@ window.medias.init = window.medias.download.init();
 ```
 
 - `Loader.init()` initializes the preloader animation.
+
 - `window.medias.download.init()` handles image and video downloads during the preloader phase.
+
 - The preloader can completes only if `window.medias.download.init()` is initialized.
+
 - If no media needs to be fetched, still call `window.medias.download.init(false)`.
+
 - Media is fetched via the REST API at `/admin/wp-json/scg/v1/medias`. Refer to the REST requests in your `src > back > theme > functions.php`.
+
 - To link media to a page, use `<scg-load data-value="YOUR_MEDIA_GROUP_KEY" />`, replacing `YOUR_MEDIA_GROUP_KEY` with the appropriate media group key.
+
 - To display media, use `window.medias.download.display()`.
 
 
@@ -144,13 +164,21 @@ window.medias.init = window.medias.download.init();
 ## To Know
 
 - Multisite isn't ready.
+
 - Minification and compression works only in production mode.
+
 - Image compression supports GIF, JPG, PNG, and SVG; WEBP support is not implemented yet.
+
 - Image compression works only for the frontend part. If you manage your medias via backend, you need to manage it at your hands.
+
 - Use `<Wrapper value={my_value} />` for insert HTML returns when you can't use `dangerouslySetInnerHTML`.
+
 - If you prefer using `Sass` instead of `Scss`, use `.sass` extension instead of `.scss` and remove all brackets.
+
 - Using `mailto:`, `tel:`, or other schemas/protocols that are not `http` or `https` without `target` attribute will create a bug on click.
+
 - The WordPress frontend redirects to the wp-admin. You can delete this behavior in `src > back > theme > functions.php`.
+
 - On the frontend, if a media file isn’t directly imported in your main JS app files, Webpack won’t recognize or compile it. To ensure Webpack processes the file, you need to manually import it into the relevant JS file. For example, if you're using an audio file, navigate to `src > front > medias > audios` and import the file within `audios.js`.
 
 
