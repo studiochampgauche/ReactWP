@@ -157,7 +157,7 @@ window.medias.init = window.medias.download.init();
 > ### Prevent Flash of Unstyled Content (FOUC)
 > - In our boilerplate, styles are loaded in one time in the file `main.min.css`. In most cases, the file is loaded before the HTML body. However, with large files or slow connections, this may not always happen. If you suspect that your CSS file might not load before the body, it is advisable to use inline styles within your `<head>` element for the preloader.
 >
-> - For the very rare cases where the styles would not be loaded before the preloader completes, we have provided a check by checking if `You can check if `window.SYSTEM.loaded.css` is `true` before closing your preloader animation.` is `true` before closing the preloader animation.
+> - For the very rare cases that the styles would not be loaded before the preloader completes, we have provided a check by checking if `window.SYSTEM.loaded.css` is `true` before closing your preloader animation.
 
 
 
