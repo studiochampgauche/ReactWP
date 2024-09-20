@@ -71,6 +71,7 @@ This boilerplate provides a fast way to set up a React Single Page Application (
 ## Web Server Configuration
 
 - Place your production files from `dist` directory on your web server, or set this directory as the root.
+
 - Configure your web server to redirect all URL requests to the `index.html` file, unless the requested file or directory physically exists on the server.
 
 > [!NOTE]  
@@ -218,3 +219,11 @@ window.medias.init = window.medias.download.init();
 
 > [!WARNING]
 > v4 is not a continuation of v3 but a breaking change with a new headless ecosystem. If you need v3, [Download here](https://archives.champgauche.studio/wordpress-boilerplate-v3.zip)
+
+
+## What's next for the boilerplate?
+- Audio downloading
+- Medias caching
+- Favicon management via backend
+- Open Graph Image management via backend: actually, you can manage it globally from the frontend, and you can manage it specifically for individual pages, posts and CPTs via the admin... We need to be able to manage the globally in the backend too.
+- Maintenance mode
