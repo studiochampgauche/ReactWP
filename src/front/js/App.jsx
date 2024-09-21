@@ -21,7 +21,11 @@ window.SYSTEM = {
     ajaxPath: '/admin/wp-admin/admin-ajax.php',
     restPath: '/admin/wp-json/',
     loaded: {
-        css: false
+        css: false,
+        fonts: false,
+        images: false,
+        videos: false,
+        audios: false
     }
 };
 
@@ -35,38 +39,20 @@ window.defaultMetas = {
 window.gscroll = null;
 
 
-window.loader = Loader.init();
-
-window.medias = {
-    download: Loader.download(), 
+window.loader = {
+    anim: Loader.init(),
+    downloader: Loader.downloader()
 };
-window.medias.init = window.medias.download.init();
+window.loader.medias = window.loader.downloader.init();
 
 
-document.addEventListener("DOMContentLoaded", () => {
+/*
+* window.loader.medias.then(({ mediaGroups, fonts }) => {});
+*
+* const displayFunc = window.loader.downloader.display();
+* displayFunc.then(() => {});
+*/
 
-    const cssLinkElement = document.getElementById('mainStyle');
-
-    if (cssLinkElement.sheet) {
-
-        window.SYSTEM.loaded.css = true;
-
-    } else {
-
-        cssLinkElement.onload = () => {
-
-            window.SYSTEM.loaded.css = true;
-
-        };
-
-        cssLinkElement.onerror = () => {
-
-            window.SYSTEM.loaded.css = false;
-
-        };
-
-    }
-});
 
 
 const componentMap = {

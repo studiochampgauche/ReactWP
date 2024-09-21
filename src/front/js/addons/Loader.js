@@ -1,9 +1,8 @@
 'use strict';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const panelElement = document.getElementById('preloader');
-
-let isLoaded = false;
 
 const Loader = {
 	init: () => {
@@ -39,7 +38,21 @@ const Loader = {
                 /*
                 * If medias not loaded, restart
                 */
-                if(!isLoaded || !window.gscroll || !window.SYSTEM.loaded.css){
+                if(
+                    
+                    !window.gscroll
+
+                    || !window.SYSTEM.loaded.css
+
+                    || !window.SYSTEM.loaded.fonts
+
+                    || !window.SYSTEM.loaded.images
+
+                    || !window.SYSTEM.loaded.videos
+
+                    || !window.SYSTEM.loaded.audios
+
+                ){
 
                     tl.restart();
 
@@ -71,28 +84,138 @@ const Loader = {
         });
 
 	},
-	download: () => {
+	downloader: () => {
 
         return {
 
-            init: (use = true) => {
+            init: (fetchImagesVideos = true) => {
 
-                return new Promise(async (done, reject) => {
+                return new Promise((resolved, rejected) => {
 
-                    if(!use){
+                    let fontDatas = [],
+                        mediaDatas = [];
 
-                        isLoaded = true;
+                    const css = () => {
 
-                        done([]);
-                        
-                        return;
+                        const cssLinkElement = document.getElementById('mainStyle');
+
+                        if (cssLinkElement.sheet){
+
+                            if(cssLinkElement.sheet.cssRules.length)
+                                loaded();
+                            else
+                                throw new Error('CSS can\'t be load or no cssRules can\'t be found.');
+
+                        } else {
+
+                            cssLinkElement.onload = () => loaded();
+
+                            cssLinkElement.onerror = () => {
+
+                                throw new Error('CSS can\'t be load');
+
+                            };
+
+                        }
+
+
+                        function loaded(){
+
+                            window.SYSTEM.loaded.css = true;
+
+                            done();
+
+                        }
+
                     }
 
-                    try{
+
+                    const fonts = () => {
+
+                        document.fonts.ready.then(() => {
+
+                            const fonts = Array.from(document.fonts);
+
+                            if(!fonts.length){
+
+                                window.SYSTEM.loaded.fonts = true;
+
+                                done();
+                                
+                                return;
+                            }
+
+
+                            let ok = true;
+                            let countLoaded = 0;
+
+                            for(let i = 0; i < fonts.length; i++){
+
+                                const font = fonts[i];
+
+                                if (font.status === 'error'){
+
+                                    throw new Error(`${font.family} can\'t be loaded.`);
+
+                                } else if(font.status === 'unloaded'){
+
+                                    font
+                                    .load()
+                                    .then(() => loaded())
+                                    .catch(() => {
+
+                                        throw new Error(`${font.family} weight ${font.weight} can\'t be loaded.`);
+
+                                    });
+
+                                } else
+                                    loaded();
+
+                            }
+
+
+                            function loaded(){
+
+                                countLoaded += 1;
+
+                                if(countLoaded !== fonts.length || window.SYSTEM.loaded.fonts) return;
+
+                                ScrollTrigger?.refresh();
+
+                                window.SYSTEM.loaded.fonts = true;
+
+                                fontDatas = fonts;
+
+                                done();
+
+                            }
+
+
+
+                        });
+
+                    }
+
+
+
+                    const otherMedias = async () => {
+
+                        if(!fetchImagesVideos){
+
+                            window.SYSTEM.loaded.images = true;
+                            window.SYSTEM.loaded.videos = true;
+                            window.SYSTEM.loaded.audios = true;
+
+                            done();
+                            
+                            return;
+                        }
+
+
 
                         const callMediaGroups = await fetch(window.SYSTEM.restPath + 'scg/v1/medias');
 
-                        if(!callMediaGroups.ok) throw new Error('Image groups can\'t be loaded');
+                        if(!callMediaGroups.ok) throw new Error('Medias groups can\'t be loaded');
 
 
                         let mediaGroups = await callMediaGroups.json();
@@ -100,9 +223,11 @@ const Loader = {
 
                         if(Array.isArray(mediaGroups)){
 
-                            isLoaded = true;
+                            window.SYSTEM.loaded.images = true;
+                            window.SYSTEM.loaded.videos = true;
+                            window.SYSTEM.loaded.audios = true;
 
-                            done([]);
+                            done();
 
                             return;
                         }
@@ -126,12 +251,28 @@ const Loader = {
 
                             medias.forEach((media, i) => {
 
-                                const srcElement = media.type === 'video' ? document.createElement('video') : new Image();
+                                const mediaTypes = {
+                                    video: () => document.createElement('video'),
+                                    audio: () => new Audio(),
+                                    image: () => new Image()
+                                };
+
+                                let srcElement = mediaTypes[media.type];
+
+                                if(!srcElement)
+                                    throw new Error(`${media.type} isn't supported.`);
+
+
+                                srcElement = srcElement();
+
                                 srcElement.src = media.src;
 
-                                if(media.type === 'video'){
-                                    
-                                    srcElement.onloadedmetadata  = () => loaded(srcElement, group, i)
+                                if(['video', 'audio'].includes(media.type)){
+
+                                    srcElement.preload = 'auto';
+                                    srcElement.controls = true;
+
+                                    srcElement.onloadeddata = () => loaded(srcElement, group, i)
                                     
                                 } else {
 
@@ -144,7 +285,7 @@ const Loader = {
                         }
 
 
-                        const loaded = (srcElement, group, i) => {
+                        function loaded(srcElement, group, i){
 
                             loadedCount += 1;
 
@@ -152,18 +293,53 @@ const Loader = {
 
                             if(loadedCount !== totalToCount) return;
 
-                            isLoaded = true;
+                            window.SYSTEM.loaded.images = true;
+                            window.SYSTEM.loaded.videos = true;
+                            window.SYSTEM.loaded.audios = true;
 
+                            mediaDatas = mediaGroups;
 
-                            done(mediaGroups);
+                            done();
 
                         }
 
+                    }
+
+
+
+                    try{
+
+                        css();
+                        fonts();
+                        otherMedias();
+
                     } catch(error){
 
-                        reject(error);
+                        rejected(error);
 
                     }
+
+
+
+                    function done(){
+
+                        if(
+                            !window.SYSTEM.loaded.css
+
+                            || !window.SYSTEM.loaded.fonts
+
+                            || !window.SYSTEM.loaded.images
+
+                            || !window.SYSTEM.loaded.videos
+
+                            || !window.SYSTEM.loaded.audios
+                        ) return;
+
+
+                        resolved({mediaGroups: mediaDatas, fonts: fontDatas});
+
+                    }
+
                 });
 
             },
@@ -171,31 +347,51 @@ const Loader = {
 
                 return new Promise(done => {
         
-                    const loadElement = document.querySelector('scg-load');
-                    if(!loadElement || !loadElement.hasAttribute('data-value')){
+                    const loadElements = document.querySelectorAll('scg-load');
+                    if(!loadElements.length){
 
                         done();
 
                         return;
                     }
 
-                    window.medias.init.then(mediaGroups => {
 
-                        mediaGroups?.[loadElement.getAttribute('data-value')]?.forEach((data, i) => {
+                    let ok = false;
+                    loadElements.forEach(loadElement => {
 
-                            const target = document.querySelector(data.target);
+                        if(!loadElement.hasAttribute('data-value')) return;
 
-                            if(!target) return;
+                        if(!ok) ok = true;
+                        
+                        window.loader.medias
+                        .then(({ mediaGroups }) => {
 
-                            target.replaceWith(data.el);
+                            mediaGroups?.[loadElement.getAttribute('data-value')]?.forEach((data, i) => {
 
-                            if(i !== mediaGroups[loadElement.getAttribute('data-value')].length -1) return;
+                                const target = document.querySelector(data.target);
 
-                            done();
+                                if(!target) return;
+
+                                target.replaceWith(data.el);
+
+                                if(i !== mediaGroups[loadElement.getAttribute('data-value')].length -1) return;
+
+                                done();
+
+                            });
 
                         });
 
                     });
+
+
+
+                    if(!ok){
+
+                        done();
+
+                        return;
+                    }
 
                 });
 

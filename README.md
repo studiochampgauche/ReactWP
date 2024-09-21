@@ -125,51 +125,42 @@ RewriteRule ^ index.html [L]
 
 
 
-## Preloader Animation & Medias Download
+## Loader Concept
 
-In your `src > front > js > App.jsx` file, you'll see the following code:
+The loader concept initiates a preloading animation and the downloading of fonts, images, videos and audios. It make sure you have your medias, styles and the GSAP SmoothScroller ready before allowing visitors to navigate.
 
+You'll find the preloader HTML and its inline styles in `src > front > template > index.html`.
+
+You'll find the preloader JavaScript in `src > front > js > addons > Loader.js`:
+
+- `Loader.init()` initiates the preloader animation.
+- `Loader.downloader().init()` initiates the downloading of fonts, images, videos and audios. At the same time, it check if we have the styles.
+- `Loader.downloader().display()` replaces each target by its media.
+
+
+How we initiates preloading animation and downloads in `src > front > js > App.jsx`:
 ```
-window.loader = Loader.init();
-
-window.medias = {
-    download: Loader.download(), 
+window.loader = {
+    anim: Loader.init(),
+    downloader: Loader.downloader()
 };
-window.medias.init = window.medias.download.init();
+window.loader.medias = window.loader.downloader.init();
 ```
 
-- `Loader.init()` initializes the preloader animation.
+All function implemented with the Loader are using a `Promise`:
 
-- `window.medias.download.init()` handles image and video downloads during the preloader phase.
+- `window.loader.anim.then(() => {})` allow you to know when your preloader animation is resolved
 
-- The preloader can completes only if `window.medias.download.init()` is initialized.
+- `window.loader.medias.then(({ mediaGroups, fonts }) => {})` allow you to play with images, videos, audios and fonts when they are ready
 
-- If no media needs to be fetched, still call `window.medias.download.init(false)`.
-
-- Media is fetched via the REST API at `/admin/wp-json/scg/v1/medias`. Refer to the REST requests in your `src > back > theme > functions.php`.
-
-- To link media to a page, use `<scg-load data-value="YOUR_MEDIA_GROUP_KEY" />`, replacing `YOUR_MEDIA_GROUP_KEY` with the appropriate media group key.
-
-- To display media, use `window.medias.download.display()`.
-
+- `window.loader.downloader.display()` allow you to display images, videos and audios when they are ready. Place your display function in a variable named `displayFunc` and use `displayFunc.then(() => {})` for call something when all medias are displayed.
 
 > [!NOTE]
-> - The preloader is implemented using a `Promise`. You can determine when the promise is resolved and call your page animation inside this method `window.medias.init.then()` if your page animation is done before the preloader has finish. Put a look on your file `src > front > js > addons > Loader.js`.
+>- `Loader.init()` can complete only if `Loader.downloader().init()` is launched too. If no media needs to be fetched, still call `Loader.downloader().init(false)`.
 >
-> - The display method is also implemented using a `Promise`. If the media selector isn't available because the display is not done, touch your element within the `.then()` to ensure the media exists before touch it.
-> ```
-> const displayFunc = window.medias.download.display();
-> displayFunc.then(() => {});
-> ```
-
-
-> [!IMPORTANT]  
-> ### Prevent Flash of Unstyled Content (FOUC)
-> - In our boilerplate, styles are loaded in one time in the file `main.min.css`. In most cases, the file is loaded before the HTML body. However, with large file or slow connections, this may not always happen. If you suspect that your CSS file might not load before the body, it is advisable to use inline styles within your `<head>` element for the preloader.
+>- Medias are fetched via the REST API at `/admin/wp-json/scg/v1/medias`. Refer to the REST requests in your `src > back > theme > functions.php`. `target` parameter is not required.
 >
-> - For the very rare cases that the styles would not be loaded before the preloader completes, we have provided a check by checking if `window.SYSTEM.loaded.css` is `true` before closing your preloader animation.
-
-
+>- When you use the display function with your component, use `<scg-load data-value="YOUR_MEDIA_GROUP_KEY" />` to link the good group of medias associated. 
 
 
 ## To Know
@@ -203,6 +194,13 @@ window.medias.init = window.medias.download.init();
 
 ## Changelog
 
+***2024-09-21***
+
+- ***Added***: Fonts background preloading
+- ***Added***: Audios background preloading
+- ***Changed***: Loader concept
+
+
 ***2024-09-14***
 
 - ***Added***: `Wrapper.jsx` component
@@ -232,7 +230,6 @@ window.medias.init = window.medias.download.init();
 
 
 ## What's next for the boilerplate?
-- Audio downloading
 - Medias caching
 - Favicon management via backend
 - Open Graph Image management via backend: actually, you can manage it globally from the frontend, and you can manage it specifically for individual pages, posts and CPTs via the admin... We need to be able to manage the globally in the backend too.
