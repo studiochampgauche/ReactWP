@@ -101,6 +101,7 @@ RewriteRule ^ index.html [L]
 >
 > - If you have many posts and don't want to manually assign a Component Name for each, you can either create logic in App.jsx or use ACF hooks to auto-populate the field.
 >
+> ### Ajax and REST API
 > - Retrieve the Ajax and REST API base paths with `window.SYSTEM.ajaxPath` and `window.SYSTEM.restPath`.
 
 > [!TIP]
