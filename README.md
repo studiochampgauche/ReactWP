@@ -138,7 +138,7 @@ You'll find the preloader JavaScript in `src > front > js > addons > Loader.js`:
 - `Loader.downloader().display()` replaces each target by its media.
 
 
-How we initiates preloading animation and downloads in `src > front > js > App.jsx`:
+We initiates preloading animation and downloads in `src > front > js > App.jsx`:
 ```
 window.loader = {
     anim: Loader.init(),
