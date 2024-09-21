@@ -74,6 +74,15 @@ This boilerplate provides a fast way to set up a React Single Page Application (
 
 - Configure your web server to redirect all URL requests to the `index.html` file, unless the requested file or directory physically exists on the server.
 
+For example, on Apache, we add this in the `.htaccess`:
+```
+RewriteEngine On
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]
+```
+
 > [!NOTE]  
 > The `dist` directory is created when you install WordPress with the `npm run get:wp` command and is populated throughout your progress.
 
