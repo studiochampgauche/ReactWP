@@ -2,13 +2,15 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-const panelElement = document.getElementById('preloader');
-
 const Loader = {
 	init: () => {
 
         return new Promise(done => {
 
+
+            const panelElement = document.getElementById('preloader');
+
+            
             /*
             * Create loading animation
             */
@@ -90,10 +92,14 @@ const Loader = {
 
             init: (fetchImagesVideos = true) => {
 
-                return new Promise((resolved, rejected) => {
+                return new Promise(async (resolved, rejected) => {
 
                     let fontDatas = [],
                         mediaDatas = [];
+
+
+                    const cache = await caches.open('medias');
+                    const urlsToCache = [];
 
                     const css = () => {
 
@@ -249,7 +255,7 @@ const Loader = {
 
                             const medias = mediaGroups[group];
 
-                            medias.forEach((media, i) => {
+                            medias.forEach(async (media, i) => {
 
                                 const mediaTypes = {
                                     video: () => document.createElement('video'),
@@ -262,10 +268,23 @@ const Loader = {
                                 if(!srcElement)
                                     throw new Error(`${media.type} isn't supported.`);
 
-
                                 srcElement = srcElement();
 
-                                srcElement.src = media.src;
+                                const cacheResponse = media?.cache === false ? false : await cache.match(media.src);
+
+                                if (cacheResponse) {
+
+                                    const blob = await cacheResponse.blob();
+                                    srcElement.src = URL.createObjectURL(blob);
+
+                                } else {
+                
+                                    if(media?.cache !== false)
+                                        urlsToCache.push(media.src);
+
+                                    srcElement.src = media.src;
+                                }
+
 
                                 if(['video', 'audio'].includes(media.type)){
 
@@ -285,7 +304,7 @@ const Loader = {
                         }
 
 
-                        function loaded(srcElement, group, i){
+                        async function loaded(srcElement, group, i){
 
                             loadedCount += 1;
 
@@ -298,6 +317,8 @@ const Loader = {
                             window.SYSTEM.loaded.audios = true;
 
                             mediaDatas = mediaGroups;
+
+                            if(urlsToCache) await cache.addAll([...new Set(urlsToCache)]);
 
                             done();
 
@@ -358,7 +379,7 @@ const Loader = {
 
 
                     const allLoaded = Array.from(loadElements).every(el => el.hasAttribute('data-value'));
-                    
+
                     if(!allLoaded) {
 
                         done();
@@ -377,9 +398,8 @@ const Loader = {
 
                                 const target = document.querySelector(data.target);
 
-                                if(!target) return;
-
-                                target.replaceWith(data.el);
+                                if(target)
+                                    target.replaceWith(data.el);
 
                                 if(i !== loadElements.length - 1 || j !== mediaGroups[loadElement.getAttribute('data-value')].length - 1) return;
 

@@ -14,7 +14,8 @@ This boilerplate provides a fast way to set up a React Single Page Application (
 - Document head management
 - Smooth Page Transition
 - Smooth Scrolling
-- Medias precharging
+- Medias download
+- Medias caching
 
 
 ## Ready
@@ -133,7 +134,16 @@ All function implemented with the Loader are using a `Promise`:
 > [!NOTE]
 >- `Loader.init()` can complete only if `Loader.downloader().init()` is launched too. If no media needs to be fetched, still call `Loader.downloader().init(false)`.
 >- Medias are fetched via the REST API at `/admin/wp-json/scg/v1/medias`. Refer to the REST requests in your `src > back > theme > functions.php`. `target` parameter is not required.
->- When you use the display function with your component, use `<scg-load data-value="YOUR_MEDIA_GROUP_KEY" />` to link the good group of medias associated. 
+>- When you use the display function with your component, use `<scg-load data-value="YOUR_MEDIA_GROUP_KEY" />` to link the good group of medias associated.
+
+
+## Medias Caching
+
+- When you [download medias](https://github.com/studiochampgauche/headless-react-wordpress-boilerplate?tab=readme-ov-file#loader-concept), each file is added to the cache.
+- You can disable caching by adding `cache` parameter to `false` in your medias REST request. Refer to the REST requests in your `src > back > theme > functions.php`.
+
+> [!NOTE]
+> No logic is done for clear files from the cache.
 
 
 ## To Know
@@ -162,7 +172,7 @@ All function implemented with the Loader are using a `Promise`:
 
 
 ## What's Next
-- Cache API for fonts, images, videos and audios.
+- Cache API for fonts.
 - Favicon management via backend
 - Open Graph Image management via backend: actually, you can manage it globally from the frontend, and you can manage it specifically for individual pages, posts and CPTs via the admin... We need to be able to manage the globally in the backend too.
 - Maintenance mode

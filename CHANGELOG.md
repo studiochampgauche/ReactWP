@@ -1,5 +1,10 @@
 ## Changelog
 
+***2024-09-22***
+
+- ***Added***: Medias caching
+
+
 ***2024-09-21***
 
 - ***Fixed***: When you use `window.loader.downloader.display()` you can now have multiple `<scg-load data-value="" />`
