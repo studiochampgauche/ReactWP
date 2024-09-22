@@ -104,29 +104,19 @@
                         *            ],
                         *            [
                         *                'type' => 'audio',
-                        *                'target' => '',
                         *                'src' => ''
                         *            ],
                         *        ],
                         *        'about' => [
                         *            [
                         *                'type' => 'video',
-                        *                'target' => '',
                         *                'src' => ''
                         *            ],
                         *        ],
                         *    ];
                         */
 
-                        $data = [
-                            'home' => [
-                                [
-                                    'type' => 'video',
-                                    'src' => scg::field('audio_file', 8),
-                                    'target' => '#myaudio'
-                                ]
-                            ]
-                        ];
+                        $data = [];
 
                         return new WP_REST_Response($data, 200);
 

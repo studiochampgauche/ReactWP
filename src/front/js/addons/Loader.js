@@ -348,6 +348,7 @@ const Loader = {
                 return new Promise(done => {
         
                     const loadElements = document.querySelectorAll('scg-load');
+
                     if(!loadElements.length){
 
                         done();
@@ -356,17 +357,23 @@ const Loader = {
                     }
 
 
-                    let ok = false;
-                    loadElements.forEach(loadElement => {
+                    const allLoaded = Array.from(loadElements).every(el => el.hasAttribute('data-value'));
+                    
+                    if(!allLoaded) {
 
-                        if(!loadElement.hasAttribute('data-value')) return;
+                        done();
 
-                        if(!ok) ok = true;
+                        return;
+
+                    }
+
+
+                    loadElements.forEach((loadElement, i) => {
                         
                         window.loader.medias
                         .then(({ mediaGroups }) => {
 
-                            mediaGroups?.[loadElement.getAttribute('data-value')]?.forEach((data, i) => {
+                            mediaGroups?.[loadElement.getAttribute('data-value')]?.forEach((data, j) => {
 
                                 const target = document.querySelector(data.target);
 
@@ -374,7 +381,7 @@ const Loader = {
 
                                 target.replaceWith(data.el);
 
-                                if(i !== mediaGroups[loadElement.getAttribute('data-value')].length -1) return;
+                                if(i !== loadElements.length - 1 || j !== mediaGroups[loadElement.getAttribute('data-value')].length - 1) return;
 
                                 done();
 
@@ -384,14 +391,6 @@ const Loader = {
 
                     });
 
-
-
-                    if(!ok){
-
-                        done();
-
-                        return;
-                    }
 
                 });
 

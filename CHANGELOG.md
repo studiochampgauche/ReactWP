@@ -2,6 +2,7 @@
 
 ***2024-09-21***
 
+- ***Fixed***: When you use `window.loader.downloader.display()` you can now have multiple `<scg-load data-value="" />`
 - ***Added***: Fonts background preloading
 - ***Added***: Audios background preloading
 - ***Changed***: Loader concept
