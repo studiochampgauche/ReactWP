@@ -139,7 +139,7 @@ All function implemented with the Loader are using a `Promise`:
 
 ## Medias Caching
 
-- When you [download medias](https://github.com/studiochampgauche/headless-react-wordpress-boilerplate?tab=readme-ov-file#loader-concept), each file is added to the cache.
+- When you [download medias](https://github.com/studiochampgauche/headless-react-wordpress-boilerplate?tab=readme-ov-file#loader-concept), each image|video|audio file is added to the cache.
 - You can disable caching by adding `cache` parameter to `false` in your medias REST request. Refer to the REST requests in your `src > back > theme > functions.php`.
 
 > [!NOTE]
