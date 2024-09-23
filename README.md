@@ -146,6 +146,7 @@ All function implemented with the Loader are using a `Promise`:
 >- Media caching works only on secure URLs.
 >- For now, you can't delete cache on demand. It's coming.
 >- For now, the no more used medias are not deleted from the cache. It's coming.
+>- While waiting for the coming elements, you need to use the Cache API by your own.
 
 
 ## To Know
