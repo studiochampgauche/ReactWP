@@ -173,7 +173,9 @@ All function implemented with the Loader are using a `Promise`:
 
 
 ## What's Next
-- Cache API for fonts.
+- Delete cache on demand
+- Automatically remove no more used medias from the cache
+- Cache API for fonts
 - Favicon management via backend
 - Open Graph Image management via backend: actually, you can manage it globally from the frontend, and you can manage it specifically for individual pages, posts and CPTs via the admin... We need to be able to manage the globally in the backend too.
 - Maintenance mode
