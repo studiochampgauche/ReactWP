@@ -3,7 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const Loader = {
-	init: () => {
+    init: () => {
 
         return new Promise(done => {
 
@@ -85,8 +85,8 @@ const Loader = {
 
         });
 
-	},
-	downloader: () => {
+    },
+    downloader: () => {
 
         return {
 
@@ -98,8 +98,16 @@ const Loader = {
                         mediaDatas = [];
 
 
-                    const cache = await caches.open('medias');
+                    let cache;
                     const urlsToCache = [];
+
+                    try{
+                        cache = await caches.open('medias');
+                    } catch (_){
+
+                        console.warn('Medias caching can\'t work on non-secure url');
+
+                    }
 
                     const css = () => {
 
@@ -270,7 +278,7 @@ const Loader = {
 
                                 srcElement = srcElement();
 
-                                const cacheResponse = media?.cache === false ? false : await cache.match(media.src);
+                                const cacheResponse = media?.cache === false || !cache ? false : await cache.match(media.src);
 
                                 if (cacheResponse) {
 
@@ -279,7 +287,7 @@ const Loader = {
 
                                 } else {
                 
-                                    if(media?.cache !== false)
+                                    if(media?.cache !== false && cache)
                                         urlsToCache.push(media.src);
 
                                     srcElement.src = media.src;
@@ -318,7 +326,7 @@ const Loader = {
 
                             mediaDatas = mediaGroups;
 
-                            if(urlsToCache) await cache.addAll([...new Set(urlsToCache)]);
+                            if(urlsToCache && cache) await cache.addAll([...new Set(urlsToCache)]);
 
                             done();
 
