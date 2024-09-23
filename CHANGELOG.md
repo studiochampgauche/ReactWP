@@ -1,5 +1,10 @@
 ## Changelog
 
+***2024-09-23***
+
+- ***Fixed***: A non-secure website cannot load because the Cache API does not exist.
+
+
 ***2024-09-22***
 
 - ***Added***: Medias caching
