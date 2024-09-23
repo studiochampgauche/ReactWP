@@ -144,7 +144,7 @@ All function implemented with the Loader are using a `Promise`:
 
 > [!NOTE]
 >- Media caching works only on secure URLs.
->- For now, you can't delete cache on demand. It's coming.
+>- For now, the cache don't update when you change a media with the same url. It's coming.
 >- For now, the no more used medias are not deleted from the cache. It's coming.
 >- While waiting for the coming elements, you need to use the Cache API by your own.
 
@@ -175,7 +175,7 @@ All function implemented with the Loader are using a `Promise`:
 
 
 ## What's Next
-- Delete cache on demand
+- Update cache when you change media with same url
 - Automatically remove no more used medias from the cache
 - Cache API for fonts
 - Favicon management via backend
