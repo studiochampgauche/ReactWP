@@ -155,7 +155,7 @@ All function implemented with the Loader are using a `Promise`:
 - Image compression works only for the frontend part. If you manage your medias via backend, you need to manage it at your hands.
 - Use `<Wrapper value={my_value} />` for insert HTML returns when you can't use `dangerouslySetInnerHTML`.
 - If you prefer using `Sass` instead of `Scss`, use `.sass` extension instead of `.scss` and remove all brackets.
-- Using `mailto:`, `tel:`, or other schemas/protocols that are not `http` or `https` without `target` attribute will create a bug on click.
+- Using `mailto:`, `tel:`, or other schemas/protocols that are not `http` or `https` without `target` attribute will create a bug on click. e.g. use `target="_self"` for mailto or others that are not `http` or `https`.
 - The WordPress frontend redirects to the wp-admin. You can delete this behavior in `src > back > theme > functions.php`.
 - On the frontend, if a media file isn’t directly imported in your main JS app files, Webpack won’t recognize or compile it. To ensure Webpack processes the file, you need to manually import it into the relevant JS file. For example, if you're using an audio file, navigate to `src > front > medias > audios` and import the file within `audios.js`.
 
