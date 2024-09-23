@@ -137,13 +137,14 @@ All function implemented with the Loader are using a `Promise`:
 >- When you use the display function with your component, use `<scg-load data-value="YOUR_MEDIA_GROUP_KEY" />` to link the good group of medias associated.
 
 
-## Medias Caching
+## Media Caching
 
 - When you [download medias](https://github.com/studiochampgauche/headless-react-wordpress-boilerplate?tab=readme-ov-file#loader-concept), each image|video|audio file is added to the cache API.
 - You can disable caching for a file by adding `cache` parameter to `false` in your medias REST request. Refer to the REST requests in your `src > back > theme > functions.php`.
 
 > [!NOTE]
-> No logic is done for clear files from the cache.
+>- No logic is done for clear files from the cache.
+>- Media caching works only on secure URLs.
 
 
 ## To Know
