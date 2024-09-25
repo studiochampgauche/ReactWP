@@ -1,6 +1,6 @@
 # Headless React-WordPress Boilerplate
 
-This boilerplate provides a fast way to set up a React Single Page Application (SPA) with a WordPress and ACF Pro backend.
+This boilerplate help us to quickly set up a React Single Page Application (SPA) with a WordPress and ACF Pro backend.
 
 
 ## Features
