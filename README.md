@@ -87,9 +87,6 @@ RewriteRule ^ index.html [L]
 > ### Ajax and REST API
 > - Retrieve the Ajax and REST API base paths with `window.SYSTEM.ajaxPath` and `window.SYSTEM.restPath`.
 
-> [!TIP]
-> Using the admin side is optional. To work with only the React frontend, stop fetching pages in `src > front > js > App.jsx` and use: `npm run watch:front`, `npm run build:front`, or `npm run prod:front`.
-
 
 
 ## Page Transitions
