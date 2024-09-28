@@ -20,7 +20,22 @@ window.SYSTEM = {
     adminUrl: 'https://wpp.test/admin/',
     ajaxPath: '/admin/wp-admin/admin-ajax.php',
     restPath: '/admin/wp-json/',
-    loaded: {
+};
+
+window.defaultMetas = {
+    robots: 'max-image-preview:large, noindex, nofollow',
+    siteName: 'My project',
+    description: 'My React headless WordPress Project',
+    image: window.SYSTEM.baseUrl + 'assets/images/sharing.jpg'
+};
+
+
+window.gscroll = null;
+
+window.loader = {
+    anim: Loader.init(),
+    downloader: Loader.downloader(),
+    isLoaded: {
         css: false,
         fonts: false,
         images: false,
@@ -28,30 +43,7 @@ window.SYSTEM = {
         audios: false
     }
 };
-
-window.defaultMetas = {
-    robots: 'max-image-preview:large, noindex, nofollow',
-    siteName: 'My WordPress Project',
-    description: 'My WordPress Project a React Front-end with a back-end WordPress',
-    image: window.SYSTEM.baseUrl + 'assets/images/sharing.jpg'
-};
-
-window.gscroll = null;
-
-
-window.loader = {
-    anim: Loader.init(),
-    downloader: Loader.downloader()
-};
 window.loader.medias = window.loader.downloader.init();
-
-
-/*
-* window.loader.medias.then(({ mediaGroups, fonts }) => {});
-*
-* const displayFunc = window.loader.downloader.display();
-* displayFunc.then(() => {});
-*/
 
 
 

@@ -44,15 +44,15 @@ const Loader = {
                     
                     !window.gscroll
 
-                    || !window.SYSTEM.loaded.css
+                    || !window.loader.isLoaded.css
 
-                    || !window.SYSTEM.loaded.fonts
+                    || !window.loader.isLoaded.fonts
 
-                    || !window.SYSTEM.loaded.images
+                    || !window.loader.isLoaded.images
 
-                    || !window.SYSTEM.loaded.videos
+                    || !window.loader.isLoaded.videos
 
-                    || !window.SYSTEM.loaded.audios
+                    || !window.loader.isLoaded.audios
 
                 ){
 
@@ -135,7 +135,7 @@ const Loader = {
 
                         function loaded(){
 
-                            window.SYSTEM.loaded.css = true;
+                            window.loader.isLoaded.css = true;
 
                             done();
 
@@ -152,7 +152,7 @@ const Loader = {
 
                             if(!fonts.length){
 
-                                window.SYSTEM.loaded.fonts = true;
+                                window.loader.isLoaded.fonts = true;
 
                                 done();
                                 
@@ -192,11 +192,11 @@ const Loader = {
 
                                 countLoaded += 1;
 
-                                if(countLoaded !== fonts.length || window.SYSTEM.loaded.fonts) return;
+                                if(countLoaded !== fonts.length || window.loader.isLoaded.fonts) return;
 
                                 ScrollTrigger?.refresh();
 
-                                window.SYSTEM.loaded.fonts = true;
+                                window.loader.isLoaded.fonts = true;
 
                                 fontDatas = fonts;
 
@@ -216,9 +216,9 @@ const Loader = {
 
                         if(!fetchImagesVideos){
 
-                            window.SYSTEM.loaded.images = true;
-                            window.SYSTEM.loaded.videos = true;
-                            window.SYSTEM.loaded.audios = true;
+                            window.loader.isLoaded.images = true;
+                            window.loader.isLoaded.videos = true;
+                            window.loader.isLoaded.audios = true;
 
                             done();
                             
@@ -237,9 +237,9 @@ const Loader = {
 
                         if(Array.isArray(mediaGroups)){
 
-                            window.SYSTEM.loaded.images = true;
-                            window.SYSTEM.loaded.videos = true;
-                            window.SYSTEM.loaded.audios = true;
+                            window.loader.isLoaded.images = true;
+                            window.loader.isLoaded.videos = true;
+                            window.loader.isLoaded.audios = true;
 
                             done();
 
@@ -320,9 +320,9 @@ const Loader = {
 
                             if(loadedCount !== totalToCount) return;
 
-                            window.SYSTEM.loaded.images = true;
-                            window.SYSTEM.loaded.videos = true;
-                            window.SYSTEM.loaded.audios = true;
+                            window.loader.isLoaded.images = true;
+                            window.loader.isLoaded.videos = true;
+                            window.loader.isLoaded.audios = true;
 
                             mediaDatas = mediaGroups;
 
@@ -353,15 +353,15 @@ const Loader = {
                     function done(){
 
                         if(
-                            !window.SYSTEM.loaded.css
+                            !window.loader.isLoaded.css
 
-                            || !window.SYSTEM.loaded.fonts
+                            || !window.loader.isLoaded.fonts
 
-                            || !window.SYSTEM.loaded.images
+                            || !window.loader.isLoaded.images
 
-                            || !window.SYSTEM.loaded.videos
+                            || !window.loader.isLoaded.videos
 
-                            || !window.SYSTEM.loaded.audios
+                            || !window.loader.isLoaded.audios
                         ) return;
 
 

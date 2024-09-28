@@ -117,7 +117,14 @@ We initiates preloading animation and downloads in `src > front > js > App.jsx`:
 ```
 window.loader = {
     anim: Loader.init(),
-    downloader: Loader.downloader()
+    downloader: Loader.downloader(),
+    isLoaded: {
+        css: false,
+        fonts: false,
+        images: false,
+        videos: false,
+        audios: false
+    }
 };
 window.loader.medias = window.loader.downloader.init();
 ```
