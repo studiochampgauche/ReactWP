@@ -139,6 +139,8 @@ All functions implemented with the Loader are using a `Promise`:
 >- `Loader.init()` can complete only if `Loader.downloader().init()` is launched too. If no media needs to be fetched, still call `Loader.downloader().init(false)`.
 >- Medias are fetched via the REST API at `/admin/wp-json/scg/v1/medias`. Refer to the REST requests in your `src > back > theme > functions.php`. `target` parameter is not required.
 >- When you use the display function with your component, use `<scg-load data-value="YOUR_MEDIA_GROUP_KEY" />` to link the good group of medias associated.
+>- Using the display function will loop all `<scg-load />` element that can be found. Use first parameter for select a specific `data-value`. Default is `scg-load`.
+>- When you select a specific data-value, you can delete your element after using it by adding the second parameter "remove" to `true`. Default is `false`.
 
 
 ## Media Caching

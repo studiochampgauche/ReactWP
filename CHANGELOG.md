@@ -1,5 +1,9 @@
 ## Changelog
 
+***2024-10-04***
+- ***Updated***: Display function. Now, you can select specific `scg-load` elements instead of loop all each time you call the function.
+
+
 ***2024-10-03***
 
 - ***Added***: Server-Side Rendering for the `<head>` element
