@@ -8,11 +8,16 @@
 			
             /*
             * str_replace your return when you use scg::field(), StudioChampGauche\Utils\Field::get() or ACF REST API;
-            *
-            * StudioChampGauche\Utils\Field::replace(['{MAIN_EMAIL}'], [scg::field('contact_email_main')]);
-			*
-			* You need to use ::replace Method in acf/init hook if you play with acf Field
             */
+            add_action('acf/init', function(){
+
+                StudioChampGauche\Utils\Field::replace([
+                    '{SITE_NAME}'
+                ], [
+                    StudioChampGauche\SEO\SEO::site_name()
+                ]);
+
+            });
             
             
             /*
