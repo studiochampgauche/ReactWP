@@ -51,7 +51,7 @@
 
 			echo '<head>';
 
-				echo $dom->saveXML($newHtml);
+				echo $dom->saveHTML($newHtml);
 
 				echo $dom->saveHTML($head) . PHP_EOL;
 
