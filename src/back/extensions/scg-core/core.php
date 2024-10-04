@@ -32,6 +32,7 @@ load_plugin_textdomain('cg-core', false, basename(__DIR__) . '/langs/');
 */
 require_once 'class/render.php';
 require_once 'class/utils.php';
+require_once 'class/seo.php';
 
 
 class StudioChampGauche{
@@ -59,6 +60,46 @@ class StudioChampGauche{
             add_filter('show_admin_bar', '__return_false');
             
             
+            /*
+            * Manage Front End Source Code
+            */
+            $sourceCodeElements = self::field('source_code');
+            
+            if($sourceCodeElements){
+                $excludedElements = ['feed_links', 'feed_links_extra', 'wp_resource_hints', 'print_emoji_detection_script', 'print_emoji_styles', 'wp_shortlink_wp_head', 'wp_shortlink_header', 'wp_block_library', 'classic_theme_styles', 'global_styles'];
+
+                $elements = array_diff_key($sourceCodeElements, array_flip($excludedElements));
+
+                foreach($elements as $k => $v){
+
+                    if($v) continue;
+
+                    remove_action('wp_head', $k);
+
+                }
+
+                if(!$sourceCodeElements['wp_resource_hints'])
+                    remove_action('wp_head', 'wp_resource_hints', 2);
+
+                if(!$sourceCodeElements['feed_links'])
+                    remove_action('wp_head', 'feed_links', 2);
+
+                if(!$sourceCodeElements['feed_links_extra'])
+                    remove_action('wp_head', 'feed_links_extra', 3);
+
+                if(!$sourceCodeElements['print_emoji_detection_script'])
+                    remove_action('wp_head', 'print_emoji_detection_script', 7);
+
+                if(!$sourceCodeElements['print_emoji_styles'])
+                    remove_action('wp_print_styles', 'print_emoji_styles');
+
+                if(!$sourceCodeElements['wp_shortlink_wp_head'])
+                    remove_action('wp_head', 'wp_shortlink_wp_head', 10);
+
+                if(!$sourceCodeElements['wp_shortlink_header'])
+                    remove_action('template_redirect', 'wp_shortlink_header', 11);
+            }
+
             
             /*
             * Accept SVG
@@ -112,6 +153,24 @@ class StudioChampGauche{
                 
 			}
             
+        });
+
+
+        add_action('wp_enqueue_scripts', function(){
+
+            /*
+            * Remove Basics Styles
+            */
+            if(!self::field('source_code_global_styles'))
+                wp_dequeue_style('global-styles');
+            
+            if(!self::field('source_code_wp_block_library'))
+                wp_dequeue_style('wp-block-library');
+            
+            if(!self::field('source_code_classic_theme_styles'))
+                wp_dequeue_style('classic-theme-styles');
+
+
         });
         
         

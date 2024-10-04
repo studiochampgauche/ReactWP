@@ -1,5 +1,17 @@
 ## Changelog
 
+***2024-10-03***
+
+- ***Added***: Server-Side Rendering for the `<head>` element
+- ***Added***: Favicon management from backend
+- ***Added***: Global SEO management from backend
+- ***Added***: `/admin/wp-json/scg/v1/settings/` endpoint
+- ***Fixed***: Robots crawler
+- ***Fixed***: HTTP response code for not founded page
+- ***Changed***: How Metas.jsx work (React Helmet)
+- ***Changed***: We stop redirect wordpress frontend part
+
+
 ***2024-09-28***
 
 - ***Changed***: Move "what's loaded" from `window.SYSTEM` to `window.loader`

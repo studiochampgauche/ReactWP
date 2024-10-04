@@ -23,20 +23,6 @@
 			
 
 
-            /*
-            * Shot events on template_redirect
-            */
-            add_action('template_redirect', function(){
-
-            	if(is_admin()) return;
-
-            	wp_redirect(admin_url());
-
-            	exit;
-
-            });
-
-
 
             /*
             * Rest API Requests
@@ -118,6 +104,32 @@
                         */
 
                         $data = [];
+
+                        return new WP_REST_Response($data, 200);
+
+                    },
+                ]);
+
+
+
+                /*
+                * Get Settings
+                */
+                register_rest_route('scg/v1', '/settings/', [
+                    'methods'  => 'GET',
+                    'callback' => function(){
+
+                        $data = [
+                            'blog_public' => (bool)get_option('blog_public'),
+                            'blog_name' => get_bloginfo('name'),
+                            'seo' => [
+                                'site_name' => scg::field('seo_site_name', 'option'),
+                                'description' => scg::field('seo_description', 'option'),
+                                'og_title' => scg::field('seo_og_title', 'option'),
+                                'og_description' => scg::field('seo_og_description', 'option'),
+                                'og_image' => scg::field('seo_og_image', 'option'),
+                            ]
+                        ];
 
                         return new WP_REST_Response($data, 200);
 

@@ -11,6 +11,7 @@ import PageTransition from './components/PageTransition';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
+import SinglePostPage from './pages/SinglePostPage';
 import WaitingPage from './pages/WaitingPage';
 import NotFoundPage from './pages/NotFoundPage';
 
@@ -20,13 +21,6 @@ window.SYSTEM = {
     adminUrl: 'https://wpp.test/admin/',
     ajaxPath: '/admin/wp-admin/admin-ajax.php',
     restPath: '/admin/wp-json/',
-};
-
-window.defaultMetas = {
-    robots: 'max-image-preview:large, noindex, nofollow',
-    siteName: 'My project',
-    description: 'My React headless WordPress Project',
-    image: window.SYSTEM.baseUrl + 'assets/images/sharing.jpg'
 };
 
 
@@ -48,7 +42,8 @@ window.loader.medias = window.loader.downloader.init();
 
 
 const componentMap = {
-    HomePage
+    HomePage,
+    SinglePostPage
 };
 
 
@@ -57,8 +52,9 @@ const root = createRoot(mainNode);
 
 const App = () => {
 
-    const [routes, setRoutes] = useState([]);
-    const [loaded, setLoaded] = useState(false);
+    const [isSettings, setSettings] = useState([]);
+    const [isRoutes, setRoutes] = useState([]);
+    const [isLoaded, setLoaded] = useState(false);
 
     useEffect(() => {
 
@@ -67,16 +63,47 @@ const App = () => {
 
             try{
 
-                const callPages = await fetch(window.SYSTEM.restPath + 'wp/v2/pages?_fields=id,link,acf');
+                const settingsPromise = fetch(window.SYSTEM.restPath + 'scg/v1/settings');
+                const postsPromise = fetch(window.SYSTEM.restPath + 'wp/v2/posts?_fields=id,title,link,acf,date_gmt,modified_gmt,author');
+                const pagesPromise = fetch(window.SYSTEM.restPath + 'wp/v2/pages?_fields=id,title,link,acf');
 
+
+                const [callSettings, callPosts, callPages] = await Promise.all([settingsPromise, postsPromise, pagesPromise]);
+
+                if(!callSettings.ok) throw new Error('Settings can\'t be loaded');
+                if(!callPosts.ok) throw new Error('Posts can\'t be loaded');
                 if(!callPages.ok) throw new Error('Pages can\'t be loaded');
 
 
+                const settings = await callSettings.json();
+                const posts = await callPosts.json();
                 const pages = await callPages.json();
+                
 
                 setRoutes([
-                    ...pages.map(page => ({ id: page.id, path: page.link.replace(window.SYSTEM.adminUrl, '/'), acf: page.acf }))
+                    ...pages.map(page => ({
+                        id: page.id,
+                        title: page.title.rendered,
+                        path: page.link.replace(window.SYSTEM.adminUrl, '/'),
+                        acf: page.acf
+                    })),
+                    ...posts.map(post => {
+
+                        post.acf.seo.og_type = 'article'; // because default is website
+
+                        return {
+                            id: post.id,
+                            date: post.date_gmt,
+                            modified: post.modified_gmt,
+                            //author: users.filter(user => user.id === post.author)[0].link.replace('/admin', ''),
+                            title: post.title.rendered,
+                            path: post.link.replace(window.SYSTEM.adminUrl, '/'),
+                            acf: post.acf
+                        }
+                    }),
                 ]);
+
+                setSettings(settings);
 
                 setLoaded(true);
 
@@ -95,7 +122,7 @@ const App = () => {
     return (
         <Router>
 
-            {loaded ? (
+            {isLoaded ? (
                 <>
                     <Header />
                     <Scroller>
@@ -103,8 +130,8 @@ const App = () => {
                             
                             <Routes>
 
-                                {routes.map((route, i) => {
-                                    
+                                {isRoutes.map((route, i) => {
+
                                     const Component = componentMap[route.acf.component_name];
 
                                     return (
@@ -115,14 +142,17 @@ const App = () => {
                                             element={
                                                 <>
                                                     <Metas
-                                                        title={route.acf?.seo?.title || window.defaultMetas.siteName}
-                                                        ogTitle={route.acf?.seo?.og_title || window.defaultMetas.siteName}
-                                                        description={route.acf?.seo?.description || window.defaultMetas.description}
-                                                        ogDescription={route.acf?.seo?.og_description || window.defaultMetas.description}
-                                                        robots={!route.acf?.seo?.stop_indexing ? 'max-image-preview:large, index, follow' : window.defaultMetas.robots}
-                                                        image={route.acf?.seo?.image || window.defaultMetas.images}
+                                                        datas={{
+                                                            page_name: route?.title,
+                                                            date: route?.date,
+                                                            modified: route?.modified,
+                                                            name: route?.acf?.name,
+                                                            seo: route.acf?.seo,
+                                                            author: route?.author
+                                                        }}
+                                                        settings={isSettings}
                                                     />
-                                                    <Component id={route.id} path={route.path} acf={route.acf} />
+                                                    <Component id={route?.id} title={route?.title} path={route?.path} acf={route?.acf} />
                                                 </>
                                             }
                                         />
@@ -134,8 +164,9 @@ const App = () => {
                                     element={
                                         <>
                                             <Metas
-                                                title='Page not found'
-                                            /> 
+                                                datas={{page_name: 'Error 404', seo: {stop_indexing: true}}}
+                                                settings={isSettings}
+                                            />
                                             <NotFoundPage />
                                         </>
                                     }

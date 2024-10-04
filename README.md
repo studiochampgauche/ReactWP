@@ -58,7 +58,7 @@ This boilerplate help us to quickly set up a React Single Page Application (SPA)
 ## Web Server Configuration
 
 - Place your production files from `dist` directory on your web server, or set this directory as the root.
-- Configure your web server to redirect all URL requests to the `index.html` file, unless the requested file or directory physically exists on the server.
+- Configure your web server to redirect all URL requests to the `index.php` file, unless the requested file or directory physically exists on the server.
 
 For example, on Apache, we add this in the `.htaccess`:
 ```
@@ -66,7 +66,7 @@ RewriteEngine On
 RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^ index.html [L]
+RewriteRule ^ index.php [L]
 ```
 
 > [!NOTE]  
@@ -162,7 +162,6 @@ All function implemented with the Loader are using a `Promise`:
 - Use `<Wrapper value={my_value} />` for insert HTML returns when you can't use `dangerouslySetInnerHTML`.
 - If you prefer using `Sass` instead of `Scss`, use `.sass` extension instead of `.scss` and remove all brackets.
 - Using `mailto:`, `tel:`, or other schemas/protocols that are not `http` or `https` without `target` attribute will create a bug on click. e.g. use `target="_self"` for mailto or others that are not `http` or `https`.
-- The WordPress frontend redirects to the wp-admin. You can delete this behavior in `src > back > theme > functions.php`.
 - On the frontend, if a media file isn’t directly imported in your main JS app files, Webpack won’t recognize or compile it. To ensure Webpack processes the file, you need to manually import it into the relevant JS file. For example, if you're using an audio file, navigate to `src > front > medias > audios` and import the file within `audios.js`.
 
 
@@ -182,6 +181,4 @@ All function implemented with the Loader are using a `Promise`:
 - Update cache when you change media with same url
 - Automatically remove no more used medias from the cache
 - Cache API for fonts
-- Favicon management via backend
-- Open Graph Image management via backend: actually, you can manage it globally from the frontend, and you can manage it specifically for individual pages, posts and CPTs via the admin... We need to be able to manage the globally in the backend too.
 - Maintenance mode
