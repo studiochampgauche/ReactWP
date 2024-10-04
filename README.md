@@ -178,7 +178,8 @@ All functions implemented with the Loader are using a `Promise`:
 
 
 ## What's Next
-- Update cache when you change media with same url
-- Automatically remove no more used medias from the cache
+- Update cache when you do a change up for a same url
+- Automatically remove no more used url from the cache
 - Cache API for fonts
+- Cache API for some REST API endpoints
 - Maintenance mode
