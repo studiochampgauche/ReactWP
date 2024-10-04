@@ -129,7 +129,7 @@ window.loader = {
 window.loader.medias = window.loader.downloader.init();
 ```
 
-All function implemented with the Loader are using a `Promise`:
+All functions implemented with the Loader are using a `Promise`:
 
 - `window.loader.anim.then(() => {})` allow you to know when your preloader animation is resolved
 - `window.loader.medias.then(({ mediaGroups, fonts }) => {})` allow you to play with images, videos, audios and fonts when they are ready
