@@ -57,6 +57,7 @@ const Loader = {
 
             })
             .to(panelElement, .6, {
+                delay: .1,
                 opacity: 0,
                 onStart: () => done()
             })
