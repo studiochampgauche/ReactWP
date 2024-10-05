@@ -1,5 +1,13 @@
 ## Changelog
 
+***2024-10-05***
+- ***Added***: Cache Concept
+- ***Added***: File `src > front > js > addons > Cache.js`
+- ***Added***: Cache on REST API endpoint
+- ***Updated***: How we cache medias
+- ***Updated***: Preloader Panel Demo
+
+
 ***2024-10-04***
 - ***Updated***: Display function. Now, you can select specific `scg-load` elements instead of loop all each time you call the function.
 

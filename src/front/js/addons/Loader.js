@@ -1,6 +1,7 @@
 'use strict';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Cache from './Cache';
 
 const Loader = {
     init: () => {
@@ -27,14 +28,6 @@ const Loader = {
 
 
             tl
-            .to(panelElement.querySelectorAll('.contents .bars .bar'), .4, {
-                scaleY: 1,
-                stagger: .065
-            })
-            .to(panelElement.querySelectorAll('.contents .bars .bar'), .4, {
-                scaleY: .1,
-                stagger: .065
-            })
             .add(() => {
 
                 /*
@@ -63,20 +56,10 @@ const Loader = {
                 }
 
             })
-            .to(panelElement.querySelectorAll('.contents .bars .bar'), .4, {
-                scaleY: 1,
-                stagger: .065
-            })
-            .to(panelElement.querySelectorAll('.contents'), .6, {
-                scale: 1.5
-            }, '-=.4')
             .to(panelElement, .6, {
                 opacity: 0,
                 onStart: () => done()
-            }, '-=.6')
-            .to(panelElement.querySelectorAll('.contents .bars'), .6, {
-                y: 25
-            }, '-=.6')
+            })
             .add(() => {
 
                 panelElement.remove();
@@ -98,16 +81,6 @@ const Loader = {
                         mediaDatas = [];
 
 
-                    let cache;
-                    const urlsToCache = [];
-
-                    try{
-                        cache = await caches.open('medias');
-                    } catch (_){
-
-                        console.warn('Medias caching can\'t work on non-secure url');
-
-                    }
 
                     const css = () => {
 
@@ -227,9 +200,14 @@ const Loader = {
 
 
 
-                        const callMediaGroups = await fetch(window.SYSTEM.restPath + 'scg/v1/medias');
+
+                        const callMediaGroups = await fetch(await Cache.get(window.SYSTEM.restPath + 'scg/v1/medias'));
 
                         if(!callMediaGroups.ok) throw new Error('Medias groups can\'t be loaded');
+
+
+                        Cache.put(callMediaGroups.url, callMediaGroups.clone());
+
 
 
                         let mediaGroups = await callMediaGroups.json();
@@ -278,33 +256,37 @@ const Loader = {
 
                                 srcElement = srcElement();
 
-                                const cacheResponse = media?.cache === false || !cache ? false : await cache.match(media.src);
+                                const cacheGet = await Cache.get(media.src);
 
-                                if (cacheResponse) {
+                                if(!cacheGet.includes('blob:')){
 
-                                    const blob = await cacheResponse.blob();
-                                    srcElement.src = URL.createObjectURL(blob);
+                                    const resp = await fetch(cacheGet);
 
+                                    if(!resp.ok) throw new Error(`${media.src} can\'t be loaded`);
+
+                                    Cache.put(resp.url, resp.clone());
+
+
+                                    const srcElementBlob = await resp.blob();
+                                    const srcElementURL = URL.createObjectURL(srcElementBlob);
+
+                                    srcElement.src = srcElementURL;
                                 } else {
-                
-                                    if(media?.cache !== false && cache)
-                                        urlsToCache.push(media.src);
 
-                                    srcElement.src = media.src;
+                                    srcElement.src = cacheGet;
+
                                 }
+
+
+                                loaded(srcElement, group, i);
+
 
 
                                 if(['video', 'audio'].includes(media.type)){
 
                                     srcElement.preload = 'auto';
                                     srcElement.controls = true;
-
-                                    srcElement.onloadeddata = () => loaded(srcElement, group, i)
                                     
-                                } else {
-
-                                    srcElement.onload  = () => loaded(srcElement, group, i)
-
                                 }
 
                             });
@@ -325,8 +307,6 @@ const Loader = {
                             window.loader.isLoaded.audios = true;
 
                             mediaDatas = mediaGroups;
-
-                            if(urlsToCache && cache) await cache.addAll([...new Set(urlsToCache)]);
 
                             done();
 
@@ -405,6 +385,11 @@ const Loader = {
                             mediaGroups?.[loadElement.getAttribute('data-value')]?.forEach((data, j) => {
 
                                 const target = document.querySelector(data.target);
+
+                                if(data.type === 'image'){
+                                    data.el.width = 5;
+                                    data.el.height = 5;
+                                }
 
                                 if(target)
                                     target.replaceWith(data.el);

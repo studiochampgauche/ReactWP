@@ -14,8 +14,8 @@ This boilerplate help us to quickly set up a React Single Page Application (SPA)
 - Document head management
 - Smooth Page Transition
 - Smooth Scrolling
-- Medias download
-- Medias caching
+- Loader Concept
+- Cache Concept
 
 
 ## Ready
@@ -143,16 +143,59 @@ All functions implemented with the Loader are using a `Promise`:
 >- When you select a specific data-value, you can delete your element after using it by adding the second parameter "remove" to `true`. Default is `false`.
 
 
-## Media Caching
+## Cache Concept
 
-- When you [download medias](https://github.com/studiochampgauche/headless-react-wordpress-boilerplate?tab=readme-ov-file#loader-concept), each image|video|audio file is added to the cache API.
-- You can disable caching for a file by adding `cache` parameter to `false` in your medias REST request. Refer to the REST requests in your `src > back > theme > functions.php`.
+The Cache concept uses the Cache Service Worker API. It lets you add your endpoints (or others) to the cache, and automatically caches media you upload using the Loader concept.
+
+For activate the cache uncomment the cache initializer in `src > front > js > App.jsx`:
+```
+//Cache.init('scg-cache').then(() => {
+
+    window.loader = {
+        anim: Loader.init(),
+        downloader: Loader.downloader(),
+        isLoaded: {
+            css: false,
+            fonts: false,
+            images: false,
+            videos: false,
+            audios: false
+        }
+    };
+    window.loader.medias = window.loader.downloader.init();
+
+//});
+```
+
+***How it's work***
+
+For exemple, put a look on what we have do for get pages that composing your routes in `src > front > js > App.jsx`:
+```
+try{
+
+    const pagesPromise = fetch(await Cache.get(window.SYSTEM.restPath + 'wp/v2/pages?_fields=id,title,link,acf'));
+
+
+    const [callPages] = await Promise.all([pagesPromise]);
+
+    if(!callPages.ok) throw new Error('Pages can\'t be loaded');
+
+
+    Cache.put(callPages.url, callPages.clone());
+
+
+    const pages = await callPages.json();
+
+}
+```
+
 
 > [!NOTE]
->- Media caching works only on secure URLs.
+>- Cache Concept works only on secure URLs.
 >- For now, the cache don't update when you change a media with the same url. It's coming.
 >- For now, the no more used medias are not deleted from the cache. It's coming.
 >- While waiting for the coming elements, you need to use the Cache API by your own.
+>- It's ok to have `Cache.put()` even if you don't need to do it, because the function'll work only if the url is not on protocol `blob:`.
 
 
 ## To Know
@@ -183,5 +226,4 @@ All functions implemented with the Loader are using a `Promise`:
 - Update cache when you do a change up for a same url
 - Automatically remove no more used url from the cache
 - Cache API for fonts
-- Cache API for some REST API endpoints
 - Maintenance mode

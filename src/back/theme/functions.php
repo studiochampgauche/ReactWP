@@ -85,7 +85,6 @@
                         *        'home' => [
                         *            [
                         *                'type' => 'video',
-                        *                'cache' => false,
                         *                'target' => '',
                         *                'src' => ''
                         *            ],

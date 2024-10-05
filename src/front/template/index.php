@@ -100,34 +100,6 @@
 						justify-content: center;
 						will-change: opacity;
 						z-index: 101;
-						.contents{
-							span{
-								display: table;
-								margin: 0 auto;
-								font-size: 24px;
-								white-space: nowrap;
-								text-transform: uppercase;
-								color: var(--white-color);
-							}
-							.bars{
-								display: flex;
-								width: 30px;
-								height: 30px;
-								margin: 25px auto 0;
-								align-items: flex-start;
-								justify-content: space-between;
-								will-change: transform;
-								.bar{
-									background: var(--white-color);
-									width: 5px;
-									height: 100%;
-									transform: scaleY(.1);
-									transform-origin: left top;
-									will-change: transform;
-									//border-radius: 10px;
-								}
-							}
-						}
 					}
 
 					#viewport{

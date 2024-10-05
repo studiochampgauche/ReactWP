@@ -4,6 +4,7 @@ import React, { StrictMode, useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import Cache from './addons/Cache';
 import Loader from './addons/Loader';
 import Metas from './components/Metas';
 import Scroller from './components/Scroller';
@@ -16,6 +17,8 @@ import WaitingPage from './pages/WaitingPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 
+window.gscroll = null;
+
 window.SYSTEM = {
     baseUrl: 'https://wpp.test/',
     adminUrl: 'https://wpp.test/admin/',
@@ -24,20 +27,22 @@ window.SYSTEM = {
 };
 
 
-window.gscroll = null;
+//Cache.init('scg-cache').then(() => {
 
-window.loader = {
-    anim: Loader.init(),
-    downloader: Loader.downloader(),
-    isLoaded: {
-        css: false,
-        fonts: false,
-        images: false,
-        videos: false,
-        audios: false
-    }
-};
-window.loader.medias = window.loader.downloader.init();
+    window.loader = {
+        anim: Loader.init(),
+        downloader: Loader.downloader(),
+        isLoaded: {
+            css: false,
+            fonts: false,
+            images: false,
+            videos: false,
+            audios: false
+        }
+    };
+    window.loader.medias = window.loader.downloader.init();
+
+//});
 
 
 
@@ -63,9 +68,9 @@ const App = () => {
 
             try{
 
-                const settingsPromise = fetch(window.SYSTEM.restPath + 'scg/v1/settings');
-                const postsPromise = fetch(window.SYSTEM.restPath + 'wp/v2/posts?_fields=id,title,link,acf,date_gmt,modified_gmt,author');
-                const pagesPromise = fetch(window.SYSTEM.restPath + 'wp/v2/pages?_fields=id,title,link,acf');
+                const settingsPromise = fetch(await Cache.get(window.SYSTEM.restPath + 'scg/v1/settings'));
+                const postsPromise = fetch(await Cache.get(window.SYSTEM.restPath + 'wp/v2/posts?_fields=id,title,link,acf,date_gmt,modified_gmt,author'));
+                const pagesPromise = fetch(await Cache.get(window.SYSTEM.restPath + 'wp/v2/pages?_fields=id,title,link,acf'));
 
 
                 const [callSettings, callPosts, callPages] = await Promise.all([settingsPromise, postsPromise, pagesPromise]);
@@ -73,6 +78,11 @@ const App = () => {
                 if(!callSettings.ok) throw new Error('Settings can\'t be loaded');
                 if(!callPosts.ok) throw new Error('Posts can\'t be loaded');
                 if(!callPages.ok) throw new Error('Pages can\'t be loaded');
+
+
+                Cache.put(callSettings.url, callSettings.clone());
+                Cache.put(callPosts.url, callPosts.clone());
+                Cache.put(callPages.url, callPages.clone());
 
 
                 const settings = await callSettings.json();
