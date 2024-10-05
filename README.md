@@ -140,7 +140,6 @@ All functions implemented with the Loader are using a `Promise`:
 >- Medias are fetched via the REST API at `/admin/wp-json/scg/v1/medias`. Refer to the REST requests in your `src > back > theme > functions.php`. `target` parameter is not required.
 >- When you use the display function with your component, use `<scg-load data-value="YOUR_MEDIA_GROUP_KEY" />` to link the good group of medias associated.
 >- Using the display function will loop all `<scg-load />` element that can be found. Use first parameter for select a specific `data-value`. Default is `scg-load`.
->- When you select a specific data-value, you can delete your element after using it by adding the second parameter "remove" to `true`. Default is `false`.
 
 
 ## Cache Concept
@@ -195,7 +194,7 @@ try{
 >- For now, the cache don't update when you change a media with the same url. It's coming.
 >- For now, the no more used medias are not deleted from the cache. It's coming.
 >- While waiting for the coming elements, you need to use the Cache API by your own or you can simply change the cacheName parameter in `Cache.init('scg-cache')`.
->- It's ok to have `Cache.put()` even if you don't need to do it, because the function'll work only if the url is not on protocol `blob:`.
+>- It's ok to have `Cache.put()` even if you don't need to do it, because the function will work only if the url is not on protocol `blob:`.
 
 
 ## To Know

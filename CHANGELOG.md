@@ -1,11 +1,13 @@
 ## Changelog
 
+
 ***2024-10-05***
 - ***Added***: Cache Concept
 - ***Added***: File `src > front > js > addons > Cache.js`
 - ***Added***: Cache on REST API endpoint
 - ***Updated***: How we cache medias
 - ***Updated***: Preloader Panel Demo
+- ***Changed***: Stop removing `<scg-load />` elements (temporary)
 
 
 ***2024-10-04***

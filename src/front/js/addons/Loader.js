@@ -352,9 +352,9 @@ const Loader = {
                 });
 
             },
-            display: (target = 'scg-load', remove = false) => {
+            display: (target = 'scg-load') => {
 
-                return new Promise(resolved => {
+                return new Promise(done => {
         
                     const loadElements = document.querySelectorAll((target === 'scg-load' ? target : 'scg-load[data-value='+ target +']'));
 
@@ -403,17 +403,6 @@ const Loader = {
                         });
 
                     });
-
-
-
-                    function done(){
-
-                        if(remove && target !== 'scg-load')
-                            loadElements.forEach((loadElement, i) => loadElement.remove());
-
-                        resolved();
-
-                    }
                 });
 
             }
