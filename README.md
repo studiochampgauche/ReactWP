@@ -145,7 +145,7 @@ All functions implemented with the Loader are using a `Promise`:
 
 ## Cache Concept
 
-The Cache concept uses the Cache Service Worker API. It lets you add your endpoints (or others) to the cache, and automatically caches media you upload using the Loader concept.
+The Cache concept uses the Cache Service Worker API. It lets you add your endpoints (or others) to the cache, and automatically caches media you upload with the Loader concept.
 
 For activate the cache uncomment the cache initializer in `src > front > js > App.jsx`:
 ```
@@ -169,7 +169,7 @@ For activate the cache uncomment the cache initializer in `src > front > js > Ap
 
 ***How it's work***
 
-For exemple, put a look on what we have do for get pages that composing your routes in `src > front > js > App.jsx`:
+For example, put a look on what we have do for get pages that composing your routes in `src > front > js > App.jsx`:
 ```
 try{
 
@@ -194,7 +194,7 @@ try{
 >- Cache Concept works only on secure URLs.
 >- For now, the cache don't update when you change a media with the same url. It's coming.
 >- For now, the no more used medias are not deleted from the cache. It's coming.
->- While waiting for the coming elements, you need to use the Cache API by your own.
+>- While waiting for the coming elements, you need to use the Cache API by your own or you can simply change the cacheName parameter in `Cache.init('scg-cache')`.
 >- It's ok to have `Cache.put()` even if you don't need to do it, because the function'll work only if the url is not on protocol `blob:`.
 
 
