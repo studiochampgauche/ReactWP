@@ -25,6 +25,21 @@
             */
             StudioChampGauche\Utils\CustomPostType::default('posts_per_page', -1);
             StudioChampGauche\Utils\CustomPostType::default('paged', 1);
+
+
+
+            /*
+            * Shot events on template_redirect
+            */
+            add_action('template_redirect', function(){
+
+                if(is_admin()) return;
+
+                wp_redirect(admin_url());
+
+                exit;
+
+            });
 			
 
 
