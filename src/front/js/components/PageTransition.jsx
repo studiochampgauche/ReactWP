@@ -1,77 +1,47 @@
 'use strict';
 import React, { useEffect, useState, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
-import Loader from '../addons/Loader';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-
-let firstLoad = true;
 
 
 const PageTransition = ({ children }) => {
 
 
+	const ref = useRef(null);
+
 	const to = useRef(null);
 
 	const anchorRef = useRef(null);
-	const behaviorRef = useRef(null);
+	const firstLoadRef = useRef(true);
+	const canTransitRef = useRef(false);
 	const navigateRef = useRef(useNavigate());
-
-	const { pathname } = useLocation();
 
 
 	const [isLeaving, setIsLeaving] = useState(false);
 	const [isEntering, setIsEntering] = useState(false);
 
 
+	const { pathname } = useLocation();
+
 
 	/*
-	* Manage click
+	* On new page
 	*/
 	useEffect(() => {
+		
 
+		if(!firstLoadRef.current){
 
-		if(!firstLoad){
-
-
-
-			/*
-			* When you change Page, refresh Scroller
-			*/
-			ScrollTrigger?.refresh();
-
-
-
-			/*
-	        * Start position
-	        */
-	        if(anchorRef.current){
-
-				window.gscroll?.scrollTo(document.getElementById(anchorRef.current), false, 'top top') || document.getElementById(anchorRef.current).scrollIntoView({ behavior: 'instant' })
-
-	        }
-			else
-	        	window.gscroll?.scrollTop(0) || window.scrollTo(0, 0);
-
-
+			setIsLeaving(false);
+			setIsEntering(true);
 
 		}
+		firstLoadRef.current = false;
 
 
 
-		if(firstLoad)
-			firstLoad = false;
-
-
-
-
-
-
-        /*
-        * Prevent default behavior, create your own behavior
-        */
-        const elements = document.querySelectorAll('a, .goto');
+		const elements = document.querySelectorAll('a, .goto');
         if(!elements.length) return;
 
         const events = [];
@@ -114,6 +84,10 @@ const PageTransition = ({ children }) => {
 
 
 
+        		to.current = path;
+        		anchorRef.current = anchor;
+        		canTransitRef.current = item.hasAttribute('data-transition') && item.getAttribute('data-transition') === 'true';
+
 
         		if(path === pathname && anchor){
 
@@ -125,16 +99,9 @@ const PageTransition = ({ children }) => {
 
         		} else if(path !== pathname){
 
-        			item.hasAttribute('data-transition') && item.getAttribute('data-transition') === 'true' ? setIsLeaving(true) : navigateRef.current(path);
+        			setIsLeaving(true);
 
         		}
-
-
-
-        		to.current = path;
-        		anchorRef.current = anchor;
-        		behaviorRef.current = item.hasAttribute('data-behavior') ? item.getAttribute('data-behavior') : 'instant';
-
 
         	}
 
@@ -157,83 +124,109 @@ const PageTransition = ({ children }) => {
 
         }
 
-
 	}, [pathname]);
 
 
 
-	/*
-    * isLeaving transition
-    */
 	useEffect(() => {
-		
+
 		if(!isLeaving) return;
-        
-		
-		const tl = gsap.timeline({
+
+		if(!canTransitRef.current){
+
+			if(window.gscroll?.scrollTop() > 0)
+				ref.current.style.opacity = 0;
+			
+
+			window.gscroll?.paused(true);
+
+			if(!anchorRef.current)
+				window.gscroll?.scrollTop(0) || window.scrollTo(0, 0);
+
+
+			navigateRef.current(to.current);
+
+			return;
+
+		}
+
+
+		let tl = gsap.timeline({
 			onComplete: () => {
-				
+
+				tl.kill();
+				tl = null;
+
+				window.gscroll?.paused(true);
+
+				if(!anchorRef.current)
+					window.gscroll?.scrollTop(0) || window.scrollTo(0, 0);
+
+
 				navigateRef.current(to.current);
-				
-				setIsLeaving(false);
-				setIsEntering(true);
-				
+
 			}
 		});
-		
-		
+
 		tl
-		.to('main', .2, {
+		.to(ref.current, .4, {
 			opacity: 0
 		});
 		
-		
-		return () => {
-			
-			tl.kill();
-			
-		}
-		
-		
+
 	}, [isLeaving]);
 
 
-
-
-	/*
-    * isEntering transition
-    */
 	useEffect(() => {
-		
+
 		if(!isEntering) return;
-		
-		
-		const tl = gsap.timeline({
+
+
+		ScrollTrigger?.refresh();
+
+		if(anchorRef.current){
+			window.gscroll?.scrollTo(document.getElementById(anchorRef.current), false, 'top top') || document.getElementById(anchorRef.current).scrollIntoView({ behavior: 'instant' });
+			ScrollTrigger?.refresh();
+		}
+
+
+		if(!canTransitRef.current){
+
+			ref.current.style.opacity = 1;
+
+			setIsEntering(false);
+
+			window.gscroll?.paused(false);
+
+			return;
+
+		}
+
+
+
+		let tl = gsap.timeline({
 			onComplete: () => {
-				
+
+				tl.kill();
+				tl = null;
+
 				setIsEntering(false);
 
+				window.gscroll?.paused(false);
 
 			}
 		});
-		
+
 		tl
-		.to('main', .2, {
+		.to(ref.current, .4, {
 			opacity: 1
 		});
 		
-		
-		return () => {
-			
-			tl.kill();
-			
-		}
-		
-		
+
 	}, [isEntering]);
 	
 	
-	return(<main>{children}</main>)
+	return(<main ref={ref}>{children}</main>)
 	
 }
 export default PageTransition;

@@ -1,5 +1,7 @@
 ## Changelog
 
+***2024-10-11***
+- ***Added***: Repair Page Transition
 
 ***2024-10-05***
 - ***Added***: Cache Concept
