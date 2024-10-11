@@ -1,11 +1,11 @@
 <?php
 
-	class helloChamp{
+    class helloChamp{
 
-		function __construct(){
+        function __construct(){
             
-			if(!class_exists('scg')) return;
-			
+            if(!class_exists('scg')) return;
+            
             /*
             * str_replace your return when you use scg::field(), StudioChampGauche\Utils\Field::get() or ACF REST API;
             */
@@ -25,22 +25,7 @@
             */
             StudioChampGauche\Utils\CustomPostType::default('posts_per_page', -1);
             StudioChampGauche\Utils\CustomPostType::default('paged', 1);
-
-
-
-            /*
-            * Shot events on template_redirect
-            */
-            add_action('template_redirect', function(){
-
-                if(is_admin()) return;
-
-                wp_redirect(admin_url());
-
-                exit;
-
-            });
-			
+            
 
 
 
@@ -56,7 +41,7 @@
             */
             $this->ajaxRequests();
 
-		}
+        }
 
 
 
@@ -167,7 +152,7 @@
 
         }
 
-	}
+    }
 
-	new helloChamp();
+    new helloChamp();
 ?>
