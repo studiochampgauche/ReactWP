@@ -139,7 +139,7 @@ const PageTransition = ({ children }) => {
 
 			if(window.gscroll?.scrollTop() > 0)
 				ref.current.style.opacity = 0;
-			
+
 
 			window.gscroll?.paused(true);
 
@@ -147,7 +147,7 @@ const PageTransition = ({ children }) => {
 				window.gscroll?.scrollTop(0) || window.scrollTo(0, 0);
 
 
-			navigateRef.current(to.current);
+			gsap.delayedCall(.01, () => navigateRef.current(to.current));
 
 			return;
 
@@ -166,13 +166,13 @@ const PageTransition = ({ children }) => {
 					window.gscroll?.scrollTop(0) || window.scrollTo(0, 0);
 
 
-				navigateRef.current(to.current);
+				gsap.delayedCall(.01, () => navigateRef.current(to.current));
 
 			}
 		});
 
 		tl
-		.to(ref.current, .4, {
+		.to(ref.current, .2, {
 			opacity: 0
 		});
 		
@@ -224,7 +224,7 @@ const PageTransition = ({ children }) => {
 		});
 
 		tl
-		.to(ref.current, .4, {
+		.to(ref.current, .2, {
 			opacity: 1
 		});
 		
