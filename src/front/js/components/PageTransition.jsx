@@ -128,6 +128,9 @@ const PageTransition = ({ children }) => {
 
 
 
+	/*
+	* When you leave the page
+	*/
 	useEffect(() => {
 
 		if(!isLeaving) return;
@@ -177,6 +180,9 @@ const PageTransition = ({ children }) => {
 	}, [isLeaving]);
 
 
+	/*
+	* When you enter in a page
+	*/
 	useEffect(() => {
 
 		if(!isEntering) return;
