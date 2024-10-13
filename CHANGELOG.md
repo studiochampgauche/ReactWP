@@ -1,6 +1,10 @@
 ## Changelog
 
 ***2024-10-11***
+- ***removed***: hideForSeo Class Name
+
+
+***2024-10-11***
 - ***Fixed***: Page Transition
 
 ***2024-10-05***

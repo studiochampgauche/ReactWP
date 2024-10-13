@@ -44,12 +44,3 @@ scg-wrap{
     background-repeat: no-repeat;
     background-position: center center;
 }
-
-.hideForSeo{
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(1px 1px 1px 1px);
-    clip: rect(1px, 1px, 1px, 1px);
-}
