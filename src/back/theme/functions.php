@@ -115,14 +115,7 @@
                 * ];
                 */
 
-                $medias = [
-                    'home' => [
-                        [
-                            'type' => 'audio',
-                            'src' => scg::field('audio_file', 8)
-                        ]
-                    ]
-                ];
+                $medias = [];
 
 
                 wp_localize_script('scg-main', 'MEDIAS', $medias);
