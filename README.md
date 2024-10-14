@@ -11,6 +11,7 @@ This boilerplate help us to quickly set up a React Single Page Application (SPA)
 - Image Compression
 - ESM format
 - App routing
+- Hybrid Rendering SSR + Client-Side Fetching
 - Document head management
 - Smooth Page Transition
 - Smooth Scrolling
@@ -43,7 +44,6 @@ This boilerplate help us to quickly set up a React Single Page Application (SPA)
 4. Add `.npmrc` for GSAP autentication.
 5. Run `npm i` to install Node modules.
 6. Duplicate `wp-config-sample.php` in `src > back` to `wp-config.php` and configure it.
-7. Update URLs in `src > front > js > App.jsx` within `window.SYSTEM`.
 8. Add your server configuration file in `src > front > template` directory. More explanations [here](https://github.com/studiochampgauche/headless-react-wordpress-boilerplate?tab=readme-ov-file#web-server-configuration).
 9. Run `npm run build:front:back` or `npm run watch:front:back` for initialize setup.
 10. Configure your WordPress backend `(yourdomain.com/admin)`.
@@ -76,16 +76,18 @@ RewriteRule ^ index.php [L]
 
 ## Frontend-Backend Interaction
 
-- In a headless setup, the frontend is separate from the backend, communicating via fetch requests.
+- `wp-load.php` is loaded in the frontend allowing you use the wordpress ecosystem like plugins, customs fonctions, etc. inner your frontend.
+- We server-side rendering childs of `<head>` element and attributes of his parent (the `<html>` element). Helmet then boards.
+- We server-side rendering Routes. Routes are given in `src > back > theme > function.php` and they are mounted in `src > front > js > App.jsx`.
+- Use `SYSTEM.ajaxPath` for call the `admin-ajax.php` of wordpress. `ajaxRequests` function is ready in `src > back > theme > function.php`.
+- Using `SYSTEM.restPath` will return the string `/admin/wp-json/`. `restRequests` function is ready in `src > back > theme > function.php`.
 - Every page, post, custom post type, and some users (like authors) that make up your routes must be linked to a Component. This requires a field for each admin element to assign a component name, which you then map in the ecosystem.
 - To map components, add them to the `componentMap` object in `src > front > js > App.jsx`.
 
 > [!NOTE]  
 > - Pages and posts already have the required field. For custom post types, go to (yourdomain.com/admin/wp-admin/admin.php?page=site-settings), select your CPT in the `Modules` tab under `Component`. For add the field like for the users, edit the `render.php` file of the Champ Gauche Core Plugin around line 655.
 > - If you have many posts and don't want to manually assign a Component Name for each, you can either create logic in App.jsx or use ACF hooks to auto-populate the field.
->
-> ### Ajax and REST API
-> - Retrieve the Ajax and REST API base paths with `window.SYSTEM.ajaxPath` and `window.SYSTEM.restPath`.
+> - Use fetch for update datas composing your routes... You probably can do your checkup in `PageTransion.jsx` before rendering the new page.
 
 
 
@@ -102,7 +104,7 @@ RewriteRule ^ index.php [L]
 
 ## Loader Concept
 
-The loader concept initiates a preloading animation and the downloading of fonts, images, videos and audios. It make sure you have your medias, styles and the GSAP SmoothScroller ready before allowing visitors to navigate.
+The loader concept initiates a preloading animation and the downloading of fonts, images, videos and audios. It make sure you have your medias and the GSAP SmoothScroller ready before allowing visitors to navigate.
 
 You'll find the preloader HTML in `src > front > template > index.php`.
 
@@ -138,42 +140,25 @@ All functions implemented with the Loader are using a `Promise`:
 
 > [!NOTE]
 >- `Loader.init()` can complete only if `Loader.downloader().init()` is launched too. If no media needs to be fetched, still call `Loader.downloader().init(false)`.
->- Medias are fetched via the REST API at `/admin/wp-json/scg/v1/medias`. Refer to the REST requests in your `src > back > theme > functions.php`. `target` parameter is not required.
+>- Manage your medias in `src > back > theme > functions.php`. Find `wp_localize_script('scg-main', 'MEDIAS', $medias)`.
 >- When you use the display function with your component, use `<scg-load data-value="YOUR_MEDIA_GROUP_KEY" />` to link the good group of medias associated.
 >- Using the display function will loop all `<scg-load />` element that can be found. Use first parameter for select a specific `data-value`. Default is `scg-load`.
 
 
 ## Cache Concept
 
-The Cache concept uses the Cache Service Worker API. It lets you add your endpoints (or others) to the cache, and automatically caches media you upload with the Loader concept.
+The Cache concept uses the Cache Service Worker API. It lets you add your endpoints (or others) to the cache, and automatically caches media you upload with the Loader concept. He doesn't manage your headers.
 
-For activate the cache uncomment the cache initializer in `src > front > js > App.jsx`:
-```
-//Cache.init('scg-cache').then(() => {
+For activate the cache go to your admin `(yourdomain.com/admin/wp-admin/admin.php?page=site-settings)` and click on "Extra" tab, you'll see `Cache version` and `Cache Expiration`. Version `0` will disable your cache, just add a version. 
 
-    window.loader = {
-        anim: Loader.init(),
-        downloader: Loader.downloader(),
-        isLoaded: {
-            css: false,
-            fonts: false,
-            images: false,
-            videos: false,
-            audios: false
-        }
-    };
-    window.loader.medias = window.loader.downloader.init();
-
-//});
-```
 
 ***How it's work***
 
-For example, put a look on what we have do for get pages that composing your routes in `src > front > js > App.jsx`:
+For example, put a look on what we have do for get pages before we have server-side rendering:
 ```
 try{
 
-    const pagesPromise = fetch(await Cache.get(window.SYSTEM.restPath + 'wp/v2/pages?_fields=id,title,link,acf'));
+    const pagesPromise = fetch(await Cache.get(SYSTEM.restPath + 'wp/v2/pages?_fields=id,title,link,acf'));
 
 
     const [callPages] = await Promise.all([pagesPromise]);
@@ -192,10 +177,8 @@ try{
 
 > [!NOTE]
 >- Cache Concept works only on secure URLs.
->- For now, the cache don't update when you change a media with the same url. It's coming.
->- For now, the no more used medias are not deleted from the cache. It's coming.
->- While waiting for the coming elements, you need to use the Cache API by your own or you can simply change the cacheName parameter in `Cache.init('scg-cache')`.
 >- It's ok to have `Cache.put()` even if you don't need to do it, because the function will work only if the url is not on protocol `blob:`.
+>- You can use wordpress Hook like `save_post` with `update_field` of ACF for update your Cache version when a post is saved
 
 
 ## To Know
@@ -223,7 +206,4 @@ try{
 
 
 ## What's Next
-- Update cache when you do a change up for a same url
-- Automatically remove no more used url from the cache
-- Cache API for fonts
 - Maintenance mode
