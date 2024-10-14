@@ -6,6 +6,7 @@
 - ***Added***: Cache lifetime from backend
 - ***Added***: Default SEO settings access. use `defaultSEO` variable.
 - ***Changed***: We have stop fetching routes, medias and settings. They are now construct from server.
+- ***Changed***: How `Metas.jsx` work (React Helmet)
 - ***Removed***: `window.SYSTEM` object is now construct from server. Use `SYSTEM` variable instead.
 - ***Removed***: `/admin/wp-json/scg/v1/settings/` endpoint
 - ***Removed***: `/admin/wp-json/scg/v1/medias/` endpoint
