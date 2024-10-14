@@ -119,7 +119,6 @@ window.loader = {
     anim: Loader.init(),
     downloader: Loader.downloader(),
     isLoaded: {
-        css: false,
         fonts: false,
         images: false,
         videos: false,
