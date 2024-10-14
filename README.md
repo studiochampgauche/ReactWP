@@ -84,7 +84,7 @@ RewriteRule ^ index.php [L]
 ## Frontend-Backend Interaction
 
 - `wp-load.php` is loaded in the frontend allowing you use the wordpress ecosystem like plugins, customs fonctions, etc. inner your frontend.
-- We render server-side the children of the `<head>` element and the attributes of its parent (the `<html>` element). React Helmet then takes over.
+- We render server-side the childrens of the `<head>` element and the attributes of its parent (the `<html>` element). React Helmet then takes over.
 - We server-side rendering Routes. Routes are given in `src > back > theme > function.php` and they are mounted in `src > front > js > App.jsx`.
 - Use `SYSTEM.ajaxPath` for call the `admin-ajax.php` of wordpress. `ajaxRequests` function is ready in `src > back > theme > function.php`.
 - Using `SYSTEM.restPath` will return the string `/admin/wp-json/`. `restRequests` function is ready in `src > back > theme > function.php`.
