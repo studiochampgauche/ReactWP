@@ -82,9 +82,8 @@
                     }
 
                 }
-
-
                 wp_localize_script('scg-main', 'ROUTES', $routes);
+
 
                 /*
                 * medias
@@ -116,7 +115,6 @@
                 */
 
                 $medias = [];
-
 
                 wp_localize_script('scg-main', 'MEDIAS', $medias);
                 
