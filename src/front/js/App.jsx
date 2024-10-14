@@ -81,7 +81,7 @@ if(parseFloat(SYSTEM.cacheVersion) > 0){
 
     if(localStorage.getItem('cacheEndTime'))
         localStorage.removeItem('cacheEndTime');
-    
+
 
     initLoader();
 
@@ -123,6 +123,8 @@ const App = () => {
 
                                     const Component = componentMap[route.componentName];
 
+                                    route.seo.pageTitle = route.title;
+
                                     return (
                                         <Route
                                             exact 
@@ -130,17 +132,11 @@ const App = () => {
                                             path={route.path} 
                                             element={
                                                 <>
-                                                    {/*<Metas
-                                                        datas={{
-                                                            page_name: route?.title,
-                                                            date: route?.date,
-                                                            modified: route?.modified,
-                                                            name: route?.acf?.name,
-                                                            seo: route.acf?.seo,
-                                                            author: route?.author
-                                                        }}
-                                                    />*/}
-                                                    <Component id={route.id} title={route.title} path={route.path} />
+                                                    <Metas
+                                                        extraDatas={route?.extraDatas}
+                                                        seo={route?.seo}
+                                                    />
+                                                    <Component id={route.id} title={route.title} path={route.path} postType={route.postType} seo={route.seo} />
                                                     <Footer />
                                                 </>
                                             }
@@ -152,9 +148,9 @@ const App = () => {
                                     path="*"
                                     element={
                                         <>
-                                            {/*<Metas
-                                                datas={{page_name: 'Error 404', seo: {stop_indexing: true}}}
-                                            />*/}
+                                            <Metas
+                                                seo={{pageTitle: 'Error 404', stop_indexing: true}}
+                                            />
                                             <NotFoundPage />
                                         </>
                                     }

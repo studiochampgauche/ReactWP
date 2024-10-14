@@ -175,21 +175,23 @@ class StudioChampGauche{
 
 
             /*
-            * Main Style
+            * Add Main Style
             */
             //wp_enqueue_style('scg-main', str_replace('/admin', '', site_url('/assets/css/main.min.css')), null, null, null);
 
 
             /*
-            * Main Javascript
+            * Add Main Javascript
             */
             wp_enqueue_script('scg-main', str_replace('/admin', '', site_url('/assets/js/main.min.js')), null, null, true);
 
 
-            $siteUrl = site_url();
 
+            /*
+            * Add SYSTEM global variable
+            */
+            $siteUrl = site_url();
             wp_localize_script('scg-main', 'SYSTEM', [
-                'blogName' => get_bloginfo('name'),
                 'public' => (bool)get_option('blog_public'),
                 'cacheVersion' => (scg::field('cache_version') ? scg::field('cache_version') : 0),
                 'cacheExpiration' => (scg::field('cache_expiration') ? scg::field('cache_expiration') : 0),
@@ -200,9 +202,19 @@ class StudioChampGauche{
             ]);
 
 
-            wp_localize_script('scg-main', 'defaultSEO', scg::field('seo', 'option'));
+            /*
+            * Add defaultSEO global variable
+            */
+            $defaultSEO = scg::field('seo', 'option');
+            $defaultSEO['blogName'] = \StudioChampGauche\SEO\SEO::site_name();
+
+            wp_localize_script('scg-main', 'defaultSEO', $defaultSEO);
+
             
             
+            /*
+            * Remove scg-main script type attribute
+            */
             add_filter('script_loader_tag', function($tag, $handle, $src){
                 if($handle !== 'scg-main')
                     return $tag;

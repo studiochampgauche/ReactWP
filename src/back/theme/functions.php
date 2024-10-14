@@ -49,10 +49,35 @@
                             'id' => $v->ID,
                             'title' => get_the_title($v->ID),
                             'path' => str_replace(site_url(), '', get_permalink($v->ID)),
-                            'postType' => $v->post_type,
+                            'type' => $v->post_type,
                             'seo' => scg::field('seo', $v->ID),
                             'componentName' => scg::field('component_name', $v->ID)
                         ];
+
+
+                        if($routes[$k]['type'] === 'post'){
+
+                            $routes[$k]['seo']['og_type'] = 'article';
+
+                            $routes[$k]['extraDatas'] = [
+                                'date' => $v->post_date,
+                                'modified' => $v->post_modified,
+                                'author' => get_author_posts_url($v->post_author)
+                            ];
+
+                        } elseif($routes[$k]['type'] === 'author'){
+
+                            $routes[$k]['seo']['og_type'] = 'profile';
+
+                            $routes[$k]['extraDatas'] = [
+                                'username' => '',
+                                'name' => [
+                                    'firstname' => '',
+                                    'lastname' => ''
+                                ]
+                            ];
+
+                        }
 
                     }
 
