@@ -15,7 +15,7 @@ const HomePage = () => {
 	
 	return(
 		<>
-			
+			<section style={{background: '#00ff00', height: '100svh'}} />
 		</>
 	);
 	
