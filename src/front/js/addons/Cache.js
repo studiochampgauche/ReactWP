@@ -57,6 +57,18 @@ const Cache = {
 
         this.cache.add(url);
 
+    },
+    delete: function(cacheName){
+
+
+        return new Promise(async (done) => {
+
+            await caches.delete(cacheName);
+
+            done();
+
+        });
+
     }
 }
 

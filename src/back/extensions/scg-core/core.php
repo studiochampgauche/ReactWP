@@ -184,6 +184,23 @@ class StudioChampGauche{
             * Main Javascript
             */
             wp_enqueue_script('scg-main', str_replace('/admin', '', site_url('/assets/js/main.min.js')), null, null, true);
+
+
+            $siteUrl = site_url();
+
+            wp_localize_script('scg-main', 'SYSTEM', [
+                'blogName' => get_bloginfo('name'),
+                'public' => (bool)get_option('blog_public'),
+                'cacheVersion' => (scg::field('cache_version') ? scg::field('cache_version') : 0),
+                'cacheExpiration' => (scg::field('cache_expiration') ? scg::field('cache_expiration') : 0),
+                'baseUrl' => str_replace(['/admin/', '/admin'], '/', $siteUrl),
+                'adminUrl' => rtrim($siteUrl, '/') . '/',
+                'ajaxPath' => '/admin/wp-admin/admin-ajax.php',
+                'restPath' => '/admin/wp-json/'
+            ]);
+
+
+            wp_localize_script('scg-main', 'defaultSEO', scg::field('seo', 'option'));
             
             
             add_filter('script_loader_tag', function($tag, $handle, $src){
@@ -614,7 +631,7 @@ class StudioChampGauche{
                     '. file_get_contents('assets/css/main.min.css') .'
                 </style>
             ';
-        });
+        }, 3);
         
 
         

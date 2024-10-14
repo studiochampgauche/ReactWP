@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Champ Gauche Core\n"
 "POT-Creation-Date: 2023-04-27 11:54-0400\n"
-"PO-Revision-Date: 2024-09-05 10:19-0400\n"
+"PO-Revision-Date: 2024-10-14 04:16-0400\n"
 "Last-Translator: Studio Champ Gauche <allo@champgauche.studio>\n"
 "Language-Team: Studio Champ Gauche\n"
 "Language: en_CA\n"
@@ -129,3 +129,15 @@ msgstr "Where to display the Component module? post and page already have the mo
 
 msgid "Composant"
 msgstr "Component"
+
+msgid "Version du cache"
+msgstr "Cache Version"
+
+msgid "Expiration du cache"
+msgstr "Cache Expiration"
+
+msgid "Laissez à zéro pour désactiver."
+msgstr "Leave at zero to disable."
+
+msgid "Inscrivez un nombre en seconde."
+msgstr "Enter a number in seconds."

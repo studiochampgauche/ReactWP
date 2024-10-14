@@ -16,7 +16,7 @@ const Metas = ({ datas, settings }) => {
 	const og_image = datas?.seo?.og_image || settings?.seo?.og_image;
 
 
-	useEffect(() => {
+	/*useEffect(() => {
 
 		const head = document.querySelector('head');
 		const metas = head.querySelectorAll('meta[name="robots"], meta[name="description"], meta[property^="og:"]:not([property="og:site_name"]), meta[property^="article:"], meta[property^="profile:"]'); //, meta[property^="og:"]:not([property="og:site_name"]) head.querySelectorAll('meta[name="robots"], meta[name="description"], meta[property^="og:"]');
@@ -32,7 +32,7 @@ const Metas = ({ datas, settings }) => {
         .join('&');
 
 
-        let newUrl = (window.SYSTEM.baseUrl + pathname.replace('/', '') + (paramsString && '?' + paramsString)).replace('/?', '?');
+        let newUrl = (SYSTEM.baseUrl + pathname.replace('/', '') + (paramsString && '?' + paramsString)).replace('/?', '?');
 
         if(newUrl.endsWith('/'))
         	newUrl = newUrl.slice(0, -1);
@@ -41,13 +41,13 @@ const Metas = ({ datas, settings }) => {
 
 
 
-	}, [pathname]);
+	}, [pathname]);*/
 
 
 	return (
 		<Helmet>
 
-			<title>{datas?.seo?.title || datas.page_name + ' - ' + (settings?.seo?.site_name || settings.blog_name)}</title>
+			{/*<title>{datas?.seo?.title || datas.page_name + ' - ' + (settings?.seo?.site_name || settings.blog_name)}</title>
 
 			<meta name="robots" content={datas?.seo?.stop_indexing || !settings.blog_public ? 'max-image-preview:large, noindex, nofollow' : 'max-image-preview:large, index, follow'} />
 
@@ -73,7 +73,7 @@ const Metas = ({ datas, settings }) => {
 
 			{og_description && <meta property="og:description" content={og_description} />}
 
-			{og_image && <meta property="og:image" content={og_image} />}
+			{og_image && <meta property="og:image" content={og_image} />}*/}
 
 		</Helmet>
 	)

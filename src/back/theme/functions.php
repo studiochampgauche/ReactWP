@@ -28,6 +28,82 @@
             
 
 
+            /*
+            * Enqueue Scripts
+            */
+            add_action('wp_enqueue_scripts', function(){
+
+
+                /*
+                * Routes
+                */
+
+                $data = scg::cpt(['page', 'post'])->posts;
+                $routes = [];
+
+                if($data){
+
+                    foreach ($data as $k => $v) {
+                        
+                        $routes[] = [
+                            'id' => $v->ID,
+                            'title' => get_the_title($v->ID),
+                            'path' => str_replace(site_url(), '', get_permalink($v->ID)),
+                            'postType' => $v->post_type,
+                            'seo' => scg::field('seo', $v->ID),
+                            'componentName' => scg::field('component_name', $v->ID)
+                        ];
+
+                    }
+
+                }
+
+
+                wp_localize_script('scg-main', 'ROUTES', $routes);
+
+                /*
+                * medias
+                *
+                * $medias = [
+                *     'home' => [
+                *         [
+                *             'type' => 'video',
+                *             'target' => '',
+                *             'src' => ''
+                *         ],
+                *         [
+                *             'type' => 'image',
+                *             'target' => '',
+                *             'src' => ''
+                *         ],
+                *         [
+                *             'type' => 'audio',
+                *             'src' => ''
+                *         ],
+                *     ],
+                *     'about' => [
+                *         [
+                *             'type' => 'video',
+                *             'src' => ''
+                *         ],
+                *     ],
+                * ];
+                */
+
+                $medias = [
+                    'home' => [
+                        [
+                            'type' => 'audio',
+                            'src' => scg::field('audio_file', 8)
+                        ]
+                    ]
+                ];
+
+
+                wp_localize_script('scg-main', 'MEDIAS', $medias);
+                
+            });
+
 
             /*
             * Rest API Requests
@@ -73,39 +149,10 @@
             add_action('rest_api_init', function(){
 
                 /*
-                * Get Medias
-                */
-                register_rest_route('scg/v1', '/medias/', [
+                *
+                register_rest_route('scg/v1', '/custom/', [
                     'methods'  => 'GET',
                     'callback' => function(){
-
-
-                        /*
-                        *    $data = [
-                        *        'home' => [
-                        *            [
-                        *                'type' => 'video',
-                        *                'target' => '',
-                        *                'src' => ''
-                        *            ],
-                        *            [
-                        *                'type' => 'image',
-                        *                'target' => '',
-                        *                'src' => ''
-                        *            ],
-                        *            [
-                        *                'type' => 'audio',
-                        *                'src' => ''
-                        *            ],
-                        *        ],
-                        *        'about' => [
-                        *            [
-                        *                'type' => 'video',
-                        *                'src' => ''
-                        *            ],
-                        *        ],
-                        *    ];
-                        */
 
                         $data = [];
 
@@ -113,32 +160,7 @@
 
                     },
                 ]);
-
-
-
-                /*
-                * Get Settings
                 */
-                register_rest_route('scg/v1', '/settings/', [
-                    'methods'  => 'GET',
-                    'callback' => function(){
-
-                        $data = [
-                            'blog_public' => (bool)get_option('blog_public'),
-                            'blog_name' => get_bloginfo('name'),
-                            'seo' => [
-                                'site_name' => scg::field('seo_site_name', 'option'),
-                                'description' => scg::field('seo_description', 'option'),
-                                'og_title' => scg::field('seo_og_title', 'option'),
-                                'og_description' => scg::field('seo_og_description', 'option'),
-                                'og_image' => scg::field('seo_og_image', 'option'),
-                            ]
-                        ];
-
-                        return new WP_REST_Response($data, 200);
-
-                    },
-                ]);
 
 
             });

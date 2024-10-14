@@ -5,7 +5,6 @@ const WaitingPage = () => {
     
 	useEffect(() => {
         
-        
         return () => {
             
             

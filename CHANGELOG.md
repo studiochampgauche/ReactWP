@@ -1,5 +1,17 @@
 ## Changelog
 
+***2024-10-14***
+- ***Added***: `Cache.delete()`. See `src > front > js > addons > Cache.js`
+- ***Added***: Cache version from backend
+- ***Added***: Cache lifetime from backend
+- ***Added***: Default SEO settings access. use `defaultSEO` variable.
+- ***Changed***: We have stop fetching routes, medias and settings. They are now construct from server.
+- ***Removed***: `window.SYSTEM` object is now construct from server. Use `SYSTEM` variable instead.
+- ***Removed***: `/admin/wp-json/scg/v1/settings/` endpoint
+- ***Removed***: `/admin/wp-json/scg/v1/medias/` endpoint
+- ***Removed***: Demo contents
+- ***Updated***: Language files
+
 
 ***2024-10-13***
 - ***removed***: hideForSeo Class Name

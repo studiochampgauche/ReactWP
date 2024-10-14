@@ -177,17 +177,7 @@ const Loader = {
 
 
 
-
-                        const callMediaGroups = await fetch(await Cache.get(window.SYSTEM.restPath + 'scg/v1/medias'));
-
-                        if(!callMediaGroups.ok) throw new Error('Medias groups can\'t be loaded');
-
-
-                        Cache.put(callMediaGroups.url, callMediaGroups.clone());
-
-
-
-                        let mediaGroups = await callMediaGroups.json();
+                        let mediaGroups = MEDIAS;
                         
 
                         if(Array.isArray(mediaGroups)){

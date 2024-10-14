@@ -9,6 +9,7 @@
 
 	$wp->main();
 
+
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -18,6 +19,7 @@
 <body>
 	<noscript>You need to enable JavaScript to run this app.</noscript>
 	<div id="viewport">
+
 		<div id="preloader">
 			<div class="contents">
 				<span>Hello world</span>
@@ -26,7 +28,9 @@
 				</div>
 			</div>
 		</div>
+
 		<div id="app"></div>
+
 	</div>
 	<?php wp_footer(); ?>
 </body>
