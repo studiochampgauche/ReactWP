@@ -10,6 +10,7 @@
 - ***Removed***: `/admin/wp-json/scg/v1/settings/` endpoint
 - ***Removed***: `/admin/wp-json/scg/v1/medias/` endpoint
 - ***Removed***: Demo contents
+- ***Removed***: `Nav.jsx` and `Logo.jsx` component
 - ***Updated***: Language files
 
 
