@@ -207,3 +207,8 @@ try{
 
 ## What's Next
 - Maintenance mode
+
+
+## You start with a good base!
+
+![Lighthouse](https://champgauche.studio/admin/wp-content/uploads/2024/10/Capture-decran-2024-10-14-103713.png)
