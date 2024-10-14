@@ -156,6 +156,9 @@ class StudioChampGauche{
         });
 
 
+        /*
+        * wp_enqueue_scripts
+        */
         add_action('wp_enqueue_scripts', function(){
 
             /*
@@ -169,6 +172,30 @@ class StudioChampGauche{
             
             if(!self::field('source_code_classic_theme_styles'))
                 wp_dequeue_style('classic-theme-styles');
+
+
+            /*
+            * Main Style
+            */
+            //wp_enqueue_style('scg-main', str_replace('/admin', '', site_url('/assets/css/main.min.css')), null, null, null);
+
+
+            /*
+            * Main Javascript
+            */
+            wp_enqueue_script('scg-main', str_replace('/admin', '', site_url('/assets/js/main.min.js')), null, null, true);
+            
+            
+            add_filter('script_loader_tag', function($tag, $handle, $src){
+                if($handle !== 'scg-main')
+                    return $tag;
+
+                $tag = '<script src="' . esc_url( $src ) . '"></script>';
+
+                return $tag;
+
+            } , 10, 3);
+
 
 
         });
@@ -562,7 +589,34 @@ class StudioChampGauche{
             }
             
         });
+
+        /*
+        * Shot Events on template_redirect
+        */
+        add_action('template_redirect', function(){
+            
+            if(is_admin()) return;
+
+            wp_redirect(admin_url());
+
+            exit;
+        });
+
+
+
+        /*
+        * Shot Events on wp_head
+        */
+        add_action('wp_head', function(){
+            
+            echo '
+                <style type="text/css">
+                    '. file_get_contents('assets/css/main.min.css') .'
+                </style>
+            ';
+        });
         
+
         
         /*
 		* Save ACF in JSON

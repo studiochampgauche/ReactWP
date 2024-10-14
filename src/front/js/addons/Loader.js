@@ -28,6 +28,13 @@ const Loader = {
 
 
             tl
+            .to(panelElement.querySelector('.gbar .line'), .2, {
+                scaleX: 1
+            })
+            .to(panelElement.querySelector('.gbar .line'), .2, {
+                scaleX: 0,
+                transformOrigin: 'right center'
+            })
             .add(() => {
 
                 /*
@@ -36,8 +43,6 @@ const Loader = {
                 if(
                     
                     !window.gscroll
-
-                    || !window.loader.isLoaded.css
 
                     || !window.loader.isLoaded.fonts
 
@@ -56,11 +61,18 @@ const Loader = {
                 }
 
             })
+            .to(panelElement.querySelector('.gbar .line'), .2, {
+                scaleX: 1,
+                transformOrigin: 'left center'
+            })
+            .to(panelElement.querySelector('.gbar .line'), .2, {
+                scaleX: 0,
+                transformOrigin: 'right center'
+            })
             .to(panelElement, .6, {
-                delay: .1,
                 opacity: 0,
                 onStart: () => done()
-            })
+            }, '-=.4')
             .add(() => {
 
                 panelElement.remove();
@@ -80,42 +92,6 @@ const Loader = {
 
                     let fontDatas = [],
                         mediaDatas = [];
-
-
-
-                    const css = () => {
-
-                        const cssLinkElement = document.getElementById('mainStyle');
-
-                        if (cssLinkElement.sheet){
-
-                            if(cssLinkElement.sheet.cssRules.length)
-                                loaded();
-                            else
-                                throw new Error('CSS can\'t be load or no cssRules can\'t be found.');
-
-                        } else {
-
-                            cssLinkElement.onload = () => loaded();
-
-                            cssLinkElement.onerror = () => {
-
-                                throw new Error('CSS can\'t be load');
-
-                            };
-
-                        }
-
-
-                        function loaded(){
-
-                            window.loader.isLoaded.css = true;
-
-                            done();
-
-                        }
-
-                    }
 
 
                     const fonts = () => {
@@ -319,7 +295,6 @@ const Loader = {
 
                     try{
 
-                        css();
                         fonts();
                         otherMedias();
 

@@ -1,7 +1,12 @@
 ## Changelog
 
-***2024-10-11***
+
+***2024-10-13***
 - ***removed***: hideForSeo Class Name
+- ***Changed***: How we do SSR (experimental)... we now loading wordpress by including `wp-load.php` in the frontend. With this, we have stop calling `<head>` child elements and `<html>` atributes with cURL
+- ***Changed***: We stopped loading the main.min.css file using a `<link>` element. We now include it as inline styles.
+- ***Added***: When you visit the frontend admin part (not frontend React) e.g. `/admin`, you are redirect to `/admin/wp-admin`
+
 
 
 ***2024-10-11***
