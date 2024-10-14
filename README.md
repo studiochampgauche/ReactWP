@@ -104,7 +104,9 @@ RewriteRule ^ index.php [L]
 
 The loader concept initiates a preloading animation and the downloading of fonts, images, videos and audios. It make sure you have your medias, styles and the GSAP SmoothScroller ready before allowing visitors to navigate.
 
-You'll find the preloader HTML and its inline styles in `src > front > template > index.php`.
+You'll find the preloader HTML in `src > front > template > index.php`.
+
+You'll find the preloader SCSS in `src > front > scss > site > _preloader.scss`.
 
 You'll find the preloader JavaScript in `src > front > js > addons > Loader.js`:
 
