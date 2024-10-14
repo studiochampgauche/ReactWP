@@ -120,7 +120,7 @@ You'll find the preloader SCSS in `src > front > scss > site > _preloader.scss`.
 You'll find the preloader JavaScript in `src > front > js > addons > Loader.js`:
 
 - `Loader.init()` initiates the preloader animation.
-- `Loader.downloader().init()` initiates the downloading of fonts, images, videos and audios. At the same time, it check if we have the styles.
+- `Loader.downloader().init()` initiates the downloading of fonts, images, videos and audios.
 - `Loader.downloader().display()` replaces each target by its media.
 
 
