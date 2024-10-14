@@ -3,6 +3,12 @@
 This boilerplate help us to quickly set up a React Single Page Application (SPA) with a WordPress and ACF Pro backend.
 
 
+## Start with a good base!
+
+[See features](https://github.com/studiochampgauche/headless-react-wordpress-boilerplate?tab=readme-ov-file#features)
+![Lighthouse](https://champgauche.studio/admin/wp-content/uploads/2024/10/Capture-decran-2024-10-14-103713.png)
+
+
 ## Features
 
 - Webpack setup
@@ -207,8 +213,3 @@ try{
 
 ## What's Next
 - Maintenance mode
-
-
-## You start with a good base!
-
-![Lighthouse](https://champgauche.studio/admin/wp-content/uploads/2024/10/Capture-decran-2024-10-14-103713.png)
