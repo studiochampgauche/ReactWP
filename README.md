@@ -1,6 +1,6 @@
 # Headless React-WordPress Boilerplate
 
-This project is designed to help us quickly set modern web applications using React as the front-end and WordPress as the back-end that'll go on awwwards, leveraging a Hybrid Rendering approach.
+This project is designed to help us quickly set modern web applications using React as the front-end and WordPress as the back-end that'll go on Awwwards, leveraging a Hybrid Rendering approach.
 
 
 ## Hybrid Rendering Approach
