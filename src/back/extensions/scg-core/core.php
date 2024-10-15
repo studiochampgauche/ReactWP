@@ -686,18 +686,6 @@ class StudioChampGauche{
         
 	}
 
-	static function menu($theme_location = null, $args = []){
-
-		return StudioChampGauche\Utils\Menu::get($theme_location, $args);
-        
-	}
-
-	static function button($text = null, $args = []){
-        
-        return StudioChampGauche\Utils\Button::get($text, $args);
-        
-	}
-
 	static function source($args = []){
         
         return StudioChampGauche\Utils\Source::get($args);
