@@ -219,7 +219,7 @@ add_action('acf/init', function(){
 ``` 
 
 
-***`scg::cpt($post_type = 'post', $args = [])`***
+#### ***`scg::cpt($post_type = 'post', $args = [])`***
 
 - Call [https://developer.wordpress.org/reference/classes/wp_query/](new WP_Query()).
 - You can pass the first parameter to `null` if you want pass it in `$args`
@@ -231,7 +231,7 @@ StudioChampGauche\Utils\CustomPostType::default('paged', 1);
 ```
 
 
-***`scg::source($args = [])`***
+#### ***`scg::source($args = [])`***
 
 - Get URL or path.
 
@@ -247,7 +247,7 @@ StudioChampGauche\Utils\Source::default('url', true);
 ```
 
 
-***`add_filter('scg_wp_head', function($wp_heads){});`***
+#### ***`add_filter('scg_wp_head', function($wp_heads){});`***
 
 - Add, modify and remove metadata.
 
