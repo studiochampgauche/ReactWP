@@ -2,7 +2,7 @@
 
 ***2024-10-15***
 - ***Added***: Button.jsx
-- ***Powers-up***: Improve README.md
+- ***Improve***: README.md
 
 
 ***2024-10-14***
