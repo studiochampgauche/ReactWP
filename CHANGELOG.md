@@ -1,5 +1,10 @@
 ## Changelog
 
+***2024-10-15***
+- ***Added***: Button.jsx
+- ***Powers-up***: Improve README.md
+
+
 ***2024-10-14***
 - ***Added***: `Cache.delete()`. See `src > front > js > addons > Cache.js`
 - ***Added***: Cache version from backend
