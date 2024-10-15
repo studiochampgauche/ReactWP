@@ -200,7 +200,7 @@ try{
 
 Through your frontend or backend depending the case, you can use these custom PHP functions and hooks:
 
-***`scg::field($field, $id = false, $format = true, $escape = false)`***
+#### ***`scg::field($field, $id = false, $format = true, $escape = false)`***
 
 - Call `get_field()` of ACF.
 - It'll check first in `option` before the current page if you don't set an ID.
