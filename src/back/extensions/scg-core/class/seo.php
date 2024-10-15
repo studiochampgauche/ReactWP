@@ -83,20 +83,12 @@ class Seo{
 				if($obj->user_nicename)
 					$wp_heads['og_profile_username'] = '<meta property="profile:username" content="'. $obj->user_nicename .'" />';
 
-
-				$wp_heads['og_profile_gender'] = '';
 				
 			} elseif(self::og_type() === 'article'){
 				
 				$wp_heads['og_article_published_time'] = '<meta property="article:published_time" content="'. $obj->post_date_gmt .'" />';
 				
 				$wp_heads['og_article_modified_time'] = '<meta property="article:modified_time" content="'. $obj->post_modified_gmt .'" />';
-				
-				$wp_heads['og_article_expiration_time'] = '';
-
-				$wp_heads['og_article_section'] = '';
-
-				$wp_heads['og_article_tag'] = '';
 				
 				$wp_heads['og_article_author'] = '<meta property="article:author" content="'. get_author_posts_url($obj->post_author) .'" />';
 				
