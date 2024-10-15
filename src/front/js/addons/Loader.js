@@ -299,9 +299,7 @@ const Loader = {
                     function done(){
 
                         if(
-                            !window.loader.isLoaded.css
-
-                            || !window.loader.isLoaded.fonts
+                            !window.loader.isLoaded.fonts
 
                             || !window.loader.isLoaded.images
 

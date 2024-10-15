@@ -4,6 +4,7 @@
 - ***Added***: Button.jsx
 - ***Improve***: README.md
 - ***Fixed***: Since ***2024-10-13***, styles have been loaded as inline styles, so the CSS path variable was not correct.
+- ***Fixed***: Since styles was been loaded as inline styles, Loader concept can't resolve `window.loader.medias`. Fixed.
 
 
 ***2024-10-14***
