@@ -5,7 +5,7 @@ This project is designed to help us quickly set modern web applications using Re
 
 ## Hybrid Rendering Approach
 
-1. ***Server-Side Data Injection:*** Essential data, including metadata, routes, styles, and scripts, are generated and injected by the server with PHP using WordPress. This ensures that important information is available before the application is loaded in the browser.
+1. ***Server-Side Data Injection:*** Essential data, including metadata, routes, medias, styles, and scripts, are injected by the server with PHP using WordPress. This ensures that important information is available before the application is loaded in the browser.
 
 2. ***Client-Side Rendering (CSR):*** The React application renders components on the client side, leveraging the pre-loaded data without requiring additional fetch requests. This enhances performance and improves the user experience.
 
