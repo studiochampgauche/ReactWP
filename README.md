@@ -193,14 +193,8 @@ try{
 #### Scss/Sass/Css
 - You can use `Sass` instead of `Scss` by turn your `.scss` extension to `.sass` and by removing brackets.
 - Turn easly your pixel units to viewport units in your css by using:
-    - `vw($value, $screen_dimension: 1920px)`
-    - `svw($value, $screen_dimension: 1920px)`
-    - `lvw($value, $screen_dimension: 1920px)`
-    - `dvw($value, $screen_dimension: 1920px)`
-    - `vh($value, $screen_dimension: 1080px)`
-    - `svh($value, $screen_dimension: 1080px)`
-    - `lvh($value, $screen_dimension: 1080px)`
-    - `dvh($value, $screen_dimension: 1080px)`
+    - `vw|svw|lvw|dvw($value, $screen_dimension: 1920px)`
+    - `vh|svh|lvh|dvh($value, $screen_dimension: 1080px)`
 
 #### PHP
 
