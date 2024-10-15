@@ -297,6 +297,9 @@ add_filter('scg_wp_head', function($wp_heads){
 - fav_ms_tile_270x270
 
 
+> [!NOTE]
+> If you want remove a displayed metadata, pass it to empty.
+
 
 
 ## To Know
