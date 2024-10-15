@@ -247,6 +247,56 @@ StudioChampGauche\Utils\Source::default('url', true);
 ```
 
 
+***`add_filter('scg_wp_head', function($wp_heads){});`***
+
+- Add, modify and remove metadata.
+
+Example:
+```
+add_filter('scg_wp_head', function($wp_heads){
+                
+    /*
+    * Add Open Graph article:section and article:tag on Post Type 'post'
+    */
+    
+    if(is_singular(['post'])){
+    
+        $wp_heads['og_article_section'] = '<meta property="article:section" content="" />';
+        
+        $wp_heads['og_article_tag'] = '<meta property="article:tag" content="" />';
+        
+    }
+
+    return $wp_heads;
+
+});
+```
+
+***Existing keys***
+
+- title
+- charset
+- compatible
+- viewport
+- description
+- og_type
+- og_profile_first_name
+- og_profile_last_name
+- og_profile_username
+- og_article_published_time
+- og_article_modified_time
+- og_article_author
+- og_url
+- og_site_name
+- og_title
+- og_description
+- og_image
+- fav_ie_32x32
+- fav_apple_touch_180x180
+- fav_all_browsers_192x192
+- fav_ms_tile_270x270
+
+
 
 
 ## To Know
