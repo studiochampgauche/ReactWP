@@ -185,6 +185,74 @@ try{
 >- You can use wordpress Hook like `save_post` with `update_field` of ACF for update your Cache version when a post is saved
 
 
+## Hidden Possibilities
+
+#### Components
+- Use `<Wrapper value={my_value} />` from `src > front > js > components > Wrapper.jsx` for insert HTML returns when you can't use `dangerouslySetInnerHTML`.
+
+#### Scss/Sass/Css
+- You can use `Sass` instead of `Scss` by turn your `.scss` extension to `.sass` and by removing brackets.
+- Turn easly your pixel units to viewport units in your css by using:
+    - `vw($value, $screen_dimension: 1920px)`
+    - `svw($value, $screen_dimension: 1920px)`
+    - `lvw($value, $screen_dimension: 1920px)`
+    - `dvw($value, $screen_dimension: 1920px)`
+    - `vh($value, $screen_dimension: 1080px)`
+    - `svh($value, $screen_dimension: 1080px)`
+    - `lvh($value, $screen_dimension: 1080px)`
+    - `dvh($value, $screen_dimension: 1080px)`
+
+#### PHP
+
+Through your frontend or backend depending the case, you can use these custom PHP functions and hooks:
+
+***`scg::field($field, $id = false, $format = true, $escape = false)`***
+
+- Call `get_field()` of ACF.
+- It'll check first in `option` before the current page if you don't set an ID.
+
+Replace your return with `str_replace()` when you use `scg::field()`, `StudioChampGauche\Utils\Field::get()` or ACF REST API:
+```
+add_action('acf/init', function(){
+
+    StudioChampGauche\Utils\Field::replace([
+        '{SITE_NAME}'
+    ], [
+        StudioChampGauche\SEO\SEO::site_name()
+    ]);
+
+});
+``` 
+
+
+***`scg::cpt($post_type = 'post', $args = [])`***
+
+- Call [https://developer.wordpress.org/reference/classes/wp_query/](new WP_Query()).
+- You can pass the first parameter to `null` if you want pass it in `$args`
+
+Set default parameters when you call `scg::cpt()` or `StudioChampGauche\Utils\CustomPostType::get()`:
+```
+StudioChampGauche\Utils\CustomPostType::default('posts_per_page', -1);
+StudioChampGauche\Utils\CustomPostType::default('paged', 1);
+```
+
+
+***`scg::source($args = [])`***
+
+- Get URL or path.
+
+`$args` parameters:
+***base*** Default value is `/`, equal to theme root.
+***path*** Path to your file
+***url *** Default value is `false` returning the absolute path. `true` if you want the url.
+
+Set default parameters when you call `scg::source()` or `StudioChampGauche\Utils\Source::get()`:
+```
+StudioChampGauche\Utils\Source::default('base', '/');
+StudioChampGauche\Utils\Source::default('url', true);
+```
+
+
 
 
 ## To Know
@@ -193,8 +261,6 @@ try{
 - Minification and compression works only in production mode.
 - Image compression supports GIF, JPG, PNG, and SVG; WEBP support is not implemented yet.
 - Image compression works only for the frontend part. If you manage your medias via backend, you need to manage it at your hands.
-- Use `<Wrapper value={my_value} />` for insert HTML returns when you can't use `dangerouslySetInnerHTML`.
-- If you prefer using `Sass` instead of `Scss`, use `.sass` extension instead of `.scss` and remove all brackets.
 - Using `mailto:`, `tel:`, or other schemas/protocols that are not `http` or `https` without `target` attribute will create a bug on click. e.g. use `target="_self"` for mailto or others that are not `http` or `https`.
 - On the frontend, if a media file isn’t directly imported in your main JS app files, Webpack won’t recognize or compile it. To ensure Webpack processes the file, you need to manually import it into the relevant JS file. For example, if you're using an audio file, navigate to `src > front > medias > audios` and import the file within `audios.js`.
 
