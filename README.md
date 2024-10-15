@@ -18,6 +18,7 @@ This boilerplate help us to quickly set up a React Single Page Application (SPA)
 - Image Compression
 - ESM format
 - App routing
+- Run on PHP server
 - Hybrid Rendering SSR + Client-Side Fetching
 - Document head management
 - Smooth Page Transition
