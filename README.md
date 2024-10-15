@@ -84,7 +84,7 @@ RewriteRule ^ index.php [L]
 - `wp-load.php` is loaded in the frontend allowing you use the WordPress ecosystem like plugins, customs fonctions, etc. inner your frontend.
 - We render server-side the childrens of the `<head>` element and the attributes of its parent (the `<html>` element). React Helmet then takes over.
 - We server-side data injecting routes in `src > back > theme > function.php`. After, routes are mounted in `src > front > js > App.jsx`.
-- Use `SYSTEM.ajaxPath` for call the `admin-ajax.php` of wordpress. `ajaxRequests` function is ready in `src > back > theme > function.php`.
+- Use `SYSTEM.ajaxPath` for call the `admin-ajax.php` of WordPress. `ajaxRequests` function is ready in `src > back > theme > function.php`.
 - Using `SYSTEM.restPath` will return the string `/admin/wp-json/`. `restRequests` function is ready in `src > back > theme > function.php`.
 - Every page, post, custom post type, and some users (like authors) that make up your routes must be linked to a Component. This requires a field for each admin element to assign a component name, which you then map in the ecosystem.
 - To map components, add them to the `componentMap` object in `src > front > js > App.jsx`.
@@ -182,7 +182,7 @@ try{
 > [!NOTE]
 >- Cache Concept works only on secure URLs.
 >- It's ok to have `Cache.put()` even if you don't need to do it, because the function will work only if the url is not on protocol `blob:`.
->- You can use wordpress Hook like `save_post` with `update_field` of ACF for update your Cache version when a post is saved
+>- You can use WordPress Hook like `save_post` with `update_field` of ACF for update your Cache version when a post is saved
 
 
 ## Hidden Possibilities
