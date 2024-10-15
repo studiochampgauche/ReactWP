@@ -3,6 +3,7 @@
 ***2024-10-15***
 - ***Added***: Button.jsx
 - ***Improve***: README.md
+- ***Fixed***: Since ***2024-10-13***, styles was loaded inline-style so css path variable was not good.
 
 
 ***2024-10-14***
