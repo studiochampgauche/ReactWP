@@ -236,9 +236,9 @@ StudioChampGauche\Utils\CustomPostType::default('paged', 1);
 - Get URL or path.
 
 `$args` parameters:
-***base*** Default value is `/`, equal to theme root.
-***path*** Path to your file
-***url *** Default value is `false` returning the absolute path. `true` if you want the url.
+- ***base*** Default value is `/`, equal to theme root.
+- ***path*** Path to your file
+- ***url *** Default value is `false` returning the absolute path. `true` if you want the url.
 
 Set default parameters when you call `scg::source()` or `StudioChampGauche\Utils\Source::get()`:
 ```
