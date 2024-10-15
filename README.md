@@ -1,47 +1,46 @@
 # Headless React-WordPress Boilerplate
 
-This boilerplate help us to quickly set up a React Single Page Application (SPA) with a WordPress and ACF Pro backend.
+This project is designed to streamline the development of modern web applications using React as the front-end and WordPress as the back-end, leveraging a Hybrid Rendering approach.
 
 
-## Start with a good base!
+## Hybrid Rendering Approach
 
-[See features](https://github.com/studiochampgauche/headless-react-wordpress-boilerplate?tab=readme-ov-file#features)
+1. ***Server-Side Data Injection:*** Essential data, including metadata, routes, styles, and scripts, are generated and injected by the server with PHP using WordPress. This ensures that important information is available before the application is loaded in the browser.
 
-![Lighthouse](https://champgauche.studio/admin/wp-content/uploads/2024/10/Capture-decran-2024-10-14-110304.png)
+2. ***Client-Side Rendering (CSR):*** The React application renders components on the client side, leveraging the pre-loaded data without requiring additional fetch requests. This enhances performance and improves the user experience.
 
 
 ## Features
 
-- Webpack setup
-- SCSS/SASS support
-- JavaScript & CSS minification
-- Image Compression
-- ESM format
-- App routing
-- Run on PHP server
-- Hybrid Rendering SSR + Client-Side Fetching
-- Document head management
-- Smooth Page Transition
-- Smooth Scrolling
-- Loader Concept
-- Cache Concept
+- Webpack setup for optimized asset management
+- SCSS/SASS support for streamlined styling
+- JavaScript & CSS minification for improved load times
+- Image Compression to enhance performance
+- ESM format for modern JavaScript support
+- App routing for seamless navigation
+- Run on PHP server for compatibility with WordPress
+- Hybrid Rendering for a balanced approach to data fetching
+- Document head management for SEO optimization
+- Smooth Page Transition for a better user experience
+- Smooth Scrolling for enhanced navigation
+- Loader Concept for managing loading states
+- Cache Concept to improve performance
 
 
 ## Ready
 
-- React Router
-- React Helmet
-- GSAP Premium
-- Free Font Awesome
-
+- Integrated with React Router for dynamic routing
+- Utilizing React Helmet for document head management
+- Includes GSAP Premium for advanced animations
+- Free Font Awesome for icon support
 
 
 ## Requirements
 
-- NodeJS (minimum tested: v20.15.0)
 - ACF Pro License
 - PHP 8.2+
 - GSAP Club Membership
+- NodeJS (for local only, minimum tested: v20.15.0)
 
 
 ## Installation Guide
@@ -62,7 +61,6 @@ This boilerplate help us to quickly set up a React Single Page Application (SPA)
 15. Start working!
 
 
-
 ## Web Server Configuration
 
 - Place your production files from `dist` directory on your web server, or set this directory as the root.
@@ -81,12 +79,11 @@ RewriteRule ^ index.php [L]
 > The `dist` directory is created when you install WordPress with the `npm run get:wp` command and is populated throughout your progress.
 
 
-
 ## Frontend-Backend Interaction
 
 - `wp-load.php` is loaded in the frontend allowing you use the wordpress ecosystem like plugins, customs fonctions, etc. inner your frontend.
 - We render server-side the childrens of the `<head>` element and the attributes of its parent (the `<html>` element). React Helmet then takes over.
-- We server-side rendering Routes. Routes are given in `src > back > theme > function.php` and they are mounted in `src > front > js > App.jsx`.
+- We server-side data injecting routes in `src > back > theme > function.php`. After, routes are mounted in `src > front > js > App.jsx`.
 - Use `SYSTEM.ajaxPath` for call the `admin-ajax.php` of wordpress. `ajaxRequests` function is ready in `src > back > theme > function.php`.
 - Using `SYSTEM.restPath` will return the string `/admin/wp-json/`. `restRequests` function is ready in `src > back > theme > function.php`.
 - Every page, post, custom post type, and some users (like authors) that make up your routes must be linked to a Component. This requires a field for each admin element to assign a component name, which you then map in the ecosystem.
@@ -96,7 +93,6 @@ RewriteRule ^ index.php [L]
 > - Pages and posts already have the required field. For custom post types, go to (yourdomain.com/admin/wp-admin/admin.php?page=site-settings), select your CPT in the `Modules` tab under `Component`. For add the field like for the users, edit the `render.php` file of the Champ Gauche Core Plugin around line 1358.
 > - If you have many posts and don't want to manually assign a Component Name for each, you can either create logic in `App.jsx` or in `functions.php` or use ACF hooks to auto-populate the field.
 > - Use fetch for update datas composing your routes... You probably can do your checkup in `PageTransion.jsx` before rendering the new page.
-
 
 
 ## Page Transitions
