@@ -108,7 +108,7 @@ RewriteRule ^ index.php [L]
 
 ## Loader Concept
 
-The loader concept initiates a preloading animation and the downloading of fonts, images, videos and audios. It make sure you have your medias and the GSAP SmoothScroller ready before allowing visitors to navigate.
+The loader concept initiates a preloading animation and the downloading of fonts, images, videos and audios before your app is mounted. It make sure you have your medias and the GSAP SmoothScroller ready before allowing visitors to navigate.
 
 You'll find the preloader HTML in `src > front > template > index.php`.
 
@@ -153,7 +153,7 @@ All functions implemented with the Loader are using a `Promise`:
 
 The Cache concept uses the Cache Service Worker API. It lets you add your endpoints (or others) to the cache, and automatically caches media you upload with the Loader concept. He doesn't manage your headers.
 
-For activate the cache go to your admin `(yourdomain.com/admin/wp-admin/admin.php?page=site-settings)` and click on "Extra" tab, you'll see `Cache version` and `Cache Expiration`. Version `0` will disable your cache, just add a version. 
+For activate the cache, go to your admin `(yourdomain.com/admin/wp-admin/admin.php?page=site-settings)` and click on "Extra" tab, you'll see `Cache version` and `Cache Expiration`. Version `0` will disable your cache, just add a version. 
 
 
 ***How it's work***
