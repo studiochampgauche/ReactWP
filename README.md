@@ -158,7 +158,7 @@ For activate the cache go to your admin `(yourdomain.com/admin/wp-admin/admin.ph
 
 ***How it's work***
 
-For example, put a look on what we have do for get pages before we have server-side rendering:
+For example, put a look on what we have do for get pages before we have server-side injecting:
 ```
 try{
 
@@ -183,6 +183,10 @@ try{
 >- Cache Concept works only on secure URLs.
 >- It's ok to have `Cache.put()` even if you don't need to do it, because the function will work only if the url is not on protocol `blob:`.
 >- You can use wordpress Hook like `save_post` with `update_field` of ACF for update your Cache version when a post is saved
+
+
+## Hidden Possibilities
+
 
 
 ## To Know
