@@ -222,7 +222,7 @@ add_action('acf/init', function(){
 #### ***`scg::cpt($post_type = 'post', $args = [])`***
 
 - Call [new WP_Query()](https://developer.wordpress.org/reference/classes/wp_query/).
-- You can pass the first parameter to `null` if you want pass it in `$args`
+- You can pass the first parameter to `null` if you want pass `post_type` in `$args`
 
 Set default parameters when you call `scg::cpt()` or `StudioChampGauche\Utils\CustomPostType::get()`:
 ```
