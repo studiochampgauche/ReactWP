@@ -93,7 +93,7 @@ RewriteRule ^ index.php [L]
 
 > [!NOTE]  
 > - Pages and posts already have the required field. For custom post types, go to (yourdomain.com/admin/wp-admin/admin.php?page=site-settings), select your CPT in the `Modules` tab under `Component`. For add the field like for the users, edit the `render.php` file of the Champ Gauche Core Plugin around line 1358.
-> - If you have many posts and don't want to manually assign a Component Name for each, you can either create logic in App.jsx or use ACF hooks to auto-populate the field.
+> - If you have many posts and don't want to manually assign a Component Name for each, you can either create logic in `App.jsx` or in `functions.php` or use ACF hooks to auto-populate the field.
 > - Use fetch for update datas composing your routes... You probably can do your checkup in `PageTransion.jsx` before rendering the new page.
 
 
