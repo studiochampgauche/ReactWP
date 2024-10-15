@@ -185,8 +185,6 @@ try{
 >- You can use wordpress Hook like `save_post` with `update_field` of ACF for update your Cache version when a post is saved
 
 
-## Hidden Possibilities
-
 
 
 ## To Know
