@@ -298,7 +298,7 @@ add_filter('scg_wp_head', function($wp_heads){
 
 
 > [!NOTE]
-> If you want remove a displayed metadata, pass it to empty.
+> If you want remove an existing metadata, pass it to empty.
 
 
 
