@@ -45,14 +45,30 @@
 
                     foreach ($data as $k => $v) {
                         
+                        $acf = get_fields($v->ID);
+
                         $routes[] = [
                             'id' => $v->ID,
                             'title' => get_the_title($v->ID),
                             'path' => str_replace(site_url(), '', get_permalink($v->ID)),
                             'type' => $v->post_type,
-                            'seo' => scg::field('seo', $v->ID),
-                            'componentName' => scg::field('component_name', $v->ID)
+                            'seo' => (isset($acf['seo']) ? $acf['seo'] : []),
+                            'componentName' => (isset($acf['component_name']) ? $acf['component_name'] : '')
                         ];
+
+
+                        $unset = [
+                            'seo',
+                            'component_name'
+                        ];
+                        
+                        foreach($unset as $u){
+
+                            if(isset($acf[$u])) unset($acf[$u]);
+
+                        }
+
+                        $routes[$k]['acf'] = $acf;
 
 
                         if($routes[$k]['type'] === 'post'){
