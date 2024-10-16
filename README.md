@@ -208,7 +208,7 @@ Through your frontend or backend depending the case, you can use these custom PH
 - Call `get_field()` of ACF.
 - It'll check first in `option` before the current page if you don't set an ID.
 
-Replace your return with `str_replace()` when you use `scg::field()`, `StudioChampGauche\Utils\Field::get()` or ACF REST API:
+Replace your return with `str_replace()` when you use ACF PHP functions or ACF REST API:
 ```
 add_action('acf/init', function(){
 
