@@ -673,7 +673,7 @@ class StudioChampGauche{
 
 
         /*
-        * ACF Replace values when you use get_fields()
+        * ACF Replace values from php functions
         */
         add_filter('acf/format_value', function ($value, $post_id, $field){
 
@@ -688,6 +688,29 @@ class StudioChampGauche{
             return $return;
             
         }, 10, 3);
+
+
+
+        /*
+        * ACF Replace values from REST API
+        */
+        add_filter( 'acf/settings/rest_api_format', function () {
+            return 'standard';
+        });
+
+        add_filter('acf/rest/format_value_for_rest', function ($value_formatted, $post_id, $field, $value, $format){
+
+            $return = $value_formatted;
+
+            if($return && is_array($return) && \StudioChampGauche\Utils\Field::$elementsToReplace)
+                \StudioChampGauche\Utils\Field::recursive(\StudioChampGauche\Utils\Field::$elementsToReplace[0], \StudioChampGauche\Utils\Field::$elementsToReplace[1], $return);
+            elseif($return && is_string($return) && \StudioChampGauche\Utils\Field::$elementsToReplace)
+                $return = str_replace(\StudioChampGauche\Utils\Field::$elementsToReplace[0], \StudioChampGauche\Utils\Field::$elementsToReplace[1], $return);
+
+
+            return $return;
+            
+        }, 10, 5);
         
     }
     
