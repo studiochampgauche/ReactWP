@@ -73,6 +73,7 @@
 
                         if($routes[$k]['type'] === 'post'){
 
+                            $routes[$k]['componentName'] = 'SinglePostPage';
                             $routes[$k]['seo']['og_type'] = 'article';
 
                             $routes[$k]['extraDatas'] = [
