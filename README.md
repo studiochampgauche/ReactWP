@@ -104,6 +104,9 @@ RewriteRule ^ index.php [L]
 - When you change page, you can't control the scroll behavior. The scroll behavior'll be "instant".
 - Edit transition settings in `src > front > js > components > PageTransition.jsx`.
 
+> [!WARNING]  
+> - Using `mailto:`, `tel:`, other protocols that are not `http` or `https` or an attribute like `download` without `target` attribute will create a bug on click. e.g. use `target="_self"`, `target="_blank"` or other.
+
 
 
 ## Loader Concept
@@ -308,7 +311,6 @@ add_filter('scg_wp_head', function($wp_heads){
 - Minification and compression works only in production mode.
 - Image compression supports GIF, JPG, PNG, and SVG; WEBP support is not implemented yet.
 - Image compression works only for the frontend part. If you manage your medias via backend, you need to manage it at your hands.
-- Using `mailto:`, `tel:`, or other schemas/protocols that are not `http` or `https` without `target` attribute will create a bug on click. e.g. use `target="_self"` for mailto or others that are not `http` or `https`.
 - On the frontend, if a media file isn’t directly imported in your main JS app files, Webpack won’t recognize or compile it. To ensure Webpack processes the file, you need to manually import it into the relevant JS file. For example, if you're using an audio file, navigate to `src > front > medias > audios` and import the file within `audios.js`.
 
 
