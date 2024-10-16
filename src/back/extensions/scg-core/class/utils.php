@@ -10,16 +10,8 @@ class Field{
 
         if(!is_array(self::$elementsToReplace)) return;
 
-
-        $return = ($id ? get_field($field, $id, $format, $escape) : (!empty(get_field($field, 'option', $format, $escape)) ? get_field($field, 'option', $format, $escape) : get_field($field, $id, $format, $escape)));
-
 		
-		if($return && is_array($return) && self::$elementsToReplace)
-			self::recursive(self::$elementsToReplace[0], self::$elementsToReplace[1], $return);
-		elseif($return && is_string($return) && self::$elementsToReplace)
-			$return = str_replace(self::$elementsToReplace[0], self::$elementsToReplace[1], $return);
-		
-        return $return;
+        return ($id ? get_field($field, $id, $format, $escape) : (!empty(get_field($field, 'option', $format, $escape)) ? get_field($field, 'option', $format, $escape) : get_field($field, $id, $format, $escape)));
 
     }
 

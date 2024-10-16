@@ -1,5 +1,9 @@
 ## Changelog
 
+***2024-10-16***
+- ***Updated***: Add acf value replacement for other acf functions instead of only `get_field()`
+- ***Move***: ACF REST API replacement in `Studio Champ Gauche Core plugin` instead of `functions.php`
+
 
 ***2024-10-15***
 - ***Added***: Button.jsx

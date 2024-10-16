@@ -670,6 +670,24 @@ class StudioChampGauche{
 
 			return $paths;
 		});
+
+
+        /*
+        * ACF Replace values when you use get_fields()
+        */
+        add_filter('acf/format_value', function ($value, $post_id, $field){
+
+            $return = $value;
+
+            if($return && is_array($return) && \StudioChampGauche\Utils\Field::$elementsToReplace)
+                \StudioChampGauche\Utils\Field::recursive(\StudioChampGauche\Utils\Field::$elementsToReplace[0], \StudioChampGauche\Utils\Field::$elementsToReplace[1], $return);
+            elseif($return && is_string($return) && \StudioChampGauche\Utils\Field::$elementsToReplace)
+                $return = str_replace(\StudioChampGauche\Utils\Field::$elementsToReplace[0], \StudioChampGauche\Utils\Field::$elementsToReplace[1], $return);
+
+
+            return $return;
+            
+        }, 10, 3);
         
     }
     
