@@ -138,7 +138,7 @@ const App = () => {
                                                         extraDatas={route?.extraDatas}
                                                         seo={route?.seo}
                                                     />
-                                                    <Component id={route.id} title={route.title} path={route.path} postType={route.postType} seo={route.seo} />
+                                                    <Component id={route.id} title={route.title} path={route.path} postType={route.postType} seo={route.seo} acf={route.acf} />
                                                     <Footer />
                                                 </>
                                             }
