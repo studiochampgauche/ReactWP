@@ -53,7 +53,7 @@
                             'path' => str_replace(site_url(), '', get_permalink($v->ID)),
                             'type' => $v->post_type,
                             'seo' => (isset($acf['seo']) ? $acf['seo'] : []),
-                            'componentName' => (isset($acf['component_name']) ? $acf['component_name'] : '')
+                            'componentName' => (isset($acf['component_name']) && !empty($acf['component_name']) ? $acf['component_name'] : 'DefaultPage')
                         ];
 
 

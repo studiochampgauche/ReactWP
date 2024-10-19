@@ -12,6 +12,7 @@ import PageTransition from './components/PageTransition';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
+import DefaultPage from './pages/DefaultPage';
 import SinglePostPage from './pages/SinglePostPage';
 import WaitingPage from './pages/WaitingPage';
 import NotFoundPage from './pages/NotFoundPage';
@@ -91,6 +92,7 @@ if(parseFloat(SYSTEM.cacheVersion) > 0){
 
 const componentMap = {
     HomePage,
+    DefaultPage,
     SinglePostPage
 };
 
