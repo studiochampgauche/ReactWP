@@ -91,7 +91,7 @@ RewriteRule ^ index.php [L]
 - To map components, add them to the `componentMap` object in `src > front > js > App.jsx`.
 
 > [!NOTE]  
-> - Pages and posts already have the required field. For custom post types, go to (yourdomain.com/admin/wp-admin/admin.php?page=site-settings), select your CPT in the `Modules` tab under `Component`. For add the field like for the users, edit the `render.php` file of the Champ Gauche Core Plugin around line 1358.
+> - Pages and posts already have the required field. For custom post types, go to (yourdomain.com/admin/wp-admin/admin.php?page=site-settings), select your CPT in the `Modules` tab under `Component`. For add the field like for the users, edit the `render.php` file of the Champ Gauche Core Plugin around line 1787.
 > - If you have many posts and don't want to manually assign a Component Name for each, you can either create logic in `App.jsx` or in `functions.php` or use ACF hooks to auto-populate the field.
 > - Use fetch for update datas composing your routes... You probably can do your checkup in `PageTransion.jsx` before rendering the new page.
 
@@ -316,6 +316,20 @@ add_filter('scg_wp_head', function($wp_heads){
 > If you want remove an existing metadata, pass it to empty.
 
 
+#### In Admin Panel
+
+- You can clean Front End sources like wp_generator, WP Block Library, Global Styles, Classic Theme Styles, etc.
+- You can change the appearance of the admin panel to have a panel containing only what you need.
+- You can activate/deactivate Gutenberg
+- You can activate/deactivate Editor for `post` and `page` post_type.
+- You can remove default dashboard elements
+- You can manage theme locations
+- You can accept SVG
+- You can stop create multiple resizes of an image you upload
+- You can manage a global SEO and a specific SEO for each page, post_type, author and taxonomies.
+
+> [!NOTE]  
+> - Pages and posts already have the seo module. For custom post types, go to (yourdomain.com/admin/wp-admin/admin.php?page=site-settings), select your CPT in the `Modules` tab under `SEO`. For add the field like for the users, edit the `render.php` file of the Champ Gauche Core Plugin around line 1787.
 
 ## To Know
 
