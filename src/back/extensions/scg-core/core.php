@@ -192,9 +192,12 @@ class StudioChampGauche{
             */
             $siteUrl = site_url();
             wp_localize_script('scg-main', 'SYSTEM', [
-                'public' => (bool)get_option('blog_public'),
+                'public' => get_option('blog_public'),
                 'cacheVersion' => (scg::field('cache_version') ? scg::field('cache_version') : 0),
                 'cacheExpiration' => (scg::field('cache_expiration') ? scg::field('cache_expiration') : 0),
+                'consentActive' => (scg::field('consent_module') ? true : false),
+                'consentVersion' => (scg::field('consent_configs_version') ? scg::field('consent_configs_version') : 0),
+                'consentExpiration' => (scg::field('consent_configs_expiration') ? scg::field('consent_configs_expiration') : 0),
                 'baseUrl' => str_replace(['/admin/', '/admin'], '/', $siteUrl),
                 'adminUrl' => rtrim($siteUrl, '/') . '/',
                 'ajaxPath' => '/admin/wp-admin/admin-ajax.php',
@@ -643,6 +646,7 @@ class StudioChampGauche{
                     '. file_get_contents('assets/css/main.min.css') .'
                 </style>
             ';
+
         }, 3);
         
 
@@ -694,7 +698,7 @@ class StudioChampGauche{
         /*
         * ACF Replace values from REST API
         */
-        add_filter( 'acf/settings/rest_api_format', function () {
+        add_filter('acf/settings/rest_api_format', function () {
             return 'standard';
         });
 

@@ -1,5 +1,14 @@
 ## Changelog
 
+***2024-10-20***
+- ***Added***: Consent Concept `src > front > js > addons > Consent.js`
+- ***Added***: `src > front > scss > site > _buttons.scss`
+- ***Added***: `src > front > scss > site > _consent.scss`
+- ***Updated***: When App is render
+- ***Updated***: Language files
+- ***Updated***: `src > front > template > index.php`
+
+
 ***2024-10-19***
 - ***Added***: `src > front > js > pages > DefaultPage.jsx` component
 

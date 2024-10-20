@@ -4,6 +4,7 @@ import React, { StrictMode, useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import './addons/Consent';
 import Cache from './addons/Cache';
 import Loader from './addons/Loader';
 import Metas from './components/Metas';
@@ -17,23 +18,6 @@ import SinglePostPage from './pages/SinglePostPage';
 import WaitingPage from './pages/WaitingPage';
 import NotFoundPage from './pages/NotFoundPage';
 
-function initLoader(){
-
-    window.loader = {
-        anim: Loader.init(),
-        downloader: Loader.downloader(),
-        isLoaded: {
-            fonts: false,
-            images: false,
-            videos: false,
-            audios: false
-        }
-    };
-    window.loader.medias = window.loader.downloader.init();
-
-}
-
-
 if(parseFloat(SYSTEM.cacheVersion) > 0){
 
     const lastCacheVersion = localStorage.getItem('cacheVersion');
@@ -45,11 +29,11 @@ if(parseFloat(SYSTEM.cacheVersion) > 0){
 
         if(lastCacheVersion){
 
-            Cache.delete('cache-v' + lastCacheVersion).then(() => Cache.init('cache-v' + SYSTEM.cacheVersion).then(() => initLoader()));
+            Cache.delete('cache-v' + lastCacheVersion).then(() => Cache.init('cache-v' + SYSTEM.cacheVersion).then(() => initApp()));
 
         } else{
 
-            Cache.init('cache-v' + SYSTEM.cacheVersion).then(() => initLoader());
+            Cache.init('cache-v' + SYSTEM.cacheVersion).then(() => initApp());
 
         }
 
@@ -59,7 +43,7 @@ if(parseFloat(SYSTEM.cacheVersion) > 0){
 
     } else{
 
-        Cache.init('cache-v' + SYSTEM.cacheVersion).then(() => initLoader());
+        Cache.init('cache-v' + SYSTEM.cacheVersion).then(() => initApp());
 
     }
 
@@ -84,100 +68,117 @@ if(parseFloat(SYSTEM.cacheVersion) > 0){
         localStorage.removeItem('cacheEndTime');
 
 
-    initLoader();
+    initApp();
 
 }
 
 
+function initApp(){
 
-const componentMap = {
-    HomePage,
-    DefaultPage,
-    SinglePostPage
-};
+    window.loader = {
+        anim: Loader.init(),
+        downloader: Loader.downloader(),
+        isLoaded: {
+            fonts: false,
+            images: false,
+            videos: false,
+            audios: false
+        }
+    };
+    window.loader.medias = window.loader.downloader.init();
 
 
-const mainNode = document.getElementById('app');
-const root = createRoot(mainNode);
 
-const App = () => {
+    const componentMap = {
+        HomePage,
+        DefaultPage,
+        SinglePostPage
+    };
 
-    const [isLoaded, setLoaded] = useState(false);
 
-    useEffect(() => {
+    const mainNode = document.getElementById('app');
+    const root = createRoot(mainNode);
 
-        setLoaded(true);
+    const App = () => {
 
-    }, []);
+        const [isLoaded, setLoaded] = useState(false);
 
-    return (
-        <Router>
+        useEffect(() => {
 
-            {isLoaded ? (
-                <>
-                    <Header />
-                    <Scroller>
-                        <PageTransition>
-                            
-                            <Routes>
+            setLoaded(true);
 
-                                {ROUTES.map((route, i) => {
+        }, []);
 
-                                    const Component = componentMap[route.componentName];
+        return (
+            <Router>
 
-                                    route.seo.pageTitle = route.title;
+                {isLoaded ? (
+                    <>
+                        <Header />
+                        <Scroller>
+                            <PageTransition>
+                                
+                                <Routes>
 
-                                    return (
-                                        <Route
-                                            exact 
-                                            key={i} 
-                                            path={route.path} 
-                                            element={
-                                                <>
-                                                    <Metas
-                                                        extraDatas={route?.extraDatas}
-                                                        seo={route?.seo}
-                                                    />
-                                                    <Component id={route.id} title={route.title} path={route.path} postType={route.postType} seo={route.seo} acf={route.acf} />
-                                                    <Footer />
-                                                </>
-                                            }
-                                        />
-                                    )
-                                })}
+                                    {ROUTES.map((route, i) => {
 
-                                <Route
-                                    path="*"
-                                    element={
-                                        <>
-                                            <Metas
-                                                seo={{pageTitle: 'Error 404', stop_indexing: true}}
+                                        const Component = componentMap[route.componentName];
+
+                                        route.seo.pageTitle = route.title;
+
+                                        return (
+                                            <Route
+                                                exact 
+                                                key={i} 
+                                                path={route.path} 
+                                                element={
+                                                    <>
+                                                        <Metas
+                                                            extraDatas={route?.extraDatas}
+                                                            seo={route?.seo}
+                                                        />
+                                                        <Component id={route.id} title={route.title} path={route.path} postType={route.postType} seo={route.seo} acf={route.acf} />
+                                                        <Footer />
+                                                    </>
+                                                }
                                             />
-                                            <NotFoundPage />
-                                        </>
-                                    }
-                                />
+                                        )
+                                    })}
 
-                            </Routes>
-                            
-                        </PageTransition>
-                    </Scroller>
-                </>
-            ) : (
-                <Routes>
-                    <Route path="*" element={<WaitingPage />} />
-                </Routes>
-            )}
+                                    <Route
+                                        path="*"
+                                        element={
+                                            <>
+                                                <Metas
+                                                    seo={{pageTitle: 'Error 404', stop_indexing: true}}
+                                                />
+                                                <NotFoundPage />
+                                            </>
+                                        }
+                                    />
 
-        </Router>
+                                </Routes>
+                                
+                            </PageTransition>
+                        </Scroller>
+                    </>
+                ) : (
+                    <Routes>
+                        <Route path="*" element={<WaitingPage />} />
+                    </Routes>
+                )}
+
+            </Router>
+        );
+        
+    };
+
+    root.render(
+        //<StrictMode>
+            <HelmetProvider>
+                <App />
+            </HelmetProvider>
+        //</StrictMode>
     );
-    
-};
 
-root.render(
-    //<StrictMode>
-        <HelmetProvider>
-            <App />
-        </HelmetProvider>
-    //</StrictMode>
-);
+}

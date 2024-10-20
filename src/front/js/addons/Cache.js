@@ -1,3 +1,5 @@
+'use strict';
+
 const Cache = {
     cache: null,
     init: async function(cacheName){

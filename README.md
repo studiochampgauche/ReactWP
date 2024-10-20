@@ -25,6 +25,7 @@ This project is designed to help us quickly set modern web applications using Re
 - Smooth Scrolling for enhanced navigation
 - Loader Concept for managing loading states
 - Cache Concept to improve performance
+- Consent Concept
 
 
 ## Ready
@@ -188,6 +189,17 @@ try{
 >- You can use WordPress Hook like `save_post` with `update_field` of ACF for update your Cache version when a post is saved
 
 
+## Consent Concept
+
+The Consent concept provides a customizable box for your visitors, allowing them to accept or, if permitted, reject your policies.
+
+- For activate the consent box, go to your admin `(yourdomain.com/admin/wp-admin/admin.php?page=site-settings)` and click on "Modules" tab, you'll see the `Consent` module that you can active. When you active, you'll have a new tab on this page named `Consent Box` for your settings.
+- You can style this box using `SCSS` in the file located at `src/front/scss/site/_consent.scss`.
+- You can manage the HTML of the box in `src > front > template > index.php`.
+- Update the `action()` method in `src > front > js > addons > Consent.js` for manage what you do when a user accept or reject the box.
+
+
+
 ## Hidden Possibilities
 
 #### Components
@@ -203,7 +215,7 @@ try{
 
 Through your frontend or backend depending the case, you can use these custom PHP functions and hooks:
 
-#### ***`scg::field($field, $id = false, $format = true, $escape = false)`***
+##### ***`scg::field($field, $id = false, $format = true, $escape = false)`***
 
 - Call `get_field()` of ACF.
 - It'll check first in `option` before the current page if you don't set an ID.
@@ -222,7 +234,7 @@ add_action('acf/init', function(){
 ``` 
 
 
-#### ***`scg::cpt($post_type = 'post', $args = [])`***
+##### ***`scg::cpt($post_type = 'post', $args = [])`***
 
 - Call [new WP_Query()](https://developer.wordpress.org/reference/classes/wp_query/).
 - You can pass the first parameter to `null` if you want pass `post_type` in `$args`
@@ -234,7 +246,7 @@ StudioChampGauche\Utils\CustomPostType::default('paged', 1);
 ```
 
 
-#### ***`scg::source($args = [])`***
+##### ***`scg::source($args = [])`***
 
 - Get URL or absolute path.
 
@@ -250,7 +262,7 @@ StudioChampGauche\Utils\Source::default('url', true);
 ```
 
 
-#### ***`add_filter('scg_wp_head', function($wp_heads){});`***
+##### ***`add_filter('scg_wp_head', function($wp_heads){});`***
 
 - Add, modify and remove metadata.
 

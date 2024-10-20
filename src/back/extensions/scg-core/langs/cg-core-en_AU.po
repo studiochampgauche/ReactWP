@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Champ Gauche Core\n"
 "POT-Creation-Date: 2023-04-27 11:54-0400\n"
-"PO-Revision-Date: 2024-10-14 04:18-0400\n"
+"PO-Revision-Date: 2024-10-20 02:29-0400\n"
 "Last-Translator: Studio Champ Gauche <allo@champgauche.studio>\n"
 "Language-Team: Studio Champ Gauche\n"
 "Language: en_AU\n"
@@ -129,3 +129,57 @@ msgstr "Where to display the Component module? post and page already have the mo
 
 msgid "Composant"
 msgstr "Component"
+
+msgid "Version du cache"
+msgstr "Cache Version"
+
+msgid "Expiration du cache"
+msgstr "Cache Expiration"
+
+msgid "Laissez à zéro pour désactiver."
+msgstr "Leave at zero to disable."
+
+msgid "Inscrivez un nombre en seconde."
+msgstr "Enter a number in seconds."
+
+msgid "Consentement"
+msgstr "Consent"
+
+msgid "Voulez-vous afficher une boite de consentement?"
+msgstr "Do you want to display a consent box?"
+
+msgid "Boite"
+msgstr "Box"
+
+msgid "Texte de l'onglet"
+msgstr "Tab Text"
+
+msgid "Titre de l'en-tête"
+msgstr "Header Title"
+
+msgid "Texte"
+msgstr "Text"
+
+msgid "Afficher"
+msgstr "Display"
+
+msgid "Texte principal"
+msgstr "Main Text"
+
+msgid "Bouton d'acceptation"
+msgstr "Accept Button"
+
+msgid "Bouton de refus"
+msgstr "Reject Button"
+
+msgid "Liens"
+msgstr "Links"
+
+msgid "Nouvel onglet"
+msgstr "New tab"
+
+msgid "Ajouter un lien"
+msgstr "Add a link"
+
+msgid "Boite de consentement"
+msgstr "Consent Box"
