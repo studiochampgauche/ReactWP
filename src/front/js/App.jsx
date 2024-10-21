@@ -124,7 +124,7 @@ function initApp(){
 
                                         const Component = componentMap[route.componentName];
 
-                                        route.seo.pageTitle = route.title;
+                                        route.seo.pageTitle = route.routeName;
 
                                         return (
                                             <Route
@@ -137,7 +137,7 @@ function initApp(){
                                                             extraDatas={route?.extraDatas}
                                                             seo={route?.seo}
                                                         />
-                                                        <Component id={route.id} title={route.title} path={route.path} postType={route.postType} seo={route.seo} acf={route.acf} />
+                                                        <Component id={route.id} routeName={route.routeName} path={route.path} type={route.type} seo={route.seo} acf={route.acf} />
                                                         <Footer />
                                                     </>
                                                 }

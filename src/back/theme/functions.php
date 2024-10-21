@@ -49,7 +49,7 @@
 
                         $routes[] = [
                             'id' => $v->ID,
-                            'title' => get_the_title($v->ID),
+                            'routeName' => get_the_title($v->ID),
                             'path' => str_replace(site_url(), '', get_permalink($v->ID)),
                             'type' => $v->post_type,
                             'seo' => (isset($acf['seo']) ? $acf['seo'] : []),
