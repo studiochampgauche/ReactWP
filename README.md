@@ -7,7 +7,7 @@
 - [Frontend-Backend Interaction](https://docs.reactwp.com/frontend-backend-interaction)
 - [Concepts](https://docs.reactwp.com/concepts)
 	- [Loader Concept](https://docs.reactwp.com/concepts/loader-concept)
-	- [Cache Concept](https://docs.reactwp.com/concepts/cache-concept
+	- [Cache Concept](https://docs.reactwp.com/concepts/cache-concept)
 	- [Consent Concept](https://docs.reactwp.com/concepts/consent-concept)
 	- [SEO Concept](https://docs.reactwp.com/concepts/seo-concept)
 	- [Page Transition Concept](https://docs.reactwp.com/concepts/page-transition-concept)
