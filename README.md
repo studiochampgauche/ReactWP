@@ -1,8 +1,5 @@
 ![ReactWP](https://reactwp.com/github-image/banner-black.jpg)
 
-[See docs](https://docs.reactwp.com)
-
-***Table of Contents***
 - [Introduction](https://docs.reactwp.com/)
 - [Requirements](https://docs.reactwp.com/requirements)
 - [Installation Guide](https://docs.reactwp.com/installation-guide)
