@@ -2,10 +2,8 @@
 
 	require_once 'admin/wp-load.php';
 
-	$url = (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/admin' . $_SERVER['REQUEST_URI'];
-
 	global $wp;
-	$wp->parse_request($url);
+	$wp->parse_request();
 
 	$wp->main();
 
