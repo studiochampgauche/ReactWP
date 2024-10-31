@@ -2,6 +2,8 @@
 
 $table_prefix  = 'wp_';
 
+$current_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . '://' . $_SERVER['HTTP_HOST'];
+
 define('DB_NAME', '');
 define('DB_USER', '');
 define('DB_PASSWORD', '');
@@ -25,5 +27,8 @@ define('WP_DEBUG_DISPLAY', false);
 
 if(!defined('ABSPATH'))
     define('ABSPATH', dirname(__FILE__) . '/');
+
+if(!defined('WP_HOME'))
+    define('WP_HOME', $current_url);
 
 require_once(ABSPATH . 'wp-settings.php');
