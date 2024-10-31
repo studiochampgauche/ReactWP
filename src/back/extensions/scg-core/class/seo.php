@@ -272,7 +272,7 @@ class Seo{
 		
 		global $wp;
 		
-		return str_replace('/admin', '', home_url(add_query_arg((isset($_GET) ? $_GET : []), $wp->request)));
+		return home_url(add_query_arg((isset($_GET) ? $_GET : []), $wp->request));
 		
 	}
 }
