@@ -137,7 +137,14 @@ function initApp(){
                                                             extraDatas={route?.extraDatas}
                                                             seo={route?.seo}
                                                         />
-                                                        <Component id={route.id} routeName={route.routeName} path={route.path} type={route.type} seo={route.seo} acf={route.acf} />
+                                                        <Component
+                                                            id={route.id}
+                                                            type={route.type}
+                                                            routeName={route.routeName}
+                                                            path={route.path}
+                                                            seo={route.seo}
+                                                            acf={route.acf}
+                                                        />
                                                         <Footer />
                                                     </>
                                                 }
