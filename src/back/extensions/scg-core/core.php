@@ -622,18 +622,6 @@ class StudioChampGauche{
             
         });
 
-        /*
-        * Shot Events on template_redirect
-        */
-        add_action('template_redirect', function(){
-            
-            if(is_admin()) return;
-
-            wp_redirect(admin_url());
-
-            exit;
-        });
-
 
 
         /*
