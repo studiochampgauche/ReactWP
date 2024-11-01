@@ -1,10 +1,18 @@
-@import 'inc/variables';
-@import 'inc/font-face';
-@import 'inc/mixins';
-@import 'inc/functions';
+/*
+* Utils
+*/
+@forward 'utils/base';
+@forward 'utils/preloader';
+@forward 'utils/consent';
 
-@import 'site/base';
-@import 'site/preloader';
-@import 'site/consent';
-@import 'site/header';
-@import 'site/footer';
+/*
+* Components
+*/
+@forward 'components/header';
+@forward 'components/footer';
+@forward 'components/button';
+
+/*
+* Pages
+*/
+@forward 'pages/home';
