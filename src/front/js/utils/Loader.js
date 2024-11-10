@@ -164,7 +164,7 @@ const Loader = {
 
                     const otherMedias = async () => {
 
-                        if(!fetchImagesVideos){
+                        if(!fetchImagesVideos || Array.isArray(MEDIAS)){
 
                             window.loader.isLoaded.images = true;
                             window.loader.isLoaded.videos = true;
@@ -177,23 +177,8 @@ const Loader = {
 
 
 
-                        let mediaGroups = MEDIAS;
-                        
-
-                        if(Array.isArray(mediaGroups)){
-
-                            window.loader.isLoaded.images = true;
-                            window.loader.isLoaded.videos = true;
-                            window.loader.isLoaded.audios = true;
-
-                            done();
-
-                            return;
-                        }
-
-
-
-                        let loadedCount = 0,
+                        let mediaGroups = MEDIAS,
+                            loadedCount = 0,
                             totalToCount = 0;
 
                         for(let group in mediaGroups){
