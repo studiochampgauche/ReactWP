@@ -4,9 +4,7 @@ const Consent = {
 
     init: () => {
 
-        const haveConsent = SYSTEM.consentActive;
-
-        if(!haveConsent){
+        if(!SYSTEM.consentActive){
              
             if(localStorage.getItem('consent'))
                 localStorage.removeItem('consent');
