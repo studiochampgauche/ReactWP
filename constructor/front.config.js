@@ -101,12 +101,7 @@ const main = {
 					from: '../src/front/template',
 					to: path.resolve(__dirname, '../dist'),
 					noErrorOnMissing: true
-				},
-				{
-					from: '../src/front/scss/inc/fa/webfonts',
-					to: path.resolve(__dirname, '../dist/assets/css/inc/fa/webfonts'),
-					noErrorOnMissing: true
-				},
+				}
 			]
 		}),
 	],
