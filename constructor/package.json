@@ -4,16 +4,10 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "build:front": "webpack --mode development --config front.config.js",
-    "watch:front": "webpack --mode development --config front.config.js --watch",
-    "build:back": "webpack --mode development --config back.config.js",
-    "watch:back": "webpack --mode development --config back.config.js --watch",
-    "build:front:back": "webpack --mode development --config webpack.config.js",
-    "watch:front:back": "webpack --mode development --config webpack.config.js --watch",
-    "prod:front": "webpack --mode production --config front.config.js",
-    "prod:back": "webpack --mode production --config back.config.js",
-    "prod:front:back": "webpack --mode production --config webpack.config.js",
-    "get:wp": "curl -LO http://wordpress.org/latest.zip && cd ../ && mkdir dist && cd dist && mkdir admin && cd ../constructor && mv latest.zip ../dist/admin/ && unzip -d ../dist/admin/ ../dist/admin/latest.zip && rm ../dist/admin/latest.zip && mv ../dist/admin/wordpress/* ../dist/admin/ && rm -rf ../dist/admin/wordpress"
+    "build": "webpack --mode development",
+    "watch": "webpack --mode development --watch",
+    "prod": "webpack --mode production",
+    "get:wp": "curl -LO http://wordpress.org/latest.zip && cd ../ && mkdir dist && cd dist && mkdir admin && cd ../constructor && mv latest.zip ../dist/admin/ && unzip -d ../dist/admin/ ../dist/admin/latest.zip && rm ../dist/admin/latest.zip && mv ../dist/admin/wordpress/* ../dist/admin/ && rm -rf ../dist/admin/wordpress && rm -rf ../dist/admin/wp-content/plugins/akismet && rm ../dist/admin/wp-content/plugins/hello.php && rm -rf ../dist/admin/wp-content/themes/twenty* && curl -LO http://reactwp.com/download/plugins/scg-core.zip && mv scg-core.zip ../dist/admin/wp-content/plugins && unzip -d ../dist/admin/wp-content/plugins ../dist/admin/wp-content/plugins/scg-core.zip && rm ../dist/admin/wp-content/plugins/scg-core.zip && curl -LO http://reactwp.com/download/plugins/advanced-custom-fields-pro.zip && mv advanced-custom-fields-pro.zip ../dist/admin/wp-content/plugins && unzip -d ../dist/admin/wp-content/plugins ../dist/admin/wp-content/plugins/advanced-custom-fields-pro.zip && rm ../dist/admin/wp-content/plugins/advanced-custom-fields-pro.zip"
   },
   "devDependencies": {
     "@babel/core": "7.26.0",
@@ -40,12 +34,12 @@
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-helmet-async": "2.0.5",
-    "react-router-dom": "6.27.0",
-    "sass": "1.80.5",
+    "react-router-dom": "6.28.0",
+    "sass": "1.80.6",
     "sass-loader": "16.0.3",
     "terser-webpack-plugin": "5.3.10",
     "url": "0.11.4",
-    "webpack": "5.96.0",
+    "webpack": "5.96.1",
     "webpack-cli": "5.1.4"
   }
 }
