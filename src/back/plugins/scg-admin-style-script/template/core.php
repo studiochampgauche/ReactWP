@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Champ Gauche Admin Styles & Scripts
+Plugin Name: Admin Styles & Scripts
 Author: Studio Champ Gauche
 Author URI: https://champgauche.studio
 Description: A plugin that enqueue style and script files in the admin.
