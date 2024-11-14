@@ -7,7 +7,7 @@ Description: A plugin that handles repetitive needs in each project and add-ons.
 Requires at least: 6.4.1
 Requires PHP: 8.2
 Version: 4.0.0
-Text Domain: cg-core
+Text Domain: scg-core
 Domain Path: /langs
 */
 
