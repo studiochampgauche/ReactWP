@@ -148,13 +148,13 @@ class Seo{
 		$obj = get_queried_object();
 		
 		if(is_search())
-			return __('Résultat(s) de recherche pour', 'cg-core') . ' \'' . $_GET['s'] . '\'' . ' - ' . self::site_name();
+			return __('Résultat(s) de recherche pour', 'scg-core') . ' \'' . $_GET['s'] . '\'' . ' - ' . self::site_name();
 		
 		elseif(is_404())
-			return __('Erreur 404', 'cg-core') . ' - ' . self::site_name();
+			return __('Erreur 404', 'scg-core') . ' - ' . self::site_name();
 		
 		elseif(is_author())
-			return (\StudioChampGauche\Utils\Field::get('seo_title', 'user_' . $obj->ID) ? \StudioChampGauche\Utils\Field::get('seo_title', 'user_' . $obj->ID) : __('Publications de', 'cg-core') . ' ' . $obj->display_name . ' - ' . self::site_name());
+			return (\StudioChampGauche\Utils\Field::get('seo_title', 'user_' . $obj->ID) ? \StudioChampGauche\Utils\Field::get('seo_title', 'user_' . $obj->ID) : __('Publications de', 'scg-core') . ' ' . $obj->display_name . ' - ' . self::site_name());
 			
 		elseif(is_category() || is_tag() || is_tax())
 			return (\StudioChampGauche\Utils\Field::get('seo_title', 'term_' . $obj->term_id) ? \StudioChampGauche\Utils\Field::get('seo_title', 'term_' . $obj->term_id)  : $obj->name . ' - ' . self::site_name());

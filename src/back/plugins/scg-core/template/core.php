@@ -382,7 +382,7 @@ class StudioChampGauche{
                 */
                 $args = array(
 					'id' => 'is-menus',
-					'title' => __('Menus', 'cg-core'),
+					'title' => __('Menus', 'scg-core'),
 					'href' => $admin_url . 'nav-menus.php',
 					'meta' => array(
 						'class' => 'is-menus'
@@ -397,7 +397,7 @@ class StudioChampGauche{
 				*/
 				$args = array(
 					'id' => 'is-files',
-					'title' => __('Images et fichiers', 'cg-core'),
+					'title' => __('Images et fichiers', 'scg-core'),
 					'href' => $admin_url . 'upload.php',
 					'meta' => array(
 						'class' => 'is-files'
@@ -415,7 +415,7 @@ class StudioChampGauche{
                     
                     $args = array(
                         'id' => 'is-users-list',
-                        'title' => __('Utilisateurs', 'cg-core'),
+                        'title' => __('Utilisateurs', 'scg-core'),
                         'href' => $admin_url . 'users.php',
                         'meta' => array(
                             'class' => 'is-users-list'
@@ -426,7 +426,7 @@ class StudioChampGauche{
                     
                     $args = array(
                         'id' => 'is-users-profile',
-                        'title' => __('Profil', 'cg-core'),
+                        'title' => __('Profil', 'scg-core'),
                         'href' => $admin_url . 'profile.php',
                         'parent' => 'is-users-list',
                         'meta' => array(
@@ -439,7 +439,7 @@ class StudioChampGauche{
                     
                     $args = array(
                         'id' => 'is-users-profile',
-                        'title' => __('Profil', 'cg-core'),
+                        'title' => __('Profil', 'scg-core'),
                         'href' => $admin_url . 'profile.php',
                         'meta' => array(
                             'class' => 'is-users-profile'
@@ -460,7 +460,7 @@ class StudioChampGauche{
                     */
                     $args = array(
 						'id' => 'is-site',
-						'title' => __('Configurations', 'cg-core'),
+						'title' => __('Configurations', 'scg-core'),
 						'meta' => array(
 							'class' => 'is-site'
 						)
@@ -473,7 +473,7 @@ class StudioChampGauche{
                     */
                     $args = array(
 						'id' => 'is-site-settings',
-						'title' => __('Générales', 'cg-core'),
+						'title' => __('Générales', 'scg-core'),
 						'href' => $admin_url . 'admin.php?page=site-settings',
 						'parent' => 'is-site',
 						'meta' => array(
@@ -489,7 +489,7 @@ class StudioChampGauche{
                     if(current_user_can('switch_themes')){
                         $args = array(
                             'id' => 'is-site-themes',
-                            'title' => __('Thèmes', 'cg-core'),
+                            'title' => __('Thèmes', 'scg-core'),
                             'href' => $admin_url . 'themes.php',
                             'parent' => 'is-site',
                             'meta' => array(
@@ -505,7 +505,7 @@ class StudioChampGauche{
                         */
                         $args = array(
                             'id' => 'is-site-themes-editor',
-                            'title' => __('Éditeur', 'cg-core'),
+                            'title' => __('Éditeur', 'scg-core'),
                             'href' => $admin_url . 'theme-editor.php',
                             'parent' => 'is-site-themes',
                             'meta' => array(
@@ -525,7 +525,7 @@ class StudioChampGauche{
                         
                         $args = array(
                             'id' => 'is-site-plugins',
-                            'title' => __('Extensions', 'cg-core'),
+                            'title' => __('Extensions', 'scg-core'),
                             'href' => $admin_url . 'plugins.php',
                             'parent' => 'is-site',
                             'meta' => array(
@@ -540,7 +540,7 @@ class StudioChampGauche{
                         */
                         $args = array(
                             'id' => 'is-site-plugin-editor',
-                            'title' => __('Éditeur', 'cg-core'),
+                            'title' => __('Éditeur', 'scg-core'),
                             'href' => $admin_url . 'plugin-editor.php',
                             'parent' => 'is-site-plugins',
                             'meta' => array(
@@ -556,7 +556,7 @@ class StudioChampGauche{
                         */
                         $args = array(
                             'id' => 'is-acf',
-                            'title' => __('ACF', 'cg-core'),
+                            'title' => __('ACF', 'scg-core'),
                             'href' => $admin_url . 'edit.php?post_type=acf-field-group',
                             'parent' => 'is-site',
                             'meta' => array(
@@ -571,7 +571,7 @@ class StudioChampGauche{
                         */
                         $args = array(
                             'id' => 'is-site-import',
-                            'title' => __('Importer', 'cg-core'),
+                            'title' => __('Importer', 'scg-core'),
                             'href' => $admin_url . 'import.php',
                             'parent' => 'is-site',
                             'meta' => array(
@@ -587,7 +587,7 @@ class StudioChampGauche{
                         */
                         $args = array(
                             'id' => 'is-site-export',
-                            'title' => __('Exporter', 'cg-core'),
+                            'title' => __('Exporter', 'scg-core'),
                             'href' => $admin_url . 'export.php',
                             'parent' => 'is-site',
                             'meta' => array(
