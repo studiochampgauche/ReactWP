@@ -703,6 +703,33 @@ class StudioChampGauche{
             return $return;
             
         }, 10, 5);
+
+
+
+        /*
+        * Shot events on customize_register
+        */
+        add_action('customize_register', function($wp_customize){
+
+            if(!self::field('customize_themes'))
+                $wp_customize->remove_panel('themes');
+
+            if(!self::field('customize_nav_menus'))
+                $wp_customize->remove_panel('nav_menus');
+
+            if(!self::field('customize_title_tagline'))
+                $wp_customize->remove_section('title_tagline');
+
+            if(!self::field('customize_static_front_page'))
+                $wp_customize->remove_section('static_front_page');
+
+            if(!self::field('customize_custom_css'))
+                $wp_customize->remove_section('custom_css');
+
+            if(!self::field('customize_colors'))
+                $wp_customize->remove_section('colors');
+
+        }, 20);
         
     }
     
