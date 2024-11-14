@@ -24,7 +24,7 @@ if(!defined('ABSPATH') || !is_plugin_active('advanced-custom-fields-pro/acf.php'
 /*
 * Load Languages
 */
-load_plugin_textdomain('cg-core', false, basename(__DIR__) . '/langs/');
+load_plugin_textdomain('scg-core', false, basename(__DIR__) . '/langs/');
 
 
 /*

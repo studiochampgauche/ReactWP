@@ -7,7 +7,7 @@ Description: A plugin that enqueue style and script files in the admin.
 Requires at least: 6.4.1
 Requires PHP: 8.2
 Version: 1.0.0
-Text Domain: scg-admin-appearance
+Text Domain: scg-admin-style-script
 Domain Path: /langs
 */
 
@@ -24,7 +24,7 @@ if(!defined('ABSPATH') || !is_plugin_active('advanced-custom-fields-pro/acf.php'
 /*
 * Load Languages
 */
-load_plugin_textdomain('scg-admin-appearance', false, basename(__DIR__) . '/langs/');
+load_plugin_textdomain('scg-admin-style-script', false, basename(__DIR__) . '/langs/');
 
 
 class StudioChampGaucheAdminStyleScript{
