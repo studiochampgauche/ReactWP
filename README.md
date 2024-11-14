@@ -28,3 +28,5 @@
 > [!IMPORTANT]
 > - On step #2, `get:core` delete at the same time default plugins and twenty themes.
 > - With step #3, you need to uninstall the current GSAP module if your subscription level is not `Premium` for install the module according to your level.
+> - You can access your admin by adding `/admin` to your url.
+> - You need to configure your web server to redirect all URL requests to the `index.php` file, unless the requested file or directory physically exists on the server.
