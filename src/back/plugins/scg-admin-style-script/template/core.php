@@ -8,7 +8,6 @@ Requires at least: 6.4.1
 Requires PHP: 8.2
 Version: 1.0.0
 Text Domain: scg-admin-style-script
-Domain Path: /langs
 */
 
 
@@ -19,12 +18,6 @@ require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 
 if(!defined('ABSPATH') || !is_plugin_active('advanced-custom-fields-pro/acf.php') || !is_plugin_active('scg-core/core.php')) return;
-
-
-/*
-* Load Languages
-*/
-load_plugin_textdomain('scg-admin-style-script', false, basename(__DIR__) . '/langs/');
 
 
 class StudioChampGaucheAdminStyleScript{
