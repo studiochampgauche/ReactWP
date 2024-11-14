@@ -18,7 +18,7 @@ import SinglePostPage from './pages/SinglePostPage';
 import WaitingPage from './pages/WaitingPage';
 import NotFoundPage from './pages/NotFoundPage';
 
-if(parseFloat(SYSTEM.cacheVersion) > 0){
+if(SYSTEM.cacheActive){
 
     const lastCacheVersion = localStorage.getItem('cacheVersion');
     const cacheEndTime = localStorage.getItem('cacheEndTime');

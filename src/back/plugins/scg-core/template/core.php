@@ -193,6 +193,7 @@ class StudioChampGauche{
             $siteUrl = site_url();
             wp_localize_script('scg-main', 'SYSTEM', [
                 'public' => get_option('blog_public'),
+                'cacheActive' => (scg::field('cache_module') ? true : false),
                 'cacheVersion' => (scg::field('cache_version') ? scg::field('cache_version') : 0),
                 'cacheExpiration' => (scg::field('cache_expiration') ? scg::field('cache_expiration') : 0),
                 'consentActive' => (scg::field('consent_module') ? true : false),
