@@ -31,4 +31,7 @@ if(!defined('ABSPATH'))
 if(!defined('WP_HOME'))
     define('WP_HOME', $current_url);
 
+if(!defined('WP_USE_THEMES'))
+    define('WP_USE_THEMES', false);
+
 require_once(ABSPATH . 'wp-settings.php');
