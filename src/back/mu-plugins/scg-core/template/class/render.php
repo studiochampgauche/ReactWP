@@ -67,7 +67,7 @@ class Render{
 
 		acf_add_local_field_group( array(
 			'key' => 'group_6569608968ef4',
-			'title' => __('Configurations du site', 'scg-core'),
+			'title' => __('Site settings', 'scg-core'),
 			'fields' => array(
 			array(
 				'key' => 'field_6569608a84582',
@@ -88,7 +88,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_6569647a500a8',
-				'label' => __('Code source', 'scg-core'),
+				'label' => __('Source code', 'scg-core'),
 				'name' => 'source_code',
 				'aria-label' => '',
 				'type' => 'group',
@@ -503,7 +503,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_6569a23ae02cc',
-				'label' => __('Changer l\'apparence', 'scg-core'),
+				'label' => __('Change appearance', 'scg-core'),
 				'name' => 'change_appearance',
 				'aria-label' => '',
 				'type' => 'true_false',
@@ -523,7 +523,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_65697d9722de6',
-				'label' => __('Tableau de bord', 'scg-core'),
+				'label' => __('Dashboard', 'scg-core'),
 				'name' => 'dashboard',
 				'aria-label' => '',
 				'type' => 'group',
@@ -761,7 +761,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_65698585f5582',
-				'label' => __('Éditeur et Gutenberg', 'scg-core'),
+				'label' => __('Classic editor et Gutenberg', 'scg-core'),
 				'name' => 'editor_and_gutenberg',
 				'aria-label' => '',
 				'type' => 'group',
@@ -797,7 +797,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_65698608f5584',
-						'label' => __('Éditeur de page', 'scg-core'),
+						'label' => __('Page editor', 'scg-core'),
 						'name' => 'page_editor',
 						'aria-label' => '',
 						'type' => 'true_false',
@@ -817,7 +817,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_65698611f5585',
-						'label' => __('Éditeur de blogue', 'scg-core'),
+						'label' => __('Post editor', 'scg-core'),
 						'name' => 'post_editor',
 						'aria-label' => '',
 						'type' => 'true_false',
@@ -994,12 +994,12 @@ class Render{
 				'min' => 0,
 				'max' => 0,
 				'collapsed' => '',
-				'button_label' => __('Ajouter un Theme Location', 'scg-core'),
+				'button_label' => __('Add a theme location', 'scg-core'),
 				'rows_per_page' => 20,
 				'sub_fields' => array(
 					array(
 						'key' => 'field_6569c7ffc0821',
-						'label' => __('Nom', 'scg-core'),
+						'label' => __('Name', 'scg-core'),
 						'name' => 'name',
 						'aria-label' => '',
 						'type' => 'text',
@@ -1060,7 +1060,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_656982bae9569',
-				'label' => __('Accepter les SVG', 'scg-core'),
+				'label' => __('Accept SVG', 'scg-core'),
 				'name' => 'accept_svg',
 				'aria-label' => '',
 				'type' => 'true_false',
@@ -1080,7 +1080,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_6569b442163b7',
-				'label' => __('Redimensionner les images téléchargées', 'scg-core'),
+				'label' => __('Resize images', 'scg-core'),
 				'name' => 'resize_images',
 				'aria-label' => '',
 				'type' => 'true_false',
@@ -1121,7 +1121,7 @@ class Render{
 				'name' => 'seo_module',
 				'aria-label' => '',
 				'type' => 'checkbox',
-				'instructions' => __('Où afficher le module SEO? post et page ont déjà le module.', 'scg-core'),
+				'instructions' => __('Where you want display SEO module? post et page has already the module.', 'scg-core'),
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -1141,11 +1141,11 @@ class Render{
 			),
 			array(
 				'key' => 'field_6578asdtgftgss',
-				'label' => __('Composant', 'scg-core'),
+				'label' => __('Component', 'scg-core'),
 				'name' => 'component_module',
 				'aria-label' => '',
 				'type' => 'checkbox',
-				'instructions' => __('Où afficher le module Composant? post et page ont déjà le module.', 'scg-core'),
+				'instructions' => __('Where you want display Component module? post et page has already the module.', 'scg-core'),
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -1165,11 +1165,11 @@ class Render{
 			),
 			array(
 				'key' => 'field_67148bsajh923982knb',
-				'label' => __('Consentement', 'scg-core'),
+				'label' => __('Consent box', 'scg-core'),
 				'name' => 'consent_module',
 				'aria-label' => '',
 				'type' => 'true_false',
-				'instructions' => __('Voulez-vous afficher une boite de consentement?', 'scg-core'),
+				'instructions' => '',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -1190,7 +1190,7 @@ class Render{
 				'name' => 'cache_module',
 				'aria-label' => '',
 				'type' => 'true_false',
-				'instructions' => __('Voulez-vous activer la mise en cache?', 'scg-core'),
+				'instructions' => '',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -1265,7 +1265,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_6576242fc5f3d',
-						'label' => __('Tous les navigateurs (192x192)', 'scg-core'),
+						'label' => __('All navigators (192x192)', 'scg-core'),
 						'name' => 'all_browsers_192x192',
 						'aria-label' => '',
 						'type' => 'image',
@@ -1360,7 +1360,7 @@ class Render{
 				'sub_fields' => array(
 					array(
 						'key' => 'field_6574sgoiuqhs456',
-						'label' => __('Nom du site', 'scg-core'),
+						'label' => __('Site Name', 'scg-core'),
 						'name' => 'site_name',
 						'aria-label' => '',
 						'type' => 'text',
@@ -1400,7 +1400,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_6574cmlbjhdw7',
-						'label' => __('OG Titre', 'scg-core'),
+						'label' => __('OG Title', 'scg-core'),
 						'name' => 'og_title',
 						'aria-label' => '',
 						'type' => 'text',
@@ -1496,7 +1496,7 @@ class Render{
 				'name' => 'cache_expiration',
 				'aria-label' => '',
 				'type' => 'number',
-				'instructions' => __('Inscrivez un nombre en seconde.', 'scg-core'),
+				'instructions' => __('In second.', 'scg-core'),
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -1536,7 +1536,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_656mnbjdk9827as',
-				'label' => __('Boite de consentement', 'scg-core'),
+				'label' => __('Consent box', 'scg-core'),
 				'name' => '',
 				'aria-label' => '',
 				'type' => 'tab',
@@ -1561,7 +1561,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_lkjgbbxdntywbdipqoz019327',
-				'label' => __('Configurations', 'scg-core'),
+				'label' => __('Settings', 'scg-core'),
 				'name' => 'consent_configs',
 				'aria-label' => '',
 				'type' => 'group',
@@ -1603,7 +1603,7 @@ class Render{
 						'name' => 'expiration',
 						'aria-label' => '',
 						'type' => 'number',
-						'instructions' => __('Inscrivez un nombre en seconde.', 'scg-core'),
+						'instructions' => __('In second.', 'scg-core'),
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -1623,7 +1623,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_65tuyqwvfsaowi987625',
-				'label' => __('Boite', 'scg-core'),
+				'label' => __('Box', 'scg-core'),
 				'name' => 'consent_box',
 				'aria-label' => '',
 				'type' => 'group',
@@ -1639,7 +1639,7 @@ class Render{
 				'sub_fields' => array(
 					array(
 						'key' => 'field_9836651shjgvsi21',
-						'label' => __('Texte de l\'onglet', 'scg-core'),
+						'label' => __('Tab Text', 'scg-core'),
 						'name' => 'tab_name',
 						'aria-label' => '',
 						'type' => 'text',
@@ -1659,7 +1659,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_9836651shjgvsi22',
-						'label' => __('Titre de l\'en-tête', 'scg-core'),
+						'label' => __('Heading Title', 'scg-core'),
 						'name' => 'header_title',
 						'aria-label' => '',
 						'type' => 'group',
@@ -1675,7 +1675,7 @@ class Render{
 						'sub_fields' => array(
 							array(
 								'key' => 'field_9836651shjgvsi221',
-								'label' => __('Texte', 'scg-core'),
+								'label' => __('Text', 'scg-core'),
 								'name' => 'text',
 								'aria-label' => '',
 								'type' => 'text',
@@ -1695,7 +1695,7 @@ class Render{
 							),
 							array(
 								'key' => 'field_9836651shjgvsi222',
-								'label' => __('Afficher', 'scg-core'),
+								'label' => __('Display', 'scg-core'),
 								'name' => 'display',
 								'aria-label' => '',
 								'type' => 'true_false',
@@ -1718,7 +1718,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_9836651anbvy2890d0h',
-						'label' => __('Texte principal', 'scg-core'),
+						'label' => __('Main text', 'scg-core'),
 						'name' => 'main_text',
 						'aria-label' => '',
 						'type' => 'wysiwyg',
@@ -1739,7 +1739,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_9836651shjgvsi23',
-						'label' => __('Bouton d\'acceptation', 'scg-core'),
+						'label' => __('Accep button', 'scg-core'),
 						'name' => 'accept_button',
 						'aria-label' => '',
 						'type' => 'group',
@@ -1755,7 +1755,7 @@ class Render{
 						'sub_fields' => array(
 							array(
 								'key' => 'field_9836651shjgvsi231',
-								'label' => __('Texte', 'scg-core'),
+								'label' => __('Text', 'scg-core'),
 								'name' => 'text',
 								'aria-label' => '',
 								'type' => 'text',
@@ -1777,7 +1777,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_9836651shjgvsi24',
-						'label' => __('Bouton de refus', 'scg-core'),
+						'label' => __('Reject button', 'scg-core'),
 						'name' => 'reject_button',
 						'aria-label' => '',
 						'type' => 'group',
@@ -1793,7 +1793,7 @@ class Render{
 						'sub_fields' => array(
 							array(
 								'key' => 'field_9836651shjgvsi241',
-								'label' => __('Texte', 'scg-core'),
+								'label' => __('Text', 'scg-core'),
 								'name' => 'text',
 								'aria-label' => '',
 								'type' => 'text',
@@ -1813,7 +1813,7 @@ class Render{
 							),
 							array(
 								'key' => 'field_9836651shjgvsi242',
-								'label' => __('Afficher', 'scg-core'),
+								'label' => __('Display', 'scg-core'),
 								'name' => 'display',
 								'aria-label' => '',
 								'type' => 'true_false',
@@ -1836,7 +1836,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_9836651shjgvsi25',
-						'label' => __('Liens', 'scg-core'),
+						'label' => __('Links', 'scg-core'),
 						'name' => 'links',
 						'aria-label' => '',
 						'type' => 'repeater',
@@ -1853,12 +1853,12 @@ class Render{
 						'min' => 0,
 						'max' => 0,
 						'collapsed' => '',
-						'button_label' => __('Ajouter un lien', 'scg-core'),
+						'button_label' => __('Add a link', 'scg-core'),
 						'rows_per_page' => 20,
 						'sub_fields' => array(
 							array(
 								'key' => 'field_9836651shjgvsi251',
-								'label' => __('Texte', 'scg-core'),
+								'label' => __('Text', 'scg-core'),
 								'name' => 'text',
 								'aria-label' => '',
 								'type' => 'text',
@@ -1898,7 +1898,7 @@ class Render{
 							),
 							array(
 								'key' => 'field_9836651shjgvsi253',
-								'label' => __('Nouvel onglet', 'scg-core'),
+								'label' => __('New Tab', 'scg-core'),
 								'name' => 'new_tab',
 								'aria-label' => '',
 								'type' => 'true_false',
@@ -2033,11 +2033,11 @@ class Render{
 
 		acf_add_local_field_group( array(
 		'key' => 'group_6574cb08273jnhbds',
-		'title' => __('Module Component', 'scg-core'),
+		'title' => __('Component Module', 'scg-core'),
 		'fields' => array(
 				array(
 					'key' => 'field_6576114beasdk4983jhb',
-					'label' => __('Nom du composant', 'scg-core'),
+					'label' => __('Component Name', 'scg-core'),
 					'name' => 'component_name',
 					'aria-label' => '',
 					'type' => 'text',
@@ -2072,7 +2072,7 @@ class Render{
 
 		acf_add_local_field_group( array(
 		'key' => 'group_6574cb60329ec',
-		'title' => __('Module SEO', 'scg-core'),
+		'title' => __('SEO Module', 'scg-core'),
 		'fields' => array(
 			array(
 				'key' => 'field_lkjshbn2988',
@@ -2092,7 +2092,7 @@ class Render{
 				'sub_fields' => array(
 					array(
 						'key' => 'field_6574cb9751639',
-						'label' => __('Ne pas indexer', 'scg-core'),
+						'label' => __('Don\'t index', 'scg-core'),
 						'name' => 'stop_indexing',
 						'aria-label' => '',
 						'type' => 'true_false',
@@ -2112,7 +2112,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_6574cb619f729',
-						'label' => __('Titre', 'scg-core'),
+						'label' => __('Title', 'scg-core'),
 						'name' => 'title',
 						'aria-label' => '',
 						'type' => 'text',
@@ -2152,7 +2152,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_6574casdbgeaxvv',
-						'label' => __('OG Titre', 'scg-core'),
+						'label' => __('OG Title', 'scg-core'),
 						'name' => 'og_title',
 						'aria-label' => '',
 						'type' => 'text',
@@ -2231,7 +2231,7 @@ class Render{
 
 
 		acf_add_options_page( array(
-			'page_title' => __('Configurations du site', 'scg-core'),
+			'page_title' => __('Site settings', 'scg-core'),
 			'menu_slug' => 'site-settings',
 			'menu_title' => __('Configurations', 'scg-core'),
 			'position' => '',

@@ -1,40 +1,12 @@
 <?php
-/*
-Plugin Name: Core
-Author: Studio Champ Gauche
-Author URI: https://champgauche.studio
-Description: A plugin that handles repetitive needs in each project.
-Requires at least: 6.4.1
-Requires PHP: 8.2
-Version: 1.0.0
-Text Domain: scg-core
-Domain Path: /langs
-*/
 
-
-/*
-* Check ABSPATH
-*/
 if(!defined('ABSPATH')) return;
 
-
 /*
-* Make sure you have all you need for the plugin
+* Make sure you have all requirements for plugins
 */
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
-
-
-/*
-* Make sure the ACF Plugin is activate
-*/
-if(!is_plugin_active('advanced-custom-fields-pro/acf.php')) return;
-
-
-/*
-* Load Languages
-*/
-load_plugin_textdomain('scg-core', false, basename(__DIR__) . '/langs/');
-
+            
 
 /*
 * Classes
@@ -50,8 +22,6 @@ class StudioChampGauche{
     
     function __construct(){
         
-        
-        
         /*
         * ACF Path
         */
@@ -62,7 +32,8 @@ class StudioChampGauche{
         * Shot Events on init
         */
         add_action('init', function(){
-			
+
+
             /*
             * Top Bar
             */
@@ -162,7 +133,7 @@ class StudioChampGauche{
                 
 			}
             
-        });
+        }, 11);
 
 
         /*
@@ -407,7 +378,7 @@ class StudioChampGauche{
 				*/
 				$args = array(
 					'id' => 'is-files',
-					'title' => __('Images et fichiers', 'scg-core'),
+					'title' => __('Images & files', 'scg-core'),
 					'href' => $admin_url . 'upload.php',
 					'meta' => array(
 						'class' => 'is-files'
@@ -425,7 +396,7 @@ class StudioChampGauche{
                     
                     $args = array(
                         'id' => 'is-users-list',
-                        'title' => __('Utilisateurs', 'scg-core'),
+                        'title' => __('Users', 'scg-core'),
                         'href' => $admin_url . 'users.php',
                         'meta' => array(
                             'class' => 'is-users-list'
@@ -436,7 +407,7 @@ class StudioChampGauche{
                     
                     $args = array(
                         'id' => 'is-users-profile',
-                        'title' => __('Profil', 'scg-core'),
+                        'title' => __('Profile', 'scg-core'),
                         'href' => $admin_url . 'profile.php',
                         'parent' => 'is-users-list',
                         'meta' => array(
@@ -449,7 +420,7 @@ class StudioChampGauche{
                     
                     $args = array(
                         'id' => 'is-users-profile',
-                        'title' => __('Profil', 'scg-core'),
+                        'title' => __('Profile', 'scg-core'),
                         'href' => $admin_url . 'profile.php',
                         'meta' => array(
                             'class' => 'is-users-profile'
@@ -470,7 +441,7 @@ class StudioChampGauche{
                     */
                     $args = array(
 						'id' => 'is-site',
-						'title' => __('Configurations', 'scg-core'),
+						'title' => __('ReactWP', 'scg-core'),
 						'meta' => array(
 							'class' => 'is-site'
 						)
@@ -483,7 +454,7 @@ class StudioChampGauche{
                     */
                     $args = array(
 						'id' => 'is-site-settings',
-						'title' => __('Générales', 'scg-core'),
+						'title' => __('Generals', 'scg-core'),
 						'href' => $admin_url . 'admin.php?page=site-settings',
 						'parent' => 'is-site',
 						'meta' => array(
@@ -499,7 +470,7 @@ class StudioChampGauche{
                     if(current_user_can('switch_themes')){
                         $args = array(
                             'id' => 'is-site-themes',
-                            'title' => __('Thèmes', 'scg-core'),
+                            'title' => __('Themes', 'scg-core'),
                             'href' => $admin_url . 'themes.php',
                             'parent' => 'is-site',
                             'meta' => array(
@@ -515,7 +486,7 @@ class StudioChampGauche{
                         */
                         $args = array(
                             'id' => 'is-site-themes-editor',
-                            'title' => __('Éditeur', 'scg-core'),
+                            'title' => __('Editor', 'scg-core'),
                             'href' => $admin_url . 'theme-editor.php',
                             'parent' => 'is-site-themes',
                             'meta' => array(
@@ -535,7 +506,7 @@ class StudioChampGauche{
                         
                         $args = array(
                             'id' => 'is-site-plugins',
-                            'title' => __('Extensions', 'scg-core'),
+                            'title' => __('Plugins', 'scg-core'),
                             'href' => $admin_url . 'plugins.php',
                             'parent' => 'is-site',
                             'meta' => array(
@@ -550,7 +521,7 @@ class StudioChampGauche{
                         */
                         $args = array(
                             'id' => 'is-site-plugin-editor',
-                            'title' => __('Éditeur', 'scg-core'),
+                            'title' => __('Editor', 'scg-core'),
                             'href' => $admin_url . 'plugin-editor.php',
                             'parent' => 'is-site-plugins',
                             'meta' => array(
@@ -581,7 +552,7 @@ class StudioChampGauche{
                         */
                         $args = array(
                             'id' => 'is-site-import',
-                            'title' => __('Importer', 'scg-core'),
+                            'title' => __('Import', 'scg-core'),
                             'href' => $admin_url . 'import.php',
                             'parent' => 'is-site',
                             'meta' => array(
@@ -597,7 +568,7 @@ class StudioChampGauche{
                         */
                         $args = array(
                             'id' => 'is-site-export',
-                            'title' => __('Exporter', 'scg-core'),
+                            'title' => __('Export', 'scg-core'),
                             'href' => $admin_url . 'export.php',
                             'parent' => 'is-site',
                             'meta' => array(

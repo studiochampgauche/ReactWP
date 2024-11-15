@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const plugins = [
-	'scg-admin-style-script'
+	'scg-core'
 ];
 
 
@@ -17,12 +17,12 @@ const main = {
 	entry: plugins.reduce((entries, pluginName) => {
 
 		entries[pluginName] = [
-			`../src/back/plugins/${pluginName}/js/App.jsx`,
-			`../src/back/plugins/${pluginName}/scss/App.scss`,
-			`../src/back/plugins/${pluginName}/medias/audios/audios.js`,
-			`../src/back/plugins/${pluginName}/medias/fonts/fonts.js`,
-			`../src/back/plugins/${pluginName}/medias/images/images.js`,
-			`../src/back/plugins/${pluginName}/medias/videos/videos.js`,
+			`../src/back/mu-plugins/${pluginName}/js/App.jsx`,
+			`../src/back/mu-plugins/${pluginName}/scss/App.scss`,
+			`../src/back/mu-plugins/${pluginName}/medias/audios/audios.js`,
+			`../src/back/mu-plugins/${pluginName}/medias/fonts/fonts.js`,
+			`../src/back/mu-plugins/${pluginName}/medias/images/images.js`,
+			`../src/back/mu-plugins/${pluginName}/medias/videos/videos.js`,
 		];
 
 		return entries;
@@ -30,7 +30,7 @@ const main = {
 	}, {}),
 	output: {
 		filename: '[name]/assets/js/main.min.js',
-		path: path.resolve(__dirname, '../dist/admin/wp-content/plugins/')
+		path: path.resolve(__dirname, '../dist/admin/wp-content/mu-plugins/')
 	},
 	module: {
 		rules: [
@@ -133,9 +133,14 @@ const main = {
 	plugins: [
 		new CopyPlugin({
 			patterns: [
+				{
+			        from: '../src/back/mu-plugins/load.php',
+			        to: path.resolve(__dirname, `../dist/admin/wp-content/mu-plugins/`),
+			        noErrorOnMissing: true,
+			    },
 				...plugins.map(pluginName => ({
-			        from: path.resolve(__dirname, `../src/back/plugins/${pluginName}/template`),
-			        to: path.resolve(__dirname, `../dist/admin/wp-content/plugins/${pluginName}`),
+			        from: path.resolve(__dirname, `../src/back/mu-plugins/${pluginName}/template`),
+			        to: path.resolve(__dirname, `../dist/admin/wp-content/mu-plugins/${pluginName}`),
 			        noErrorOnMissing: true,
 			    }))
 			]

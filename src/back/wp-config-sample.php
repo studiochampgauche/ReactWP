@@ -34,4 +34,7 @@ if(!defined('WP_HOME'))
 if(!defined('WP_USE_THEMES'))
     define('WP_USE_THEMES', false);
 
+if(!defined('WP_DEFAULT_THEME'))
+    define('WP_DEFAULT_THEME', 'the-theme');
+
 require_once(ABSPATH . 'wp-settings.php');
