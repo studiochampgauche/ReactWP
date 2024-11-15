@@ -1121,7 +1121,7 @@ class Render{
 				'name' => 'seo_module',
 				'aria-label' => '',
 				'type' => 'checkbox',
-				'instructions' => __('Where you want display SEO module? post et page has already the module.', 'scg-core'),
+				'instructions' => __('Where you want to display the SEO module? post et page has already the module.', 'scg-core'),
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -1145,7 +1145,7 @@ class Render{
 				'name' => 'component_module',
 				'aria-label' => '',
 				'type' => 'checkbox',
-				'instructions' => __('Where you want display Component module? post et page has already the module.', 'scg-core'),
+				'instructions' => __('Where you want to display the Component module? post et page has already the module.', 'scg-core'),
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
