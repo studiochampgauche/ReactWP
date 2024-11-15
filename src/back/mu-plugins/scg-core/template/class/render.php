@@ -516,7 +516,7 @@ class Render{
 					'id' => '',
 				),
 				'message' => '',
-				'default_value' => 0,
+				'default_value' => 1,
 				'ui_on_text' => '',
 				'ui_off_text' => '',
 				'ui' => 1,
@@ -2233,7 +2233,7 @@ class Render{
 		acf_add_options_page( array(
 			'page_title' => __('Site settings', 'scg-core'),
 			'menu_slug' => 'site-settings',
-			'menu_title' => __('Configurations', 'scg-core'),
+			'menu_title' => __('Site settings', 'scg-core'),
 			'position' => '',
 			'redirect' => false,
 		) );
