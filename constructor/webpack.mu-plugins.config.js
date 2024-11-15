@@ -17,12 +17,12 @@ const main = {
 	entry: plugins.reduce((entries, pluginName) => {
 
 		entries[pluginName] = [
-			`../src/back/mu-plugins/${pluginName}/js/App.jsx`,
-			`../src/back/mu-plugins/${pluginName}/scss/App.scss`,
-			`../src/back/mu-plugins/${pluginName}/medias/audios/audios.js`,
-			`../src/back/mu-plugins/${pluginName}/medias/fonts/fonts.js`,
-			`../src/back/mu-plugins/${pluginName}/medias/images/images.js`,
-			`../src/back/mu-plugins/${pluginName}/medias/videos/videos.js`,
+			`../src/back/mu-plugins/plugins/${pluginName}/js/App.jsx`,
+			`../src/back/mu-plugins/plugins/${pluginName}/scss/App.scss`,
+			`../src/back/mu-plugins/plugins/${pluginName}/medias/audios/audios.js`,
+			`../src/back/mu-plugins/plugins/${pluginName}/medias/fonts/fonts.js`,
+			`../src/back/mu-plugins/plugins/${pluginName}/medias/images/images.js`,
+			`../src/back/mu-plugins/plugins/${pluginName}/medias/videos/videos.js`,
 		];
 
 		return entries;
@@ -134,12 +134,12 @@ const main = {
 		new CopyPlugin({
 			patterns: [
 				{
-			        from: '../src/back/mu-plugins/load.php',
+			        from: '../src/back/mu-plugins/configs',
 			        to: path.resolve(__dirname, `../dist/admin/wp-content/mu-plugins/`),
 			        noErrorOnMissing: true,
 			    },
 				...plugins.map(pluginName => ({
-			        from: path.resolve(__dirname, `../src/back/mu-plugins/${pluginName}/template`),
+			        from: path.resolve(__dirname, `../src/back/mu-plugins/plugins/${pluginName}/template`),
 			        to: path.resolve(__dirname, `../dist/admin/wp-content/mu-plugins/${pluginName}`),
 			        noErrorOnMissing: true,
 			    }))
