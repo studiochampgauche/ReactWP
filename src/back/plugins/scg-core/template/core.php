@@ -3,7 +3,7 @@
 Plugin Name: Core
 Author: Studio Champ Gauche
 Author URI: https://champgauche.studio
-Description: A plugin that handles repetitive needs in each project and add-ons.
+Description: A plugin that handles repetitive needs in each project.
 Requires at least: 6.4.1
 Requires PHP: 8.2
 Version: 1.0.0
@@ -13,12 +13,21 @@ Domain Path: /langs
 
 
 /*
+* Check ABSPATH
+*/
+if(!defined('ABSPATH')) return;
+
+
+/*
 * Make sure you have all you need for the plugin
 */
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 
-if(!defined('ABSPATH') || !is_plugin_active('advanced-custom-fields-pro/acf.php')) return;
+/*
+* Make sure the ACF Plugin is activate
+*/
+if(!is_plugin_active('advanced-custom-fields-pro/acf.php')) return;
 
 
 /*

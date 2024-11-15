@@ -3,7 +3,7 @@
 Plugin Name: Admin Styles & Scripts
 Author: Studio Champ Gauche
 Author URI: https://champgauche.studio
-Description: A plugin that enqueue style and script files in the admin.
+Description: A plugin that enqueue style and script files for admin.
 Requires at least: 6.4.1
 Requires PHP: 8.2
 Version: 1.0.0
@@ -11,13 +11,17 @@ Text Domain: scg-admin-style-script
 */
 
 
+
+/*
+* Check ABSPATH
+*/
+if(!defined('ABSPATH')) return;
+
+
 /*
 * Make sure you have all you need for the plugin
 */
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
-
-
-if(!defined('ABSPATH') || !is_plugin_active('advanced-custom-fields-pro/acf.php') || !is_plugin_active('scg-core/core.php')) return;
 
 
 class StudioChampGaucheAdminStyleScript{
