@@ -454,7 +454,7 @@ class StudioChampGauche{
                     */
                     $args = array(
 						'id' => 'is-site-settings',
-						'title' => __('Generals', 'scg-core'),
+						'title' => __('Site settings', 'scg-core'),
 						'href' => $admin_url . 'admin.php?page=site-settings',
 						'parent' => 'is-site',
 						'meta' => array(
