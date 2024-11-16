@@ -242,6 +242,12 @@ class StudioChampGauche{
 
 
                 /*
+                * Stop resizing uploaded images
+                */
+                update_field('field_6569b442163b7', false, 'option');
+
+
+                /*
                 * Create Home Page
                 */
                 $homePageArgs = array(
