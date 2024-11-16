@@ -208,6 +208,28 @@ class StudioChampGauche{
                     ]
                 ], 'option');
 
+
+                /*
+                * Create Home Page
+                */
+                $homePageArgs = array(
+                    'post_title' => 'Home',
+                    'post_type' => 'page',
+                    'post_content' => '',
+                    'post_status' => 'publish',
+                    'post_author' => 1,
+                );
+
+                // Insert the post into the database
+                $homePage_id = wp_insert_post($homePageArgs);
+
+
+                /*
+                * Setup home page as a Static Page
+                */
+                update_option('show_on_front', 'page'); 
+                update_option('page_on_front', $homePage_id);
+
             }
             
         }, 11);
