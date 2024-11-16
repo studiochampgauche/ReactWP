@@ -761,7 +761,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_65698585f5582',
-				'label' => __('Classic editor et Gutenberg', 'scg-core'),
+				'label' => __('Classic editor and Gutenberg', 'scg-core'),
 				'name' => 'editor_and_gutenberg',
 				'aria-label' => '',
 				'type' => 'group',
