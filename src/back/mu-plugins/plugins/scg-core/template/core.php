@@ -145,7 +145,7 @@ class StudioChampGauche{
                 /*
                 * Delete default posts/pages
                 */
-                foreach(scg::cpt(['post', 'page'])->posts as $item){
+                foreach(scg::cpt(['post', 'page'], ['post_status' => ['publish', 'draft']])->posts as $item){
 
                     wp_delete_post($item->ID, true);
 
@@ -155,6 +155,58 @@ class StudioChampGauche{
                 * Change Admin Appearance
                 */
                 update_field('field_6569a23ae02cc', true, 'option');
+
+
+                /*
+                * Change Dashboard
+                */
+                update_field('field_65697d9722de6', [
+                    'welcome_panel' => false,
+                    'dashboard_incoming_links' => false,
+                    'dashboard_plugins' => false,
+                    'dashboard_primary' => false,
+                    'dashboard_secondary' => false,
+                    'dashboard_quick_press' => false,
+                    'dashboard_recent_drafts' => false,
+                    'dashboard_recent_comments' => false,
+                    'dashboard_right_now' => false,
+                    'dashboard_activity' => false,
+                    'dashboard_site_health' => false
+                ], 'option');
+
+
+                /*
+                * Classic editor and Gutenberg
+                */
+                update_field('field_65698585f5582', [
+                    'gutenberg' => false,
+                    'page_editor' => false,
+                    'post_editor' => false
+                ], 'option');
+
+
+                /*
+                * Theme Customize
+                */
+                update_field('field_65698585f5582', [
+                    'themes' => false,
+                    'nav_menus' => false,
+                    'title_tagline' => false,
+                    'static_front_page' => false,
+                    'custom_css' => false,
+                    'colors' => false
+                ], 'option');
+
+
+                /*
+                * Theme locations
+                */
+                update_field('field_6569c7eac0820', [
+                    [
+                        'name' => 'Main Menu',
+                        'slug' => 'main_menu',
+                    ]
+                ], 'option');
 
             }
             
