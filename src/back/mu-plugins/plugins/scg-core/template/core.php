@@ -219,8 +219,6 @@ class StudioChampGauche{
                     'post_status' => 'publish',
                     'post_author' => 1,
                 );
-
-                // Insert the post into the database
                 $homePage_id = wp_insert_post($homePageArgs);
 
 
