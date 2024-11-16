@@ -210,6 +210,32 @@ class StudioChampGauche{
 
 
                 /*
+                * Source code
+                */
+                update_field('field_6569647a500a8', [
+                    'rsd_link' => false,
+                    'wlwmanifest_link' => false,
+                    'wp_generator' => false,
+                    'start_post_rel_link' => false,
+                    'index_rel_link' => false,
+                    'feed_links' => false,
+                    'feed_links_extra' => false,
+                    'adjacent_posts_rel_link' => false,
+                    'rest_output_link_wp_head' => false,
+                    'wp_oembed_add_discovery_links' => false,
+                    'wp_resource_hints' => false,
+                    'print_emoji_detection_script' => false,
+                    'print_emoji_styles' => false,
+                    'rel_canonical' => false,
+                    'wp_shortlink_wp_head' => false,
+                    'wp_shortlink_header' => false,
+                    'wp_block_library' => false,
+                    'classic_theme_styles' => false,
+                    'global_styles' => false
+                ], 'option');
+
+
+                /*
                 * Create Home Page
                 */
                 $homePageArgs = array(
