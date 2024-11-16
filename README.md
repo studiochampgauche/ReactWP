@@ -19,12 +19,10 @@
 4. Install your modules `npm i`
 5. From `src > back`, duplicate the `wp-config-sample.php` to `wp-config.php` and setup it.
 6. Build your app in development mode with `npm run build` or build and watch with `npm run watch`. You can build for production with `npm run prod`.
-7. Setup your backend:
-	- Change your permalink for other than Plain Text.
+7. Setup your backend by adding `/admin` to your url.
 8. Start working!
 
 > [!IMPORTANT]
 > - On step #2, `get:core` delete at the same time default plugins and twenty themes.
 > - With step #3 or #4, you need to uninstall the current GSAP module if your subscription level is not `Premium` for install the module according to your level.
-> - You can access your admin by adding `/admin` to your url.
 > - You need to configure your web server to redirect all URL requests to the `index.php` file, unless the requested file or directory physically exists on the server.
