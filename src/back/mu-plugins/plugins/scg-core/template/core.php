@@ -230,6 +230,13 @@ class StudioChampGauche{
                 update_option('show_on_front', 'page'); 
                 update_option('page_on_front', $homePage_id);
 
+
+                /*
+                * Update permalink Structure
+                */
+                update_option('permalink_structure', '/%postname%/');
+                flush_rewrite_rules();
+
             }
             
         }, 11);
