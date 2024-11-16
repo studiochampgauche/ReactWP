@@ -5,8 +5,23 @@
   "type": "module",
   "scripts": {
     "build": "webpack --mode development",
+    "build:front": "webpack --mode development --config webpack.front.config.js",
+    "build:back": "webpack --mode development --config webpack.back.config.js",
+    "build:back:theme": "webpack --mode development --config webpack.theme.config.js",
+    "build:back:plugins": "webpack --mode development --config webpack.plugins.config.js",
+    "build:back:mu-plugins": "webpack --mode development --config webpack.mu-plugins.config.js",
     "watch": "webpack --mode development --watch",
+    "watch:front": "webpack --mode development --config webpack.front.config.js --watch",
+    "watch:back": "webpack --mode development --config webpack.back.config.js --watch",
+    "watch:back:theme": "webpack --mode development --config webpack.theme.config.js --watch",
+    "watch:back:plugins": "webpack --mode development --config webpack.plugins.config.js --watch",
+    "watch:back:mu-plugins": "webpack --mode development --config webpack.mu-plugins.config.js --watch",
     "prod": "webpack --mode production",
+    "prod:front": "webpack --mode production --config webpack.front.config.js",
+    "prod:back": "webpack --mode production --config webpack.back.config.js",
+    "prod:back:theme": "webpack --mode production --config webpack.theme.config.js",
+    "prod:back:plugins": "webpack --mode production --config webpack.plugins.config.js",
+    "prod:back:mu-plugins": "webpack --mode production --config webpack.mu-plugins.config.js",
     "get:core": "curl -LO http://wordpress.org/latest.zip && cd ../ && mkdir dist && cd dist && mkdir admin && cd ../constructor && mv latest.zip ../dist/admin/ && unzip -d ../dist/admin/ ../dist/admin/latest.zip && rm ../dist/admin/latest.zip && mv ../dist/admin/wordpress/* ../dist/admin/ && rm -rf ../dist/admin/wordpress && rm -rf ../dist/admin/wp-content/plugins/akismet && rm ../dist/admin/wp-content/plugins/hello.php && rm -rf ../dist/admin/wp-content/themes/twenty* &&  curl -LO http://reactwp.com/download/plugins/advanced-custom-fields-pro.zip && cd ../dist/admin/wp-content && mkdir mu-plugins && cd ../../../constructor && mv advanced-custom-fields-pro.zip ../dist/admin/wp-content/mu-plugins && unzip -d ../dist/admin/wp-content/mu-plugins ../dist/admin/wp-content/mu-plugins/advanced-custom-fields-pro.zip && rm ../dist/admin/wp-content/mu-plugins/advanced-custom-fields-pro.zip"
   },
   "devDependencies": {
