@@ -132,6 +132,23 @@ class StudioChampGauche{
 				register_nav_menus($__locations);
                 
 			}
+
+
+            /*
+            * Remove default pages and posts
+            */
+            if (get_option('firstload') < 1) {
+
+                update_option('firstload', 1);
+
+
+                foreach(scg::cpt(['post', 'page'])->posts as $item){
+
+                    wp_delete_post($item->ID, true);
+
+                }
+
+            }
             
         }, 11);
 
