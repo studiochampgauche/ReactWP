@@ -20,7 +20,6 @@
 5. From `src > back`, duplicate the `wp-config-sample.php` to `wp-config.php` and setup it.
 6. Build your app in development mode with `npm run build` or build and watch with `npm run watch`. You can build for production with `npm run prod`.
 7. Setup your backend:
-	- Add your Home Page and setup it as a Static Page.
 	- Change your permalink for other than Plain Text.
 8. Start working!
 
