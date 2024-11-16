@@ -236,6 +236,12 @@ class StudioChampGauche{
 
 
                 /*
+                * Allow SVG
+                */
+                update_field('field_656982bae9569', true, 'option');
+
+
+                /*
                 * Create Home Page
                 */
                 $homePageArgs = array(
