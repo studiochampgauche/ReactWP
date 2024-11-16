@@ -135,18 +135,26 @@ class StudioChampGauche{
 
 
             /*
-            * Remove default pages and posts
+            * On firstload
             */
             if (get_option('firstload') < 1) {
 
                 update_option('firstload', 1);
 
 
+                /*
+                * Delete default posts/pages
+                */
                 foreach(scg::cpt(['post', 'page'])->posts as $item){
 
                     wp_delete_post($item->ID, true);
 
                 }
+
+                /*
+                * Change Admin Appearance
+                */
+                update_field('field_6569a23ae02cc', true, 'option');
 
             }
             
