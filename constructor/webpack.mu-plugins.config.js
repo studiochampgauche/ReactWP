@@ -13,7 +13,7 @@ const plugins = [
 
 
 const main = {
-	cache: false,
+	cache: true,
 	entry: plugins.reduce((entries, pluginName) => {
 
 		entries[pluginName] = [
