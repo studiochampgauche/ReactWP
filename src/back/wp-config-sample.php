@@ -25,16 +25,10 @@ define('WP_DEBUG_LOG', false);
 define('WP_DEBUG_DISPLAY', false);
 @ini_set('display_errors', 0);
 
-if(!defined('ABSPATH'))
-    define('ABSPATH', dirname(__FILE__) . '/');
+define('ABSPATH', dirname(__FILE__) . '/');
 
-if(!defined('WP_HOME'))
-    define('WP_HOME', $current_url);
-
-if(!defined('WP_USE_THEMES'))
-    define('WP_USE_THEMES', false);
-
-if(!defined('WP_DEFAULT_THEME'))
-    define('WP_DEFAULT_THEME', 'reactwp');
+define('WP_HOME', $current_url);
+define('WP_USE_THEMES', false);
+define('WP_DEFAULT_THEME', 'reactwp');
 
 require_once(ABSPATH . 'wp-settings.php');
