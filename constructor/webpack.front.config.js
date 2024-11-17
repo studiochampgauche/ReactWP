@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const main = {
-	cache: false,
+	cache: true,
 	entry: {
 		app: [
 			'../src/front/js/App.jsx',
