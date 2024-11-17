@@ -7,7 +7,7 @@ Description: A plugin that enqueue style and script files for admin.
 Requires at least: 6.4.1
 Requires PHP: 8.2
 Version: 1.0.0
-Text Domain: scg-admin-style-script
+Text Domain: reactwp-admin-style-script
 */
 
 
@@ -33,13 +33,13 @@ class StudioChampGaucheAdminStyleScript{
             /*
             * Add Style
             */
-            wp_enqueue_style('scg-admin-style-script', plugin_dir_url('scg-admin-style-script/core.php') . 'assets/css/main.min.css', null, null, false);
+            wp_enqueue_style('reactwp-admin-style-script', plugin_dir_url('reactwp-admin-style-script/core.php') . 'assets/css/main.min.css', null, null, false);
 
 
             /*
             * Add Javascript
             */
-            wp_enqueue_script('scg-admin-style-script', plugin_dir_url('scg-admin-style-script/core.php') . 'assets/js/main.min.js', null, null, true);
+            wp_enqueue_script('reactwp-admin-style-script', plugin_dir_url('reactwp-admin-style-script/core.php') . 'assets/js/main.min.js', null, null, true);
 
         });
         

@@ -9,4 +9,4 @@ Version: 1.0.0
 
 require_once 'advanced-custom-fields-pro/acf.php';
 
-require_once 'scg-core/core.php';
+require_once 'reactwp/init.php';
