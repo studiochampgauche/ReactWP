@@ -51,9 +51,9 @@ const main = {
 
 
 								const index = plugins.findIndex(plugin => file.includes(plugin));
-								const extensionName = plugins[index];
+								const pluginName = plugins[index];
 
-								return `${extensionName}/assets/css/main.min.css`;
+								return `${pluginName}/assets/css/main.min.css`;
 							},
 						}
 					},
@@ -69,9 +69,9 @@ const main = {
 							name: (file) => {
 
 								const index = plugins.findIndex(plugin => file.includes(plugin));
-								const extensionName = plugins[index];
+								const pluginName = plugins[index];
 
-								return `${extensionName}/assets/images/[name].[ext]`;
+								return `${pluginName}/assets/images/[name].[ext]`;
 							}
 						}
 					}
@@ -86,9 +86,9 @@ const main = {
 							name: (file) => {
 
 								const index = plugins.findIndex(plugin => file.includes(plugin));
-								const extensionName = plugins[index];
+								const pluginName = plugins[index];
 
-								return `${extensionName}/assets/videos/[name].[ext]`;
+								return `${pluginName}/assets/videos/[name].[ext]`;
 							}
 						}
 					}
@@ -103,9 +103,9 @@ const main = {
 							name: (file) => {
 
 								const index = plugins.findIndex(plugin => file.includes(plugin));
-								const extensionName = plugins[index];
+								const pluginName = plugins[index];
 
-								return `${extensionName}/assets/audios/[name].[ext]`;
+								return `${pluginName}/assets/audios/[name].[ext]`;
 							}
 						}
 					}
@@ -120,9 +120,9 @@ const main = {
 							name: (file) => {
 
 								const index = plugins.findIndex(plugin => file.includes(plugin));
-								const extensionName = plugins[index];
+								const pluginName = plugins[index];
 
-								return `${extensionName}/assets/fonts/[name].[ext]`;
+								return `${pluginName}/assets/fonts/[name].[ext]`;
 							}
 						}
 					}
