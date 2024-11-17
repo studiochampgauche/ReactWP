@@ -7,21 +7,29 @@ import ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const themes = [
+	'the-theme'
+];
+
 const main = {
 	cache: true,
-	entry: {
-		theme: [
-			'../src/back/theme/js/App.jsx',
-			'../src/back/theme/scss/App.scss',
-			'../src/back/theme/medias/audios/audios.js',
-			'../src/back/theme/medias/fonts/fonts.js',
-			'../src/back/theme/medias/images/images.js',
-			'../src/back/theme/medias/videos/videos.js',
-		]
-	},
+	entry: themes.reduce((entries, themeName) => {
+
+		entries[themeName] = [
+			`../src/back/themes/${themeName}/js/App.jsx`,
+			`../src/back/themes/${themeName}/scss/App.scss`,
+			`../src/back/themes/${themeName}/medias/audios/audios.js`,
+			`../src/back/themes/${themeName}/medias/fonts/fonts.js`,
+			`../src/back/themes/${themeName}/medias/images/images.js`,
+			`../src/back/themes/${themeName}/medias/videos/videos.js`,
+		];
+
+		return entries;
+
+	}, {}),
 	output: {
-		filename: 'js/main.min.js',
-		path: path.resolve(__dirname, '../dist/admin/wp-content/themes/the-theme/assets/')
+		filename: '[name]/assets/js/main.min.js',
+		path: path.resolve(__dirname, '../dist/admin/wp-content/themes/')
 	},
 	module: {
 		rules: [
@@ -38,8 +46,14 @@ const main = {
 					{
 						loader: 'file-loader',
 						options: {
-							name: 'main.min.css',
-							outputPath: 'css'
+							name: (file) => {
+
+
+								const index = themes.findIndex(theme => file.includes(theme));
+								const themeName = themes[index];
+
+								return `${themeName}/assets/css/main.min.css`;
+							}
 						}
 					},
 					'sass-loader'
@@ -51,8 +65,13 @@ const main = {
 					{
 						loader: 'file-loader',
 						options: {
-							name: '[name].[ext]',
-							outputPath: 'images',
+							name: (file) => {
+
+								const index = themes.findIndex(theme => file.includes(theme));
+								const themeName = themes[index];
+
+								return `${themeName}/assets/images/[name].[ext]`;
+							}
 						}
 					}
 				]
@@ -63,8 +82,13 @@ const main = {
 					{
 						loader: 'file-loader',
 						options: {
-							name: '[name].[ext]',
-							outputPath: 'videos',
+							name: (file) => {
+
+								const index = themes.findIndex(theme => file.includes(theme));
+								const themeName = themes[index];
+
+								return `${themeName}/assets/videos/[name].[ext]`;
+							}
 						}
 					}
 				]
@@ -75,8 +99,13 @@ const main = {
 					{
 						loader: 'file-loader',
 						options: {
-							name: '[name].[ext]',
-							outputPath: 'audios',
+							name: (file) => {
+
+								const index = themes.findIndex(theme => file.includes(theme));
+								const themeName = themes[index];
+
+								return `${themeName}/assets/audios/[name].[ext]`;
+							}
 						}
 					}
 				]
@@ -87,8 +116,13 @@ const main = {
 					{
 						loader: 'file-loader',
 						options: {
-							name: '[name].[ext]',
-							outputPath: 'fonts',
+							name: (file) => {
+
+								const index = themes.findIndex(theme => file.includes(theme));
+								const themeName = themes[index];
+
+								return `${themeName}/assets/fonts/[name].[ext]`;
+							}
 						}
 					}
 				]
@@ -103,11 +137,11 @@ const main = {
 					to: path.resolve(__dirname, '../dist/admin'),
 					noErrorOnMissing: true
 				},
-				{
-					from: '../src/back/theme/template',
-					to: path.resolve(__dirname, '../dist/admin/wp-content/themes/the-theme'),
-					noErrorOnMissing: true
-				}
+				...themes.map(themeName => ({
+			        from: path.resolve(__dirname, `../src/back/themes/${themeName}/template`),
+			        to: path.resolve(__dirname, `../dist/admin/wp-content/themes/${themeName}`),
+			        noErrorOnMissing: true,
+			    }))
 			]
 		}),
 	],
