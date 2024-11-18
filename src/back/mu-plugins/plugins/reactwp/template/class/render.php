@@ -1,6 +1,6 @@
 <?php
     
-namespace StudioChampGauche\Render;
+namespace ReactWP\Render;
 
 class Render{
     
@@ -24,7 +24,7 @@ class Render{
     
     public function wp_head(){
 
-        self::$wp_heads = apply_filters('scg_wp_head', self::$wp_heads);
+        self::$wp_heads = apply_filters('rwp_wp_head', self::$wp_heads);
         echo implode('', self::$wp_heads);
 
     }
@@ -67,11 +67,11 @@ class Render{
 
 		acf_add_local_field_group( array(
 			'key' => 'group_6569608968ef4',
-			'title' => __('Site settings', 'scg-core'),
+			'title' => __('Site settings', 'rwp-core'),
 			'fields' => array(
 			array(
 				'key' => 'field_6569608a84582',
-				'label' => __('Frontend', 'scg-core'),
+				'label' => __('Frontend', 'rwp-core'),
 				'name' => '',
 				'aria-label' => '',
 				'type' => 'tab',
@@ -88,7 +88,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_6569647a500a8',
-				'label' => __('Source code', 'scg-core'),
+				'label' => __('Source code', 'rwp-core'),
 				'name' => 'source_code',
 				'aria-label' => '',
 				'type' => 'group',
@@ -424,7 +424,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_656966f87a6d2',
-						'label' => __('WP Block Library', 'scg-core'),
+						'label' => __('WP Block Library', 'rwp-core'),
 						'name' => 'wp_block_library',
 						'aria-label' => '',
 						'type' => 'true_false',
@@ -444,7 +444,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_656966517a6d1',
-						'label' => __('Classic Theme Styles', 'scg-core'),
+						'label' => __('Classic Theme Styles', 'rwp-core'),
 						'name' => 'classic_theme_styles',
 						'aria-label' => '',
 						'type' => 'true_false',
@@ -464,7 +464,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_6569662c7a6d0',
-						'label' => __('Global Styles', 'scg-core'),
+						'label' => __('Global Styles', 'rwp-core'),
 						'name' => 'global_styles',
 						'aria-label' => '',
 						'type' => 'true_false',
@@ -486,7 +486,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_65697d8022de5',
-				'label' => __('Backend', 'scg-core'),
+				'label' => __('Backend', 'rwp-core'),
 				'name' => '',
 				'aria-label' => '',
 				'type' => 'tab',
@@ -503,7 +503,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_6569a23ae02cc',
-				'label' => __('Change appearance', 'scg-core'),
+				'label' => __('Change appearance', 'rwp-core'),
 				'name' => 'change_appearance',
 				'aria-label' => '',
 				'type' => 'true_false',
@@ -523,7 +523,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_65697d9722de6',
-				'label' => __('Dashboard', 'scg-core'),
+				'label' => __('Dashboard', 'rwp-core'),
 				'name' => 'dashboard',
 				'aria-label' => '',
 				'type' => 'group',
@@ -761,7 +761,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_65698585f5582',
-				'label' => __('Classic editor and Gutenberg', 'scg-core'),
+				'label' => __('Classic editor and Gutenberg', 'rwp-core'),
 				'name' => 'editor_and_gutenberg',
 				'aria-label' => '',
 				'type' => 'group',
@@ -777,7 +777,7 @@ class Render{
 				'sub_fields' => array(
 					array(
 						'key' => 'field_656985c2f5583',
-						'label' => __('Gutenberg', 'scg-core'),
+						'label' => __('Gutenberg', 'rwp-core'),
 						'name' => 'gutenberg',
 						'aria-label' => '',
 						'type' => 'true_false',
@@ -797,7 +797,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_65698608f5584',
-						'label' => __('Page editor', 'scg-core'),
+						'label' => __('Page editor', 'rwp-core'),
 						'name' => 'page_editor',
 						'aria-label' => '',
 						'type' => 'true_false',
@@ -817,7 +817,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_65698611f5585',
-						'label' => __('Post editor', 'scg-core'),
+						'label' => __('Post editor', 'rwp-core'),
 						'name' => 'post_editor',
 						'aria-label' => '',
 						'type' => 'true_false',
@@ -977,7 +977,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_6569c7eac0820',
-				'label' => __('Theme Locations', 'scg-core'),
+				'label' => __('Theme Locations', 'rwp-core'),
 				'name' => 'theme_locations',
 				'aria-label' => '',
 				'type' => 'repeater',
@@ -994,12 +994,12 @@ class Render{
 				'min' => 0,
 				'max' => 0,
 				'collapsed' => '',
-				'button_label' => __('Add a theme location', 'scg-core'),
+				'button_label' => __('Add a theme location', 'rwp-core'),
 				'rows_per_page' => 20,
 				'sub_fields' => array(
 					array(
 						'key' => 'field_6569c7ffc0821',
-						'label' => __('Name', 'scg-core'),
+						'label' => __('Name', 'rwp-core'),
 						'name' => 'name',
 						'aria-label' => '',
 						'type' => 'text',
@@ -1020,7 +1020,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_6569c805c0822',
-						'label' => __('Slug', 'scg-core'),
+						'label' => __('Slug', 'rwp-core'),
 						'name' => 'slug',
 						'aria-label' => '',
 						'type' => 'text',
@@ -1043,7 +1043,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_6569b42e163b6',
-				'label' => __('Extra', 'scg-core'),
+				'label' => __('Extra', 'rwp-core'),
 				'name' => '',
 				'aria-label' => '',
 				'type' => 'tab',
@@ -1060,7 +1060,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_656982bae9569',
-				'label' => __('Accept SVG', 'scg-core'),
+				'label' => __('Accept SVG', 'rwp-core'),
 				'name' => 'accept_svg',
 				'aria-label' => '',
 				'type' => 'true_false',
@@ -1080,7 +1080,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_6569b442163b7',
-				'label' => __('Resize images', 'scg-core'),
+				'label' => __('Resize images', 'rwp-core'),
 				'name' => 'resize_images',
 				'aria-label' => '',
 				'type' => 'true_false',
@@ -1100,7 +1100,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_656f243853465dffgghrsaj',
-				'label' => __('Modules', 'scg-core'),
+				'label' => __('Modules', 'rwp-core'),
 				'name' => '',
 				'aria-label' => '',
 				'type' => 'tab',
@@ -1117,11 +1117,11 @@ class Render{
 			),
 			array(
 				'key' => 'field_6578ad26fghyrf',
-				'label' => __('SEO', 'scg-core'),
+				'label' => __('SEO', 'rwp-core'),
 				'name' => 'seo_module',
 				'aria-label' => '',
 				'type' => 'checkbox',
-				'instructions' => __('Where you want to display the SEO module? post et page has already the module.', 'scg-core'),
+				'instructions' => __('Where you want to display the SEO module? post et page has already the module.', 'rwp-core'),
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -1141,11 +1141,11 @@ class Render{
 			),
 			array(
 				'key' => 'field_6578asdtgftgss',
-				'label' => __('Component', 'scg-core'),
+				'label' => __('Component', 'rwp-core'),
 				'name' => 'component_module',
 				'aria-label' => '',
 				'type' => 'checkbox',
-				'instructions' => __('Where you want to display the Component module? post et page has already the module.', 'scg-core'),
+				'instructions' => __('Where you want to display the Component module? post et page has already the module.', 'rwp-core'),
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -1165,7 +1165,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_67148bsajh923982knb',
-				'label' => __('Consent box', 'scg-core'),
+				'label' => __('Consent box', 'rwp-core'),
 				'name' => 'consent_module',
 				'aria-label' => '',
 				'type' => 'true_false',
@@ -1186,7 +1186,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_67148bsajuihs829hsn',
-				'label' => __('Cache', 'scg-core'),
+				'label' => __('Cache', 'rwp-core'),
 				'name' => 'cache_module',
 				'aria-label' => '',
 				'type' => 'true_false',
@@ -1207,7 +1207,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_656f2438585c4',
-				'label' => __('SEO', 'scg-core'),
+				'label' => __('SEO', 'rwp-core'),
 				'name' => '',
 				'aria-label' => '',
 				'type' => 'tab',
@@ -1224,7 +1224,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_65762346c5f3b',
-				'label' => __('Favicon', 'scg-core'),
+				'label' => __('Favicon', 'rwp-core'),
 				'name' => 'favicon',
 				'aria-label' => '',
 				'type' => 'group',
@@ -1240,7 +1240,7 @@ class Render{
 				'sub_fields' => array(
 					array(
 						'key' => 'field_65762351c5f3c',
-						'label' => __('Internet Explorer.ico (32x32)', 'scg-core'),
+						'label' => __('Internet Explorer.ico (32x32)', 'rwp-core'),
 						'name' => 'ie_32x32',
 						'aria-label' => '',
 						'type' => 'image',
@@ -1265,7 +1265,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_6576242fc5f3d',
-						'label' => __('All navigators (192x192)', 'scg-core'),
+						'label' => __('All navigators (192x192)', 'rwp-core'),
 						'name' => 'all_browsers_192x192',
 						'aria-label' => '',
 						'type' => 'image',
@@ -1344,7 +1344,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_lkjs09kjnnms',
-				'label' => __('Global', 'scg-core'),
+				'label' => __('Global', 'rwp-core'),
 				'name' => 'seo',
 				'aria-label' => '',
 				'type' => 'group',
@@ -1360,7 +1360,7 @@ class Render{
 				'sub_fields' => array(
 					array(
 						'key' => 'field_6574sgoiuqhs456',
-						'label' => __('Site Name', 'scg-core'),
+						'label' => __('Site Name', 'rwp-core'),
 						'name' => 'site_name',
 						'aria-label' => '',
 						'type' => 'text',
@@ -1380,7 +1380,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_0939kkjx',
-						'label' => __('Description', 'scg-core'),
+						'label' => __('Description', 'rwp-core'),
 						'name' => 'description',
 						'aria-label' => '',
 						'type' => 'textarea',
@@ -1400,7 +1400,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_6574cmlbjhdw7',
-						'label' => __('OG Title', 'scg-core'),
+						'label' => __('OG Title', 'rwp-core'),
 						'name' => 'og_title',
 						'aria-label' => '',
 						'type' => 'text',
@@ -1420,7 +1420,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_6574cb098vhfj87',
-						'label' => __('OG Description', 'scg-core'),
+						'label' => __('OG Description', 'rwp-core'),
 						'name' => 'og_description',
 						'aria-label' => '',
 						'type' => 'textarea',
@@ -1440,7 +1440,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_65762c8f5skjhg945',
-						'label' => __('Image', 'scg-core'),
+						'label' => __('Image', 'rwp-core'),
 						'name' => 'og_image',
 						'aria-label' => '',
 						'type' => 'image',
@@ -1467,7 +1467,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_656mn89726hvwuyiuc',
-				'label' => __('Cache', 'scg-core'),
+				'label' => __('Cache', 'rwp-core'),
 				'name' => '',
 				'aria-label' => '',
 				'type' => 'tab',
@@ -1492,11 +1492,11 @@ class Render{
 			),
 			array(
 				'key' => 'field_6574lkhfuwio98',
-				'label' => __('Expiration', 'scg-core'),
+				'label' => __('Expiration', 'rwp-core'),
 				'name' => 'cache_expiration',
 				'aria-label' => '',
 				'type' => 'number',
-				'instructions' => __('In second.', 'scg-core'),
+				'instructions' => __('In second.', 'rwp-core'),
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -1514,7 +1514,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_6574sio47876xn',
-				'label' => __('Version', 'scg-core'),
+				'label' => __('Version', 'rwp-core'),
 				'name' => 'cache_version',
 				'aria-label' => '',
 				'type' => 'number',
@@ -1536,7 +1536,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_656mnbjdk9827as',
-				'label' => __('Consent box', 'scg-core'),
+				'label' => __('Consent box', 'rwp-core'),
 				'name' => '',
 				'aria-label' => '',
 				'type' => 'tab',
@@ -1561,7 +1561,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_lkjgbbxdntywbdipqoz019327',
-				'label' => __('Settings', 'scg-core'),
+				'label' => __('Settings', 'rwp-core'),
 				'name' => 'consent_configs',
 				'aria-label' => '',
 				'type' => 'group',
@@ -1577,7 +1577,7 @@ class Render{
 				'sub_fields' => array(
 					array(
 						'key' => 'field_lkjgbbxdntywbdipqoz0193271',
-						'label' => __('Version', 'scg-core'),
+						'label' => __('Version', 'rwp-core'),
 						'name' => 'version',
 						'aria-label' => '',
 						'type' => 'number',
@@ -1599,11 +1599,11 @@ class Render{
 					),
 					array(
 						'key' => 'field_lkjgbbxdntywbdipqoz0193272',
-						'label' => __('Expiration', 'scg-core'),
+						'label' => __('Expiration', 'rwp-core'),
 						'name' => 'expiration',
 						'aria-label' => '',
 						'type' => 'number',
-						'instructions' => __('In second.', 'scg-core'),
+						'instructions' => __('In second.', 'rwp-core'),
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -1623,7 +1623,7 @@ class Render{
 			),
 			array(
 				'key' => 'field_65tuyqwvfsaowi987625',
-				'label' => __('Box', 'scg-core'),
+				'label' => __('Box', 'rwp-core'),
 				'name' => 'consent_box',
 				'aria-label' => '',
 				'type' => 'group',
@@ -1639,7 +1639,7 @@ class Render{
 				'sub_fields' => array(
 					array(
 						'key' => 'field_9836651shjgvsi21',
-						'label' => __('Tab Text', 'scg-core'),
+						'label' => __('Tab Text', 'rwp-core'),
 						'name' => 'tab_name',
 						'aria-label' => '',
 						'type' => 'text',
@@ -1659,7 +1659,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_9836651shjgvsi22',
-						'label' => __('Heading Title', 'scg-core'),
+						'label' => __('Heading Title', 'rwp-core'),
 						'name' => 'header_title',
 						'aria-label' => '',
 						'type' => 'group',
@@ -1675,7 +1675,7 @@ class Render{
 						'sub_fields' => array(
 							array(
 								'key' => 'field_9836651shjgvsi221',
-								'label' => __('Text', 'scg-core'),
+								'label' => __('Text', 'rwp-core'),
 								'name' => 'text',
 								'aria-label' => '',
 								'type' => 'text',
@@ -1695,7 +1695,7 @@ class Render{
 							),
 							array(
 								'key' => 'field_9836651shjgvsi222',
-								'label' => __('Display', 'scg-core'),
+								'label' => __('Display', 'rwp-core'),
 								'name' => 'display',
 								'aria-label' => '',
 								'type' => 'true_false',
@@ -1718,7 +1718,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_9836651anbvy2890d0h',
-						'label' => __('Main text', 'scg-core'),
+						'label' => __('Main text', 'rwp-core'),
 						'name' => 'main_text',
 						'aria-label' => '',
 						'type' => 'wysiwyg',
@@ -1739,7 +1739,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_9836651shjgvsi23',
-						'label' => __('Accep button', 'scg-core'),
+						'label' => __('Accep button', 'rwp-core'),
 						'name' => 'accept_button',
 						'aria-label' => '',
 						'type' => 'group',
@@ -1755,7 +1755,7 @@ class Render{
 						'sub_fields' => array(
 							array(
 								'key' => 'field_9836651shjgvsi231',
-								'label' => __('Text', 'scg-core'),
+								'label' => __('Text', 'rwp-core'),
 								'name' => 'text',
 								'aria-label' => '',
 								'type' => 'text',
@@ -1777,7 +1777,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_9836651shjgvsi24',
-						'label' => __('Reject button', 'scg-core'),
+						'label' => __('Reject button', 'rwp-core'),
 						'name' => 'reject_button',
 						'aria-label' => '',
 						'type' => 'group',
@@ -1793,7 +1793,7 @@ class Render{
 						'sub_fields' => array(
 							array(
 								'key' => 'field_9836651shjgvsi241',
-								'label' => __('Text', 'scg-core'),
+								'label' => __('Text', 'rwp-core'),
 								'name' => 'text',
 								'aria-label' => '',
 								'type' => 'text',
@@ -1813,7 +1813,7 @@ class Render{
 							),
 							array(
 								'key' => 'field_9836651shjgvsi242',
-								'label' => __('Display', 'scg-core'),
+								'label' => __('Display', 'rwp-core'),
 								'name' => 'display',
 								'aria-label' => '',
 								'type' => 'true_false',
@@ -1836,7 +1836,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_9836651shjgvsi25',
-						'label' => __('Links', 'scg-core'),
+						'label' => __('Links', 'rwp-core'),
 						'name' => 'links',
 						'aria-label' => '',
 						'type' => 'repeater',
@@ -1853,12 +1853,12 @@ class Render{
 						'min' => 0,
 						'max' => 0,
 						'collapsed' => '',
-						'button_label' => __('Add a link', 'scg-core'),
+						'button_label' => __('Add a link', 'rwp-core'),
 						'rows_per_page' => 20,
 						'sub_fields' => array(
 							array(
 								'key' => 'field_9836651shjgvsi251',
-								'label' => __('Text', 'scg-core'),
+								'label' => __('Text', 'rwp-core'),
 								'name' => 'text',
 								'aria-label' => '',
 								'type' => 'text',
@@ -1878,7 +1878,7 @@ class Render{
 							),
 							array(
 								'key' => 'field_9836651shjgvsi252',
-								'label' => __('URL', 'scg-core'),
+								'label' => __('URL', 'rwp-core'),
 								'name' => 'url',
 								'aria-label' => '',
 								'type' => 'text',
@@ -1898,7 +1898,7 @@ class Render{
 							),
 							array(
 								'key' => 'field_9836651shjgvsi253',
-								'label' => __('New Tab', 'scg-core'),
+								'label' => __('New Tab', 'rwp-core'),
 								'name' => 'new_tab',
 								'aria-label' => '',
 								'type' => 'true_false',
@@ -1919,7 +1919,7 @@ class Render{
 							),
 							array(
 								'key' => 'field_9836651shjgvsi254',
-								'label' => __('Page Transition', 'scg-core'),
+								'label' => __('Page Transition', 'rwp-core'),
 								'name' => 'page_transition',
 								'aria-label' => '',
 								'type' => 'true_false',
@@ -1964,8 +1964,8 @@ class Render{
 		) );
 
 
-		$seoPostTypes = \StudioChampGauche\Utils\Field::get('seo_module') ? \StudioChampGauche\Utils\Field::get('seo_module') : [];
-		$componentPostTypes = \StudioChampGauche\Utils\Field::get('component_module') ? \StudioChampGauche\Utils\Field::get('component_module') : [];
+		$seoPostTypes = \ReactWP\Utils\Field::get('seo_module') ? \ReactWP\Utils\Field::get('seo_module') : [];
+		$componentPostTypes = \ReactWP\Utils\Field::get('component_module') ? \ReactWP\Utils\Field::get('component_module') : [];
 
 
 		$seoPts = [
@@ -2033,11 +2033,11 @@ class Render{
 
 		acf_add_local_field_group( array(
 		'key' => 'group_6574cb08273jnhbds',
-		'title' => __('Component Module', 'scg-core'),
+		'title' => __('Component Module', 'rwp-core'),
 		'fields' => array(
 				array(
 					'key' => 'field_6576114beasdk4983jhb',
-					'label' => __('Component Name', 'scg-core'),
+					'label' => __('Component Name', 'rwp-core'),
 					'name' => 'component_name',
 					'aria-label' => '',
 					'type' => 'text',
@@ -2072,11 +2072,11 @@ class Render{
 
 		acf_add_local_field_group( array(
 		'key' => 'group_6574cb60329ec',
-		'title' => __('SEO Module', 'scg-core'),
+		'title' => __('SEO Module', 'rwp-core'),
 		'fields' => array(
 			array(
 				'key' => 'field_lkjshbn2988',
-				'label' => __('SEO', 'scg-core'),
+				'label' => __('SEO', 'rwp-core'),
 				'name' => 'seo',
 				'aria-label' => '',
 				'type' => 'group',
@@ -2092,7 +2092,7 @@ class Render{
 				'sub_fields' => array(
 					array(
 						'key' => 'field_6574cb9751639',
-						'label' => __('Don\'t index', 'scg-core'),
+						'label' => __('Don\'t index', 'rwp-core'),
 						'name' => 'stop_indexing',
 						'aria-label' => '',
 						'type' => 'true_false',
@@ -2112,7 +2112,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_6574cb619f729',
-						'label' => __('Title', 'scg-core'),
+						'label' => __('Title', 'rwp-core'),
 						'name' => 'title',
 						'aria-label' => '',
 						'type' => 'text',
@@ -2132,7 +2132,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_6574cb619fe8d',
-						'label' => __('Description', 'scg-core'),
+						'label' => __('Description', 'rwp-core'),
 						'name' => 'description',
 						'aria-label' => '',
 						'type' => 'textarea',
@@ -2152,7 +2152,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_6574casdbgeaxvv',
-						'label' => __('OG Title', 'scg-core'),
+						'label' => __('OG Title', 'rwp-core'),
 						'name' => 'og_title',
 						'aria-label' => '',
 						'type' => 'text',
@@ -2172,7 +2172,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_6574cb09821hnbn',
-						'label' => __('OG Description', 'scg-core'),
+						'label' => __('OG Description', 'rwp-core'),
 						'name' => 'og_description',
 						'aria-label' => '',
 						'type' => 'textarea',
@@ -2192,7 +2192,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_65762c8f5a048',
-						'label' => __('Image', 'scg-core'),
+						'label' => __('Image', 'rwp-core'),
 						'name' => 'og_image',
 						'aria-label' => '',
 						'type' => 'image',
@@ -2231,9 +2231,9 @@ class Render{
 
 
 		acf_add_options_page( array(
-			'page_title' => __('Site settings', 'scg-core'),
+			'page_title' => __('Site settings', 'rwp-core'),
 			'menu_slug' => 'site-settings',
-			'menu_title' => __('Site settings', 'scg-core'),
+			'menu_title' => __('Site settings', 'rwp-core'),
 			'position' => '',
 			'redirect' => false,
 		) );
