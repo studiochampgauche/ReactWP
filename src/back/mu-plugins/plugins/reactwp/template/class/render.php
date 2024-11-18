@@ -1739,7 +1739,7 @@ class Render{
 					),
 					array(
 						'key' => 'field_9836651shjgvsi23',
-						'label' => __('Accep button', 'rwp-core'),
+						'label' => __('Accept button', 'rwp-core'),
 						'name' => 'accept_button',
 						'aria-label' => '',
 						'type' => 'group',
