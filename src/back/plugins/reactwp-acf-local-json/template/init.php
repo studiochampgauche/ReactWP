@@ -24,13 +24,13 @@ if(!defined('ABSPATH')) return;
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 
-class StudioChampGaucheACFJSON{
+class ReactWPACFJSON{
     
     private $acf_path;
 
     function __construct(){
         
-        $this->acf_path = scg::source(['path' => 'datas/acf', 'url' => false]);
+        $this->acf_path = rwp::source(['path' => 'datas/acf', 'url' => false]);
 
 
         /*
@@ -74,6 +74,6 @@ class StudioChampGaucheACFJSON{
     
 }
 
-new StudioChampGaucheACFJSON();
+new ReactWPACFJSON();
 
 ?>

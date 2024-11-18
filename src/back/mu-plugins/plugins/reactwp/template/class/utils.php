@@ -1,6 +1,6 @@
 <?php
     
-namespace StudioChampGauche\Utils;
+namespace ReactWP\Utils;
 
 class Field{
 

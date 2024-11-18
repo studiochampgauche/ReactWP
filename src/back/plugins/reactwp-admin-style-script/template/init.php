@@ -24,7 +24,7 @@ if(!defined('ABSPATH')) return;
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 
-class StudioChampGaucheAdminStyleScript{
+class ReactWPAdminStyleScript{
     
     function __construct(){
         
@@ -47,6 +47,6 @@ class StudioChampGaucheAdminStyleScript{
     
 }
 
-new StudioChampGaucheAdminStyleScript();
+new ReactWPAdminStyleScript();
 
 ?>

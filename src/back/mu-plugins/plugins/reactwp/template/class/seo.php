@@ -1,6 +1,6 @@
 <?php
     
-namespace StudioChampGauche\Seo;
+namespace ReactWP\Seo;
 
 class Seo{
 	
@@ -20,15 +20,15 @@ class Seo{
 				
 				||
 				
-				(is_author() && \StudioChampGauche\Utils\Field::get('seo_stop_indexing', 'user_' . $obj->ID))
+				(is_author() && \ReactWP\Utils\Field::get('seo_stop_indexing', 'user_' . $obj->ID))
 				
 				||
 				
-				((is_category() || is_tag() || is_tax()) && \StudioChampGauche\Utils\Field::get('seo_stop_indexing', 'term_' . $obj->term_id))
+				((is_category() || is_tag() || is_tax()) && \ReactWP\Utils\Field::get('seo_stop_indexing', 'term_' . $obj->term_id))
 				
 				||
 				
-				($obj && $obj->ID && \StudioChampGauche\Utils\Field::get('seo_stop_indexing', $obj->ID))
+				($obj && $obj->ID && \ReactWP\Utils\Field::get('seo_stop_indexing', $obj->ID))
 
 				||
 
@@ -55,7 +55,7 @@ class Seo{
 			
 		});
 		
-		add_filter('scg_wp_head', function($wp_heads){
+		add_filter('rwp_wp_head', function($wp_heads){
 			
 			$obj = get_queried_object();
 			
@@ -111,7 +111,7 @@ class Seo{
 				$wp_heads['og_image'] = '<meta property="og:image" content="'. self::og_image() .'" />';
 			
 			
-			$fav = \StudioChampGauche\Utils\Field::get('favicon');
+			$fav = \ReactWP\Utils\Field::get('favicon');
 			
 			if(isset($fav['ie_32x32']) && $fav['ie_32x32'])
 				$wp_heads['fav_ie_32x32'] = '<!--[if IE]><link rel="shortcut icon" href="'. $fav['ie_32x32'] .'"><![endif]-->';
@@ -137,7 +137,7 @@ class Seo{
 	
 	public static function site_name(){
 		
-		$siteName = \StudioChampGauche\Utils\Field::get('seo_site_name');
+		$siteName = \ReactWP\Utils\Field::get('seo_site_name');
 		
 		return $siteName ? $siteName : get_bloginfo('name');
 		
@@ -148,19 +148,19 @@ class Seo{
 		$obj = get_queried_object();
 		
 		if(is_search())
-			return __('Search result(s) for', 'scg-core') . ' \'' . $_GET['s'] . '\'' . ' - ' . self::site_name();
+			return __('Search result(s) for', 'rwp-core') . ' \'' . $_GET['s'] . '\'' . ' - ' . self::site_name();
 		
 		elseif(is_404())
-			return __('404 Error', 'scg-core') . ' - ' . self::site_name();
+			return __('404 Error', 'rwp-core') . ' - ' . self::site_name();
 		
 		elseif(is_author())
-			return (\StudioChampGauche\Utils\Field::get('seo_title', 'user_' . $obj->ID) ? \StudioChampGauche\Utils\Field::get('seo_title', 'user_' . $obj->ID) : __('Posts of', 'scg-core') . ' ' . $obj->display_name . ' - ' . self::site_name());
+			return (\ReactWP\Utils\Field::get('seo_title', 'user_' . $obj->ID) ? \ReactWP\Utils\Field::get('seo_title', 'user_' . $obj->ID) : __('Posts of', 'rwp-core') . ' ' . $obj->display_name . ' - ' . self::site_name());
 			
 		elseif(is_category() || is_tag() || is_tax())
-			return (\StudioChampGauche\Utils\Field::get('seo_title', 'term_' . $obj->term_id) ? \StudioChampGauche\Utils\Field::get('seo_title', 'term_' . $obj->term_id)  : $obj->name . ' - ' . self::site_name());
+			return (\ReactWP\Utils\Field::get('seo_title', 'term_' . $obj->term_id) ? \ReactWP\Utils\Field::get('seo_title', 'term_' . $obj->term_id)  : $obj->name . ' - ' . self::site_name());
 			
-		elseif($obj && $obj->ID && \StudioChampGauche\Utils\Field::get('seo_title', $obj->ID))
-			return \StudioChampGauche\Utils\Field::get('seo_title', $obj->ID);
+		elseif($obj && $obj->ID && \ReactWP\Utils\Field::get('seo_title', $obj->ID))
+			return \ReactWP\Utils\Field::get('seo_title', $obj->ID);
 		
 		elseif($obj && $obj->ID)
 			return get_the_title($obj->ID) . ' - ' . self::site_name();
@@ -174,18 +174,18 @@ class Seo{
 		
 		$obj = get_queried_object();
 		
-		if(is_author() && \StudioChampGauche\Utils\Field::get('seo_description', 'user_' . $obj->ID))
-			return \StudioChampGauche\Utils\Field::get('seo_description', 'user_' . $obj->ID);
+		if(is_author() && \ReactWP\Utils\Field::get('seo_description', 'user_' . $obj->ID))
+			return \ReactWP\Utils\Field::get('seo_description', 'user_' . $obj->ID);
 		
-		elseif((is_category() || is_tag() || is_tax()) && \StudioChampGauche\Utils\Field::get('seo_description', 'term_' . $obj->term_id))
-			return \StudioChampGauche\Utils\Field::get('seo_description', 'term_' . $obj->term_id);
+		elseif((is_category() || is_tag() || is_tax()) && \ReactWP\Utils\Field::get('seo_description', 'term_' . $obj->term_id))
+			return \ReactWP\Utils\Field::get('seo_description', 'term_' . $obj->term_id);
 		
-		elseif($obj && $obj->ID && \StudioChampGauche\Utils\Field::get('seo_description', $obj->ID))
-			return \StudioChampGauche\Utils\Field::get('seo_description', $obj->ID);
+		elseif($obj && $obj->ID && \ReactWP\Utils\Field::get('seo_description', $obj->ID))
+			return \ReactWP\Utils\Field::get('seo_description', $obj->ID);
 		
 		
 			
-		return \StudioChampGauche\Utils\Field::get('seo_description');
+		return \ReactWP\Utils\Field::get('seo_description');
 		
 	}
 	
@@ -212,13 +212,13 @@ class Seo{
 		
 		
 		if(is_author())
-			return (\StudioChampGauche\Utils\Field::get('seo_og_title', 'user_' . $obj->ID) ? \StudioChampGauche\Utils\Field::get('seo_og_title', 'user_' . $obj->ID) : (\StudioChampGauche\Utils\Field::get('seo_og_title') ? \StudioChampGauche\Utils\Field::get('seo_og_title') : __('Publications de', 'cg-core-plugin') . ' ' . $obj->display_name . ' - ' . self::site_name()));
+			return (\ReactWP\Utils\Field::get('seo_og_title', 'user_' . $obj->ID) ? \ReactWP\Utils\Field::get('seo_og_title', 'user_' . $obj->ID) : (\ReactWP\Utils\Field::get('seo_og_title') ? \ReactWP\Utils\Field::get('seo_og_title') : __('Publications de', 'cg-core-plugin') . ' ' . $obj->display_name . ' - ' . self::site_name()));
 			
 		elseif(is_category() || is_tag() || is_tax())
-			return (\StudioChampGauche\Utils\Field::get('seo_og_title', 'term_' . $obj->term_id) ? \StudioChampGauche\Utils\Field::get('seo_og_title', 'term_' . $obj->term_id)  : (\StudioChampGauche\Utils\Field::get('seo_og_title') ? \StudioChampGauche\Utils\Field::get('seo_og_title') : $obj->name . ' - ' . self::site_name()));
+			return (\ReactWP\Utils\Field::get('seo_og_title', 'term_' . $obj->term_id) ? \ReactWP\Utils\Field::get('seo_og_title', 'term_' . $obj->term_id)  : (\ReactWP\Utils\Field::get('seo_og_title') ? \ReactWP\Utils\Field::get('seo_og_title') : $obj->name . ' - ' . self::site_name()));
 			
 		elseif($obj && $obj->ID)
-			return (\StudioChampGauche\Utils\Field::get('seo_og_title', $obj->ID) ? \StudioChampGauche\Utils\Field::get('seo_og_title', $obj->ID) : (\StudioChampGauche\Utils\Field::get('seo_og_title') ? \StudioChampGauche\Utils\Field::get('seo_og_title') : self::title()));
+			return (\ReactWP\Utils\Field::get('seo_og_title', $obj->ID) ? \ReactWP\Utils\Field::get('seo_og_title', $obj->ID) : (\ReactWP\Utils\Field::get('seo_og_title') ? \ReactWP\Utils\Field::get('seo_og_title') : self::title()));
 	
 		
 		
@@ -233,18 +233,18 @@ class Seo{
 		
 		$obj = get_queried_object();
 		
-		if(is_author() && \StudioChampGauche\Utils\Field::get('seo_og_description', 'user_' . $obj->ID))
-			return \StudioChampGauche\Utils\Field::get('seo_og_description', 'user_' . $obj->ID);
+		if(is_author() && \ReactWP\Utils\Field::get('seo_og_description', 'user_' . $obj->ID))
+			return \ReactWP\Utils\Field::get('seo_og_description', 'user_' . $obj->ID);
 		
-		elseif((is_category() || is_tag() || is_tax()) && \StudioChampGauche\Utils\Field::get('seo_og_description', 'term_' . $obj->term_id))
-			return \StudioChampGauche\Utils\Field::get('seo_og_description', 'term_' . $obj->term_id);
+		elseif((is_category() || is_tag() || is_tax()) && \ReactWP\Utils\Field::get('seo_og_description', 'term_' . $obj->term_id))
+			return \ReactWP\Utils\Field::get('seo_og_description', 'term_' . $obj->term_id);
 		
-		elseif($obj && $obj->ID && \StudioChampGauche\Utils\Field::get('seo_og_description', $obj->ID))
-			return \StudioChampGauche\Utils\Field::get('seo_og_description', $obj->ID);
+		elseif($obj && $obj->ID && \ReactWP\Utils\Field::get('seo_og_description', $obj->ID))
+			return \ReactWP\Utils\Field::get('seo_og_description', $obj->ID);
 		
 		
 			
-		return \StudioChampGauche\Utils\Field::get('seo_og_description') ? \StudioChampGauche\Utils\Field::get('seo_og_description') : self::description();
+		return \ReactWP\Utils\Field::get('seo_og_description') ? \ReactWP\Utils\Field::get('seo_og_description') : self::description();
 		
 	}
 	
@@ -253,18 +253,18 @@ class Seo{
 		
 		$obj = get_queried_object();
 		
-		if(is_author() && \StudioChampGauche\Utils\Field::get('seo_og_image', 'user_' . $obj->ID))
-			return \StudioChampGauche\Utils\Field::get('seo_og_image', 'user_' . $obj->ID);
+		if(is_author() && \ReactWP\Utils\Field::get('seo_og_image', 'user_' . $obj->ID))
+			return \ReactWP\Utils\Field::get('seo_og_image', 'user_' . $obj->ID);
 		
-		elseif((is_category() || is_tag() || is_tax()) && \StudioChampGauche\Utils\Field::get('seo_og_image', 'term_' . $obj->term_id))
-			return \StudioChampGauche\Utils\Field::get('seo_og_image', 'term_' . $obj->term_id);
+		elseif((is_category() || is_tag() || is_tax()) && \ReactWP\Utils\Field::get('seo_og_image', 'term_' . $obj->term_id))
+			return \ReactWP\Utils\Field::get('seo_og_image', 'term_' . $obj->term_id);
 		
-		elseif($obj && $obj->ID && \StudioChampGauche\Utils\Field::get('seo_og_image', $obj->ID))
-			return \StudioChampGauche\Utils\Field::get('seo_og_image', $obj->ID);
+		elseif($obj && $obj->ID && \ReactWP\Utils\Field::get('seo_og_image', $obj->ID))
+			return \ReactWP\Utils\Field::get('seo_og_image', $obj->ID);
 		
 
 			
-		return \StudioChampGauche\Utils\Field::get('seo_og_image');
+		return \ReactWP\Utils\Field::get('seo_og_image');
 		
 	}
 	

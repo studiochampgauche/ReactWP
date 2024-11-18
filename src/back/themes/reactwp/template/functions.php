@@ -4,27 +4,27 @@
 
         function __construct(){
             
-            if(!class_exists('scg')) return;
+            if(!class_exists('rwp')) return;
             
             /*
-            * str_replace your return when you use scg::field(), StudioChampGauche\Utils\Field::get() or ACF REST API;
+            * str_replace your return when you use rwp::field(), ReactWP\Utils\Field::get() or ACF REST API;
             */
             add_action('acf/init', function(){
 
-                StudioChampGauche\Utils\Field::replace([
+                ReactWP\Utils\Field::replace([
                     '{SITE_NAME}'
                 ], [
-                    StudioChampGauche\SEO\SEO::site_name()
+                    ReactWP\SEO\SEO::site_name()
                 ]);
 
             });
             
             
             /*
-            * Set defaults when you call scg::cpt() or StudioChampGauche\Utils\CustomPostType::get();
+            * Set defaults when you call rwp::cpt() or ReactWP\Utils\CustomPostType::get();
             */
-            StudioChampGauche\Utils\CustomPostType::default('posts_per_page', -1);
-            StudioChampGauche\Utils\CustomPostType::default('paged', 1);
+            ReactWP\Utils\CustomPostType::default('posts_per_page', -1);
+            ReactWP\Utils\CustomPostType::default('paged', 1);
             
 
 
@@ -38,7 +38,7 @@
                 * Routes
                 */
 
-                $data = scg::cpt(['page', 'post'])->posts;
+                $data = rwp::cpt(['page', 'post'])->posts;
                 $routes = [];
 
                 if($data){
@@ -99,7 +99,7 @@
                     }
 
                 }
-                wp_localize_script('scg-main', 'ROUTES', $routes);
+                wp_localize_script('rwp-main', 'ROUTES', $routes);
 
 
                 /*
@@ -133,7 +133,7 @@
 
                 $medias = [];
 
-                wp_localize_script('scg-main', 'MEDIAS', $medias);
+                wp_localize_script('rwp-main', 'MEDIAS', $medias);
                 
             });
 
@@ -161,7 +161,7 @@
 
                 /*
                 *
-                register_rest_route('scg/v1', '/custom/', [
+                register_rest_route('rwp/v1', '/custom/', [
                     'methods'  => 'GET',
                     'callback' => function(){
 

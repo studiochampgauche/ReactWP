@@ -30,28 +30,28 @@
 		<div id="app"></div>
 
 
-		<?php if(scg::field('consent_module')){ ?>
+		<?php if(rwp::field('consent_module')){ ?>
 			<div id="consent-panel">
 				<div class="inner">
 					<div id="consent-box">
 						<div class="contents">
-							<?= (scg::field('consent_box_header_title_display') ? '<h2>'. scg::field('consent_box_header_title_text') .'</h2>' : null); ?>
+							<?= (rwp::field('consent_box_header_title_display') ? '<h2>'. rwp::field('consent_box_header_title_text') .'</h2>' : null); ?>
 							<div class="text">
-								<?= scg::field('consent_box_main_text'); ?>
+								<?= rwp::field('consent_box_main_text'); ?>
 							</div>
 							<div class="buttons">
 								<button class="btn accept">
-									<span><?= scg::field('consent_box_accept_button_text'); ?></span>
+									<span><?= rwp::field('consent_box_accept_button_text'); ?></span>
 								</button>
-								<?php if(scg::field('consent_box_reject_button_display')){ ?>
+								<?php if(rwp::field('consent_box_reject_button_display')){ ?>
 									<button class="btn reject">
-										<span><?= scg::field('consent_box_reject_button_text'); ?></span>
+										<span><?= rwp::field('consent_box_reject_button_text'); ?></span>
 									</button>
 								<?php } ?>
 							</div>
 							<?php
 
-								$links = scg::field('consent_box_links');
+								$links = rwp::field('consent_box_links');
 
 								if($links){
 
@@ -75,7 +75,7 @@
 					</div>
 					<div id="consent-button">
 						<div class="int">
-							<span><?= scg::field('consent_box_tab_name'); ?></span>
+							<span><?= rwp::field('consent_box_tab_name'); ?></span>
 						</div>
 					</div>
 				</div>

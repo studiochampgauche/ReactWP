@@ -16,7 +16,7 @@ require_once 'class/utils.php';
 require_once 'class/seo.php';
 
 
-class StudioChampGauche{
+class ReactWP{
     
     function __construct(){
         
@@ -137,7 +137,7 @@ class StudioChampGauche{
                 /*
                 * Delete default posts/pages
                 */
-                foreach(scg::cpt(['post', 'page'], ['post_status' => ['publish', 'draft']])->posts as $item){
+                foreach(self::cpt(['post', 'page'], ['post_status' => ['publish', 'draft']])->posts as $item){
 
                     wp_delete_post($item->ID, true);
 
@@ -291,13 +291,13 @@ class StudioChampGauche{
             /*
             * Add Main Style
             */
-            //wp_enqueue_style('scg-main', str_replace('/admin', '', site_url('/assets/css/main.min.css')), null, null, null);
+            //wp_enqueue_style('rwp-main', str_replace('/admin', '', site_url('/assets/css/main.min.css')), null, null, null);
 
 
             /*
             * Add Main Javascript
             */
-            wp_enqueue_script('scg-main', str_replace('/admin', '', site_url('/assets/js/main.min.js')), null, null, true);
+            wp_enqueue_script('rwp-main', str_replace('/admin', '', site_url('/assets/js/main.min.js')), null, null, true);
 
 
 
@@ -305,14 +305,14 @@ class StudioChampGauche{
             * Add SYSTEM global variable
             */
             $siteUrl = site_url();
-            wp_localize_script('scg-main', 'SYSTEM', [
+            wp_localize_script('rwp-main', 'SYSTEM', [
                 'public' => get_option('blog_public'),
-                'cacheActive' => (scg::field('cache_module') ? true : false),
-                'cacheVersion' => (scg::field('cache_version') ? scg::field('cache_version') : 0),
-                'cacheExpiration' => (scg::field('cache_expiration') ? scg::field('cache_expiration') : 0),
-                'consentActive' => (scg::field('consent_module') ? true : false),
-                'consentVersion' => (scg::field('consent_configs_version') ? scg::field('consent_configs_version') : 0),
-                'consentExpiration' => (scg::field('consent_configs_expiration') ? scg::field('consent_configs_expiration') : 0),
+                'cacheActive' => (self::field('cache_module') ? true : false),
+                'cacheVersion' => (self::field('cache_version') ? self::field('cache_version') : 0),
+                'cacheExpiration' => (self::field('cache_expiration') ? self::field('cache_expiration') : 0),
+                'consentActive' => (self::field('consent_module') ? true : false),
+                'consentVersion' => (self::field('consent_configs_version') ? self::field('consent_configs_version') : 0),
+                'consentExpiration' => (self::field('consent_configs_expiration') ? self::field('consent_configs_expiration') : 0),
                 'baseUrl' => str_replace(['/admin/', '/admin'], '/', $siteUrl),
                 'adminUrl' => rtrim($siteUrl, '/') . '/',
                 'ajaxPath' => '/admin/wp-admin/admin-ajax.php',
@@ -323,18 +323,18 @@ class StudioChampGauche{
             /*
             * Add defaultSEO global variable
             */
-            $defaultSEO = scg::field('seo', 'option');
-            $defaultSEO['blogName'] = \StudioChampGauche\SEO\SEO::site_name();
+            $defaultSEO = self::field('seo', 'option');
+            $defaultSEO['blogName'] = \ReactWP\SEO\SEO::site_name();
 
-            wp_localize_script('scg-main', 'defaultSEO', $defaultSEO);
+            wp_localize_script('rwp-main', 'defaultSEO', $defaultSEO);
 
             
             
             /*
-            * Remove scg-main script type attribute
+            * Remove rwp-main script type attribute
             */
             add_filter('script_loader_tag', function($tag, $handle, $src){
-                if($handle !== 'scg-main')
+                if($handle !== 'rwp-main')
                     return $tag;
 
                 $tag = '<script src="' . esc_url( $src ) . '"></script>';
@@ -489,7 +489,7 @@ class StudioChampGauche{
                 */
                 $args = array(
 					'id' => 'is-menus',
-					'title' => __('Menus', 'scg-core'),
+					'title' => __('Menus', 'rwp-core'),
 					'href' => $admin_url . 'nav-menus.php',
 					'meta' => array(
 						'class' => 'is-menus'
@@ -504,7 +504,7 @@ class StudioChampGauche{
 				*/
 				$args = array(
 					'id' => 'is-files',
-					'title' => __('Images & files', 'scg-core'),
+					'title' => __('Images & files', 'rwp-core'),
 					'href' => $admin_url . 'upload.php',
 					'meta' => array(
 						'class' => 'is-files'
@@ -522,7 +522,7 @@ class StudioChampGauche{
                     
                     $args = array(
                         'id' => 'is-users-list',
-                        'title' => __('Users', 'scg-core'),
+                        'title' => __('Users', 'rwp-core'),
                         'href' => $admin_url . 'users.php',
                         'meta' => array(
                             'class' => 'is-users-list'
@@ -533,7 +533,7 @@ class StudioChampGauche{
                     
                     $args = array(
                         'id' => 'is-users-profile',
-                        'title' => __('Profile', 'scg-core'),
+                        'title' => __('Profile', 'rwp-core'),
                         'href' => $admin_url . 'profile.php',
                         'parent' => 'is-users-list',
                         'meta' => array(
@@ -546,7 +546,7 @@ class StudioChampGauche{
                     
                     $args = array(
                         'id' => 'is-users-profile',
-                        'title' => __('Profile', 'scg-core'),
+                        'title' => __('Profile', 'rwp-core'),
                         'href' => $admin_url . 'profile.php',
                         'meta' => array(
                             'class' => 'is-users-profile'
@@ -567,7 +567,7 @@ class StudioChampGauche{
                     */
                     $args = array(
 						'id' => 'is-site',
-						'title' => __('ReactWP', 'scg-core'),
+						'title' => __('ReactWP', 'rwp-core'),
 						'meta' => array(
 							'class' => 'is-site'
 						)
@@ -580,7 +580,7 @@ class StudioChampGauche{
                     */
                     $args = array(
 						'id' => 'is-site-settings',
-						'title' => __('Site settings', 'scg-core'),
+						'title' => __('Site settings', 'rwp-core'),
 						'href' => $admin_url . 'admin.php?page=site-settings',
 						'parent' => 'is-site',
 						'meta' => array(
@@ -596,7 +596,7 @@ class StudioChampGauche{
                     if(current_user_can('switch_themes')){
                         $args = array(
                             'id' => 'is-site-themes',
-                            'title' => __('Themes', 'scg-core'),
+                            'title' => __('Themes', 'rwp-core'),
                             'href' => $admin_url . 'themes.php',
                             'parent' => 'is-site',
                             'meta' => array(
@@ -612,7 +612,7 @@ class StudioChampGauche{
                         */
                         $args = array(
                             'id' => 'is-site-themes-editor',
-                            'title' => __('Editor', 'scg-core'),
+                            'title' => __('Editor', 'rwp-core'),
                             'href' => $admin_url . 'theme-editor.php',
                             'parent' => 'is-site-themes',
                             'meta' => array(
@@ -632,7 +632,7 @@ class StudioChampGauche{
                         
                         $args = array(
                             'id' => 'is-site-plugins',
-                            'title' => __('Plugins', 'scg-core'),
+                            'title' => __('Plugins', 'rwp-core'),
                             'href' => $admin_url . 'plugins.php',
                             'parent' => 'is-site',
                             'meta' => array(
@@ -647,7 +647,7 @@ class StudioChampGauche{
                         */
                         $args = array(
                             'id' => 'is-site-plugin-editor',
-                            'title' => __('Editor', 'scg-core'),
+                            'title' => __('Editor', 'rwp-core'),
                             'href' => $admin_url . 'plugin-editor.php',
                             'parent' => 'is-site-plugins',
                             'meta' => array(
@@ -663,7 +663,7 @@ class StudioChampGauche{
                         */
                         $args = array(
                             'id' => 'is-acf',
-                            'title' => __('ACF', 'scg-core'),
+                            'title' => __('ACF', 'rwp-core'),
                             'href' => $admin_url . 'edit.php?post_type=acf-field-group',
                             'parent' => 'is-site',
                             'meta' => array(
@@ -678,7 +678,7 @@ class StudioChampGauche{
                         */
                         $args = array(
                             'id' => 'is-site-import',
-                            'title' => __('Import', 'scg-core'),
+                            'title' => __('Import', 'rwp-core'),
                             'href' => $admin_url . 'import.php',
                             'parent' => 'is-site',
                             'meta' => array(
@@ -694,7 +694,7 @@ class StudioChampGauche{
                         */
                         $args = array(
                             'id' => 'is-site-export',
-                            'title' => __('Export', 'scg-core'),
+                            'title' => __('Export', 'rwp-core'),
                             'href' => $admin_url . 'export.php',
                             'parent' => 'is-site',
                             'meta' => array(
@@ -752,10 +752,10 @@ class StudioChampGauche{
 
             $return = $value;
 
-            if($return && is_array($return) && \StudioChampGauche\Utils\Field::$elementsToReplace)
-                \StudioChampGauche\Utils\Field::recursive(\StudioChampGauche\Utils\Field::$elementsToReplace[0], \StudioChampGauche\Utils\Field::$elementsToReplace[1], $return);
-            elseif($return && is_string($return) && \StudioChampGauche\Utils\Field::$elementsToReplace)
-                $return = str_replace(\StudioChampGauche\Utils\Field::$elementsToReplace[0], \StudioChampGauche\Utils\Field::$elementsToReplace[1], $return);
+            if($return && is_array($return) && \ReactWP\Utils\Field::$elementsToReplace)
+                \ReactWP\Utils\Field::recursive(\ReactWP\Utils\Field::$elementsToReplace[0], \ReactWP\Utils\Field::$elementsToReplace[1], $return);
+            elseif($return && is_string($return) && \ReactWP\Utils\Field::$elementsToReplace)
+                $return = str_replace(\ReactWP\Utils\Field::$elementsToReplace[0], \ReactWP\Utils\Field::$elementsToReplace[1], $return);
 
 
             return $return;
@@ -775,10 +775,10 @@ class StudioChampGauche{
 
             $return = $value_formatted;
 
-            if($return && is_array($return) && \StudioChampGauche\Utils\Field::$elementsToReplace)
-                \StudioChampGauche\Utils\Field::recursive(\StudioChampGauche\Utils\Field::$elementsToReplace[0], \StudioChampGauche\Utils\Field::$elementsToReplace[1], $return);
-            elseif($return && is_string($return) && \StudioChampGauche\Utils\Field::$elementsToReplace)
-                $return = str_replace(\StudioChampGauche\Utils\Field::$elementsToReplace[0], \StudioChampGauche\Utils\Field::$elementsToReplace[1], $return);
+            if($return && is_array($return) && \ReactWP\Utils\Field::$elementsToReplace)
+                \ReactWP\Utils\Field::recursive(\ReactWP\Utils\Field::$elementsToReplace[0], \ReactWP\Utils\Field::$elementsToReplace[1], $return);
+            elseif($return && is_string($return) && \ReactWP\Utils\Field::$elementsToReplace)
+                $return = str_replace(\ReactWP\Utils\Field::$elementsToReplace[0], \ReactWP\Utils\Field::$elementsToReplace[1], $return);
 
 
             return $return;
@@ -817,27 +817,28 @@ class StudioChampGauche{
     
     static function field($field, $id = false, $format = true, $escape = false){
 		
-        return StudioChampGauche\Utils\Field::get($field, $id, $format, $escape);
+        return ReactWP\Utils\Field::get($field, $id, $format, $escape);
         
 	}
     
     static function cpt($post_type = 'post', $args = []){
         
-		return StudioChampGauche\Utils\CustomPostType::get($post_type, $args);
+		return ReactWP\Utils\CustomPostType::get($post_type, $args);
         
 	}
 
 	static function source($args = []){
         
-        return StudioChampGauche\Utils\Source::get($args);
+        return ReactWP\Utils\Source::get($args);
         
 	}
     
     
 }
 
-class_alias('StudioChampGauche', 'scg');
+class_alias('ReactWP', 'rwp');
+class_alias('ReactWP', 'scg');
 
-new scg();
+new rwp();
 
 ?>
