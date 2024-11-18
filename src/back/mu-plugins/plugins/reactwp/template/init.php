@@ -18,15 +18,7 @@ require_once 'class/seo.php';
 
 class StudioChampGauche{
     
-    private $acf_path;
-    
     function __construct(){
-        
-        /*
-        * ACF Path
-        */
-        $this->acf_path = self::source(['path' => 'datas/acf', 'url' => false]);
-        
         
         /*
         * Shot Events on init
@@ -413,14 +405,6 @@ class StudioChampGauche{
                 remove_post_type_support('post', 'editor');
             
             
-            /*
-            * Create ACF JSON Area
-            */
-            if(!file_exists($this->acf_path)){
-				mkdir($this->acf_path, 0777, true);
-				fopen($this->acf_path . '/index.php', 'w');
-			}
-            
         });
         
         
@@ -759,32 +743,6 @@ class StudioChampGauche{
             ';
 
         }, 3);
-        
-
-        
-        /*
-		* Save ACF in JSON
-		*/
-		add_filter('acf/settings/save_json', function($path){
-
-			return $this->acf_path;
-
-		});
-        
-        
-        /*
-		* Load ACF in JSON
-		*/
-		add_filter('acf/settings/load_json', function($paths){
-
-			// Remove original path
-			unset( $paths[0] );
-
-			// Append our new path
-			$paths[] = $this->acf_path;
-
-			return $paths;
-		});
 
 
         /*
