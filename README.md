@@ -14,15 +14,13 @@
 
 ## Installation Guide
 1. Go to `constructor`
-2. Install the WordPress Production Files + ACF Pro Plugin `npm run get:core`
-3. Authenticate your GSAP Account by adding your `.npmrc` in `constructor`
-4. Install your modules `npm i`
-5. From `src > back`, duplicate the `wp-config-sample.php` to `wp-config.php` and setup it.
-6. Build your app in development mode with `npm run build` or build and watch with `npm run watch`. You can build for production with `npm run prod`.
-7. Setup your backend by adding `/admin` to your url.
-8. Start working!
+2. Authenticate your GSAP Account by adding your `.npmrc`
+3. From `src`, duplicate the `wp-config-sample.php` to `wp-config.php` and setup it.
+4. Install cores, node modules and build the app `npm run get:core && npm i && npm run watch`
+5. Setup your backend by adding `/admin/wp-admin` to your url.
+6. Start working!
 
 > [!IMPORTANT]
-> - On step #2, `get:core` delete at the same time default plugins and twenty themes.
-> - With step #3 or #4, you need to uninstall the current GSAP module if your subscription level is not `Premium` for install the module according to your level.
+> - On step #4, `get:core` delete at the same time default plugins and twenty themes.
+> - If your current GSAP subscription level is not `Premium`, you need to uninstall the current GSAP module for install the module according to your level.
 > - You need to configure your web server to redirect all URL requests to the `index.php` file, unless the requested file or directory physically exists on the server.
