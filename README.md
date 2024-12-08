@@ -21,7 +21,7 @@
 6. Start working!
 
 > [!WARNING]
-> Since React 19, you need to add with `npm i` command, the parameter `--legacy-peer-deps` until react-helmet get an update.
+> Since React 19, you need to add with `npm i` command, the parameter `--legacy-peer-deps` until react-helmet-async get an update.
 
 > [!IMPORTANT]
 > - On step #4, `get:core` delete at the same time default plugins and twenty themes.
