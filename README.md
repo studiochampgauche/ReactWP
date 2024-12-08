@@ -1,5 +1,7 @@
 ![ReactWP](https://reactwp.com/github-image/banner-black.jpg)
 
+Use [this repo](https://github.com/studiochampgauche/ReactWP-Semi-Headless) instead if you need a Multisite
+
 > [!NOTE]
 > We have remove our docs. It'll be back soon.
 
