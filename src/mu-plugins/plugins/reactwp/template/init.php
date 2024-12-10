@@ -291,13 +291,13 @@ class ReactWP{
             /*
             * Add Main Style
             */
-            //wp_enqueue_style('rwp-main', str_replace('/admin', '', site_url('/assets/css/main.min.css')), null, null, null);
+            //wp_enqueue_style('rwp-main', get_stylesheet_directory_uri() . '/assets/css/main.min.css', null, null, null);
 
 
             /*
             * Add Main Javascript
             */
-            wp_enqueue_script('rwp-main', str_replace('/admin', '', site_url('/assets/js/main.min.js')), null, null, true);
+            wp_enqueue_script('rwp-main', get_stylesheet_directory_uri() . '/assets/js/main.min.js', null, null, true);
 
 
 
@@ -313,10 +313,10 @@ class ReactWP{
                 'consentActive' => (self::field('consent_module') ? true : false),
                 'consentVersion' => (self::field('consent_configs_version') ? self::field('consent_configs_version') : 0),
                 'consentExpiration' => (self::field('consent_configs_expiration') ? self::field('consent_configs_expiration') : 0),
-                'baseUrl' => str_replace(['/admin/', '/admin'], '/', $siteUrl),
-                'adminUrl' => rtrim($siteUrl, '/') . '/',
-                'ajaxPath' => '/admin/wp-admin/admin-ajax.php',
-                'restPath' => '/admin/wp-json/'
+                'baseUrl' => $siteUrl,
+                'adminUrl' => $siteUrl . '/wp-admin',
+                'ajaxPath' => '/wp-admin/admin-ajax.php',
+                'restPath' => '/wp-json'
             ]);
 
 
@@ -738,7 +738,7 @@ class ReactWP{
             
             echo '
                 <style type="text/css">
-                    '. file_get_contents('assets/css/main.min.css') .'
+                    '. file_get_contents(get_stylesheet_directory_uri() . '/assets/css/main.min.css') .'
                 </style>
             ';
 

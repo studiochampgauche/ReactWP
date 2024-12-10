@@ -17,12 +17,12 @@ const main = {
 	entry: plugins.reduce((entries, pluginName) => {
 
 		entries[pluginName] = [
-			`../src/back/mu-plugins/plugins/${pluginName}/js/App.jsx`,
-			`../src/back/mu-plugins/plugins/${pluginName}/scss/App.scss`,
-			`../src/back/mu-plugins/plugins/${pluginName}/medias/audios/audios.js`,
-			`../src/back/mu-plugins/plugins/${pluginName}/medias/fonts/fonts.js`,
-			`../src/back/mu-plugins/plugins/${pluginName}/medias/images/images.js`,
-			`../src/back/mu-plugins/plugins/${pluginName}/medias/videos/videos.js`,
+			`../src/mu-plugins/plugins/${pluginName}/js/App.jsx`,
+			`../src/mu-plugins/plugins/${pluginName}/scss/App.scss`,
+			`../src/mu-plugins/plugins/${pluginName}/medias/audios/audios.js`,
+			`../src/mu-plugins/plugins/${pluginName}/medias/fonts/fonts.js`,
+			`../src/mu-plugins/plugins/${pluginName}/medias/images/images.js`,
+			`../src/mu-plugins/plugins/${pluginName}/medias/videos/videos.js`,
 		];
 
 		return entries;
@@ -30,7 +30,7 @@ const main = {
 	}, {}),
 	output: {
 		filename: '[name]/assets/js/main.min.js',
-		path: path.resolve(__dirname, '../dist/admin/wp-content/mu-plugins/')
+		path: path.resolve(__dirname, '../dist/wp-content/mu-plugins/')
 	},
 	module: {
 		rules: [
@@ -134,13 +134,13 @@ const main = {
 		new CopyPlugin({
 			patterns: [
 				{
-			        from: '../src/back/mu-plugins/configs',
-			        to: path.resolve(__dirname, `../dist/admin/wp-content/mu-plugins/`),
+			        from: '../src/mu-plugins/configs',
+			        to: path.resolve(__dirname, `../dist/wp-content/mu-plugins/`),
 			        noErrorOnMissing: true,
 			    },
 				...plugins.map(pluginName => ({
-			        from: path.resolve(__dirname, `../src/back/mu-plugins/plugins/${pluginName}/template`),
-			        to: path.resolve(__dirname, `../dist/admin/wp-content/mu-plugins/${pluginName}`),
+			        from: path.resolve(__dirname, `../src/mu-plugins/plugins/${pluginName}/template`),
+			        to: path.resolve(__dirname, `../dist/wp-content/mu-plugins/${pluginName}`),
 			        noErrorOnMissing: true,
 			    }))
 			]

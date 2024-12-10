@@ -16,12 +16,12 @@ const main = {
 	entry: themes.reduce((entries, themeName) => {
 
 		entries[themeName] = [
-			`../src/back/themes/${themeName}/js/App.jsx`,
-			`../src/back/themes/${themeName}/scss/App.scss`,
-			`../src/back/themes/${themeName}/medias/audios/audios.js`,
-			`../src/back/themes/${themeName}/medias/fonts/fonts.js`,
-			`../src/back/themes/${themeName}/medias/images/images.js`,
-			`../src/back/themes/${themeName}/medias/videos/videos.js`,
+			`../src/themes/${themeName}/js/App.jsx`,
+			`../src/themes/${themeName}/scss/App.scss`,
+			`../src/themes/${themeName}/medias/audios/audios.js`,
+			`../src/themes/${themeName}/medias/fonts/fonts.js`,
+			`../src/themes/${themeName}/medias/images/images.js`,
+			`../src/themes/${themeName}/medias/videos/videos.js`,
 		];
 
 		return entries;
@@ -29,7 +29,7 @@ const main = {
 	}, {}),
 	output: {
 		filename: '[name]/assets/js/main.min.js',
-		path: path.resolve(__dirname, '../dist/admin/wp-content/themes/')
+		path: path.resolve(__dirname, '../dist/wp-content/themes/')
 	},
 	module: {
 		rules: [
@@ -133,13 +133,13 @@ const main = {
 		new CopyPlugin({
 			patterns: [
 				{
-					from: '../src/back/wp-config.php',
-					to: path.resolve(__dirname, '../dist/admin'),
+					from: '../src/wp-config.php',
+					to: path.resolve(__dirname, '../dist'),
 					noErrorOnMissing: true
 				},
 				...themes.map(themeName => ({
-			        from: path.resolve(__dirname, `../src/back/themes/${themeName}/template`),
-			        to: path.resolve(__dirname, `../dist/admin/wp-content/themes/${themeName}`),
+			        from: path.resolve(__dirname, `../src/themes/${themeName}/template`),
+			        to: path.resolve(__dirname, `../dist/wp-content/themes/${themeName}`),
 			        noErrorOnMissing: true,
 			    }))
 			]

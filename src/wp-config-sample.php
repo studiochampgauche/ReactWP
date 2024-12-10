@@ -28,7 +28,6 @@ define('WP_DEBUG_DISPLAY', false);
 define('ABSPATH', dirname(__FILE__) . '/');
 
 define('WP_HOME', $current_url);
-define('WP_USE_THEMES', false);
 define('WP_DEFAULT_THEME', 'reactwp');
 
 require_once(ABSPATH . 'wp-settings.php');

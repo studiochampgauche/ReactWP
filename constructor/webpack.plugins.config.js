@@ -18,12 +18,12 @@ const main = {
 	entry: plugins.reduce((entries, pluginName) => {
 
 		entries[pluginName] = [
-			`../src/back/plugins/${pluginName}/js/App.jsx`,
-			`../src/back/plugins/${pluginName}/scss/App.scss`,
-			`../src/back/plugins/${pluginName}/medias/audios/audios.js`,
-			`../src/back/plugins/${pluginName}/medias/fonts/fonts.js`,
-			`../src/back/plugins/${pluginName}/medias/images/images.js`,
-			`../src/back/plugins/${pluginName}/medias/videos/videos.js`,
+			`../src/plugins/${pluginName}/js/App.jsx`,
+			`../src/plugins/${pluginName}/scss/App.scss`,
+			`../src/plugins/${pluginName}/medias/audios/audios.js`,
+			`../src/plugins/${pluginName}/medias/fonts/fonts.js`,
+			`../src/plugins/${pluginName}/medias/images/images.js`,
+			`../src/plugins/${pluginName}/medias/videos/videos.js`,
 		];
 
 		return entries;
@@ -31,7 +31,7 @@ const main = {
 	}, {}),
 	output: {
 		filename: '[name]/assets/js/main.min.js',
-		path: path.resolve(__dirname, '../dist/admin/wp-content/plugins/')
+		path: path.resolve(__dirname, '../dist/wp-content/plugins/')
 	},
 	module: {
 		rules: [
@@ -135,8 +135,8 @@ const main = {
 		new CopyPlugin({
 			patterns: [
 				...plugins.map(pluginName => ({
-			        from: path.resolve(__dirname, `../src/back/plugins/${pluginName}/template`),
-			        to: path.resolve(__dirname, `../dist/admin/wp-content/plugins/${pluginName}`),
+			        from: path.resolve(__dirname, `../src/plugins/${pluginName}/template`),
+			        to: path.resolve(__dirname, `../dist/wp-content/plugins/${pluginName}`),
 			        noErrorOnMissing: true,
 			    }))
 			]
