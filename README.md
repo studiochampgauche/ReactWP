@@ -1,8 +1,5 @@
 ![ReactWP](https://reactwp.com/github-image/banner-black.jpg)
 
-> [!NOTE]
-> Use [this repo](https://github.com/studiochampgauche/ReactWP-Semi-Headless) instead if you need a Multisite.
-
 ## Requirements
 - ACF Pro License
 - PHP 8.2+
@@ -17,7 +14,7 @@
 2. Authenticate your GSAP Account by adding your `.npmrc`
 3. From `src`, duplicate the `wp-config-sample.php` to `wp-config.php` and setup it.
 4. Install cores, node modules and build the app `npm run get:core && npm i && npm run watch`
-5. Setup your backend by adding `/admin/wp-admin` to your url.
+5. Setup your backend by adding `/wp-admin` to your url.
 6. Start working!
 
 > [!WARNING]
