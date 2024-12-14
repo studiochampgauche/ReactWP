@@ -29,7 +29,7 @@ class Field{
 			if (is_array($value)) {
 				self::recursive($search, $replace, $array[$key]);
 			} else {
-				$array[$key] = is_numeric($value) && !is_string($value) ? +str_replace($search, $replace, $value) : str_replace($search, $replace, $value);
+				$array[$key] = $value ? (is_numeric($value) && !is_string($value) ? +str_replace($search, $replace, $value) : str_replace($search, $replace, $value)) : $value;
 			}
 		}
 	}
