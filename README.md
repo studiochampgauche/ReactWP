@@ -15,12 +15,11 @@ ReactWP mix Server-Side Data Injection and Server-Side Rendering on first load, 
 - GSAP Club Membership
 - Node.js
 	- For local only
-	- minimum tested: v20.15.0
-	- maximum tested: v22.12.0
+	- Tested with: v20.15.0 to v22.12.0
 
 # Installation Guide
-1. Go to `constructor`
-2. Authenticate your GSAP Account by adding your `.npmrc`
+1. Navigate to the `constructor` directory
+2. Authenticate your GSAP Account by adding your `.npmrc` file.
 3. From `src`, duplicate the `wp-config-sample.php` to `wp-config.php` and setup it.
 4. Install cores, node modules and build the app `npm run get:core && npm i && npm run watch`
 5. Setup your backend by adding `/wp-admin` to your url.
