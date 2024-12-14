@@ -1,5 +1,8 @@
 ![ReactWP](https://reactwp.com/github-image/banner-black.jpg)
 
+ReactWP mix Server-Side Data Injection and Server-Side Rendering on first load, followed by client-side rendering.
+
+
 ## Requirements
 - ACF Pro License
 - PHP 8.2+
