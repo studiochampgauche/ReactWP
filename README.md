@@ -21,4 +21,4 @@
 > Since React 19, you need to add with `npm i` command, the parameter `--legacy-peer-deps` until react-helmet-async get an update.
 
 > [!IMPORTANT]
-> - If your current GSAP subscription level is not `Premium`, you need to uninstall the current GSAP module for install the module according to your level.
+> If your current GSAP subscription level is not `Premium`, you need to uninstall the current GSAP module for install the module according to your level.
