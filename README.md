@@ -1,9 +1,11 @@
 ![ReactWP](https://reactwp.com/github-image/banner-black.jpg)
 
+# Introduction
+
 ReactWP mix Server-Side Data Injection and Server-Side Rendering on first load, followed by client-side rendering.
 
 
-## Requirements
+# Requirements
 - ACF Pro License
 - PHP 8.2+
 - GSAP Club Membership
@@ -12,7 +14,7 @@ ReactWP mix Server-Side Data Injection and Server-Side Rendering on first load, 
 	- minimum tested: v20.15.0
 	- maximum tested: v22.12.0
 
-## Installation Guide
+# Installation Guide
 1. Go to `constructor`
 2. Authenticate your GSAP Account by adding your `.npmrc`
 3. From `src`, duplicate the `wp-config-sample.php` to `wp-config.php` and setup it.
