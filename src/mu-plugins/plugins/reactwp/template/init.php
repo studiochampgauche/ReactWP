@@ -129,9 +129,9 @@ class ReactWP{
             /*
             * On firstload
             */
-            if (get_option('firstload') < 1) {
+            if (get_option('rwp_firstload') < 1) {
 
-                update_option('firstload', 1);
+                update_option('rwp_firstload', 1);
 
 
                 /*
