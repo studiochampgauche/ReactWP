@@ -2,7 +2,9 @@
 
 # Introduction
 
-![Multisite Ready](https://img.shields.io/badge/Multisite%20Ready-yes-brightgreen)
+![Multisite Ready](https://img.shields.io/badge/Multisite-Ready-brightgreen)
+![Server](https://img.shields.io/badge/Server-PHP-orange)
+![Server](https://img.shields.io/badge/Built%20with%20webpack-orange)
 
 ReactWP mix Server-Side Data Injection and Server-Side Rendering on first load, followed by client-side rendering.
 
