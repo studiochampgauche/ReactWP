@@ -21,6 +21,4 @@
 > Since React 19, you need to add with `npm i` command, the parameter `--legacy-peer-deps` until react-helmet-async get an update.
 
 > [!IMPORTANT]
-> - On step #4, `get:core` delete at the same time default plugins and twenty themes.
 > - If your current GSAP subscription level is not `Premium`, you need to uninstall the current GSAP module for install the module according to your level.
-> - You need to configure your web server to redirect all URL requests to the `index.php` file, unless the requested file or directory physically exists on the server.
