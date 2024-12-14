@@ -2,7 +2,7 @@
 
 # Introduction
 
-![Webpack](https://img.shields.io/badge/Built%20with%20Webpack-blue)
+![Built](https://img.shields.io/badge/Built-Webpack-blue)
 ![Multisite Ready](https://img.shields.io/badge/Multisite-Ready-brightgreen)
 ![Server](https://img.shields.io/badge/Server-PHP-orange)
 
