@@ -13,7 +13,7 @@ ReactWP mix Server-Side Data Injection and Server-Side Rendering on first load, 
 - GSAP Smooth Scrolling and ScrollTrigger
 - SEO Management
 - Consent box management
-- Cache Service Workers
+- Cache Service Workers (work only with https protocol)
 - A preloader that waits until media files are fully downloaded
 
 
