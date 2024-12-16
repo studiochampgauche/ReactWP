@@ -8,6 +8,14 @@
 
 ReactWP mix Server-Side Data Injection and Server-Side Rendering on first load, followed by client-side rendering.
 
+# Ready
+- Page Transition Animation
+- GSAP Smooth Scrolling and ScrollTrigger
+- SEO Management
+- Consent box management
+- Cache Service Workers
+- Preloader that wait that medias are downloaded
+
 
 # Requirements
 - ACF Pro License
@@ -30,3 +38,7 @@ ReactWP mix Server-Side Data Injection and Server-Side Rendering on first load, 
 
 > [!IMPORTANT]
 > If your current GSAP subscription level is not `Premium`, you need to uninstall the current GSAP module for install the module according to your level.
+
+
+# What's next for ReactWP?
+- Right now, you can only download all medias in a one time call instead of being able to download it page per page. We'll add this possibility.
