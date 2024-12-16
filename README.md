@@ -15,7 +15,14 @@ ReactWP mix Server-Side Data Injection and Server-Side Rendering on first load, 
 - Consent box management
 - Cache Service Workers (work only with https protocol)
 - A preloader that waits until media files are fully downloaded
-
+- Activate or not gutenberg, page editor and post editor
+- Manage what you display on WordPress Dashboard
+- Manage what you display on Theme Customize
+- Manage Theme Locations
+- Short Admin Appearance for delete superfluous
+- Accept SVG
+- Stop resizing the images you upload in admin
+- Source code cleaning
 
 # Requirements
 - ACF Pro License
