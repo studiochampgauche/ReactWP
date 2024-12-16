@@ -14,7 +14,7 @@ ReactWP mix Server-Side Data Injection and Server-Side Rendering on first load, 
 - SEO Management
 - Consent box management
 - Cache Service Workers
-- Preloader that wait that medias are downloaded
+- A preloader that waits until media files are fully downloaded
 
 
 # Requirements
