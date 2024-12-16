@@ -41,4 +41,4 @@ ReactWP mix Server-Side Data Injection and Server-Side Rendering on first load, 
 
 
 # What's next for ReactWP?
-- Right now, you can only download all medias in a one time call instead of being able to download it page per page. We'll add this possibility.
+- Right now, you can only download all medias in a one time call instead of being able to download it page per page when the page is request. We'll add this possibility.
