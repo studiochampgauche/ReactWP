@@ -8,6 +8,8 @@
 
 ReactWP mix Server-Side Data Injection and Server-Side Rendering on first load, followed by client-side rendering.
 
+We do massive Multisites with this and some Awwwards sites.
+
 # Ready
 - Page Transition Animation
 - GSAP Smooth Scrolling and ScrollTrigger
