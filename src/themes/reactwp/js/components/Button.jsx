@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Button = ({ to = null, text, className = null, ...props }) => {
+const Button = ({ to = null, text, className = null, before, after, ...props }) => {
 
 	const Tag = to ? Link : 'button';
 
@@ -14,7 +14,9 @@ const Button = ({ to = null, text, className = null, ...props }) => {
 
 	return(
 		<Tag {...tagProps}>
+			{before && (<div className="btn-before" dangerouslySetInnerHTML={{ __html: before }} />)}
 			<span>{text}</span>
+			{after && (<div className="btn-after" dangerouslySetInnerHTML={{ __html: after }} />)}
 		</Tag>
 	);
 
