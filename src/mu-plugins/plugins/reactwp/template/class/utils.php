@@ -149,13 +149,13 @@ class Button{
         return self::$configs['href'] ? '
             <a href="'. self::$configs['href'] .'" class="btn'. (self::$configs['class'] ? ' ' . self::$configs['class'] : null) .'"'. (self::$configs['attr'] ? ' ' . self::$configs['attr'] : null) .'>
 
-            '. (self::$configs['before'] ? '<div class="before">'. self::$configs['before'] .'</div>' : null) . (self::$configs['text'] ? '<span>'. self::$configs['text'] .'</span>' : null) . (self::$configs['after'] ? '<div class="after">'. self::$configs['after'] .'</div>' : null) .'
+            '. (self::$configs['before'] ? '<div class="btn-before">'. self::$configs['before'] .'</div>' : null) . (self::$configs['text'] ? '<span>'. self::$configs['text'] .'</span>' : null) . (self::$configs['after'] ? '<div class="btn-after">'. self::$configs['after'] .'</div>' : null) .'
 
             </a>
         ' : '
             <button class="btn'. (self::$configs['class'] ? ' ' . self::$configs['class'] : null) .'"'. (self::$configs['attr'] ? ' ' . self::$configs['attr'] : null) .'>
 
-            '. (self::$configs['before'] ? '<div class="before">'. self::$configs['before'] .'</div>' : null) . (self::$configs['text'] ? '<span>'. self::$configs['text'] .'</span>' : null) . (self::$configs['after'] ? '<div class="after">'. self::$configs['after'] .'</div>' : null) .'
+            '. (self::$configs['before'] ? '<div class="btn-before">'. self::$configs['before'] .'</div>' : null) . (self::$configs['text'] ? '<span>'. self::$configs['text'] .'</span>' : null) . (self::$configs['after'] ? '<div class="btn-after">'. self::$configs['after'] .'</div>' : null) .'
 
             </button>
         ';
