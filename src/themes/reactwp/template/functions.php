@@ -25,6 +25,25 @@
             */
             ReactWP\Utils\CustomPostType::default('posts_per_page', -1);
             ReactWP\Utils\CustomPostType::default('paged', 1);
+
+
+            /*
+            * Set defaults when you call rwp::menu() or ReactWP\Utils\Menu::get();
+            */
+            ReactWP\Utils\Menu::default('container', null);
+            ReactWP\Utils\Menu::default('items_wrap', '<ul>%3$s</ul>');
+            
+            
+            /*
+            * Set defaults when you call rwp::button() or ReactWP\Utils\Button::get();
+            *
+            * ReactWP\Utils\Button::default('text', 'x');
+            * ReactWP\Utils\Button::default('href', 'x');
+            * ReactWP\Utils\Button::default('class', 'x');
+            * ReactWP\Utils\Button::default('attr', 'x');
+            * ReactWP\Utils\Button::default('before', 'x');
+            * ReactWP\Utils\Button::default('after', 'x');
+            */
             
 
 
