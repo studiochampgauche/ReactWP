@@ -827,6 +827,18 @@ class ReactWP{
         
 	}
 
+    static function menu($theme_location = null, $args = []){
+
+        return ReactWP\Utils\Menu::get($theme_location, $args);
+        
+    }
+
+    static function button($text = null, $args = []){
+        
+        return ReactWP\Utils\Button::get($text, $args);
+        
+    }
+
 	static function source($args = []){
         
         return ReactWP\Utils\Source::get($args);
