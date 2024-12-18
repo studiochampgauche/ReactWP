@@ -12,8 +12,10 @@
             add_action('acf/init', function(){
 
                 ReactWP\Utils\Field::replace([
+                    '{Y}',
                     '{SITE_NAME}'
                 ], [
+                    date('Y'),
                     ReactWP\SEO\SEO::site_name()
                 ]);
 
