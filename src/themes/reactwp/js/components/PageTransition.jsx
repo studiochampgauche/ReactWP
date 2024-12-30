@@ -50,14 +50,25 @@ const PageTransition = ({ children }) => {
 
         	const handleClick = (e) => {
 
-        		if(item.hasAttribute('target')) return;
+        		if(
+        			item.hasAttribute('target')
 
-        		e.preventDefault();
+        			||
 
-        		if(!item.hasAttribute('href') && !item.hasAttribute('data-href')) return;
+        			(!item.hasAttribute('href') && !item.hasAttribute('data-href'))
+
+        			||
+
+        			e.ctrlKey
+        		) return;
 
 
         		const href = item.hasAttribute('href') ? item.getAttribute('href') : item.getAttribute('data-href');
+
+        		if(['tel', 'mailto'].some(prefix => href.startsWith(prefix))) return;
+
+
+        		e.preventDefault();
 
 
         		let path = null,
