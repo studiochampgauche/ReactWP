@@ -8,7 +8,6 @@
 
 ReactWP mix Server-Side Data Injection and Server-Side Rendering on first load, followed by client-side rendering.
 
-We do massive Multisites with this and some Awwwards sites.
 
 # Ready
 - Page Transition Animation
@@ -43,10 +42,8 @@ We do massive Multisites with this and some Awwwards sites.
 6. Start working!
 
 > [!WARNING]
-> Since React 19, you need to add with `npm i` command, the parameter `--legacy-peer-deps` until react-helmet-async get an update.
-
-> [!IMPORTANT]
-> If your current GSAP subscription level is not `Premium`, you need to uninstall the current GSAP module for install the module according to your level.
+> - Since React 19, you need to add with `npm i` command, the parameter `--legacy-peer-deps` until react-helmet-async get an update.
+> - If your current GSAP subscription level is not `Premium`, you need to uninstall the current GSAP module for install the module according to your level.
 
 
 # What's next for ReactWP?
