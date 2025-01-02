@@ -351,19 +351,32 @@ const Loader = {
                         
                         window.loader.medias
                         .then(({ mediaGroups }) => {
-
+                            
                             mediaGroups?.[loadElement.getAttribute('data-value')]?.forEach((data, j) => {
 
+                                let targ = null;
 
-                                const target = data.target ? document.querySelector(data.target) : null;
+                                if(data.target && Array.isArray(data.target)){
+
+                                    data.target.forEach(tar => {
+
+                                        if(!document.querySelector(tar)) return;
+
+                                        targ = document.querySelector(tar);
+
+                                    });
+
+                                } else if(data.target && !Array.isArray(data.target)) {
+                                    targ = document.querySelector(data.target);
+                                }
 
                                 if(data.type === 'image' && data.el){
                                     data.el.width = 5;
                                     data.el.height = 5;
                                 }
 
-                                if(target)
-                                    target.replaceWith(data.el);
+                                if(targ)
+                                    targ.replaceWith(data.el);
 
                                 if(i !== loadElements.length - 1 || j !== mediaGroups[loadElement.getAttribute('data-value')].length - 1) return;
 
