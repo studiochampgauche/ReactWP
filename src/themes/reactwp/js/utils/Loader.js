@@ -354,9 +354,10 @@ const Loader = {
 
                             mediaGroups?.[loadElement.getAttribute('data-value')]?.forEach((data, j) => {
 
-                                const target = document.querySelector(data.target);
 
-                                if(data.type === 'image'){
+                                const target = data.target ? document.querySelector(data.target) : null;
+
+                                if(data.type === 'image' && data.el){
                                     data.el.width = 5;
                                     data.el.height = 5;
                                 }
