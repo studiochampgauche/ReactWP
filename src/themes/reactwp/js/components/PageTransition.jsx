@@ -21,6 +21,7 @@ const PageTransition = ({ children }) => {
 
 	const [isLeaving, setIsLeaving] = useState(false);
 	const [isEntering, setIsEntering] = useState(false);
+	const [isShowed, setIsShowed] = useState(false);
 
 
 	const { pathname } = useLocation();
@@ -34,13 +35,24 @@ const PageTransition = ({ children }) => {
 
 		if(!firstLoadRef.current){
 
+			setIsShowed(false);
 			setIsLeaving(false);
 			setIsEntering(true);
 
+		} else {
+			setIsShowed(true);
 		}
 		firstLoadRef.current = false;
 
+	}, [pathname]);
 
+
+	/*
+	* When isShowed to true
+	*/
+	useEffect(() => {
+		
+		if(!isShowed) return;
 
 		const elements = document.querySelectorAll('a, .goto');
         if(!elements.length) return;
@@ -136,7 +148,7 @@ const PageTransition = ({ children }) => {
 
         }
 
-	}, [pathname]);
+	}, [isShowed]);
 
 
 
@@ -370,6 +382,7 @@ const PageTransition = ({ children }) => {
             ) return;
 
 
+            setIsShowed(true);
             init();
 
         }
@@ -378,7 +391,7 @@ const PageTransition = ({ children }) => {
 	}, [isEntering]);
 	
 	
-	return(<main ref={ref}>{children}</main>)
+	return(<main ref={ref}>{isShowed && children}</main>)
 	
 }
 export default PageTransition;
