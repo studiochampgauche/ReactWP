@@ -180,7 +180,6 @@ const PageTransition = ({ children }) => {
             mediaGroups[requiredLoader] = MEDIAS[requiredLoader];
 
         });
-        console.log(mediaGroups, 'aa');
 
         if(!Object.keys(mediaGroups).length){
 
@@ -291,7 +290,13 @@ const PageTransition = ({ children }) => {
 
             setIsShowed(false);
             setIsNeedToLoad(false);
-            setIsEntering(true);
+
+            window.loader.medias = new Promise(resolved => {
+            	resolved({mediaGroups: MEDIAS});
+            });
+
+
+            window.loader.medias.then(() => setIsEntering(true));
             
 
         }
