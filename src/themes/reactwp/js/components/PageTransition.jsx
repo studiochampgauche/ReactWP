@@ -21,6 +21,7 @@ const PageTransition = ({ children }) => {
 
 	const [isLeaving, setIsLeaving] = useState(false);
 	const [isEntering, setIsEntering] = useState(false);
+	const [isNeedToLoad, setIsNeedToLoad] = useState(false);
 	const [isShowed, setIsShowed] = useState(false);
 
 
@@ -35,9 +36,8 @@ const PageTransition = ({ children }) => {
 
 		if(!firstLoadRef.current){
 
-			setIsShowed(false);
 			setIsLeaving(false);
-			setIsEntering(true);
+			setIsNeedToLoad(true);
 
 		} else {
 			setIsShowed(true);
@@ -151,75 +151,25 @@ const PageTransition = ({ children }) => {
 	}, [isShowed]);
 
 
-
 	/*
-	* When you leave the page
+	* needToLoad
 	*/
 	useEffect(() => {
-
-		if(!isLeaving) return;
-
-		if(!canTransitRef.current){
-
-			if(window.gscroll?.scrollTop() > 0)
-				ref.current.style.opacity = 0;
-
-
-			window.gscroll?.paused(true);
-
-			if(!anchorRef.current)
-				window.gscroll?.scrollTop(0) || window.scrollTo(0, 0);
-
-
-			gsap.delayedCall(.01, () => navigateRef.current(to.current));
-
-			return;
-
-		}
-
-
-		let tl = gsap.timeline({
-			onComplete: () => {
-
-				tl.kill();
-				tl = null;
-
-				window.gscroll?.paused(true);
-
-				if(!anchorRef.current)
-					window.gscroll?.scrollTop(0) || window.scrollTo(0, 0);
-
-
-				gsap.delayedCall(.01, () => navigateRef.current(to.current));
-
-			}
-		});
-
-		tl
-		.to(ref.current, .2, {
-			opacity: 0
-		});
 		
+		if(!isNeedToLoad) return;
 
-	}, [isLeaving]);
 
-
-	/*
-	* When you enter in a page
-	*/
-	useEffect(() => {
-
-		if(!isEntering) return;
-
-		const isLoaded = {
+    	const isLoaded = {
 			images: false,
 			videos: false,
 			audios: false
 		};
 
+
 		const loaders = document.querySelectorAll('scg-load');
         const requiredLoaders = (loaders.length ? Object.keys(MEDIAS).filter((media, i) => media === loaders[i].getAttribute('data-value')) : []);
 
+        
         let mediaDatas = [],
         	mediaGroups = [],
         	loadedCount = 0,
@@ -230,6 +180,7 @@ const PageTransition = ({ children }) => {
             mediaGroups[requiredLoader] = MEDIAS[requiredLoader];
 
         });
+        console.log(mediaGroups, 'aa');
 
         if(!Object.keys(mediaGroups).length){
 
@@ -326,52 +277,8 @@ const PageTransition = ({ children }) => {
 
         }
 
-		function init(){
 
-			ScrollTrigger?.refresh();
-
-			if(anchorRef.current){
-				window.gscroll?.scrollTo(document.getElementById(anchorRef.current), false, 'top top') || document.getElementById(anchorRef.current).scrollIntoView({ behavior: 'instant' });
-				ScrollTrigger?.refresh();
-			}
-
-
-			if(!canTransitRef.current){
-
-				ref.current.style.opacity = 1;
-
-				setIsEntering(false);
-
-				window.gscroll?.paused(false);
-
-				return;
-
-			}
-
-
-
-			let tl = gsap.timeline({
-				onComplete: () => {
-
-					tl.kill();
-					tl = null;
-
-					setIsEntering(false);
-
-					window.gscroll?.paused(false);
-
-				}
-			});
-
-			tl
-			.to(ref.current, .2, {
-				opacity: 1
-			});
-
-		}
-
-
-		function done(){
+        function done(){
 
             if(
                 !isLoaded.images
@@ -382,10 +289,117 @@ const PageTransition = ({ children }) => {
             ) return;
 
 
-            setIsShowed(true);
-            init();
+            setIsShowed(false);
+            setIsNeedToLoad(false);
+            setIsEntering(true);
+            
 
         }
+
+	}, [isNeedToLoad]);
+
+
+
+	/*
+	* When you leave the page
+	*/
+	useEffect(() => {
+
+		if(!isLeaving) return;
+
+		if(!canTransitRef.current){
+
+			if(window.gscroll?.scrollTop() > 0)
+				ref.current.style.opacity = 0;
+
+
+			window.gscroll?.paused(true);
+
+			if(!anchorRef.current)
+				window.gscroll?.scrollTop(0) || window.scrollTo(0, 0);
+
+
+			gsap.delayedCall(.01, () => navigateRef.current(to.current));
+
+			return;
+
+		}
+
+
+		let tl = gsap.timeline({
+			onComplete: () => {
+
+				tl.kill();
+				tl = null;
+
+				window.gscroll?.paused(true);
+
+				if(!anchorRef.current)
+					window.gscroll?.scrollTop(0) || window.scrollTo(0, 0);
+
+
+				gsap.delayedCall(.01, () => navigateRef.current(to.current));
+
+			}
+		});
+
+		tl
+		.to(ref.current, .2, {
+			opacity: 0
+		});
+		
+
+	}, [isLeaving]);
+
+
+	/*
+	* When you enter in a page
+	*/
+	useEffect(() => {
+
+		if(!isEntering) return;
+
+		setIsShowed(true);
+
+		ScrollTrigger?.refresh();
+
+		if(anchorRef.current){
+			window.gscroll?.scrollTo(document.getElementById(anchorRef.current), false, 'top top') || document.getElementById(anchorRef.current).scrollIntoView({ behavior: 'instant' });
+			ScrollTrigger?.refresh();
+		}
+
+
+		if(!canTransitRef.current){
+
+			ref.current.style.opacity = 1;
+
+			setIsEntering(false);
+
+			window.gscroll?.paused(false);
+
+			return;
+
+		}
+
+
+
+		let tl = gsap.timeline({
+			onComplete: () => {
+
+				tl.kill();
+				tl = null;
+
+				setIsEntering(false);
+
+				window.gscroll?.paused(false);
+
+			}
+		});
+
+		tl
+		.to(ref.current, .2, {
+			opacity: 1
+		});
 		
 
 	}, [isEntering]);
