@@ -4,6 +4,6 @@
 ![Multisite Ready](https://img.shields.io/badge/Multisite-Yes-brightgreen)
 ![Server](https://img.shields.io/badge/Server-PHP-orange)
 
-[Introduction](https://docs.reactwp.com/)
-[Requirements](https://docs.reactwp.com/requirements)
-[Installation Guide](https://docs.reactwp.com/installation-guide)
+- [Introduction](https://docs.reactwp.com/)
+- [Requirements](https://docs.reactwp.com/requirements)
+- [Installation Guide](https://docs.reactwp.com/installation-guide)
