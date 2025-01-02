@@ -207,6 +207,13 @@ const PageTransition = ({ children }) => {
 
             medias.forEach(async (media, i) => {
 
+            	if(media.el){
+
+            		loaded(null, group, i);
+
+            		return;
+            	}
+
                 const mediaTypes = {
                     video: () => document.createElement('video'),
                     audio: () => new Audio(),
@@ -262,7 +269,8 @@ const PageTransition = ({ children }) => {
 
             loadedCount += 1;
 
-            mediaGroups[group][i].el = srcElement;
+            if(srcElement)
+            	mediaGroups[group][i].el = srcElement;
 
             if(loadedCount !== totalToCount) return;
 
