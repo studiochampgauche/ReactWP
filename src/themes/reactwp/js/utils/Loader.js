@@ -86,7 +86,7 @@ const Loader = {
 
         return {
 
-            init: (fetchImagesVideos = true) => {
+            init: (downloadAllMedias = true) => {
 
                 return new Promise(async (resolved, rejected) => {
 
@@ -109,8 +109,6 @@ const Loader = {
                                 return;
                             }
 
-
-                            let ok = true;
                             let countLoaded = 0;
 
                             for(let i = 0; i < fonts.length; i++){
@@ -164,7 +162,7 @@ const Loader = {
 
                     const otherMedias = async () => {
 
-                        if(!fetchImagesVideos || Array.isArray(MEDIAS)){
+                        if(Array.isArray(MEDIAS)){
 
                             window.loader.isLoaded.images = true;
                             window.loader.isLoaded.videos = true;
@@ -177,17 +175,40 @@ const Loader = {
 
 
 
-                        let mediaGroups = MEDIAS,
+                        const loaders = document.querySelectorAll('scg-load');
+                        const requiredLoaders = (!downloadAllMedias && loaders.length ? Object.keys(MEDIAS).filter((media, i) => media === loaders[i].getAttribute('data-value')) : []);
+
+                        let mediaGroups = downloadAllMedias ? MEDIAS : [],
                             loadedCount = 0,
                             totalToCount = 0;
+
+
+                        requiredLoaders?.forEach((requiredLoader, i) => {
+
+                            mediaGroups[requiredLoader] = MEDIAS[requiredLoader];
+
+                        });
+
+
+                        if(!Object.keys(mediaGroups).length){
+
+                            window.loader.isLoaded.images = true;
+                            window.loader.isLoaded.videos = true;
+                            window.loader.isLoaded.audios = true;
+
+                            done();
+                            
+                            return;
+
+                        }
 
                         for(let group in mediaGroups){
 
                             const medias = mediaGroups[group];
 
                             totalToCount += medias.length;
-
                         }
+
 
                         for(let group in mediaGroups){
 
@@ -246,7 +267,7 @@ const Loader = {
                         }
 
 
-                        async function loaded(srcElement, group, i){
+                        function loaded(srcElement, group, i){
 
                             loadedCount += 1;
 
