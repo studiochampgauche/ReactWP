@@ -219,6 +219,18 @@ const PageTransition = ({ children }) => {
 
         });
 
+        if(!Object.keys(mediaGroups).length){
+
+            isLoaded.images = true;
+            isLoaded.videos = true;
+            isLoaded.audios = true;
+
+            done();
+            
+            return;
+
+        }
+
         for(let group in mediaGroups){
 
             const medias = mediaGroups[group];
