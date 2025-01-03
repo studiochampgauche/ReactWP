@@ -166,7 +166,7 @@ const PageTransition = ({ children }) => {
 		};
 
 
-		const loaders = document.querySelectorAll('scg-load');
+		const loaders = document.querySelectorAll('rwp-load');
         const requiredLoaders = (loaders.length ? Object.keys(MEDIAS).filter((media, i) => media === loaders[i].getAttribute('data-value')) : []);
 
         
