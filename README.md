@@ -8,3 +8,4 @@
 - [Requirements](https://docs.reactwp.com/requirements)
 - [Installation Guide](https://docs.reactwp.com/installation-guide)
 - [How it works](https://docs.reactwp.com/how-it-works)
+- [Preloading Medias](https://docs.reactwp.com/preloading-medias)
