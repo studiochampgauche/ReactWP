@@ -175,7 +175,7 @@ const Loader = {
 
 
 
-                        const loaders = document.querySelectorAll('scg-load');
+                        const loaders = document.querySelectorAll('rwp-load');
                         const requiredLoaders = (!downloadAllMedias && loaders.length ? Object.keys(MEDIAS).filter((media, i) => media === loaders[i].getAttribute('data-value')) : []);
 
                         let mediaGroups = downloadAllMedias ? MEDIAS : [],
@@ -322,11 +322,11 @@ const Loader = {
                 });
 
             },
-            display: (target = 'scg-load') => {
+            display: (target = 'rwp-load') => {
 
                 return new Promise(done => {
         
-                    const loadElements = document.querySelectorAll((target === 'scg-load' ? target : 'scg-load[data-value='+ target +']'));
+                    const loadElements = document.querySelectorAll((target === 'rwp-load' ? target : 'rwp-load[data-value='+ target +']'));
 
                     if(!loadElements.length){
 
