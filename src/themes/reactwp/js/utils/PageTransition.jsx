@@ -81,15 +81,14 @@ const PageTransition = ({ children }) => {
         		if(['tel', 'mailto'].some(prefix => href.startsWith(prefix))) return;
 
 
-        		e.preventDefault();
-
-
         		let path = null,
         			anchor = null;
 
         		try{
 
         			const url = new URL(href);
+
+        			if(window.location.host !== url.host) return;
 
         			path = url.pathname;
 
@@ -105,6 +104,9 @@ const PageTransition = ({ children }) => {
         				path = href;
 
         		}
+
+
+        		e.preventDefault();
 
 
 
