@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Cache from '../utils/Cache';
+import Cache from './Cache';
 
 
 const PageTransition = ({ children }) => {
