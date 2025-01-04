@@ -13,11 +13,11 @@
 /*
 * Components
 */
-@forward 'components/header';
-@forward 'components/footer';
 @forward 'components/button';
 
 /*
 * Pages
 */
-@forward 'pages/home';
+@forward 'templates/header';
+@forward 'templates/footer';
+@forward 'templates/home';
