@@ -4,7 +4,7 @@ import React from 'react';
 const Wrapper = ({ value }) => {
 
 	return(
-		<scg-wrap dangerouslySetInnerHTML={{ __html: value }} />
+		<rwp-wrap dangerouslySetInnerHTML={{ __html: value }} />
 	);
 	
 }
