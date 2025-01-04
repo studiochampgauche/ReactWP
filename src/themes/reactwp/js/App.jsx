@@ -10,13 +10,13 @@ import Loader from './utils/Loader';
 import Metas from './utils/Metas';
 import Scroller from './utils/Scroller';
 import PageTransition from './utils/PageTransition';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import HomePage from './pages/HomePage';
-import DefaultPage from './pages/DefaultPage';
-import SinglePostPage from './pages/SinglePostPage';
-import WaitingPage from './pages/WaitingPage';
-import NotFoundPage from './pages/NotFoundPage';
+import Header from './templates/Header';
+import Footer from './templates/Footer';
+import HomePage from './templates/HomePage';
+import DefaultPage from './templates/DefaultPage';
+import SinglePostPage from './templates/SinglePostPage';
+import WaitingPage from './templates/WaitingPage';
+import NotFoundPage from './templates/NotFoundPage';
 
 if(SYSTEM.cacheActive){
 
