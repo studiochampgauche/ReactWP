@@ -88,12 +88,13 @@ const PageTransition = ({ children }) => {
 
         			const url = new URL(href);
 
-        			if(window.location.host !== url.host) return;
-
         			path = url.pathname;
 
         			if(url.hash)
         				anchor = url.hash;
+
+
+        			if(window.location.host !== url.host) return;
 
         		} catch(_){
 
@@ -136,6 +137,47 @@ const PageTransition = ({ children }) => {
 			events.push({element: item, event: handleClick});
 
         });
+
+
+        ScrollTrigger?.refresh();
+
+		if(anchorRef.current){
+			window.gscroll?.scrollTo(document.getElementById(anchorRef.current), false, 'top top') || document.getElementById(anchorRef.current)?.scrollIntoView({ behavior: 'instant' });
+			ScrollTrigger?.refresh();
+		}
+
+
+		if(!canTransitRef.current){
+
+			ref.current.style.opacity = 1;
+
+			setIsEntering(false);
+
+			window.gscroll?.paused(false);
+
+			return;
+
+		}
+
+
+
+		let tl = gsap.timeline({
+			onComplete: () => {
+
+				tl.kill();
+				tl = null;
+
+				setIsEntering(false);
+
+				window.gscroll?.paused(false);
+
+			}
+		});
+
+		tl
+		.to(ref.current, .2, {
+			opacity: 1
+		});
 
 
         return () => {
@@ -375,46 +417,6 @@ const PageTransition = ({ children }) => {
 		if(!isEntering) return;
 
 		setIsShowed(true);
-
-		ScrollTrigger?.refresh();
-
-		if(anchorRef.current){
-			window.gscroll?.scrollTo(document.getElementById(anchorRef.current), false, 'top top') || document.getElementById(anchorRef.current).scrollIntoView({ behavior: 'instant' });
-			ScrollTrigger?.refresh();
-		}
-
-
-		if(!canTransitRef.current){
-
-			ref.current.style.opacity = 1;
-
-			setIsEntering(false);
-
-			window.gscroll?.paused(false);
-
-			return;
-
-		}
-
-
-
-		let tl = gsap.timeline({
-			onComplete: () => {
-
-				tl.kill();
-				tl = null;
-
-				setIsEntering(false);
-
-				window.gscroll?.paused(false);
-
-			}
-		});
-
-		tl
-		.to(ref.current, .2, {
-			opacity: 1
-		});
 		
 
 	}, [isEntering]);
