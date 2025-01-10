@@ -11,6 +11,8 @@ const PageTransition = ({ children }) => {
 
 	const ref = useRef(null);
 	const hrefRef = useRef(true);
+	const pathRef = useRef(true);
+	const anchorRef = useRef(true);
 	const firstLoadRef = useRef(true);
 	const currentPathRef = useRef(true);
 
@@ -41,7 +43,7 @@ const PageTransition = ({ children }) => {
 				tl.kill();
 				tl = null;
 
-				navigate(hrefRef.current);
+				navigate(pathRef.current);
 
 				window.gscroll?.paused(true);
 				window.gscroll?.scrollTop(0) || window.scrollTo(0, 0);
@@ -78,9 +80,9 @@ const PageTransition = ({ children }) => {
 		ScrollTrigger?.refresh();
 
 
-		if(location.hash){
+		if(anchorRef.current){
 
-			window.gscroll ? window.gscroll.scrollTo(document.querySelector(location.hash), false, 'top top') : document.querySelector(location.hash).scrollIntoView({behavior: 'instant'});
+			window.gscroll ? window.gscroll.scrollTo(document.getElementById(anchorRef.current), false, 'top top') : document.getElementById(anchorRef.current).scrollIntoView({behavior: 'instant'});
 
 			ScrollTrigger?.refresh();
 
@@ -155,6 +157,9 @@ const PageTransition = ({ children }) => {
 	        				path = hrefRef.current;
 
 	        		}
+
+	        		pathRef.current = path;
+	        		anchorRef.current = anchor;
 
 
 					e.preventDefault();
@@ -323,7 +328,7 @@ const PageTransition = ({ children }) => {
 
                 || !isLoaded.audios
             ) return;
-            	
+
 
             window.loader.medias = new Promise(resolved => {
             	resolved({mediaGroups: MEDIAS});
