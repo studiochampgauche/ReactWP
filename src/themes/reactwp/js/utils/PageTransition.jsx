@@ -15,6 +15,7 @@ const PageTransition = ({ children }) => {
 	const anchorRef = useRef(true);
 	const firstLoadRef = useRef(true);
 	const currentPathRef = useRef(true);
+	const killEventsRef = useRef([]);
 
 
 	const [isLeaving, setLeaving] = useState(false);
@@ -26,6 +27,7 @@ const PageTransition = ({ children }) => {
 	const location = useLocation();
 
 	currentPathRef.current = location.pathname;
+
 
 
 
@@ -120,6 +122,7 @@ const PageTransition = ({ children }) => {
 
 		if(!isMiddle) {
 
+			killEventsRef.current = [];
 
 			const elementsToRedirect = document.querySelectorAll('a');
 
@@ -183,6 +186,8 @@ const PageTransition = ({ children }) => {
 				}
 
 				elementToRedirect.addEventListener('click', handleClick);
+
+				killEventsRef.current.push(() => elementToRedirect.removeEventListener('click', handleClick));
 
 			});
 
@@ -344,6 +349,9 @@ const PageTransition = ({ children }) => {
             
 
         }
+
+
+        return () => killEventsRef.current?.forEach(killEvent => killEvent());
 		
 
 	}, [isMiddle]);
