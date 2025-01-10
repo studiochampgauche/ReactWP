@@ -171,8 +171,6 @@ const PageTransition = ({ children }) => {
 
 	        			anchor = anchor.replace('#', '');
 
-	        			console.log(currentPathRef.current, path, location.pathname, 'yo');
-
 	        			window.gscroll ? window.gscroll.scrollTo(document.getElementById(anchor), true, 'top top') : document.getElementById(anchor).scrollIntoView({behavior: 'smooth'});
 
 	        		}
