@@ -58,7 +58,8 @@ const PageTransition = ({ children }) => {
 
 		tl
 		.to(ref.current, .2, {
-			opacity: 0
+			opacity: 0,
+			pointerEvents: 'none'
 		});
 		
 
@@ -99,7 +100,8 @@ const PageTransition = ({ children }) => {
 
 		tl
 		.to(ref.current, .2, {
-			opacity: 1
+			opacity: 1,
+			pointerEvents: 'initial'
 		});
 
 
@@ -134,21 +136,11 @@ const PageTransition = ({ children }) => {
 
 	        			const url = new URL(hrefRef.current);
 
-	        			path = url.pathname;
-
-	        			if(url.hash)
-	        				anchor = url.hash;
-
-
 	        			if(window.location.host !== url.host) return;
 
 	        		} catch(_){
 
-
-	        			if(hrefRef.current.includes('#'))
-	        				[path, anchor] = hrefRef.current.split('#');
-	        			else
-	        				path = hrefRef.current;
+	        			
 
 	        		}
 
