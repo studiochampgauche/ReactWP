@@ -11,4 +11,4 @@
 - [Preloading Medias](https://docs.reactwp.com/preloading-medias)
 
 > [!NOTE]
-> The docs is not complete. It should fill up every day for the next week.
+> The docs is not complete.
