@@ -30,6 +30,12 @@ class ReactWP{
             * Top Bar
             */
             add_filter('show_admin_bar', '__return_false');
+
+
+            /*
+            * Remove weird inline-styles added with 6.7.1
+            */
+            add_filter('wp_img_tag_add_auto_sizes', '__return_false');
             
             
             /*
