@@ -12,6 +12,7 @@ const PageTransition = ({ children }) => {
 	const ref = useRef(null);
 	const hrefRef = useRef(true);
 	const firstLoadRef = useRef(true);
+	const currentPathRef = useRef(true);
 
 
 	const [isLeaving, setLeaving] = useState(false);
@@ -21,6 +22,8 @@ const PageTransition = ({ children }) => {
 
 	const navigate = useNavigate();
 	const location = useLocation();
+
+	currentPathRef.current = location.pathname;
 
 
 
@@ -37,7 +40,6 @@ const PageTransition = ({ children }) => {
 
 				tl.kill();
 				tl = null;
-
 
 				navigate(hrefRef.current);
 
@@ -130,17 +132,27 @@ const PageTransition = ({ children }) => {
 
 
 					let path = null,
-	        			anchor = null;
+        			anchor = null;
 
 	        		try{
 
-	        			const url = new URL(hrefRef.current);
+	        			const url = new URL(href);
+
+	        			path = url.pathname;
+
+	        			if(url.hash)
+	        				anchor = url.hash;
+
 
 	        			if(window.location.host !== url.host) return;
 
 	        		} catch(_){
 
-	        			
+
+	        			if(hrefRef.current.includes('#'))
+	        				[path, anchor] = hrefRef.current.split('#');
+	        			else
+	        				path = hrefRef.current;
 
 	        		}
 
@@ -151,7 +163,19 @@ const PageTransition = ({ children }) => {
 					if(!hrefRef.current) return;
 
 					
-					setLeaving(true);
+					if(path !== location.pathname){
+
+	        			setLeaving(true);
+
+	        		} else if(currentPathRef.current === path && anchor){
+
+	        			anchor = anchor.replace('#', '');
+
+	        			console.log(currentPathRef.current, path, location.pathname, 'yo');
+
+	        			window.gscroll ? window.gscroll.scrollTo(document.getElementById(anchor), true, 'top top') : document.getElementById(anchor).scrollIntoView({behavior: 'smooth'});
+
+	        		}
 
 				}
 
@@ -163,6 +187,8 @@ const PageTransition = ({ children }) => {
 			return;
 		}
 
+		currentPathRef.current = location.pathname;
+		
 		setMiddle(false);
 		setEntering(true);
 		
