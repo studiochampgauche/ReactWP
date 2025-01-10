@@ -132,7 +132,7 @@ const PageTransition = ({ children }) => {
 
 
 					let path = null,
-        			anchor = null;
+        				anchor = null;
 
 	        		try{
 
