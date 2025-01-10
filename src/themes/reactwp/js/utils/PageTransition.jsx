@@ -75,8 +75,13 @@ const PageTransition = ({ children }) => {
 		ScrollTrigger?.refresh();
 
 
-		if(location.hash)
+		if(location.hash){
+
 			window.gscroll ? window.gscroll.scrollTo(document.querySelector(location.hash), false, 'top top') : document.querySelector(location.hash).scrollIntoView({behavior: 'instant'});
+
+			ScrollTrigger?.refresh();
+
+		}
 		
 		let tl = gsap.timeline({
 			onComplete: () => {
@@ -119,7 +124,33 @@ const PageTransition = ({ children }) => {
 					hrefRef.current = elementToRedirect.hasAttribute('href') ? elementToRedirect.getAttribute('href') : false;
 
 
-					if(e.ctrlKey || e.shiftKey || e.altKey || e.metaKey) return;
+					if(e.ctrlKey || e.shiftKey || e.altKey || e.metaKey || elementToRedirect.hasAttribute('target')) return;
+
+
+					let path = null,
+	        			anchor = null;
+
+	        		try{
+
+	        			const url = new URL(hrefRef.current);
+
+	        			path = url.pathname;
+
+	        			if(url.hash)
+	        				anchor = url.hash;
+
+
+	        			if(window.location.host !== url.host) return;
+
+	        		} catch(_){
+
+
+	        			if(hrefRef.current.includes('#'))
+	        				[path, anchor] = hrefRef.current.split('#');
+	        			else
+	        				path = hrefRef.current;
+
+	        		}
 
 
 					e.preventDefault();
@@ -127,7 +158,7 @@ const PageTransition = ({ children }) => {
 
 					if(!hrefRef.current) return;
 
-
+					
 					setLeaving(true);
 
 				}
