@@ -355,6 +355,37 @@ const PageTransition = ({ children }) => {
 		
 
 	}, [isMiddle]);
+
+
+	
+	useEffect(() => {
+
+        const handlePopState = () => {
+            
+            window.gscroll?.paused(true);
+            window.gscroll?.scrollTop(0) || window.scrollTo(0, 0);
+
+            setLeaving(false);
+            setEntering(false);
+            setMiddle(true);
+
+            gsap.delayedCall(.1, () => {
+
+            	setMiddle(false);
+            	
+            	ScrollTrigger.refresh();
+            	window.gscroll?.paused(false);
+
+            })
+
+        };
+
+        window.addEventListener('popstate', handlePopState);
+
+        return () => window.removeEventListener('popstate', handlePopState);
+
+    }, []);
+	
 	
 	
 	return(<main ref={ref}>{!isMiddle && children}</main>)
