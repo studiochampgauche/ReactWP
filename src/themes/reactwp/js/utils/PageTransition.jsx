@@ -121,7 +121,7 @@ const PageTransition = ({ children }) => {
 	*/
 	useEffect(() => {
 
-		if(!isMiddle) {
+		if(!isMiddle && !isDownloading) {
 
 			killEventsRef.current = [];
 
@@ -199,8 +199,9 @@ const PageTransition = ({ children }) => {
 		currentPathRef.current = location.pathname;
 
 
-		setMiddle(false);
+
 		setDownloading(true);
+		setMiddle(false);
 
 
 
