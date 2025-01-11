@@ -21,6 +21,7 @@ const PageTransition = ({ children }) => {
 	const [isLeaving, setLeaving] = useState(false);
 	const [isEntering, setEntering] = useState(false);
 	const [isMiddle, setMiddle] = useState(false);
+	const [isDownloading, setDownloading] = useState(false);
 
 
 	const navigate = useNavigate();
@@ -198,6 +199,25 @@ const PageTransition = ({ children }) => {
 		currentPathRef.current = location.pathname;
 
 
+		setMiddle(false);
+		setDownloading(true);
+
+
+
+        return () => killEventsRef.current?.forEach(killEvent => killEvent());
+		
+
+	}, [isMiddle]);
+
+
+
+	/*
+	* Dowloading
+	*/
+	useEffect(() => {
+
+		if(!isDownloading) return;
+
 		const isLoaded = {
 			images: false,
 			videos: false,
@@ -342,19 +362,16 @@ const PageTransition = ({ children }) => {
 
             window.loader.medias.then(() => {
 
-            	setMiddle(false);
+            	setDownloading(false);
 				setEntering(true);
 
             });
             
 
         }
-
-
-        return () => killEventsRef.current?.forEach(killEvent => killEvent());
 		
 
-	}, [isMiddle]);
+	}, [isDownloading]);
 
 
 	
