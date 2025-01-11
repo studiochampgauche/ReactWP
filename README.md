@@ -11,4 +11,5 @@
 - [Preloading Medias](https://docs.reactwp.com/preloading-medias)
 
 > [!NOTE]
-> The docs is not complete.
+> - The docs is not complete.
+> - Since 2025-01-11, when you download your media groups page by page instead of all at once during the initial load, displaying your media on page change stops working. We will fix this today.
