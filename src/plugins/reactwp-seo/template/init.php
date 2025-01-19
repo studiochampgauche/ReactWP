@@ -149,13 +149,13 @@ class Seo{
             return (CL === 'fr' ? 'Erreur 404' : '404 Error') . ' - ' . self::site_name();
         
         elseif(is_author())
-            return (\ReactWP\Utils\Field::get('seo_title', 'user_' . $obj->ID) ? \ReactWP\Utils\Field::get('seo_title', 'user_' . $obj->ID) : (CL === 'fr' ? 'Publication(s) de' : 'Post(s) of') . ' ' . $obj->display_name . ' - ' . self::site_name());
+            return (\ReactWP\Utils\Field::get('seo_title_' . CL, 'user_' . $obj->ID) ? \ReactWP\Utils\Field::get('seo_title_' . CL, 'user_' . $obj->ID) : (CL === 'fr' ? 'Publication(s) de' : 'Post(s) of') . ' ' . $obj->display_name . ' - ' . self::site_name());
             
         elseif(is_category() || is_tag() || is_tax())
-            return (\ReactWP\Utils\Field::get('seo_title', 'term_' . $obj->term_id) ? \ReactWP\Utils\Field::get('seo_title', 'term_' . $obj->term_id)  : $obj->name . ' - ' . self::site_name());
+            return (\ReactWP\Utils\Field::get('seo_title_' . CL, 'term_' . $obj->term_id) ? \ReactWP\Utils\Field::get('seo_title_' . CL, 'term_' . $obj->term_id)  : $obj->name . ' - ' . self::site_name());
             
-        elseif($obj && $obj->ID && \ReactWP\Utils\Field::get('seo_title', $obj->ID))
-            return \ReactWP\Utils\Field::get('seo_title', $obj->ID);
+        elseif($obj && $obj->ID && \ReactWP\Utils\Field::get('seo_title_' . CL, $obj->ID))
+            return \ReactWP\Utils\Field::get('seo_title_' . CL, $obj->ID);
         
         elseif($obj && $obj->ID)
             return get_the_title($obj->ID) . ' - ' . self::site_name();
@@ -169,18 +169,18 @@ class Seo{
         
         $obj = get_queried_object();
         
-        if(is_author() && \ReactWP\Utils\Field::get('seo_description', 'user_' . $obj->ID))
-            return \ReactWP\Utils\Field::get('seo_description', 'user_' . $obj->ID);
+        if(is_author() && \ReactWP\Utils\Field::get('seo_description_' . CL, 'user_' . $obj->ID))
+            return \ReactWP\Utils\Field::get('seo_description_' . CL, 'user_' . $obj->ID);
         
-        elseif((is_category() || is_tag() || is_tax()) && \ReactWP\Utils\Field::get('seo_description', 'term_' . $obj->term_id))
-            return \ReactWP\Utils\Field::get('seo_description', 'term_' . $obj->term_id);
+        elseif((is_category() || is_tag() || is_tax()) && \ReactWP\Utils\Field::get('seo_description_' . CL, 'term_' . $obj->term_id))
+            return \ReactWP\Utils\Field::get('seo_description_' . CL, 'term_' . $obj->term_id);
         
-        elseif($obj && $obj->ID && \ReactWP\Utils\Field::get('seo_description', $obj->ID))
-            return \ReactWP\Utils\Field::get('seo_description', $obj->ID);
+        elseif($obj && $obj->ID && \ReactWP\Utils\Field::get('seo_description_' . CL, $obj->ID))
+            return \ReactWP\Utils\Field::get('seo_description_' . CL, $obj->ID);
         
         
             
-        return \ReactWP\Utils\Field::get('seo_description');
+        return \ReactWP\Utils\Field::get('seo_description_' . CL);
         
     }
     
@@ -207,13 +207,13 @@ class Seo{
         
         
         if(is_author())
-            return (\ReactWP\Utils\Field::get('seo_og_title', 'user_' . $obj->ID) ? \ReactWP\Utils\Field::get('seo_og_title', 'user_' . $obj->ID) : (\ReactWP\Utils\Field::get('seo_og_title') ? \ReactWP\Utils\Field::get('seo_og_title') : __('Publications de', 'cg-core-plugin') . ' ' . $obj->display_name . ' - ' . self::site_name()));
+            return (\ReactWP\Utils\Field::get('seo_og_title_' . CL, 'user_' . $obj->ID) ? \ReactWP\Utils\Field::get('seo_og_title_' . CL, 'user_' . $obj->ID) : (\ReactWP\Utils\Field::get('seo_og_title_' . CL) ? \ReactWP\Utils\Field::get('seo_og_title_' . CL) : __('Publications de', 'cg-core-plugin') . ' ' . $obj->display_name . ' - ' . self::site_name()));
             
         elseif(is_category() || is_tag() || is_tax())
-            return (\ReactWP\Utils\Field::get('seo_og_title', 'term_' . $obj->term_id) ? \ReactWP\Utils\Field::get('seo_og_title', 'term_' . $obj->term_id)  : (\ReactWP\Utils\Field::get('seo_og_title') ? \ReactWP\Utils\Field::get('seo_og_title') : $obj->name . ' - ' . self::site_name()));
+            return (\ReactWP\Utils\Field::get('seo_og_title_' . CL, 'term_' . $obj->term_id) ? \ReactWP\Utils\Field::get('seo_og_title_' . CL, 'term_' . $obj->term_id)  : (\ReactWP\Utils\Field::get('seo_og_title_' . CL) ? \ReactWP\Utils\Field::get('seo_og_title_' . CL) : $obj->name . ' - ' . self::site_name()));
             
         elseif($obj && $obj->ID)
-            return (\ReactWP\Utils\Field::get('seo_og_title', $obj->ID) ? \ReactWP\Utils\Field::get('seo_og_title', $obj->ID) : (\ReactWP\Utils\Field::get('seo_og_title') ? \ReactWP\Utils\Field::get('seo_og_title') : self::title()));
+            return (\ReactWP\Utils\Field::get('seo_og_title_' . CL, $obj->ID) ? \ReactWP\Utils\Field::get('seo_og_title_' . CL, $obj->ID) : (\ReactWP\Utils\Field::get('seo_og_title_' . CL) ? \ReactWP\Utils\Field::get('seo_og_title_' . CL) : self::title()));
     
         
         
@@ -228,18 +228,18 @@ class Seo{
         
         $obj = get_queried_object();
         
-        if(is_author() && \ReactWP\Utils\Field::get('seo_og_description', 'user_' . $obj->ID))
-            return \ReactWP\Utils\Field::get('seo_og_description', 'user_' . $obj->ID);
+        if(is_author() && \ReactWP\Utils\Field::get('seo_og_description_' . CL, 'user_' . $obj->ID))
+            return \ReactWP\Utils\Field::get('seo_og_description_' . CL, 'user_' . $obj->ID);
         
-        elseif((is_category() || is_tag() || is_tax()) && \ReactWP\Utils\Field::get('seo_og_description', 'term_' . $obj->term_id))
-            return \ReactWP\Utils\Field::get('seo_og_description', 'term_' . $obj->term_id);
+        elseif((is_category() || is_tag() || is_tax()) && \ReactWP\Utils\Field::get('seo_og_description_' . CL, 'term_' . $obj->term_id))
+            return \ReactWP\Utils\Field::get('seo_og_description_' . CL, 'term_' . $obj->term_id);
         
-        elseif($obj && $obj->ID && \ReactWP\Utils\Field::get('seo_og_description', $obj->ID))
-            return \ReactWP\Utils\Field::get('seo_og_description', $obj->ID);
+        elseif($obj && $obj->ID && \ReactWP\Utils\Field::get('seo_og_description_' . CL, $obj->ID))
+            return \ReactWP\Utils\Field::get('seo_og_description_' . CL, $obj->ID);
         
         
             
-        return \ReactWP\Utils\Field::get('seo_og_description') ? \ReactWP\Utils\Field::get('seo_og_description') : self::description();
+        return \ReactWP\Utils\Field::get('seo_og_description_' . CL) ? \ReactWP\Utils\Field::get('seo_og_description_' . CL) : self::description();
         
     }
     
