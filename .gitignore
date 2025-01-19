@@ -1,6 +1,6 @@
-.npmrc
-.htaccess
-wp-config.php
 dist
 node_modules
 package-lock.json
+wp-config.php
+.htaccess
+.npmrc
