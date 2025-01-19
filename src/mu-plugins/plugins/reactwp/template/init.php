@@ -83,7 +83,8 @@ class ReactWP{
                 */
                 update_field('field_678bca18008f5', [
                     [
-                        'name' => CL === 'fr' ? 'Menu principal' : 'Main Menu',
+                        'name_fr' => 'Menu principal',
+                        'name_en' => 'Main Menu',
                         'slug' => 'main_menu',
                     ]
                 ], 'option');
@@ -207,8 +208,30 @@ class ReactWP{
                         'sub_fields' => array(
                             array(
                                 'key' => 'field_678bca39008f6',
-                                'label' => 'Nom',
-                                'name' => 'name',
+                                'label' => (CL === 'fr' ? 'Nom français' : 'French Name'),
+                                'name' => 'name_fr',
+                                'aria-label' => '',
+                                'type' => 'text',
+                                'instructions' => '',
+                                'required' => 0,
+                                'conditional_logic' => 0,
+                                'wrapper' => array(
+                                    'width' => '',
+                                    'class' => '',
+                                    'id' => '',
+                                ),
+                                'default_value' => '',
+                                'maxlength' => '',
+                                'allow_in_bindings' => 0,
+                                'placeholder' => '',
+                                'prepend' => '',
+                                'append' => '',
+                                'parent_repeater' => 'field_678bca18008f5',
+                            ),
+                            array(
+                                'key' => 'field_678bca39008f6',
+                                'label' => (CL === 'fr' ? 'Nom anglais' : 'English Name'),
+                                'name' => 'name_en',
                                 'aria-label' => '',
                                 'type' => 'text',
                                 'instructions' => '',
