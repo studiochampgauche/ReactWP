@@ -25,7 +25,7 @@ const main = {
 
 	}, {}),
 	output: {
-		filename: '[name]/assets/js/main.min.js',
+		filename: '[name]/assets/js/[name].min.js',
 		path: path.resolve(__dirname, '../dist/wp-content/themes/')
 	},
 	module: {
@@ -49,7 +49,7 @@ const main = {
 								const index = themes.findIndex(theme => file.includes(theme));
 								const themeName = themes[index];
 
-								return `${themeName}/assets/css/main.min.css`;
+								return `${themeName}/assets/css/${themeName}.min.css`;
 							}
 						}
 					},

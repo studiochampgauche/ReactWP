@@ -25,7 +25,7 @@ const main = {
 
 	}, {}),
 	output: {
-		filename: '[name]/assets/js/main.min.js',
+		filename: '[name]/assets/js/[name].min.js',
 		path: path.resolve(__dirname, '../dist/wp-content/mu-plugins/')
 	},
 	module: {
@@ -49,7 +49,7 @@ const main = {
 								const index = plugins.findIndex(plugin => file.includes(plugin));
 								const pluginName = plugins[index];
 
-								return `${pluginName}/assets/css/main.min.css`;
+								return `${pluginName}/assets/css/${pluginName}.min.css`;
 							},
 						}
 					},
