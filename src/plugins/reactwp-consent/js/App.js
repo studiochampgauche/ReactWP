@@ -43,10 +43,7 @@ const Consent = {
 
 			button.addEventListener('click', () => {
 
-				if(i === 0)
-					this.action(true);
-				else
-					this.action(false);
+				this.action(i === 0);
 
 				this.box.style.display = 'none';
                 this.btn.style.display = 'flex';
