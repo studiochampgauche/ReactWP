@@ -13,6 +13,7 @@ const plugins = [
 	'reactwp-images',
 	'reactwp-accept-svg',
 	'reactwp-acf-local-json',
+	'reactwp-consent',
 	'reactwp-seo'
 ];
 

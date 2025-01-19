@@ -105,7 +105,7 @@ class ReactWP{
             if($locations){
                 
                 foreach ($locations as $l) {
-                    $__locations[$l['slug']] = $l['name'];
+                    $__locations[$l['slug']] = $l['name_' . CL];
                 }
                 
                 register_nav_menus($__locations);
@@ -207,7 +207,7 @@ class ReactWP{
                         'rows_per_page' => 20,
                         'sub_fields' => array(
                             array(
-                                'key' => 'field_678bca39008f6',
+                                'key' => 'field_678bca390083240hgvbnvh32',
                                 'label' => (CL === 'fr' ? 'Nom français' : 'French Name'),
                                 'name' => 'name_fr',
                                 'aria-label' => '',
