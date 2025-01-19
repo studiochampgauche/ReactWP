@@ -1,1 +1,0 @@
-Report security issues to this email: [security@reactwp.com](mailto:security@reactwp.com)
