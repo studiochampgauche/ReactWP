@@ -8,13 +8,13 @@ add_action('wp_enqueue_scripts', function(){
 	/*
 	* CSS
 	*/
-	wp_enqueue_style('rwp-main', get_stylesheet_directory_uri() . '/assets/css/main.min.css', null, null, null);
+	wp_enqueue_style('rwp-main', get_stylesheet_directory_uri() . '/assets/css/reactwp.min.css', null, null, null);
 
 
 	/*
 	* JS
 	*/
-	wp_enqueue_script('rwp-main', get_stylesheet_directory_uri() . '/assets/js/main.min.js', null, null, true);
+	wp_enqueue_script('rwp-main', get_stylesheet_directory_uri() . '/assets/js/reactwp.min.js', null, null, true);
 
 
 
