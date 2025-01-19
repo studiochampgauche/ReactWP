@@ -261,7 +261,7 @@ class ReactWP{
                         ),
                     ),
                 ),
-                'menu_order' => 1,
+                'menu_order' => 9,
                 'position' => 'normal',
                 'style' => 'seamless',
                 'label_placement' => 'top',
