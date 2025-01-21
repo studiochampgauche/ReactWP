@@ -32,3 +32,26 @@ add_action('wp_enqueue_scripts', function(){
     } , 10, 3);
 
 });
+
+
+
+/*
+* Add inline styles for preloader
+*/
+add_action('wp_head', function(){
+
+	echo '
+	<style type="text/css">
+		#loader{
+			background: #000;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100svh;
+			z-index: 999;
+		}
+	</style>
+	';
+
+});
