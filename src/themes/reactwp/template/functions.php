@@ -31,6 +31,30 @@ add_action('wp_enqueue_scripts', function(){
 
     } , 10, 3);
 
+
+    /*
+    * Medias to Download
+    */
+    $mediasToDownload = [
+    	'group1' => [
+    		[
+    			'type' => 'image',
+    			'src' => 'https://siterapide.ca/wp-content/uploads/sites/11/2025/01/sharing.jpg'
+    		]
+    	],
+    	'group2' => [
+    		[
+    			'type' => 'image',
+    			'src' => 'https://siterapide.ca/wp-content/uploads/sites/11/2025/01/sharing.jpg'
+    		],
+    		[
+    			'type' => 'image',
+    			'src' => 'https://siterapide.ca/wp-content/uploads/sites/11/2025/01/sharing.jpg'
+    		]
+    	]
+    ];
+    wp_localize_script('rwp-main', 'MEDIAS', $mediasToDownload);
+
 });
 
 
