@@ -38,6 +38,68 @@ add_action('wp_enqueue_scripts', function(){
     $mediasToDownload = [];
     wp_localize_script('rwp-main', 'MEDIAS', $mediasToDownload);
 
+
+    /*
+    * Routes
+    */
+    $routes = [];
+    $data = rwp::cpt(['page', 'post'])->posts;
+
+
+    if($data){
+	    foreach($data as $k => $v){
+
+	    	$acfGroups = acf_get_field_groups(['post_id' => $v->ID]);
+
+	    	$acfFields = get_fields($v->ID);
+	    	$acf = [];
+
+	    	if($acfGroups){
+
+	    		foreach($acfGroups as $l => $group){
+
+	    			if(!$group['active'] || !$group['show_in_rest']) continue;
+
+
+	    			$fields = acf_get_fields($group['ID']);
+
+	    			if(!$fields) continue;
+
+	    			foreach($fields as $m => $field){
+
+	    				$acf[$field['name']] = rwp::field($field['name'], $v->ID);
+
+	    			}
+
+	    		}
+
+	    	}
+
+	    	$pageName = rwp::field('name', $v->ID);
+
+            $routes[] = [
+            	'test' => $acfGroups,
+            	'id' => $v->ID,
+            	'routeName' => $v->post_name,
+            	'pageName' => ($pageName ? $pageName : $v->post_title),
+            	'path' => (get_option('page_on_front') == $v->ID ? '/' : get_page_uri($v->ID)),
+            	'type' => $v->post_type,
+            	'seo' => (isset($acf['seo']) ? $acf['seo'] : []),
+            ];
+
+
+            if(isset($acf['seo']))
+            	unset($acf['seo']);
+
+
+            $routes[$k]['acf'] = $acf;
+
+
+	    }
+	}
+
+    wp_localize_script('rwp-main', 'ROUTES', $routes);
+
 });
 
 
