@@ -12,3 +12,4 @@
 
 		<div id="pageWrapper">
 			<div id="pageContent">
+				<main id="app">
