@@ -1,15 +1,9 @@
 'use strict';
 import { gsap } from 'gsap';
 
-window.loader = {
+const Loader = {
 	el: document.getElementById('loader'),
-	isLoaded: {
-		gscroll: false,
-		fonts: true,
-		images: true,
-		videos: true,
-		audios: true
-	},
+	perPage: false,
 	init: function() {
 
 		return new Promise(done => {
@@ -31,23 +25,11 @@ window.loader = {
 			.add(() => {
 
 				if(
-					!this.isLoaded.gscroll
+					!window.loader.isLoaded.gscroll
 
 					||
 
-					!this.isLoaded.fonts
-
-					||
-
-					!this.isLoaded.images
-
-					||
-
-					!this.isLoaded.videos
-
-					||
-
-					!this.isLoaded.audios
+					!window.loader.isLoaded.medias
 				){
 
 					tl.restart();
@@ -64,8 +46,123 @@ window.loader = {
 
 		});
 
+	},
+	download: function(){
+
+		return new Promise((done, reject) => {
+
+			try{
+				const loaders = document.querySelectorAll('rwp-loader');
+
+				const mediasToDownload = !this.perPage ? MEDIAS : (loaders.length ? Array.from(loaders).reduce((obj, element) => {
+
+					const keys = element.getAttribute('data-value').replace(', ', ',').split(',');
+
+					keys.forEach(key => {
+
+						obj[key] = MEDIAS[key];
+
+					});
+
+					return obj;
+
+				}, {}) : null);
+				
+				if(!mediasToDownload){
+
+					window.loader.isLoaded.medias = true;
+
+					done();
+
+					return;
+
+				}
+
+				const inlineDownloads = Object.values(mediasToDownload).flat(Infinity);
+
+				const totalToDownloads = inlineDownloads.length;
+
+
+				const mediaTypes = {
+	                video: () => document.createElement('video'),
+	                audio: () => new Audio(),
+	                image: () => new Image()
+	            };
+
+	            let loadedTotal = 0;
+
+				Object.keys(mediasToDownload).forEach((group, i) => {
+
+					const medias = mediasToDownload[group];
+
+
+					medias.forEach((media, j) => {
+
+						if(!media.type || !media.src || media.el) return;
+
+
+						let mediaElement = mediaTypes[media.type];
+
+						if(!mediaElement) throw new Error(`${media.type} isn't supported.`);
+
+						mediaElement = mediaElement();
+
+						mediaElement.src = media.src;
+
+
+						if(media.type === 'image'){
+
+							mediaElement.onload = () => isLoaded();
+
+						} else {
+
+							mediaElement.onloadeddata = () => isLoaded();
+
+						}
+
+
+						function isLoaded(){
+
+							loadedTotal += 1;
+
+							MEDIAS[group][j].el = mediaElement;
+
+							if(loadedTotal !== totalToDownloads) return;
+
+							window.loader.isLoaded.medias = true;
+
+							done();
+
+						}
+
+
+					})
+
+				});
+
+			} catch(error){
+
+				reject(error);
+
+			}
+
+
+		});
+
+	},
+	display: function(){
+
+
+
 	}
 };
 
 
-window.loader.init();
+window.loader = {
+	init: Loader.init(),
+	download: Loader.download(),
+	isLoaded: {
+		gscroll: false,
+		medias: false
+	}
+}
