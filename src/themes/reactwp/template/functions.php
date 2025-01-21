@@ -46,8 +46,14 @@ add_action('wp_enqueue_scripts', function(){
     $data = rwp::cpt(['page', 'post'])->posts;
 
 
+
+
     if($data){
 	    foreach($data as $k => $v){
+
+
+	    	$pageTemplate = implode('', array_map('ucfirst', explode('-', str_replace(['.php', ' '], ['', '-'], get_page_template_slug($v->ID)))));
+
 
 	    	$acfGroups = acf_get_field_groups(['post_id' => $v->ID]);
 
@@ -78,8 +84,8 @@ add_action('wp_enqueue_scripts', function(){
 	    	$pageName = rwp::field('name', $v->ID);
 
             $routes[] = [
-            	'test' => $acfGroups,
             	'id' => $v->ID,
+            	'template' => $pageTemplate,
             	'routeName' => $v->post_name,
             	'pageName' => ($pageName ? $pageName : $v->post_title),
             	'path' => (get_option('page_on_front') == $v->ID ? '/' : get_page_uri($v->ID)),
@@ -93,6 +99,36 @@ add_action('wp_enqueue_scripts', function(){
 
 
             $routes[$k]['acf'] = $acf;
+
+
+            if($routes[$k]['type'] === 'post'){
+
+                //$routes[$k]['template'] = 'SinglePost';
+                $routes[$k]['seo']['og_type'] = 'article';
+
+                $routes[$k]['extraDatas'] = [
+                    'date' => $v->post_date,
+                    'modified' => $v->post_modified,
+                    'author' => get_author_posts_url($v->post_author)
+                ];
+
+            } elseif($routes[$k]['type'] === 'author'){
+
+                $routes[$k]['seo']['og_type'] = 'profile';
+
+                $routes[$k]['extraDatas'] = [
+                    'username' => '',
+                    'name' => [
+                        'firstname' => '',
+                        'lastname' => ''
+                    ]
+                ];
+
+            } else {
+
+            	$routes[$k]['seo']['og_type'] = 'website';
+
+            }
 
 
 	    }
