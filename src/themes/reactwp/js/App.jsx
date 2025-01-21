@@ -3,12 +3,16 @@ import React, { StrictMode, useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import NotFoundTemplate from './templates/NotFound';
+import DefaultTemplate from './templates/Default';
+import WaitTemplate from './templates/Wait';
 import './inc/Loader';
 import './inc/Scroller';
-import Wait from './templates/Wait';
-import NotFound from './templates/NotFound';
 
 
+const templates = {
+	DefaultTemplate
+};
 
 const mainNode = document.getElementById('app');
 const root = createRoot(mainNode);
@@ -30,11 +34,37 @@ const App = () => {
                 <>
                     <Routes>
 
+                    	{ROUTES.map((route, i) => {
+
+                            const Template = templates[route.template] || templates['DefaultTemplate'];
+
+                            return (
+                                <Route
+                                    exact 
+                                    key={i} 
+                                    path={route.path} 
+                                    element={
+                                        <>
+                                            <Template
+                                                id={route.id}
+                                                type={route.type}
+                                                routeName={route.routeName}
+                                                pageName={route.pageName}
+                                                path={route.path}
+                                                seo={route.seo}
+                                                acf={route.acf}
+                                            />
+                                        </>
+                                    }
+                                />
+                            )
+                        })}
+
                         <Route
                             path="*"
                             element={
                                 <>
-                                    <NotFound />
+                                    <NotFoundTemplate />
                                 </>
                             }
                         />
@@ -43,7 +73,7 @@ const App = () => {
                 </>
             ) : (
                 <Routes>
-                    <Route path="*" element={<Wait />} />
+                    <Route path="*" element={<WaitTemplate />} />
                 </Routes>
             )}
 
