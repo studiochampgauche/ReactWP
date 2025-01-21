@@ -2,4 +2,10 @@
 //@use '../inc/functions' as *;
 //@use '../inc/mixins' as *;
 
-header{}
+header{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 99;
+}
