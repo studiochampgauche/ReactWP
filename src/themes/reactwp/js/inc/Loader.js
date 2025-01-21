@@ -1,9 +1,17 @@
 'use strict';
 import { gsap } from 'gsap';
 
+window.loader = {
+	isLoaded: {
+		gscroll: false,
+		medias: false,
+		fonts: false
+	}
+}
+
 const Loader = {
 	el: document.getElementById('loader'),
-	perPage: false,
+	perPage: true,
 	init: function() {
 
 		return new Promise(done => {
@@ -220,18 +228,16 @@ const Loader = {
 	},
 	display: function(){
 
+		window.loader.download.then(() => {
 
+			console.log('ready to display')
+
+		});
 
 	}
 };
 
 
-window.loader = {
-	init: Loader.init(),
-	download: Loader.download(),
-	isLoaded: {
-		gscroll: false,
-		medias: false,
-		fonts: false
-	}
-}
+window.loader.init = Loader.init();
+window.loader.download = Loader.download();
+window.loader.display = Loader.display();
