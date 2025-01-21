@@ -10,6 +10,8 @@
 
 		<div id="loader"></div>
 
+		<header></header>
+		
 		<div id="pageWrapper">
 			<div id="pageContent">
 				<main id="app">
