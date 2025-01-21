@@ -33,6 +33,9 @@ const Scroller = () => {
 		});
 
 		window.gscroll.paused(true);
+
+
+		window.loader.isLoaded.gscroll = true;
 		
 		
 		return () => {
