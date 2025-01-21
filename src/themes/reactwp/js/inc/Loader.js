@@ -136,15 +136,17 @@ const Loader = {
 
 					keys.forEach(key => {
 
+						if(!MEDIAS[key]) return;
+
 						obj[key] = MEDIAS[key];
 
 					});
 
 					return obj;
 
-				}, {}) : null);
+				}, {}) : {});
 				
-				if(!mediasToDownload){
+				if(!Object.keys(mediasToDownload).length){
 
 					window.loader.isLoaded.medias = true;
 
@@ -228,9 +230,41 @@ const Loader = {
 	},
 	display: function(){
 
-		window.loader.download.then(() => {
+		return new Promise(done => {
 
-			console.log('ready to display')
+			window.loader.download.then(() => {
+
+				const loaders = document.querySelectorAll('rwp-loader');
+				const mediasToDisplay = loaders.length ? Array.from(loaders).reduce((obj, element) => {
+
+					const keys = element.getAttribute('data-value').replace(', ', ',').split(',');
+
+					keys.forEach(key => {
+
+						if(!MEDIAS[key]) return;
+
+						obj[key] = MEDIAS[key];
+
+					});
+
+					return obj;
+
+				}, {}) : {};
+
+				if(!Object.keys(mediasToDisplay).length) return;
+
+
+				Object.values(mediasToDisplay).flat(Infinity).filter(({target}) => target).forEach((media, i) => {
+
+					const target = document.querySelector(media.target);
+
+					if(!target) return;
+
+					target.replaceWith(media.el);
+
+				});
+
+			});
 
 		});
 
