@@ -30,6 +30,10 @@ const Loader = {
 					||
 
 					!window.loader.isLoaded.medias
+
+					||
+
+					!window.loader.isLoaded.fonts
 				){
 
 					tl.restart();
@@ -52,8 +56,72 @@ const Loader = {
 		return new Promise((done, reject) => {
 
 			try{
-				const loaders = document.querySelectorAll('rwp-loader');
 
+				/*
+				* Fonts
+				*/
+				document.fonts.ready.then(() => {
+
+					const fonts = Array.from(document.fonts);
+
+					if(!fonts.length){
+
+                        window.loader.isLoaded.fonts = true;
+
+                        if(window.loader.isLoaded.medias) done();
+                        
+                        return;
+                    }
+
+                    let totalFontsLoaded = 0;
+                    const totalFontsToDownloads = fonts.length;
+
+
+                    for(let i = 0; i < totalFontsToDownloads; i++){
+
+                        const font = fonts[i];
+
+                        if (font.status === 'error'){
+
+                            throw new Error(`${font.family} can\'t be loaded.`);
+
+                        } else if(font.status === 'unloaded'){
+
+                            font
+                            .load()
+                            .then(() => isLoaded())
+                            .catch(() => {
+
+                                throw new Error(`${font.family} weight ${font.weight} can\'t be loaded.`);
+
+                            });
+
+                        } else
+                            isLoaded();
+
+
+                        function isLoaded(){
+
+							totalFontsLoaded += 1;
+
+							if(totalFontsLoaded !== totalFontsToDownloads || window.loader.isLoaded.fonts) return;
+
+							ScrollTrigger.refresh();
+
+							window.loader.isLoaded.fonts = true;
+
+							if(window.loader.isLoaded.medias) done();
+
+						}
+
+                    }
+
+				});
+
+				/*
+				* Images, videos and audios
+				*/
+				const loaders = document.querySelectorAll('rwp-loader');
 				const mediasToDownload = !this.perPage ? MEDIAS : (loaders.length ? Array.from(loaders).reduce((obj, element) => {
 
 					const keys = element.getAttribute('data-value').replace(', ', ',').split(',');
@@ -72,7 +140,7 @@ const Loader = {
 
 					window.loader.isLoaded.medias = true;
 
-					done();
+					if(window.loader.isLoaded.fonts) done();
 
 					return;
 
@@ -131,7 +199,7 @@ const Loader = {
 
 							window.loader.isLoaded.medias = true;
 
-							done();
+							if(window.loader.isLoaded.fonts) done();
 
 						}
 
@@ -163,6 +231,7 @@ window.loader = {
 	download: Loader.download(),
 	isLoaded: {
 		gscroll: false,
-		medias: false
+		medias: false,
+		fonts: false
 	}
 }
