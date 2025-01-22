@@ -7,6 +7,7 @@ import NotFoundTemplate from './templates/NotFound';
 import DefaultTemplate from './templates/Default';
 import WaitTemplate from './templates/Wait';
 import PageTransition from './inc/PageTransition';
+import Metas from './inc/Metas';
 import './inc/Loader';
 import './inc/Scroller';
 
@@ -40,6 +41,9 @@ const App = () => {
 
                             const Template = templates[route.template] || templates['DefaultTemplate'];
 
+
+                            route.seo.pageTitle = route.pageName;
+
                             return (
                                 <Route
                                     exact 
@@ -47,6 +51,10 @@ const App = () => {
                                     path={route.path} 
                                     element={
                                         <>
+                                            <Metas
+                                                extraDatas={route?.extraDatas}
+                                                seo={route?.seo}
+                                            />
                                             <Template
                                                 id={route.id}
                                                 type={route.type}
@@ -66,6 +74,9 @@ const App = () => {
                             path="*"
                             element={
                                 <>
+                                    <Metas
+                                        seo={{pageTitle: CL === 'fr' ? 'Erreur 404' : 'Error 404', do_not_index: true}}
+                                    />
                                     <NotFoundTemplate />
                                 </>
                             }
