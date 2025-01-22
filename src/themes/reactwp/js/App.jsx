@@ -6,6 +6,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import NotFoundTemplate from './templates/NotFound';
 import DefaultTemplate from './templates/Default';
 import WaitTemplate from './templates/Wait';
+import PageTransition from './inc/PageTransition';
 import './inc/Loader';
 import './inc/Scroller';
 
@@ -32,6 +33,7 @@ const App = () => {
 
             {isLoaded ? (
                 <>
+                	<PageTransition />
                     <Routes>
 
                     	{ROUTES.map((route, i) => {
