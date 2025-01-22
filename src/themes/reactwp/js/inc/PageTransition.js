@@ -10,15 +10,159 @@ const PageTransition = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 
+	const pathRef = useRef(null);
+	const hashRef = useRef(null);
+
 	const [isEntering, setEntering] = useState(false);
 	const [isMiddle, setMiddle] = useState(false);
 	const [isLeaving, setLeaving] = useState(false);
 
 	useEffect(() => {
 
-		console.log('pathname change');
+		const killEvents = [];
+
+
+		const elementsToRedirect = document.querySelectorAll('a');
+
+		elementsToRedirect?.forEach((elementToRedirect) => {
+
+			const handleClick = (e) => {
+
+				if(
+					e.ctrlKey
+
+					|| e.shiftKey
+
+					|| e.altKey
+
+					|| e.metaKey
+
+					|| !elementToRedirect.hasAttribute('href')
+
+					|| (elementToRedirect.hasAttribute('target') && elementToRedirect.getAttribute('target') === '_self')
+				) return;
+
+				pathRef.current = elementToRedirect.getAttribute('href');
+
+
+				try{
+
+					const url = new URL(pathRef.current);
+
+					if(window.location.host !== url.host) return;
+
+					pathRef.current = url.pathname;
+					hashRef.current = url.hash;
+
+				} catch(_){
+
+					const a = pathRef.current.split('#');
+
+					pathRef.current = a[0];
+					hashRef.current = a[1] || null;
+
+				}
+
+				e.preventDefault();
+
+				setLeaving(true);
+
+			}
+
+			elementToRedirect.addEventListener('click', handleClick);
+
+			killEvents.push(() => elementToRedirect.removeEventListener('click', handleClick));
+
+		});
+
+
+		return () => killEvents?.forEach(killEvent => killEvent());
+
 
 	}, [location.pathname]);
+
+
+	/*
+	* When Leaving
+	*/
+	useEffect(() => {
+
+		if(!isLeaving) return;
+
+
+		let tl = gsap.timeline({
+			onComplete: () => {
+
+				tl.kill();
+				tl = null;
+
+
+				window.gscroll.paused(true);
+				window.gscroll.scrollTop(0);
+
+				navigate(pathRef.current);
+
+				gsap.delayedCall(.01, () => {
+
+
+					setLeaving(false);
+					setEntering(true);
+
+				});
+
+			}
+		});
+
+
+		tl
+		.to('main', .2, {
+			opacity: 0,
+			pointerEvents: 'none'
+		});
+
+
+	}, [isLeaving]);
+
+
+	/*
+	* When Entering
+	*/
+	useEffect(() => {
+
+		if(!isEntering) return;
+
+		ScrollTrigger.refresh();
+
+		if(hashRef.current){
+
+			window.gscroll.scrollTop(document.getElementById(hashRef.current).getBoundingClientRect().top);
+
+			ScrollTrigger.refresh();
+
+		}
+
+
+		let tl = gsap.timeline({
+			onComplete: () => {
+
+				tl.kill();
+				tl = null;
+
+				window.gscroll.paused(false);
+				setEntering(false);
+
+			}
+		});
+
+
+		tl
+		.to('main', .2, {
+			opacity: 1,
+			pointerEvents: 'initial'
+		});
+
+
+	}, [isEntering]);
 
 	
 }
