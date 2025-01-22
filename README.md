@@ -12,6 +12,9 @@
 	- For local only
 	- Tested with: v20.15.0 to v22.12.0
 
+> [!NOTE]
+> If you need a translation plugin, the boilerplate is done for work with [Polylang](https://polylang.pro/).
+
 # Installation Guide
 1. Clone the repo
 2. Navigate to the `configs` directory;
