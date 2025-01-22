@@ -18,6 +18,19 @@ class Render{
 		* Display ACF Fields in admin
 		*/
 		add_action('init', [$this, 'acf']);
+
+
+		/*
+		* Enqueue
+		*/
+		add_action('wp_enqueue_scripts', function(){
+
+			$defaultSEO = \rwp::field('seo', 'option');
+            $defaultSEO['blogName'] = \ReactWP\SEO\SEO::site_name();
+
+            wp_localize_script('rwp-main', 'RWP_SEO', $defaultSEO);
+
+		},11);
         
     }
     
