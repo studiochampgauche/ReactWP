@@ -1,4 +1,6 @@
 'use strict';
+//import React, { useEffect, useState, useRef } from 'react'
+import { useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
 
 window.loader = {
@@ -126,25 +128,31 @@ const Loader = {
 
 				});
 
+				if(!Object.keys(MEDIAS).length){
+
+					window.loader.isLoaded.medias = true;
+
+					if(window.loader.isLoaded.fonts) done();
+
+					return;
+				}
+
 				/*
 				* Images, videos and audios
 				*/
-				const loaders = document.querySelectorAll('rwp-loader');
-				const mediasToDownload = !this.perPage ? MEDIAS : (loaders.length ? Array.from(loaders).reduce((obj, element) => {
+				const mediaGroups = ROUTES.find(({main}) => main).mediaGroups;
+				const loaders = mediaGroups && mediaGroups.length ? mediaGroups.split(',') : [];
 
-					const keys = element.getAttribute('data-value').replace(', ', ',').split(',');
+				const mediasToDownload = !this.perPage ? MEDIAS : (loaders.length ? loaders.reduce((obj, key) => {
 
-					keys.forEach(key => {
+					if(!MEDIAS[key]) return obj;
 
-						if(!MEDIAS[key]) return;
-
-						obj[key] = MEDIAS[key];
-
-					});
+					obj[key] = MEDIAS[key];
 
 					return obj;
 
 				}, {}) : {});
+
 				
 				if(!Object.keys(mediasToDownload).length){
 

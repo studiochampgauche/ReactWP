@@ -35,7 +35,24 @@ add_action('wp_enqueue_scripts', function(){
     /*
     * Medias to Download
     */
-    $mediasToDownload = [];
+    $mediasToDownload = [
+    	'group1' => [
+    		[
+	    		'type' => 'image',
+	    		'src' => 'https://siterapide.ca/wp-content/uploads/sites/11/2025/01/sharing.jpg'
+	    	]
+    	],
+    	'group2' => [
+    		[
+	    		'type' => 'image',
+	    		'src' => 'https://siterapide.ca/wp-content/uploads/sites/11/2025/01/sharing.jpg'
+	    	],
+	    	[
+	    		'type' => 'image',
+	    		'src' => 'https://siterapide.ca/wp-content/uploads/sites/11/2025/01/sharing.jpg'
+	    	]
+    	]
+    ];
     wp_localize_script('rwp-main', 'MEDIAS', $mediasToDownload);
 
 
@@ -49,6 +66,7 @@ add_action('wp_enqueue_scripts', function(){
 
 
     if($data){
+
 	    foreach($data as $k => $v){
 
 
@@ -56,8 +74,6 @@ add_action('wp_enqueue_scripts', function(){
 
 
 	    	$acfGroups = acf_get_field_groups(['post_id' => $v->ID]);
-
-	    	$acfFields = get_fields($v->ID);
 	    	$acf = [];
 
 	    	if($acfGroups){
@@ -67,7 +83,7 @@ add_action('wp_enqueue_scripts', function(){
 	    			if(!$group['active'] || !$group['show_in_rest']) continue;
 
 
-	    			$fields = acf_get_fields($group['ID']);
+	    			$fields = acf_get_fields($group['key']);
 
 	    			if(!$fields) continue;
 
@@ -88,14 +104,22 @@ add_action('wp_enqueue_scripts', function(){
             	'template' => $pageTemplate,
             	'routeName' => $v->post_name,
             	'pageName' => ($pageName ? $pageName : $v->post_title),
-            	'path' => (get_option('page_on_front') == $v->ID ? '/' : get_page_uri($v->ID)),
+            	'path' => (get_option('page_on_front') == $v->ID ? '/' : '/' . get_page_uri($v->ID)),
             	'type' => $v->post_type,
             	'seo' => (isset($acf['seo']) ? $acf['seo'] : []),
+            	'mediaGroups' => (isset($acf['media_groups']) ? str_replace(', ', ',', $acf['media_groups']) : null),
+            	'main' => ($v->ID === get_the_ID() ? true : false)
             ];
 
 
+            if(isset($acf['name']))
+            	unset($acf['name']);
+
             if(isset($acf['seo']))
             	unset($acf['seo']);
+
+            if(isset($acf['media_groups']))
+            	unset($acf['media_groups']);
 
 
             $routes[$k]['acf'] = $acf;
