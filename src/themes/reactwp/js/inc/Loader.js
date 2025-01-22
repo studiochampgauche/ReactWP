@@ -242,18 +242,15 @@ const Loader = {
 
 			window.loader.download.then(() => {
 
-				const loaders = document.querySelectorAll('rwp-loader');
-				const mediasToDisplay = loaders.length ? Array.from(loaders).reduce((obj, element) => {
+				const mediaGroups = ROUTES.find(({main}) => main).mediaGroups;
+				const loaders = mediaGroups && mediaGroups.length ? mediaGroups.split(',') : [];
 
-					const keys = element.getAttribute('data-value').replace(', ', ',').split(',');
 
-					keys.forEach(key => {
+				const mediasToDisplay = loaders.length ? Array.from(loaders).reduce((obj, key) => {
 
-						if(!MEDIAS[key]) return;
+					if(!MEDIAS[key]) return obj;
 
-						obj[key] = MEDIAS[key];
-
-					});
+					obj[key] = MEDIAS[key];
 
 					return obj;
 
