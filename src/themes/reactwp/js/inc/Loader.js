@@ -292,7 +292,21 @@ const Loader = {
 
 					totalDisplayed += 1;
 
-					const target = document.querySelector(media.target);
+					let target = null;
+
+                    if(media.target && Array.isArray(media.target)){
+
+                        media.target.forEach(tar => {
+
+                            if(!document.querySelector(tar)) return;
+
+                            target = document.querySelector(tar);
+
+                        });
+
+                    } else if(media.target && !Array.isArray(media.target)) {
+                        target = document.querySelector(media.target);
+                    }
 
 					if(target){
 						target.replaceWith(media.el);
