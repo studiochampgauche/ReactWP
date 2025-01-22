@@ -14,13 +14,11 @@ const PageTransition = () => {
 	const hashRef = useRef(null);
 
 	const [isEntering, setEntering] = useState(false);
-	const [isMiddle, setMiddle] = useState(false);
 	const [isLeaving, setLeaving] = useState(false);
 
 	useEffect(() => {
 
 		const killEvents = [];
-
 
 		const elementsToRedirect = document.querySelectorAll('a');
 
@@ -65,7 +63,10 @@ const PageTransition = () => {
 
 				e.preventDefault();
 
-				setLeaving(true);
+				if(![pathRef.current, pathRef.current + '/'].includes(location.pathname))
+					setLeaving(true);
+				else if(hashRef.current)
+					window.gscroll.scrollTo(document.getElementById(hashRef.current), true, 'top top');
 
 			}
 
@@ -74,6 +75,21 @@ const PageTransition = () => {
 			killEvents.push(() => elementToRedirect.removeEventListener('click', handleClick));
 
 		});
+
+		if(pathRef.current){
+
+			const currentRouteIndex = ROUTES.findIndex(({main}) => main);
+			const newRouteIndex = ROUTES.findIndex(({path}) => path === pathRef.current);
+
+			ROUTES[currentRouteIndex].main = false;
+			ROUTES[newRouteIndex].main = true;
+
+			window.loader.download = window.loader.instance.download();
+			window.loader.display = window.loader.instance.display();
+
+
+			window.loader.display.then(() => setEntering(true));
+		}
 
 
 		return () => killEvents?.forEach(killEvent => killEvent());
@@ -102,13 +118,7 @@ const PageTransition = () => {
 
 				navigate(pathRef.current);
 
-				gsap.delayedCall(.01, () => {
-
-
-					setLeaving(false);
-					setEntering(true);
-
-				});
+				setLeaving(false);
 
 			}
 		});
@@ -135,11 +145,13 @@ const PageTransition = () => {
 
 		if(hashRef.current){
 
-			window.gscroll.scrollTop(document.getElementById(hashRef.current).getBoundingClientRect().top);
-
-			ScrollTrigger.refresh();
+			window.gscroll.scrollTo(document.getElementById(hashRef.current), false, 'top top');
 
 		}
+
+
+		pathRef.current = null
+		hashRef.current = null;
 
 
 		let tl = gsap.timeline({

@@ -70,63 +70,68 @@ const Loader = {
 				/*
 				* Fonts
 				*/
-				document.fonts.ready.then(() => {
+				if(!window.loader.download){
+					document.fonts.ready.then(() => {
 
-					const fonts = Array.from(document.fonts);
+						const fonts = Array.from(document.fonts);
 
-					if(!fonts.length){
+						if(!fonts.length){
 
-                        window.loader.isLoaded.fonts = true;
+	                        window.loader.isLoaded.fonts = true;
 
-                        if(window.loader.isLoaded.medias) done();
-                        
-                        return;
-                    }
+	                        if(window.loader.isLoaded.medias) done();
+	                        
+	                        return;
+	                    }
 
-                    let totalFontsLoaded = 0;
-                    const totalFontsToDownloads = fonts.length;
-
-
-                    for(let i = 0; i < totalFontsToDownloads; i++){
-
-                        const font = fonts[i];
-
-                        if (font.status === 'error'){
-
-                            throw new Error(`${font.family} can\'t be loaded.`);
-
-                        } else if(font.status === 'unloaded'){
-
-                            font
-                            .load()
-                            .then(() => isLoaded())
-                            .catch(() => {
-
-                                throw new Error(`${font.family} weight ${font.weight} can\'t be loaded.`);
-
-                            });
-
-                        } else
-                            isLoaded();
+	                    let totalFontsLoaded = 0;
+	                    const totalFontsToDownloads = fonts.length;
 
 
-                        function isLoaded(){
+	                    for(let i = 0; i < totalFontsToDownloads; i++){
 
-							totalFontsLoaded += 1;
+	                        const font = fonts[i];
 
-							if(totalFontsLoaded !== totalFontsToDownloads || window.loader.isLoaded.fonts) return;
+	                        if (font.status === 'error'){
 
-							ScrollTrigger.refresh();
+	                            throw new Error(`${font.family} can\'t be loaded.`);
 
-							window.loader.isLoaded.fonts = true;
+	                        } else if(font.status === 'unloaded'){
 
-							if(window.loader.isLoaded.medias) done();
+	                            font
+	                            .load()
+	                            .then(() => isLoaded())
+	                            .catch(() => {
 
-						}
+	                                throw new Error(`${font.family} weight ${font.weight} can\'t be loaded.`);
 
-                    }
+	                            });
 
-				});
+	                        } else
+	                            isLoaded();
+
+
+	                        function isLoaded(){
+
+								totalFontsLoaded += 1;
+
+								if(totalFontsLoaded !== totalFontsToDownloads || window.loader.isLoaded.fonts) return;
+
+								ScrollTrigger.refresh();
+
+								window.loader.isLoaded.fonts = true;
+
+								if(window.loader.isLoaded.medias) done();
+
+							}
+
+	                    }
+
+					});
+				}
+
+
+				window.loader.download = null;
 
 				if(!Object.keys(MEDIAS).length){
 
@@ -184,7 +189,19 @@ const Loader = {
 
 					medias.forEach((media, j) => {
 
-						if(!media.type || !media.src || media.el) return;
+						if(!media.type || !media.src || media.el){
+
+							loadedTotal += 1;
+
+							if(loadedTotal !== totalToDownloads) return;
+
+							window.loader.isLoaded.medias = true;
+
+							if(window.loader.isLoaded.fonts) done();
+
+							return;
+
+						}
 
 
 						let mediaElement = mediaTypes[media.type];
@@ -240,7 +257,9 @@ const Loader = {
 
 		return new Promise(done => {
 
-			window.loader.download.then(() => {
+			window.loader.display = null;
+
+			window.loader.download?.then(() => {
 
 				const mediaGroups = ROUTES.find(({main}) => main).mediaGroups;
 				const loaders = mediaGroups && mediaGroups.length ? mediaGroups.split(',') : [];
@@ -256,16 +275,32 @@ const Loader = {
 
 				}, {}) : {};
 
-				if(!Object.keys(mediasToDisplay).length) return;
+				if(!Object.keys(mediasToDisplay).length){
+
+					done();
+
+					return;
+				}
 
 
-				Object.values(mediasToDisplay).flat(Infinity).filter(({target}) => target).forEach((media, i) => {
+				const inlineDisplays = Object.values(mediasToDisplay).flat(Infinity).filter(({target}) => target);
+				const countInlineDisplays = inlineDisplays.length;
+
+				let totalDisplayed = 0;
+
+				inlineDisplays.forEach((media, i) => {
+
+					totalDisplayed += 1;
 
 					const target = document.querySelector(media.target);
 
-					if(!target) return;
+					if(target){
+						target.replaceWith(media.el);
+					}
 
-					target.replaceWith(media.el);
+					if(totalDisplayed !== countInlineDisplays) return;
+
+					done();
 
 				});
 
@@ -277,6 +312,8 @@ const Loader = {
 };
 
 
-window.loader.init = Loader.init();
-window.loader.download = Loader.download();
-window.loader.display = Loader.display();
+window.loader.instance = Loader;
+
+window.loader.init = window.loader.instance.init();
+window.loader.download = window.loader.instance.download();
+window.loader.display = window.loader.instance.display();
