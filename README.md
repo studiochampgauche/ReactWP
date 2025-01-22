@@ -23,3 +23,8 @@
 
 > [!NOTE]
 > If your current GSAP subscription level is not `Premium`, you need to uninstall the current GSAP module for install the module according to your level.
+
+
+# What's next for ReactWP ?
+- Caching system: Since 2025-01-22, each media you download need to be dowloaded again when you reload. We'll fix that.
+- Docs
