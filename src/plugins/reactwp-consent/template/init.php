@@ -29,7 +29,7 @@ class Consent{
             /*
             * JS
             */
-            wp_enqueue_script('rwp-consent', plugin_dir_url('reactwp-consent/init.php') . 'assets/js/reactwp-consent.min.js', null, null, true);
+            wp_enqueue_script('rwp-consent', plugin_dir_url('reactwp-consent/init.php') . 'assets/js/reactwp-consent.min.js', null, null, false);
 
 
             /*
@@ -46,7 +46,7 @@ class Consent{
                 if($handle !== 'rwp-consent')
                     return $tag;
 
-                $tag = '<script src="' . esc_url( $src ) . '"></script>';
+                $tag = '<script src="' . esc_url( $src ) . '" defer></script>';
 
                 return $tag;
 
