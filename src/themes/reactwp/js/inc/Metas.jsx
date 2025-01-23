@@ -32,7 +32,7 @@ const Metas = ({ extraDatas, seo }) => {
 
 
 	useEffect(() => {
-
+		
 		const paramsString = [...searchParams.entries()]
         .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
         .join('&');
@@ -52,6 +52,7 @@ const Metas = ({ extraDatas, seo }) => {
 
 
 	return (
+	!isFirstLoad && 
 		<Helmet>
 	
 			<title>{title}</title>
