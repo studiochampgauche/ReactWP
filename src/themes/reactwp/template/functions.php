@@ -14,7 +14,7 @@ add_action('wp_enqueue_scripts', function(){
 	/*
 	* JS
 	*/
-	wp_enqueue_script('rwp-main', get_stylesheet_directory_uri() . '/assets/js/reactwp.min.js', null, null, true);
+	wp_enqueue_script('rwp-main', get_stylesheet_directory_uri() . '/assets/js/reactwp.min.js', null, null, false);
 
 
 
@@ -25,7 +25,7 @@ add_action('wp_enqueue_scripts', function(){
         if($handle !== 'rwp-main')
             return $tag;
 
-        $tag = '<script src="' . esc_url( $src ) . '"></script>';
+        $tag = '<script src="' . esc_url( $src ) . '" defer></script>';
 
         return $tag;
 
