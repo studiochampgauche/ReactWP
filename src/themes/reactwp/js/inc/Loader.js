@@ -19,6 +19,7 @@ const Loader = {
 		return new Promise(done => {
 
 			let tl = gsap.timeline({
+				delay: 1,
 				onComplete: () => {
 
 					tl.kill();
