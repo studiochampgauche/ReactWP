@@ -25,8 +25,8 @@
 7. Start working!
 
 > [!NOTE]
-> If your current GSAP subscription level is not `Premium`, you need to uninstall the current GSAP module for install the module according to your level.
-- When you add a plugin, go save your "Site settings".
+> - If your current GSAP subscription level is not `Premium`, you need to uninstall the current GSAP module for install the module according to your level.
+> - When you add a plugin, go save your "Site settings".
 
 
 # What's next for ReactWP ?
