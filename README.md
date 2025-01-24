@@ -5,7 +5,11 @@
 ![Server](https://img.shields.io/badge/Server-PHP-orange)
 
 > [!WARNING]
-> Our plugins and themes are designed for English, French, websites in both languages. You can use the structure without them if needed.
+> Our plugins and themes are designed for English, French, or both languages simultaneously. However, the structure can still be used without them if needed.
+>
+> ***Why limit the languages?***
+> ReactWP is designed to remain consistent and as concise as possible. This is why we handle specific languages. For example, this allows us to manage English and French on the same page without having a lot of duplication.
+> We may eventually consider support for three languages.
 
 # Requirements
 - ACF Pro License
