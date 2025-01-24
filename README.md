@@ -5,7 +5,7 @@
 ![Server](https://img.shields.io/badge/Server-PHP-orange)
 
 > [!WARNING]
-> This boilerplate is made for English, French, or websites in both languages.
+> Our plugins and themes are designed for English, French, websites in both languages. You can use the structure without them if needed.
 
 # Requirements
 - ACF Pro License
