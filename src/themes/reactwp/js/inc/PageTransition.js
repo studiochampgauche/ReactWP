@@ -83,6 +83,12 @@ const PageTransition = () => {
 
 			if(currentRouteIndex < 0 || newRouteIndex < 0) {
 
+				if(currentRouteIndex >= 0)
+					ROUTES[currentRouteIndex].main = false;
+
+				if(newRouteIndex >= 0)
+					ROUTES[newRouteIndex].main = true;
+
 				setEntering(true);
 
 				return;
