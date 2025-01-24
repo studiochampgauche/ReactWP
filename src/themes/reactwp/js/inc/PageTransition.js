@@ -81,7 +81,7 @@ const PageTransition = () => {
 			const currentRouteIndex = ROUTES.findIndex(({main}) => main);
 			const newRouteIndex = ROUTES.findIndex(({path}) => path === pathRef.current);
 
-			if(!ROUTES[newRouteIndex]) {
+			if(currentRouteIndex < 0 || newRouteIndex < 0) {
 
 				setEntering(true);
 
