@@ -4,6 +4,9 @@
 ![Multisite Ready](https://img.shields.io/badge/Work%20With%20Multisite-Yes-brightgreen)
 ![Server](https://img.shields.io/badge/Server-PHP-orange)
 
+> [!WARNING]
+> This boilerplate is made for English, French, or websites in both languages.
+
 # Requirements
 - ACF Pro License
 - PHP 8.2+
