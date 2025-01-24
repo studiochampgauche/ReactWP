@@ -81,13 +81,13 @@ const PageTransition = () => {
 			const currentRouteIndex = ROUTES.findIndex(({main}) => main);
 			const newRouteIndex = ROUTES.findIndex(({path}) => path === pathRef.current);
 
-			if(currentRouteIndex < 0 || newRouteIndex < 0) {
+			if(currentRouteIndex >= 0)
+				ROUTES[currentRouteIndex].main = false;
 
-				if(currentRouteIndex >= 0)
-					ROUTES[currentRouteIndex].main = false;
+			if(newRouteIndex >= 0)
+				ROUTES[newRouteIndex].main = true;
 
-				if(newRouteIndex >= 0)
-					ROUTES[newRouteIndex].main = true;
+			if(currentRouteIndex <  0){
 
 				setEntering(true);
 
@@ -95,9 +95,7 @@ const PageTransition = () => {
 
 			}
 
-			ROUTES[currentRouteIndex].main = false;
-			ROUTES[newRouteIndex].main = true;
-
+			
 			window.loader.download = window.loader.instance.download();
 			window.loader.display = window.loader.instance.display();
 
