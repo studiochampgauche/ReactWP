@@ -147,7 +147,8 @@ const Loader = {
 				/*
 				* Images, videos and audios
 				*/
-				const mediaGroups = ROUTES.find(({main}) => main).mediaGroups;
+				const mediaGroups = ROUTES.find(({main}) => main)?.mediaGroups;
+
 				const loaders = mediaGroups && mediaGroups.length ? mediaGroups.split(',') : [];
 
 				const mediasToDownload = !this.perPage ? MEDIAS : (loaders.length ? loaders.reduce((obj, key) => {
@@ -263,7 +264,7 @@ const Loader = {
 
 			window.loader.download?.then(() => {
 
-				const mediaGroups = ROUTES.find(({main}) => main).mediaGroups;
+				const mediaGroups = ROUTES.find(({main}) => main)?.mediaGroups;
 				const loaders = mediaGroups && mediaGroups.length ? mediaGroups.split(',') : [];
 
 
