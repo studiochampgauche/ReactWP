@@ -81,6 +81,14 @@ const PageTransition = () => {
 			const currentRouteIndex = ROUTES.findIndex(({main}) => main);
 			const newRouteIndex = ROUTES.findIndex(({path}) => path === pathRef.current);
 
+			if(!ROUTES[newRouteIndex]) {
+
+				setEntering(true);
+
+				return;
+
+			}
+
 			ROUTES[currentRouteIndex].main = false;
 			ROUTES[newRouteIndex].main = true;
 
