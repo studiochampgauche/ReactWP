@@ -11,7 +11,8 @@
 >
 > ReactWP is designed to remain consistent and as concise as possible. This is why we handle specific languages. For example, this allows us to manage English and French on the same page without having a lot of duplication.
 >
-> We'll eventually consider support for three languages, probably Spanish.
+> We'll eventually consider support for three languages, probably Spanish. Once the three-language system is in place, we will explore making it possible to support any three languages.
+
 
 # Requirements
 - ACF Pro License
