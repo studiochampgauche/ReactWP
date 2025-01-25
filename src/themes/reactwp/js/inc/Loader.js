@@ -6,6 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 window.loader = {
 	isLoaded: {
+		app: false,
 		gscroll: false,
 		medias: false,
 		fonts: false
@@ -37,6 +38,10 @@ const Loader = {
 			.add(() => {
 
 				if(
+					!window.loader.isLoaded.app
+
+					||
+
 					!window.loader.isLoaded.gscroll
 
 					||
@@ -72,7 +77,7 @@ const Loader = {
 				/*
 				* Fonts
 				*/
-				if(!window.loader.download){
+				if(!window.loader.isLoaded.fonts){
 					document.fonts.ready.then(() => {
 
 						const fonts = Array.from(document.fonts);
@@ -131,9 +136,6 @@ const Loader = {
 
 					});
 				}
-
-
-				window.loader.download = null;
 
 				if(!Object.keys(MEDIAS).length){
 
@@ -260,8 +262,6 @@ const Loader = {
 
 		return new Promise(done => {
 
-			window.loader.display = null;
-
 			window.loader.download?.then(() => {
 
 				const mediaGroups = ROUTES.find(({main}) => main)?.mediaGroups;
@@ -333,4 +333,3 @@ window.loader.instance = Loader;
 
 window.loader.init = window.loader.instance.init();
 window.loader.download = window.loader.instance.download();
-window.loader.display = window.loader.instance.display();

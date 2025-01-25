@@ -95,12 +95,18 @@ const PageTransition = () => {
 
 			}
 
-			
+
 			window.loader.download = window.loader.instance.download();
 			window.loader.display = window.loader.instance.display();
 
 
 			window.loader.display.then(() => setEntering(true));
+		} else {
+
+			window.loader.display = window.loader.instance.display();
+
+			window.loader.display.then(() => window.loader.isLoaded.app = true);
+			
 		}
 
 
@@ -127,6 +133,9 @@ const PageTransition = () => {
 
 				window.gscroll.paused(true);
 				window.gscroll.scrollTop(0);
+
+				window.loader.download = null;
+				window.loader.display = null;
 
 				navigate(pathRef.current);
 
