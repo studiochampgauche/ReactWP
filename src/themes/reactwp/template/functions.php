@@ -87,7 +87,7 @@ add_action('wp_enqueue_scripts', function(){
             	'template' => $pageTemplate,
             	'routeName' => $v->post_name,
             	'pageName' => ($pageName ? $pageName : $v->post_title),
-            	'path' => (get_option('page_on_front') == $v->ID ? '/' : '/' . get_page_uri($v->ID)),
+            	'path' => str_replace(site_url(), '', get_the_permalink($v->ID)),
             	'type' => $v->post_type,
             	'seo' => (isset($acf['seo']) ? $acf['seo'] : []),
             	'mediaGroups' => (isset($acf['media_groups']) ? str_replace(', ', ',', $acf['media_groups']) : null),
