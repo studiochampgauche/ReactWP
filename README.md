@@ -14,6 +14,10 @@
 > We'll eventually consider support for three languages, probably Spanish. Once the three-language system is in place, we will explore making it possible to support any three languages.
 
 
+> [!WARNING]
+> When you write a hyperlink, make sure your path finishes with a `/`
+
+
 # Requirements
 - ACF Pro License
 - PHP 8.2+
