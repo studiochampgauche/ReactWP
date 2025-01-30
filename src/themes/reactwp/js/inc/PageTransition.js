@@ -78,29 +78,9 @@ const PageTransition = () => {
 
 		if(pathRef.current){
 
-			const currentRouteIndex = ROUTES.findIndex(({main}) => main);
-			const newRouteIndex = ROUTES.findIndex(({path}) => path === pathRef.current);
-
-			if(currentRouteIndex >= 0)
-				ROUTES[currentRouteIndex].main = false;
-
-			if(newRouteIndex >= 0)
-				ROUTES[newRouteIndex].main = true;
-
-			if(currentRouteIndex <  0){
-
-				setEntering(true);
-
-				return;
-
-			}
-
-
-			window.loader.download = window.loader.instance.download();
 			window.loader.display = window.loader.instance.display();
-
-
 			window.loader.display.then(() => setEntering(true));
+
 		} else {
 
 			window.loader.display = window.loader.instance.display();
@@ -123,6 +103,22 @@ const PageTransition = () => {
 
 		if(!isLeaving) return;
 
+		const currentRouteIndex = ROUTES.findIndex(({main}) => main);
+		const newRouteIndex = ROUTES.findIndex(({path}) => path === pathRef.current);
+
+		if(currentRouteIndex >= 0)
+			ROUTES[currentRouteIndex].main = false;
+
+		if(newRouteIndex >= 0)
+			ROUTES[newRouteIndex].main = true;
+
+
+		window.loader.download = null;
+		window.loader.display = null;
+
+		window.loader.download = window.loader.instance.download();
+
+
 
 		let tl = gsap.timeline({
 			onComplete: () => {
@@ -134,12 +130,13 @@ const PageTransition = () => {
 				window.gscroll.paused(true);
 				window.gscroll.scrollTop(0);
 
-				window.loader.download = null;
-				window.loader.display = null;
+				window.loader.download.then(() => {
 
-				navigate(pathRef.current);
+					navigate(pathRef.current);
 
-				setLeaving(false);
+					setLeaving(false);
+
+				});
 
 			}
 		});
