@@ -14,7 +14,6 @@ const templates = {
     DefaultTemplate
 };
 
-// Composant principal avec gestion du chargement
 const App = () => {
 
     const [isLoaded, setLoaded] = useState(false);
