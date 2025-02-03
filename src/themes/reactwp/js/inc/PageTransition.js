@@ -1,175 +1,166 @@
 'use strict';
 import React, { useEffect, useState, useRef } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useBlocker, useLocation, useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 
 const PageTransition = () => {
 	
-	const navigate = useNavigate();
+
+	const firstload = useRef(true);
+
+
 	const location = useLocation();
+	const navigate = useNavigate();
+	const blocker = useBlocker(true);
 
-	const pathRef = useRef(null);
-	const hashRef = useRef(null);
+	useEffect(() => {
 
-	const [isEntering, setEntering] = useState(false);
-	const [isLeaving, setLeaving] = useState(false);
+		if(blocker.state === 'blocked'){
+
+			if(location.pathname === blocker.location.pathname){
+
+				if(blocker.location.hash){
+
+					window.gscroll.scrollTo(blocker.location.hash, true, 'top top');
+
+				}
+
+
+				return;
+
+			}
+
+
+			const currentRouteIndex = ROUTES.findIndex(({main}) => main);
+			const newRouteIndex = ROUTES.findIndex(({path}) => [blocker.location.pathname, blocker.location.pathname + '/'].includes(path));
+
+			if(currentRouteIndex >= 0)
+				ROUTES[currentRouteIndex].main = false;
+
+			if(newRouteIndex >= 0)
+				ROUTES[newRouteIndex].main = true;
+
+
+			window.loader.display = null;
+
+			window.loader.download = window.loader.instance.download();
+
+
+			let tl = gsap.timeline({
+				onComplete: () => {
+
+					tl.kill();
+					tl = null;
+
+
+					window.gscroll.paused(true);
+					window.gscroll.scrollTop(0);
+
+					window.loader.download.then(() => blocker.proceed());
+
+				}
+			});
+
+
+			tl
+			.to('#viewport', .2, {
+				opacity: 0,
+				pointerEvents: 'none'
+			});
+
+		}
+
+	}, [blocker]);
+
 
 	useEffect(() => {
 
 		const killEvents = [];
 
-		const elementsToRedirect = document.querySelectorAll('a');
+		ScrollTrigger.refresh();
 
-		elementsToRedirect?.forEach((elementToRedirect) => {
+		if(location.hash && document.querySelector(location.hash)){
+
+			window.gscroll.scrollTo(location.hash, false, 'top top');
+
+		}
+
+
+		window.loader.display = window.loader.instance.display();
+
+
+		document.querySelectorAll('a')?.forEach(linkElement => {
 
 			const handleClick = (e) => {
 
-				if(
-					e.ctrlKey
+				if (!e.target.closest("#app")) {
+					
+					if(
+						e.ctrlKey
 
-					|| e.shiftKey
+						|| e.shiftKey
 
-					|| e.altKey
+						|| e.altKey
 
-					|| e.metaKey
+						|| e.metaKey
 
-					|| !elementToRedirect.hasAttribute('href')
+						|| !linkElement.hasAttribute('href')
 
-					|| (elementToRedirect.hasAttribute('target') && elementToRedirect.getAttribute('target') === '_self')
-				) return;
-
-				pathRef.current = elementToRedirect.getAttribute('href');
+						|| linkElement.hasAttribute('target')
+					) return;
 
 
-				try{
+					let path = null,
+						hash = null;
 
-					const url = new URL(pathRef.current);
 
-					if(window.location.host !== url.host) return;
+					try{
 
-					pathRef.current = url.pathname;
-					hashRef.current = url.hash;
+						const url = new URL(linkElement.getAttribute('href'));
 
-				} catch(_){
+						if(window.location.host !== url.host) return;
 
-					const a = pathRef.current.split('#');
+						path = url.pathname;
+						hash = url.hash;
 
-					pathRef.current = a[0];
-					hashRef.current = a[1] || null;
+
+					} catch(_){
+
+						const a = linkElement.getAttribute('href').split('#');
+
+						path = a[0];
+						hash = (a[1] ? '#' + a[1] : '');
+
+					}
+
+					e.preventDefault();
+
+					navigate(path + hash);
 
 				}
 
-				e.preventDefault();
-
-				if(![pathRef.current, pathRef.current + '/'].includes(location.pathname))
-					setLeaving(true);
-				else if(hashRef.current)
-					window.gscroll.scrollTo(document.getElementById(hashRef.current), true, 'top top');
-
 			}
 
-			elementToRedirect.addEventListener('click', handleClick);
+			linkElement.addEventListener('click', handleClick);
 
-			killEvents.push(() => elementToRedirect.removeEventListener('click', handleClick));
+			killEvents.push(() => linkElement.removeEventListener('click', handleClick));
 
 		});
 
-		if(pathRef.current){
 
-			window.loader.display = window.loader.instance.display();
-			window.loader.display.then(() => setEntering(true));
 
-		} else {
 
-			window.loader.display = window.loader.instance.display();
+		if(firstload.current){
 
 			window.loader.display.then(() => window.loader.isLoaded.app = true);
-			
-		}
 
+			firstload.current = false;
 
-		return () => killEvents?.forEach(killEvent => killEvent());
-
-
-	}, [location.pathname]);
-
-
-	/*
-	* When Leaving
-	*/
-	useEffect(() => {
-
-		if(!isLeaving) return;
-
-		const currentRouteIndex = ROUTES.findIndex(({main}) => main);
-		const newRouteIndex = ROUTES.findIndex(({path}) => path === pathRef.current);
-
-		if(currentRouteIndex >= 0)
-			ROUTES[currentRouteIndex].main = false;
-
-		if(newRouteIndex >= 0)
-			ROUTES[newRouteIndex].main = true;
-
-
-		window.loader.download = null;
-		window.loader.display = null;
-
-		window.loader.download = window.loader.instance.download();
-
-
-
-		let tl = gsap.timeline({
-			onComplete: () => {
-
-				tl.kill();
-				tl = null;
-
-
-				window.gscroll.paused(true);
-				window.gscroll.scrollTop(0);
-
-				window.loader.download.then(() => {
-
-					navigate(pathRef.current);
-
-					setLeaving(false);
-
-				});
-
-			}
-		});
-
-
-		tl
-		.to('#viewport', .2, {
-			opacity: 0,
-			pointerEvents: 'none'
-		});
-
-
-	}, [isLeaving]);
-
-
-	/*
-	* When Entering
-	*/
-	useEffect(() => {
-
-		if(!isEntering) return;
-
-		ScrollTrigger.refresh();
-
-		if(hashRef.current){
-
-			window.gscroll.scrollTo(document.getElementById(hashRef.current), false, 'top top');
+			return;
 
 		}
-
-
-		pathRef.current = null
-		hashRef.current = null;
 
 
 		let tl = gsap.timeline({
@@ -179,7 +170,6 @@ const PageTransition = () => {
 				tl = null;
 
 				window.gscroll.paused(false);
-				setEntering(false);
 
 			}
 		});
@@ -192,7 +182,10 @@ const PageTransition = () => {
 		});
 
 
-	}, [isEntering]);
+		return () => killEvents?.forEach(killEvent => killEvent());
+
+
+	}, [location.pathname]);
 
 	
 }
