@@ -64,7 +64,7 @@ const router = createBrowserRouter([
                 path: "*",
                 element: (
                     <>
-                        <Metas seo={{ pageTitle: CL === 'fr' ? 'Erreur 404' : 'Error 404', do_not_index: true }} />
+                        <Metas seo={{ pageTitle: CL.value === 'fr' ? 'Erreur 404' : 'Error 404', do_not_index: true }} />
                         <NotFoundTemplate />
                     </>
                 ),
