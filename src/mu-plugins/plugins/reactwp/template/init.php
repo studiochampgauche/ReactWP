@@ -95,7 +95,7 @@ class ReactWP{
                 */
                 update_field('field_678bca18008f5', [
                     [
-                        'name_fr' => CL === 'fr' ? 'Menu principal' : 'Main menu',
+                        'name_fr' => 'Menu principal',
                         'name_en' => 'Main Menu',
                         'slug' => 'main_menu',
                     ]
