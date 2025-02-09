@@ -37,7 +37,7 @@ add_action('init', function(){
         'fields' => array(
             array(
                 'key' => 'field_67a8554331600',
-                'label' => 'Langues',
+                'label' => 'Langs',
                 'name' => 'langs',
                 'aria-label' => '',
                 'type' => 'repeater',
@@ -54,12 +54,12 @@ add_action('init', function(){
                 'min' => 0,
                 'max' => 5,
                 'collapsed' => '',
-                'button_label' => 'Ajouter une langue',
+                'button_label' => 'Add lang',
                 'rows_per_page' => 20,
                 'sub_fields' => array(
                     array(
                         'key' => 'field_67a8556a31601',
-                        'label' => 'Nom',
+                        'label' => 'Name',
                         'name' => 'name',
                         'aria-label' => '',
                         'type' => 'text',
@@ -159,7 +159,7 @@ add_action('init', function(){
 
                         return [
                             'key' => 'field_678bca390083240hgvbnvh32' . $item['code'],
-                            'label' => (CL === 'fr' ? 'Nom (' . $item['code'] . ')' : 'Name (' . $item['code'] . ')'),
+                            'label' => 'Name (' . $item['code'] . ')',
                             'name' => 'name_' . $item['code'],
                             'aria-label' => '',
                             'type' => 'text',
