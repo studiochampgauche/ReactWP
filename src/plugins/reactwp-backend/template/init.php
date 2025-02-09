@@ -211,6 +211,19 @@ add_action('admin_bar_menu', function(){
             )
         );
         $wp_admin_bar->add_node($args);
+
+
+        // Theme settings
+        $args = array(
+            'id' => 'is-theme-settings',
+            'title' => __('Theme settings', 'rwp-core'),
+            'href' => $admin_url . 'admin.php?page=theme-settings',
+            'parent' => 'is-site',
+            'meta' => array(
+                'class' => 'is-theme-settings'
+            )
+        );
+        $wp_admin_bar->add_node($args);
         
         
         // Themes Management
@@ -340,6 +353,6 @@ add_action('customize_register', function($wp_customize){
 */
 add_action('admin_head', function(){
         
-    echo '<style type="text/css">#toplevel_page_site-settings,.single-theme .theme-actions{display: none !important;}</style>';
+    echo '<style type="text/css">#toplevel_page_site-settings,#toplevel_page_theme-settings,.single-theme .theme-actions{display: none !important;}</style>';
     
 });
