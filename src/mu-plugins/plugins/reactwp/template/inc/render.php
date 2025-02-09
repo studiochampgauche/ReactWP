@@ -52,7 +52,7 @@ add_action('init', function(){
                 'layout' => 'table',
                 'pagination' => 0,
                 'min' => 0,
-                'max' => 3,
+                'max' => 5,
                 'collapsed' => '',
                 'button_label' => 'Ajouter une langue',
                 'rows_per_page' => 20,
