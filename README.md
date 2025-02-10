@@ -4,6 +4,13 @@
 ![Multisite Ready](https://img.shields.io/badge/Work%20With%20Multisite-Yes-brightgreen)
 ![Server](https://img.shields.io/badge/Server-PHP-orange)
 
+ReactWP (previously "Gate for WordPress") came from a simple need: to solve recurring issues across different projects.
+
+The project aims to tackle three main areas:
+
+- The clutter that can accumulate in a WordPress admin;
+- Unwanted bloat in both the front-end and back-end;
+- And general needs, such as SEO management or some cool stuff to meet the standards of an Awwwards-worthy project, for example.
 
 # Requirements
 - ACF Pro License
