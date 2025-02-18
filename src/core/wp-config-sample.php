@@ -1,7 +1,7 @@
 <?php
 
 /*
-* Database connexion
+* Prefix table
 */
 $table_prefix  = 'wp_';
 
