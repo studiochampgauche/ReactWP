@@ -19,7 +19,7 @@ const PageTransition = () => {
 
 		if(blocker.state === 'blocked'){
 
-			if(location.pathname === blocker.location.pathname){
+			if([blocker.location.pathname, blocker.location.pathname + '/'].includes(location.pathname)){
 
 				if(blocker.location.hash){
 
