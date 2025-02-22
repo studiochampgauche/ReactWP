@@ -8,3 +8,8 @@
 - [Requirements](https://docs.reactwp.com/requirements)
 - [Installation Guide](https://docs.reactwp.com/installation-guide)
 - [Create a Theme, Plugin, or MU-Plugin](https://docs.reactwp.com/create-theme-plugin-or-mu-plugin)
+
+***About Our Stuff***
+- [MU-Plugins](https://docs.reactwp.com/about-our-stuff/mu-plugins)
+- [Plugins](https://docs.reactwp.com/about-our-stuff/plugins)
+- [Themes](https://docs.reactwp.com/about-our-stuff/themes)
