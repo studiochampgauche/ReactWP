@@ -12,4 +12,3 @@
 ***About Our Stuff***
 - [MU-Plugins](https://docs.reactwp.com/about-our-stuff/mu-plugins)
 - [Plugins](https://docs.reactwp.com/about-our-stuff/plugins)
-- [Themes](https://docs.reactwp.com/about-our-stuff/themes)
