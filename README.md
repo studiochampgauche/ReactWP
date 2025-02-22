@@ -7,3 +7,4 @@
 - [Introduction](https://docs.reactwp.com)
 - [Requirements](https://docs.reactwp.com/requirements)
 - [Installation Guide](https://docs.reactwp.com/installation-guide)
+- [Create a Theme, Plugin, or MU-Plugin](https://docs.reactwp.com/create-theme-plugin-or-mu-plugin)
