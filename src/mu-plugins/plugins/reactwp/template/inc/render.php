@@ -123,8 +123,64 @@ add_action('init', function(){
         'description' => '',
         'show_in_rest' => 0,
     ) );
+    
+
     $langs = rwp::field('langs');
 
+    $themeLocationName = [];
+    if($langs){
+
+        foreach($langs as $k => $v){
+
+            $themeLocationName[] = [
+                array(
+                    'key' => 'field_67afdkj32nba' . $v['code'],
+                    'label' => $v['name'],
+                    'name' => '',
+                    'aria-label' => '',
+                    'type' => 'tab',
+                    'instructions' => '',
+                    'required' => 0,
+                    'conditional_logic' => 0,
+                    'wrapper' => array(
+                        'width' => '',
+                        'class' => '',
+                        'id' => '',
+                    ),
+                    'placement' => 'top',
+                    'endpoint' => 0,
+                    'selected' => 0
+                ),
+                array(
+                    'key' => 'field_678bcjkhads3280' . $v['code'],
+                    'label' => (CL === 'fr' ? 'Nom (' . $v['code'] . ')' : 'Name (' . $v['code'] . ')'),
+                    'name' => 'name_' . $v['code'],
+                    'aria-label' => '',
+                    'type' => 'text',
+                    'instructions' => '',
+                    'required' => 0,
+                    'conditional_logic' => 0,
+                    'wrapper' => array(
+                        'width' => '',
+                        'class' => '',
+                        'id' => '',
+                    ),
+                    'default_value' => '',
+                    'maxlength' => '',
+                    'allow_in_bindings' => 0,
+                    'placeholder' => '',
+                    'prepend' => '',
+                    'append' => '',
+                    'parent_repeater' => 'field_678bca18008f5',
+                )
+            ];
+
+        }
+
+
+        $themeLocationName = call_user_func_array('array_merge', $themeLocationName);
+
+    }
 
     /*
     * Add theme locations to site-settings
@@ -147,40 +203,14 @@ add_action('init', function(){
                     'class' => '',
                     'id' => '',
                 ),
-                'layout' => 'table',
+                'layout' => 'block',
                 'pagination' => 0,
                 'min' => 0,
                 'max' => 0,
-                'collapsed' => '',
+                'collapsed' => 'field_678bca4e008f7',
                 'button_label' => 'Ajouter un emplacement',
                 'rows_per_page' => 20,
                 'sub_fields' => array(
-                    ...($langs ? array_map(function($item){
-
-                        return [
-                            'key' => 'field_678bca390083240hgvbnvh32' . $item['code'],
-                            'label' => 'Name (' . $item['code'] . ')',
-                            'name' => 'name_' . $item['code'],
-                            'aria-label' => '',
-                            'type' => 'text',
-                            'instructions' => '',
-                            'required' => 0,
-                            'conditional_logic' => 0,
-                            'wrapper' => array(
-                                'width' => '',
-                                'class' => '',
-                                'id' => '',
-                            ),
-                            'default_value' => '',
-                            'maxlength' => '',
-                            'allow_in_bindings' => 0,
-                            'placeholder' => '',
-                            'prepend' => '',
-                            'append' => '',
-                            'parent_repeater' => 'field_678bca18008f5',
-                        ];
-
-                    }, $langs) : []),
                     array(
                         'key' => 'field_678bca4e008f7',
                         'label' => 'Slug',
@@ -191,7 +221,7 @@ add_action('init', function(){
                         'required' => 0,
                         'conditional_logic' => 0,
                         'wrapper' => array(
-                            'width' => '',
+                            'width' => '33.3333333333',
                             'class' => '',
                             'id' => '',
                         ),
@@ -203,6 +233,7 @@ add_action('init', function(){
                         'append' => '',
                         'parent_repeater' => 'field_678bca18008f5',
                     ),
+                    ...$themeLocationName
                 ),
             ),
         ),
@@ -225,6 +256,7 @@ add_action('init', function(){
         'description' => '',
         'show_in_rest' => 0,
     ) );
+
 
 
     /*
