@@ -9,12 +9,16 @@ class ReactWP{
     
     function __construct(){
 
-        /*
-        * Define Constante Language
-        */
-        if(!defined('CL')){
-            define('CL', (function_exists('pll_current_language') ? pll_current_language() : substr(get_locale(), 0, 2)));
-        }
+        add_action('init', function(){
+
+            /*
+            * Define Constante Language
+            */
+            if(!defined('CL')){
+                define('CL', substr(get_locale(), 0, 2));
+            }
+
+        }, 3);
 
 
         /*
