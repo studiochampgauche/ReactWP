@@ -167,3 +167,22 @@ add_action('wp_head', function(){
 	';
 
 }, 3);
+
+
+
+/*
+* Create tags
+*/
+add_action('acf/init', function(){
+
+    ReactWP\Utils\Field::replace([
+        '{Y}',
+        '{SITE_NAME}',
+        '{SITE_DOMAIN}',
+    ], [
+        date('Y'),
+        ReactWP\SEO\SEO::site_name(),
+        wp_parse_url(site_url())['host'],
+    ]);
+
+});
