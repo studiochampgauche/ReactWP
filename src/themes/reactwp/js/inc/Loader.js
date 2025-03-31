@@ -27,7 +27,7 @@ const Loader = {
 					tl.kill();
 					tl = null;
 
-					window.gscroll.paused(false);
+					window.gscroll?.paused(false);
 
 				}
 			});
