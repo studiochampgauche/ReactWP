@@ -4,6 +4,9 @@
 ![Multisite Ready](https://img.shields.io/badge/Work%20With%20Multisite-Yes-brightgreen)
 ![Server](https://img.shields.io/badge/Server-PHP-orange)
 
+> [!WARNING]
+> The documentation urls doesn't work for the moment. See docs here: https://studio-champ-gauche-1.gitbook.io/reactwp-docs
+
 - [Introduction](https://docs.reactwp.com)
 - [Requirements](https://docs.reactwp.com/requirements)
 - [Installation Guide](https://docs.reactwp.com/installation-guide)
