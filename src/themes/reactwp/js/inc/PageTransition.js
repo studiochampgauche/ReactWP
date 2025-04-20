@@ -79,16 +79,21 @@ const PageTransition = () => {
 
 		const killEvents = [];
 
-		ScrollTrigger.refresh();
-
-		if(location.hash && document.querySelector(location.hash)){
-
-			window.gscroll.scrollTo(location.hash, false, 'top top');
-
-		}
-
 
 		window.loader.display = window.loader.instance.display();
+
+
+		window.loader.display.then(() => {
+
+			ScrollTrigger.refresh();
+
+			if(location.hash && document.querySelector(location.hash)){
+
+				window.gscroll.scrollTo(location.hash, false, 'top top');
+
+			}
+
+		});
 
 
 		document.querySelectorAll('a')?.forEach(linkElement => {
