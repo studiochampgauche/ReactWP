@@ -43,7 +43,9 @@ add_action('wp_enqueue_scripts', function(){
     * Routes
     */
     $routes = [];
-    $data = rwp::cpt(['page', 'post'])->posts;
+    $data = rwp::cpt(['page', 'post'], [
+        'posts_per_page' => -1
+    ])->posts;
 
 
 
