@@ -220,6 +220,10 @@ const Loader = {
 
 						if(media.type === 'image'){
 
+							if(media.alt){
+								mediaElement.alt = media.alt;
+							}
+
 							mediaElement.onload = () => isLoaded();
 
 						} else {
