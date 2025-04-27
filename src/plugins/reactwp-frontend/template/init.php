@@ -20,6 +20,16 @@ add_filter('wp_img_tag_add_auto_sizes', '__return_false');
 
 
 /*
+* Remove weird speculation script added in WordPress 6.8
+*/
+add_filter('wp_speculation_rules_configuration', function($configs){
+
+    return null;
+
+});
+
+
+/*
 * Remove superfluous codes in <head></head>
 */
 add_action('wp_enqueue_scripts', function(){
