@@ -228,6 +228,15 @@ const Loader = {
 
 						} else {
 
+							if(media.type === 'video'){
+
+								mediaElement.preload = 'auto';
+                        		mediaElement.playsInline = true;
+
+                        		mediaElement.load();
+
+							}
+							
 							mediaElement.onloadeddata = () => isLoaded();
 
 						}
