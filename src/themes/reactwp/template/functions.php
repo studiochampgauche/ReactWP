@@ -156,8 +156,39 @@ add_action('wp_head', function(){
 
 	echo '
 	<style type="text/css">
+        :root{
+            --white-color: #fff;
+            --black-color: #000;
+        }
+
+        *{
+            outline: 0;
+            scrollbar-width: none;
+            box-sizing: border-box;
+            -ms-overflow-style: none;
+            -webkit-font-smoothing: antialiased;
+            &::-webkit-scrollbar {
+                display: none;
+            }
+        }
+
+        html,
+        body{
+            margin: 0;
+            padding: 0;
+        }
+
+        html{
+            font-size: 16px;
+        }
+
+        body{
+            max-height: 100lvh;
+            overflow: hidden;
+        }
+
 		#loader{
-			background: #000;
+			background: var(--black-color);
 			position: fixed;
 			top: 0;
 			left: 0;
