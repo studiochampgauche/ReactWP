@@ -19,66 +19,59 @@ const Button = ({ to = null, text, className = null, before, after, ...props }) 
 
 	useEffect(() => {
 
-		const killEvents = [];
+		let canEnter = true;
 
-		const arrowElement = ref.current.querySelector('.arrow');
+		let anim1 = gsap.timeline({
+			onComplete: () => {
 
-		let anim1 = gsap.timeline();
+				canEnter = true;
 
-		if(ref.current.classList.contains('turn')){
+				anim1?.restart();
+				anim1?.paused(true);
 
-			anim1
-			.to(arrowElement, .2, {
-				width: ((ref.current?.getBoundingClientRect().right - ref?.current.getBoundingClientRect().left) - ((ref.current?.getBoundingClientRect().right - ref.current.querySelector('.arrow')?.getBoundingClientRect().right) * 2)),
-			})
-			.to(arrowElement.querySelector('svg'), .2, {
-				rotate: 90,
-				scale: .85
-			}, 0)
-			.paused(true);
+			}
+		});
 
-		} else {
+		anim1
+		?.to(ref.current.querySelector('span'), .1, {
+			y: 10,
+			opacity: 0
+		})
+		.set(ref.current.querySelector('span'), {
+			y: -10
+		})
+		.to(ref.current.querySelector('span'), .1, {
+			y: 0,
+			opacity: 1
+		})
+		.paused(true);
 
-			anim1
-			.to(arrowElement, .2, {
-				width: ((ref.current?.getBoundingClientRect().right - ref?.current.getBoundingClientRect().left) - ((ref.current?.getBoundingClientRect().right - ref.current.querySelector('.arrow')?.getBoundingClientRect().right) * 2)),
-			})
-			.paused(true);
 
-		}
 
 		const handleMouseEnter = () => {
 
-			anim1.play();
-			anim1.reversed(false)
+			if(!canEnter) return;
 
-		}
+			canEnter = false;
 
-		const handleMouseLeave = () => {
-
-			anim1.play();
-			anim1.reversed(true)
+			anim1?.play();
 
 		}
 
 
-		ref.current?.addEventListener('mouseenter', handleMouseEnter);
-		ref.current?.addEventListener('mouseleave', handleMouseLeave);
+		ref.current.addEventListener('mouseenter', handleMouseEnter);
 
 
-		killEvents.push(() => {
+		return () => {
+
+			ref.current?.removeEventListener('mouseenter', handleMouseEnter);
 
 			if(anim1){
-				anim1.kill();
+				anim1?.kill();
 				anim1 = null;
 			}
 
-			ref.current?.removeEventListener('mouseenter', handleMouseEnter);
-			ref.current?.removeEventListener('mouseleave', handleMouseLeave);
-
-		});
-
-		return () => killEvents?.forEach(killEvent => killEvent());
+		}
 
 	}, []);
 
