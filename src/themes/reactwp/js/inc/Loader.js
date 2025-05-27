@@ -230,6 +230,19 @@ const Loader = {
 
 							if(media.type === 'video'){
 
+
+								if(media.loop){
+									mediaElement.loop = true;
+								}
+
+								if(media.muted){
+									mediaElement.muted = true;
+								}
+
+								if(media.controls){
+									mediaElement.controls = true;
+								}
+
 								mediaElement.preload = 'auto';
                         		mediaElement.playsInline = true;
 
