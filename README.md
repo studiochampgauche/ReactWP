@@ -15,8 +15,7 @@ Most WordPress developers face a tough choice:
 - Stick with their outdated stack
 - Jump into a fully headless setup with Next.js or Gatsby, which is often complex and useless
 
-***ReactWP offers a middle path.***
-You keep the WordPress ecosystem. You get the React developer experience. You skip the pain of APIs and complex setups.
+***ReactWP offers a middle path.*** You keep the WordPress ecosystem. You get the React developer experience. You skip the pain of APIs and complex setups.
 
 
 
