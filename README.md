@@ -37,7 +37,7 @@ With ReactWP:
 
 - You get data like posts and menus directly inside JS
 
-- You deploy it like any WordPress theme — no Node server or API setup needed
+- You deploy it like any WordPress theme. No Node server or API setup needed.
 
 
 # Who ReactWP is for
