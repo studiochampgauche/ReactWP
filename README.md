@@ -9,10 +9,6 @@
 
 ReactWP is a modern boilerplate for building full React-based themes inside WordPress, without going headless.
 
-It’s designed for developers who want to keep the flexibility of WordPress (themes, admin, plugins, SEO, server rendering) while using modern JavaScript tools like React, JSX, Webpack, hot reloading, and components.
-
-Instead of connecting an external frontend (like Next.js) to WordPress via REST or GraphQL, ReactWP lets you build directly inside a native WordPress theme. You still benefit from PHP on the server side, as data can be passed directly into your React components without the need for APIs. So instead of writing PHP templates, you're building dynamic React components powered by WordPress data.
-
 
 # Why ReactWP exists
 
@@ -22,6 +18,7 @@ Most WordPress developers face a tough choice:
 - Jump into a fully headless setup with Next.js or Gatsby, which is often complex and overkill
 
 ReactWP offers a middle path.
+
 You keep the WordPress ecosystem. You get the React developer experience. You skip the pain of APIs and complex setups.
 
 
