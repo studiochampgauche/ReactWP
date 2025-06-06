@@ -32,7 +32,7 @@ With ReactWP:
 
 - You build your interface with React components
 
-- You get data like posts and menus directly inside JS
+- You get data like posts and menus directly inside JS with `wp_localize_script`
 
 - You deploy it like any WordPress theme. No Node server or API setup needed.
 
