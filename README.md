@@ -20,41 +20,6 @@ ReactWP offers a middle path.
 You keep the WordPress ecosystem. You get the React developer experience. You skip the pain of APIs and complex setups.
 
 
-# Typical use case
-
-Let’s say you’re building a modern marketing site.
-
-You want your frontend to be 100% React. But your client wants to use WordPress to manage the content, menus, and SEO.
-
-With ReactWP:
-
-- You build your interface with React components
-
-- You get data like posts and menus directly inside JS with `wp_localize_script`
-
-- You deploy it like any WordPress theme. No Node server or API setup needed.
-
-
-# Who ReactWP is for
-
-- Agencies modernizing old WordPress projects
-
-- Freelancers who prefer React over PHP
-
-- Developers who want React inside WordPress, without headless headaches
-
-- Anyone who wants a clean bridge between modern JS and classic WordPress
-
-
-# How it compares
-| Feature             | ReactWP  | Headless (Next.js) | Classic WP Theme |
-| ------------------- | -------- | ------------------ | ---------------- |
-| React components    | Yes      | Yes                | No               |
-| Uses WP admin/tools | Yes      | Partially          | Yes              |
-| Easy to deploy      | Yes      | No                 | Yes              |
-| Learning curve      | Moderate | High               | Low              |
-| Needs REST/GraphQL  | No       | Yes                | No               |
-
 
 # The vision
 
