@@ -12,5 +12,16 @@ It’s designed for developers who want to keep the flexibility of WordPress (th
 Instead of connecting an external frontend (like Next.js) to WordPress via REST or GraphQL, ReactWP lets you build directly inside a native WordPress theme. You still benefit from PHP on the server side, as data can be passed directly into your React components without the need for APIs. So instead of writing PHP templates, you're building dynamic React components powered by WordPress data.
 
 
+## Why ReactWP exists
+
+Most WordPress developers face a tough choice:
+
+- Stick with the outdated PHP/jQuery stack
+- Jump into a fully headless setup with Next.js or Gatsby, which is often complex and overkill
+
+ReactWP offers a middle path.
+You keep the WordPress ecosystem. You get the React developer experience. You skip the pain of APIs and complex setups.
+
+
 > [!WARNING]
 > [Old docs here](https://studio-champ-gauche-1.gitbook.io/reactwp-docs). Not complete and we'll rewrite it.
