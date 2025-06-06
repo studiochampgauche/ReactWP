@@ -5,8 +5,6 @@
 ![Server](https://img.shields.io/badge/Server-PHP-orange)
 
 
-# What is ReactWP?
-
 ReactWP is a modern boilerplate for building full React-based themes inside WordPress, without going headless.
 
 
@@ -14,7 +12,7 @@ ReactWP is a modern boilerplate for building full React-based themes inside Word
 
 Most WordPress developers face a tough choice:
 
-- Stick with the outdated PHP/jQuery stack
+- Stick with their outdated stack
 - Jump into a fully headless setup with Next.js or Gatsby, which is often complex and overkill
 
 ReactWP offers a middle path.
