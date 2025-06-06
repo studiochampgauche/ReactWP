@@ -5,6 +5,8 @@
 ![Server](https://img.shields.io/badge/Server-PHP-orange)
 
 
+# What is ReactWP?
+
 ReactWP is a modern boilerplate for building full React-based themes inside WordPress, without going headless.
 
 It’s designed for developers who want to keep the flexibility of WordPress (themes, admin, plugins, SEO, server rendering) while using modern JavaScript tools like React, JSX, Webpack, hot reloading, and components.
@@ -12,7 +14,7 @@ It’s designed for developers who want to keep the flexibility of WordPress (th
 Instead of connecting an external frontend (like Next.js) to WordPress via REST or GraphQL, ReactWP lets you build directly inside a native WordPress theme. You still benefit from PHP on the server side, as data can be passed directly into your React components without the need for APIs. So instead of writing PHP templates, you're building dynamic React components powered by WordPress data.
 
 
-## Why ReactWP exists
+# Why ReactWP exists
 
 Most WordPress developers face a tough choice:
 
@@ -23,7 +25,7 @@ ReactWP offers a middle path.
 You keep the WordPress ecosystem. You get the React developer experience. You skip the pain of APIs and complex setups.
 
 
-## Typical use case
+# Typical use case
 
 Let’s say you’re building a modern marketing site.
 
@@ -38,7 +40,7 @@ With ReactWP:
 - You deploy it like any WordPress theme — no Node server or API setup needed
 
 
-## Who ReactWP is for
+# Who ReactWP is for
 
 - Agencies modernizing old WordPress projects
 
@@ -49,7 +51,7 @@ With ReactWP:
 - Anyone who wants a clean bridge between modern JS and classic WordPress
 
 
-## How it compares
+# How it compares
 | Feature             | ReactWP  | Headless (Next.js) | Classic WP Theme |
 | ------------------- | -------- | ------------------ | ---------------- |
 | React components    | Yes      | Yes                | No               |
@@ -59,7 +61,7 @@ With ReactWP:
 | Needs REST/GraphQL  | No       | Yes                | No               |
 
 
-## The vision
+# The vision
 
 ReactWP doesn’t try to replace WordPress. It enhances it.
 
