@@ -13,7 +13,7 @@ ReactWP is a modern boilerplate for building full React-based themes inside Word
 Most WordPress developers face a tough choice:
 
 - Stick with their outdated stack
-- Jump into a fully headless setup with Next.js or Gatsby, which is often complex and overkill
+- Jump into a fully headless setup with Next.js or Gatsby, which is often complex and useless
 
 ReactWP offers a middle path.
 
