@@ -13,10 +13,10 @@ const Metas = ({ extraDatas, seo }) => {
 
 	const prevPathnameRef = useRef(pathname);
 	
-	const title = seo?.title?.[CL.value] || seo.pageTitle + ' - ' + RWP_SEO.blogName;
-	const og_title = seo.og_title?.[CL.value] || title;
-	const description = seo.description?.[CL.value] || RWP_SEO.description?.[CL.value];
-	const og_description = seo.og_description?.[CL.value] || RWP_SEO.og_description?.[CL.value] || description;
+	const title = seo[`title_${CL.value}`] || seo.pageTitle + ' - ' + RWP_SEO.blogName;
+	const og_title = seo[`og_title_${CL.value}`] || title;
+	const description = seo[`description_${CL.value}`] || RWP_SEO[`description_${CL.value}`];
+	const og_description = seo[`og_description_${CL.value}`] || RWP_SEO[`og_description_${CL.value}`] || description;
 	const og_image = seo.og_image || RWP_SEO.og_image;
 
 	useEffect(() => {
