@@ -66,3 +66,8 @@ With ReactWP:
 ReactWP doesn’t try to replace WordPress. It enhances it.
 
 You keep the CMS that works. You use the frontend tools you love. Your clients still get WordPress. Your devs get React. You get a smooth workflow that doesn’t fight the platform.
+
+
+# Demo
+
+[Studio Champ Gauche Network](https://github.com/studiochampgauche/studiochampgauche-network)
