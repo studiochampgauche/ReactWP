@@ -39,6 +39,7 @@ With ReactWP:
 
 
 ## Who ReactWP is for
+
 - Agencies modernizing old WordPress projects
 
 - Freelancers who prefer React over PHP
@@ -46,3 +47,20 @@ With ReactWP:
 - Developers who want React inside WordPress, without headless headaches
 
 - Anyone who wants a clean bridge between modern JS and classic WordPress
+
+
+## How it compares
+| Feature             | ReactWP  | Headless (Next.js) | Classic WP Theme |
+| ------------------- | -------- | ------------------ | ---------------- |
+| React components    | Yes      | Yes                | No               |
+| Uses WP admin/tools | Yes      | Partially          | Yes              |
+| Easy to deploy      | Yes      | No                 | Yes              |
+| Learning curve      | Moderate | High               | Low              |
+| Needs REST/GraphQL  | No       | Yes                | No               |
+
+
+## The vision
+
+ReactWP doesn’t try to replace WordPress. It enhances it.
+
+You keep the CMS that works. You use the frontend tools you love. Your clients still get WordPress. Your devs get React. You get a smooth workflow that doesn’t fight the platform.
