@@ -30,4 +30,4 @@ You keep the CMS that works. You use the frontend tools you love. Your clients s
 
 - [Demo](https://github.com/studiochampgauche/studiochampgauche-network)
 - [ReactWP website](https://reactwp.com)
-- [Documentations](https://reactwp.com/docs) (coming soon)
+- [Documentations](https://reactwp.com/docs) (In progress)
