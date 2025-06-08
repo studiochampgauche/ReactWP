@@ -217,5 +217,19 @@ add_action('acf/init', function(){
         ReactWP\SEO\SEO::site_name(),
         wp_parse_url(site_url())['host'],
     ]);
+    
+
+    /*
+    * Set defaults when you call scg::cpt() or StudioChampGauche\Utils\CustomPostType::get();
+    */
+    ReactWP\Utils\CustomPostType::default('posts_per_page', -1);
+    ReactWP\Utils\CustomPostType::default('paged', 1);
+    
+    
+    /*
+    * Set defaults when you call scg::menu() or ReactWP\Utils\Menu::get();
+    */
+    ReactWP\Utils\Menu::default('container', null);
+    ReactWP\Utils\Menu::default('items_wrap', '<ul>%3$s</ul>');
 
 });
