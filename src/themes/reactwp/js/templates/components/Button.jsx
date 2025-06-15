@@ -77,9 +77,9 @@ const Button = ({ to = null, text, className = null, before, after, ...props }) 
 
 	return(
 		<Tag ref={ref} {...tagProps}>
-			{before && (<div className="btn-before" dangerouslySetInnerHTML={{ __html: before }} />)}
-			{text && (<span dangerouslySetInnerHTML={{ __html: text }}  />)}
-			{after && (<div className="btn-after" dangerouslySetInnerHTML={{ __html: after }} />)}
+			{before && (<div className="btn-before">{before}</div>)}
+			{text && (<span>{text}</span>)}
+			{after && (<div className="btn-after">{after}</div>)}
 		</Tag>
 	);
 
