@@ -20,13 +20,13 @@ const Contents = ({ uptitle, title, subtitle, text, buttons, titleTag, className
 			<div {...tagProps}>
 				<div className="inner-contents">
 					{uptitle && (
-						<span className="uptitle" dangerouslySetInnerHTML={{ __html: uptitle }} />
+						<span className="uptitle">{uptitle}</span>
 					)}
 					{title && (
-						<TitleTag dangerouslySetInnerHTML={{ __html: title }} />
+						<TitleTag>{title}</TitleTag>
 					)}
 					{subtitle && (
-						<span className="subtitle" dangerouslySetInnerHTML={{ __html: subtitle }} />
+						<span className="subtitle">{subtitle}</span>
 					)}
 					{text && (
 						<Wrapper value={text} />
