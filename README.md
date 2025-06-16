@@ -7,7 +7,8 @@
 
 ReactWP is a modern boilerplate for building full React-based SPA themes inside WordPress, without going headless.
 
-GSAP Ready : Play with smooth scroll, loading animations based on media to download, page transition.
+- GSAP Ready : Play with smooth scroll, loading animations based on media to download, page transition.
+- React Helmet Async Ready.
 
 
 # Why ReactWP exists
