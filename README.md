@@ -5,7 +5,9 @@
 ![Server](https://img.shields.io/badge/Server-PHP-orange)
 
 
-ReactWP is a modern boilerplate for building full React-based themes inside WordPress, without going headless.
+ReactWP is a modern boilerplate for building full React-based SPA themes inside WordPress, without going headless.
+
+GSAP Ready : Play with smooth scroll, loading animations based on media to download, page transition.
 
 
 # Why ReactWP exists
@@ -18,16 +20,8 @@ Most WordPress developers face a tough choice:
 ***ReactWP offers a middle path.*** You keep the WordPress ecosystem. You get the React developer experience. You skip the pain of APIs and complex setups.
 
 
-
-# The vision
-
-ReactWP doesn’t try to replace WordPress. It enhances it.
-
-You keep the CMS that works. You use the frontend tools you love. Your clients still get WordPress. Your devs get React. You get a smooth workflow that doesn’t fight the platform.
-
-
 # Useful links
 
 - [Demo](https://github.com/studiochampgauche/studiochampgauche-network)
-- [ReactWP website](https://reactwp.com)
+- [ReactWP website](https://reactwp.com) (Coming soon)
 - [Documentations](https://reactwp.com/docs) (In progress)
