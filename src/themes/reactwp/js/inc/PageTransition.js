@@ -23,7 +23,15 @@ const PageTransition = () => {
 
 				if(blocker.location.hash){
 
-					window.gscroll.scrollTo(blocker.location.hash, true, 'top top');
+					if(window.gscroll){
+
+						window.gscroll.scrollTo(blocker.location.hash, true, 'top top');
+
+					} else{
+
+						window.scrollTo({top: document.querySelector(blocker.location.hash).getBoundingClientRect().top, behavior: 'smooth'});
+
+					}
 
 				}
 
@@ -55,8 +63,16 @@ const PageTransition = () => {
 					tl = null;
 
 
-					window.gscroll.paused(true);
-					window.gscroll.scrollTop(0);
+					if(window.gscroll){
+
+						window.gscroll.paused(true);
+						window.gscroll.scrollTop(0);
+
+					} else {
+
+						window.scrollTo({top: 0, behavior: 'instant'});
+
+					}
 
 					window.loader.download.then(() => blocker.proceed());
 
@@ -89,7 +105,15 @@ const PageTransition = () => {
 
 			if(location.hash && document.querySelector(location.hash)){
 
-				window.gscroll.scrollTo(location.hash, false, 'top top');
+				if(window.gscroll){
+
+					window.gscroll?.scrollTo(location.hash, false, 'top top');
+
+				} else {
+
+					window.scrollTo({top: document.querySelector(location.hash).getBoundingClientRect().top, behavior: 'instant'});
+
+				}
 
 			}
 
@@ -155,8 +179,6 @@ const PageTransition = () => {
 		});
 
 
-
-
 		if(firstload.current){
 
 			window.loader.display.then(() => window.loader.isLoaded.app = true);
@@ -174,7 +196,7 @@ const PageTransition = () => {
 				tl.kill();
 				tl = null;
 
-				window.gscroll.paused(false);
+				window.gscroll?.paused(false);
 
 			}
 		});
