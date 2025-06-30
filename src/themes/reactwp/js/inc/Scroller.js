@@ -24,15 +24,24 @@ const Scroller = () => {
 			overflow: 'initial'
 		});
 
-		window.gscroll = await ScrollSmoother.create({
-			wrapper: '#pageWrapper',
-			content: '#pageContent',
-			ignoreMobileResize: true,
-			normalizeScroll: (isPointer ? true : false),
-			smooth: 2.25
-		});
+		if(
+			navigator.userAgent
 
-		window.gscroll.paused(true);
+			&&
+
+			!/IPAD|IPOD|IPHONE|MACINTOSH/.test(navigator.userAgent.toUpperCase())
+
+		){
+			window.gscroll = await ScrollSmoother.create({
+				wrapper: '#pageWrapper',
+				content: '#pageContent',
+				ignoreMobileResize: true,
+				normalizeScroll: (isPointer ? true : false),
+				smooth: 2.25
+			});
+
+			window.gscroll.paused(true);
+		}
 
 
 		window.loader.isLoaded.gscroll = true;
