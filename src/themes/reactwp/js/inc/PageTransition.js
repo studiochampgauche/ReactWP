@@ -29,7 +29,7 @@ const PageTransition = () => {
 
 					} else{
 
-						window.scrollTo({top: document.querySelector(blocker.location.hash).getBoundingClientRect().top, behavior: 'smooth'});
+						window.scrollTo({top: (blocker.location.hash ? document.querySelector(blocker.location.hash).getBoundingClientRect().top : 0), behavior: 'smooth'});
 
 					}
 
@@ -111,7 +111,7 @@ const PageTransition = () => {
 
 				} else {
 
-					window.scrollTo({top: document.querySelector(location.hash).getBoundingClientRect().top, behavior: 'instant'});
+					window.scrollTo({top: (location.hash ? document.querySelector(location.hash).getBoundingClientRect().top : 0), behavior: 'instant'});
 
 				}
 
