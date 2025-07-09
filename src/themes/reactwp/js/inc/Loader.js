@@ -315,6 +315,14 @@ const Loader = {
 				const inlineDisplays = Object.values(mediasToDisplay).flat(Infinity).filter(({target}) => target);
 				const countInlineDisplays = inlineDisplays.length;
 
+				if(!countInlineDisplays){
+
+					done();
+
+					return;
+
+				}
+
 				let totalDisplayed = 0;
 
 				inlineDisplays.forEach((media, i) => {
