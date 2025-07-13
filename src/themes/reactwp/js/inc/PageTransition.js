@@ -89,6 +89,17 @@ const PageTransition = () => {
 					});
 
 
+					/*
+					* Kill videos
+					*/
+					document.querySelectorAll('.inner-video')?.forEach(video => {
+
+						if(video.querySelector('video'))
+							video.innerHTML = '<div class="video"></div>';
+
+					});
+
+
 					window.loader.download.then(() => blocker.proceed());
 
 				}
