@@ -63,6 +63,9 @@ const PageTransition = () => {
 					tl = null;
 
 
+					/*
+					* Return to top
+					*/
 					if(window.gscroll){
 
 						window.gscroll.paused(true);
@@ -73,6 +76,18 @@ const PageTransition = () => {
 						window.scrollTo({top: 0, behavior: 'instant'});
 
 					}
+
+
+					/*
+					* Kill images
+					*/
+					document.querySelectorAll('.inner-img')?.forEach(img => {
+
+						if(img.querySelector('img'))
+							img.innerHTML = '<div class="img"></div>';
+
+					});
+
 
 					window.loader.download.then(() => blocker.proceed());
 
