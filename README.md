@@ -1,9 +1,8 @@
 ![ReactWP](https://reactwp.com/github-image/banner-black.jpg)
 
 ![Built](https://img.shields.io/badge/Built-Webpack-blue)
-![Multisite Ready](https://img.shields.io/badge/Work%20With%20Multisite-Yes-brightgreen)
+![Multisite](https://img.shields.io/badge/Multisite-Supported-brightgreen)
 ![Server](https://img.shields.io/badge/Server-PHP-orange)
-
 
 # ReactWP - Build WordPress Like It's 2025
 
@@ -34,8 +33,12 @@ Because building something custom, clean, fast, and scalable in WordPress should
 - Same conventions as the theme side
 - Easy to maintain and scale
 
-# Useful links
+## Useful links
 
 - [Demo](https://github.com/studiochampgauche/studiochampgauche-network)
 - [ReactWP website](https://reactwp.com) (Coming soon)
-- [Documentations](https://reactwp.com/docs) (In progress)
+- [Documentation](https://reactwp.com/docs) (In progress)
+
+## Want to contribute?
+
+Open issues, submit pull requests, or just fork it and build something wild.
