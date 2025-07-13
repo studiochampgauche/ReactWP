@@ -8,7 +8,7 @@
 
 ReactWP is not for everyone.
 
-It's for developers who want to push WordPress beyond basic blogs and bloated page builders. Whether you're building high-end front-end experiences worthy of Awwwards **or scaling robust plugins and mu-plugins for production use**, ReactWP gives you the structure, performance, and consistency to do it right.
+It's for advanced developers who want to push WordPress beyond basic blogs and bloated page builders. Whether you're building high-end front-end experiences worthy of Awwwards **or scaling robust plugins and mu-plugins for production use**, ReactWP gives you the structure, performance, and consistency to do it right.
 
 Use modern tools. Write real code. Deliver premium results.
 
