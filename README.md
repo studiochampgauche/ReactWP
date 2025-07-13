@@ -29,7 +29,7 @@ Because building something custom, clean, fast, and scalable in WordPress should
 ### For Plugins & MU-Plugins (Standard)
 
 - Structured and boilerplate-ready
-- Pure PHP and JS / no React or bundling needed
+- Pure PHP and JS, no React
 - Same conventions as the theme side
 - Easy to maintain and scale
 
