@@ -94,8 +94,15 @@ const PageTransition = () => {
 					*/
 					document.querySelectorAll('.inner-video')?.forEach(video => {
 
-						if(video.querySelector('video'))
+						if(video.querySelector('video')){
+
+							video.querySelector('video').pause();
+							video.querySelector('video').currentTime = 0;
+
+
 							video.innerHTML = '<div class="video"></div>';
+							
+						}
 
 					});
 
