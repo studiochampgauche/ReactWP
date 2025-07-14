@@ -214,7 +214,7 @@ add_action('acf/init', function(){
         '{SITE_DOMAIN}',
     ], [
         date('Y'),
-        ReactWP\SEO\SEO::site_name(),
+        (class_exists('ReactWP\SEO\SEO') ? ReactWP\SEO\SEO::site_name() : 'Site name'),
         wp_parse_url(site_url())['host'],
     ]);
     
