@@ -220,14 +220,14 @@ add_action('acf/init', function(){
     
 
     /*
-    * Set defaults when you call scg::cpt() or StudioChampGauche\Utils\CustomPostType::get();
+    * Set defaults when you call rwp::cpt() or ReactWP\Utils\CustomPostType::get();
     */
     ReactWP\Utils\CustomPostType::default('posts_per_page', -1);
     ReactWP\Utils\CustomPostType::default('paged', 1);
     
     
     /*
-    * Set defaults when you call scg::menu() or ReactWP\Utils\Menu::get();
+    * Set defaults when you call rwp::menu() or ReactWP\Utils\Menu::get();
     */
     ReactWP\Utils\Menu::default('container', null);
     ReactWP\Utils\Menu::default('items_wrap', '<ul>%3$s</ul>');
