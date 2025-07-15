@@ -204,10 +204,13 @@ add_action('wp_head', function(){
 
 
 /*
-* Create tags
+* Shot events on acf/init
 */
 add_action('acf/init', function(){
 
+    /*
+    * Create tags
+    */
     ReactWP\Utils\Field::replace([
         '{Y}',
         '{SITE_NAME}',
