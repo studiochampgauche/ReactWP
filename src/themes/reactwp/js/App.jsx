@@ -55,6 +55,7 @@ const router = createBrowserRouter([
                                 path={route.path}
                                 seo={route.seo}
                                 acf={route.acf}
+                                extraDatas={route?.extraDatas}
                             />
                         </>
                     ),
