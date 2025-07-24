@@ -295,6 +295,8 @@ const Loader = {
 
 			window.loader.download?.then(() => {
 
+				RWPCache.clear();
+
 				const mediaGroups = ROUTES.find(({main}) => main)?.mediaGroups;
 				const loaders = mediaGroups && mediaGroups.length ? mediaGroups.split(',') : [];
 
