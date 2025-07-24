@@ -3,6 +3,7 @@
 import { useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import RWPCache from './Cache'
 
 window.loader = {
 	isLoaded: {
@@ -215,7 +216,11 @@ const Loader = {
 
 						mediaElement = mediaElement();
 
-						mediaElement.src = media.src;
+						RWPCache.use(media.src).then(cachedSrc => {
+
+							mediaElement.src = cachedSrc;
+
+						});
 
 
 						if(media.type === 'image'){
