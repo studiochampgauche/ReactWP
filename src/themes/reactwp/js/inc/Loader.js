@@ -250,12 +250,19 @@ const Loader = {
 
 								mediaElement.preload = 'auto';
                         		mediaElement.playsInline = true;
+                        		mediaElement.autoplay = true;
 
                         		mediaElement.load();
 
 							}
 							
-							mediaElement.onloadeddata = () => isLoaded();
+							mediaElement.onloadeddata = () => {
+
+								mediaElement.autoplay = false;
+
+								isLoaded();
+
+							}
 
 						}
 
