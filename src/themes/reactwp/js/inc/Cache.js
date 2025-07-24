@@ -49,20 +49,6 @@ const RWPCache = {
 			return url;
 			
 		}
-	},
-
-	revoke(url) {
-		if (this.memory.has(url)) {
-			URL.revokeObjectURL(this.memory.get(url));
-			this.memory.delete(url);
-		}
-	},
-
-	clear() {
-		for (const blobUrl of this.memory.values()) {
-			URL.revokeObjectURL(blobUrl);
-		}
-		this.memory.clear();
 	}
 };
 
