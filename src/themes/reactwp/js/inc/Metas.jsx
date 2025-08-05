@@ -38,7 +38,7 @@ const Metas = ({ extraDatas, seo }) => {
         .join('&');
 
 
-        let newUrl = (SYSTEM.baseUrl + pathname.replace('/', '') + (paramsString && '?' + paramsString)).replace('/?', '?');
+        let newUrl = (SYSTEM.baseUrl + pathname + (paramsString && '?' + paramsString)).replace('/?', '?');
 
         if(newUrl.endsWith('/'))
         	newUrl = newUrl.slice(0, -1);
