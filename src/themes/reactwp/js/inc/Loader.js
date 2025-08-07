@@ -225,7 +225,7 @@ const Loader = {
 
 						if(media.type === 'image'){
 
-							if(media.alt){
+							if(media.alt || media.alt === ''){
 								mediaElement.alt = media.alt;
 							}
 
