@@ -3,7 +3,7 @@
 import { useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import RWPCache from './Cache'
+import RWPCache from './Cache';
 
 window.loader = {
 	isLoaded: {
@@ -222,67 +222,123 @@ const Loader = {
 
 						});
 
+						
 
-						if(media.type === 'image'){
+						const loadExtraSources = new Promise(passed => {
+ 
+							if(media?.sources?.length){
+								
+								let sourceLoaded = 0,
+									sourcesCount = media.sources.length;
 
-							if(media.alt || media.alt === ''){
-								mediaElement.alt = media.alt;
+								media.sources.forEach((source, k) => {
+
+									const sourceElement = document.createElement('source');
+
+
+									if(source.media){
+
+										sourceElement.media = source.media;
+
+									}
+
+									RWPCache.use(source.src).then(cachedSrc => {
+
+										if(media.type === 'image'){
+
+											sourceElement.srcset = cachedSrc;
+
+										} else if(media.type === 'video'){
+
+											sourceElement.src = cachedSrc;
+
+										}
+
+
+										MEDIAS[group][j].sources[k].el = sourceElement;
+
+										sourceLoaded += 1;
+
+										if(sourceLoaded !== sourcesCount) return;
+
+										passed();
+
+									});
+
+								});
+
+							} else {
+
+								passed();
+
 							}
 
-							mediaElement.onload = () => isLoaded();
-
-						} else {
-
-							if(media.type === 'video'){
+						});
 
 
-								if(media.loop){
-									mediaElement.loop = true;
+						loadExtraSources.then(() => {
+
+							if(media.type === 'image'){
+
+								if(media.alt || media.alt === ''){
+									mediaElement.alt = media.alt;
 								}
 
-								if(media.muted){
-									mediaElement.muted = true;
+								mediaElement.onload = () => isLoaded();
+
+							} else {
+
+								if(media.type === 'video'){
+
+
+									if(media.loop){
+										mediaElement.loop = true;
+									}
+
+									if(media.muted){
+										mediaElement.muted = true;
+									}
+
+									if(media.controls){
+										mediaElement.controls = true;
+									}
+
+									mediaElement.preload = 'auto';
+	                        		mediaElement.playsInline = true;
+	                        		mediaElement.autoplay = true;
+
+	                        		mediaElement.load();
+
 								}
+								
+								mediaElement.onloadeddata = () => {
 
-								if(media.controls){
-									mediaElement.controls = true;
+									mediaElement.autoplay = false;
+
+									isLoaded();
+
 								}
-
-								mediaElement.preload = 'auto';
-                        		mediaElement.playsInline = true;
-                        		mediaElement.autoplay = true;
-
-                        		mediaElement.load();
 
 							}
-							
-							mediaElement.onloadeddata = () => {
 
-								mediaElement.autoplay = false;
 
-								isLoaded();
+							function isLoaded(){
+
+								loadedTotal += 1;
+
+								MEDIAS[group][j].el = mediaElement;
+
+								if(loadedTotal !== totalToDownloads) return;
+
+								window.loader.isLoaded.medias = true;
+
+								if(window.loader.isLoaded.fonts) done();
 
 							}
 
-						}
+						});
 
-
-						function isLoaded(){
-
-							loadedTotal += 1;
-
-							MEDIAS[group][j].el = mediaElement;
-
-							if(loadedTotal !== totalToDownloads) return;
-
-							window.loader.isLoaded.medias = true;
-
-							if(window.loader.isLoaded.fonts) done();
-
-						}
-
-
-					})
+					});
 
 				});
 
@@ -354,11 +410,41 @@ const Loader = {
                         });
 
                     } else if(media.target && !Array.isArray(media.target)) {
+
                         target = document.querySelector(media.target);
+
                     }
 
 					if(target){
+
+						if(media.type === 'image' && media.el.tagName.toLowerCase() !== 'picture' && media?.sources?.length){
+
+							const pictureElement = document.createElement('picture');
+
+							media.sources.forEach((source, j) => {
+
+								pictureElement.appendChild(source.el);
+
+							});
+
+							pictureElement.appendChild(media.el);
+
+							media.el = pictureElement;
+
+						} else if(media.type === 'video' && !media.el.classList.contains('has-been-displayed') && media?.sources?.length){
+
+							media.el.classList.add('has-been-displayed');
+
+							media.sources.forEach((source, j) => {
+
+								media.el.appendChild(source.el);
+
+							});
+
+						}
+
 						target.replaceWith(media.el);
+
 					}
 
 					if(totalDisplayed !== countInlineDisplays) return;
