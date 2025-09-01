@@ -314,6 +314,7 @@ const Loader = {
 								mediaElement.onloadeddata = () => {
 
 									mediaElement.autoplay = false;
+									mediaElement.pause();
 
 									isLoaded();
 
@@ -441,6 +442,10 @@ const Loader = {
 
 							});
 
+						}
+
+						if(media.type === 'video' && media.startOnDisplay){
+							media.el.play();
 						}
 
 						target.replaceWith(media.el);
