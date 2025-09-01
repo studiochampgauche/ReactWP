@@ -38,7 +38,7 @@ const Contents = ({ uptitle, title, subtitle, text, buttons, titleTag, className
 									key={i}
 									to={button?.url}
 									text={button?.text}
-									target={button?.new_tab ? '_blank' : undefined}
+									target={button?.target ? button.target : (button?.new_tab ? '_blank' : undefined)}
 									className={button.className}
 								/>
 							))}
