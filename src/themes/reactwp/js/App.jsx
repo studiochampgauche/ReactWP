@@ -5,13 +5,15 @@ import { createBrowserRouter, RouterProvider, Routes, Route, Outlet } from 'reac
 import { HelmetProvider } from 'react-helmet-async';
 import NotFoundTemplate from './templates/NotFound';
 import DefaultTemplate from './templates/Default';
+import TemplateGsapDemo from './templates/Gsap';
 import PageTransition from './inc/PageTransition';
 import Metas from './inc/Metas';
 import './inc/Loader';
 import './inc/Scroller';
 
 const templates = {
-    DefaultTemplate
+    DefaultTemplate,
+    TemplateGsapDemo
 };
 
 const App = () => {
