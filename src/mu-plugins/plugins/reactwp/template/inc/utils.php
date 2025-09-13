@@ -71,7 +71,9 @@ class CustomPostType{
 
 class Menu{
 
-    public static $defaults = [];
+    public static $defaults = [
+        'echo' => false
+    ];
     public static $configs = [];
 
     public static function get($theme_location = null, $args = []){
