@@ -167,9 +167,9 @@ add_action('wp_head', function(){
             box-sizing: border-box;
             -ms-overflow-style: none;
             -webkit-font-smoothing: antialiased;
-            &::-webkit-scrollbar {
-                display: none;
-            }
+        }
+        *::-webkit-scrollbar {
+            display: none;
         }
 
         html,
