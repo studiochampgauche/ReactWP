@@ -4,7 +4,7 @@
 ![Multisite](https://img.shields.io/badge/Multisite-Supported-brightgreen)
 ![Server](https://img.shields.io/badge/Server-PHP-orange)
 
-# ReactWP - Build WordPress Like It's 2025
+# ReactWP - Build WordPress Like It's 2030
 
 ReactWP is not for everyone.
 
