@@ -29,7 +29,7 @@ const PageTransition = () => {
 
 					} else{
 
-						window.scrollTo({top: (blocker.location.hash ? document.querySelector(blocker.location.hash).getBoundingClientRect().top : 0), behavior: 'smooth'});
+						window.scrollTo({top: (blocker.location.hash ? (document.querySelector(blocker.location.hash).getBoundingClientRect().top + window.scrollY) : 0), behavior: 'smooth'});
 
 					}
 
