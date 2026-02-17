@@ -83,8 +83,11 @@ const PageTransition = () => {
 					*/
 					document.querySelectorAll('.inner-img')?.forEach(img => {
 
-						if(img.querySelector('img'))
+						if(img.querySelector('img')){
+
 							img.innerHTML = '<div class="img"></div>';
+							
+						}
 
 					});
 
@@ -94,13 +97,35 @@ const PageTransition = () => {
 					*/
 					document.querySelectorAll('.inner-video')?.forEach(video => {
 
-						if(video.querySelector('video')){
+						const videoEl = video.querySelector('video');
 
-							video.querySelector('video').pause();
-							video.querySelector('video').currentTime = 0;
+						if(videoEl){
+
+							videoEl.pause();
+							videoEl.currentTime = 0;
 
 
 							video.innerHTML = '<div class="video"></div>';
+							
+						}
+
+					});
+
+
+					/*
+					* Kill audios
+					*/
+					document.querySelectorAll('.inner-audio')?.forEach(audio => {
+
+						const audioEl = audio.querySelector('audio');
+
+						if(audioEl){
+
+							audioEl.pause();
+							audioEl.currentTime = 0;
+
+
+							audio.innerHTML = '<div class="audio"></div>';
 							
 						}
 
@@ -134,7 +159,7 @@ const PageTransition = () => {
 
 		window.loader.display.then(() => {
 
-			ScrollTrigger.refresh();
+			//ScrollTrigger.refresh();
 
 			if(location.hash && document.querySelector(location.hash)){
 
@@ -224,6 +249,11 @@ const PageTransition = () => {
 
 
 		let tl = gsap.timeline({
+			onStart: () => {
+
+				ScrollTrigger?.refresh();
+
+			},
 			onComplete: () => {
 
 				tl.kill();

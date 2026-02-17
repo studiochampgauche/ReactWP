@@ -63,7 +63,13 @@ const Loader = {
 			.to(this.el, .4, {
 				opacity: 0,
 				pointerEvents: 'none',
-				onComplete: () => done()
+				onComplete: () => {
+
+					ScrollTrigger?.refresh();
+					
+					done();
+
+				}
 			});
 
 		});
@@ -248,7 +254,7 @@ const Loader = {
 
 											sourceElement.srcset = cachedSrc;
 
-										} else if(media.type === 'video'){
+										} else if(['video', 'audio'].includes(media.type)){
 
 											sourceElement.src = cachedSrc;
 
@@ -288,7 +294,7 @@ const Loader = {
 
 							} else {
 
-								if(media.type === 'video'){
+								if(['video', 'audio'].includes(media.type)){
 
 
 									if(media.loop){
@@ -432,7 +438,7 @@ const Loader = {
 
 							media.el = pictureElement;
 
-						} else if(media.type === 'video' && !media.el.classList.contains('has-been-displayed') && media?.sources?.length){
+						} else if(['video', 'audio'].includes(media.type) && !media.el.classList.contains('has-been-displayed') && media?.sources?.length){
 
 							media.el.classList.add('has-been-displayed');
 
@@ -444,7 +450,7 @@ const Loader = {
 
 						}
 
-						if(media.type === 'video' && media.startOnDisplay){
+						if(['video', 'audio'].includes(media.type) && media.autoplay){
 							media.el.play();
 						}
 
