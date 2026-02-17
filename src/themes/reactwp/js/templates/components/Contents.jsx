@@ -1,10 +1,13 @@
 'use strict';
-import React from 'react';
+import React, { forwardRef, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Button from './Button';
 import Wrapper from './Wrapper';
 
-const Contents = ({ uptitle, title, subtitle, text, buttons, titleTag, className = null, ...props }) => {
+const Contents = forwardRef(function Contents({ uptitle, title, subtitle, text, buttons, titleTag, className = null, ...props }, ref){
+
+	const localRef = useRef(null);
+	const contentsRef = ref || localRef;
 
 	const pass = (uptitle || subtitle || title || text || buttons) ? true : false;
 
@@ -17,7 +20,7 @@ const Contents = ({ uptitle, title, subtitle, text, buttons, titleTag, className
 
 	return(
 		pass && (
-			<div {...tagProps}>
+			<div ref={contentsRef} {...tagProps}>
 				<div className="inner-contents">
 					{uptitle && (
 						<span className="uptitle">{uptitle}</span>
@@ -49,6 +52,6 @@ const Contents = ({ uptitle, title, subtitle, text, buttons, titleTag, className
 		)
 	);
 
-}
+});
 
 export default Contents;

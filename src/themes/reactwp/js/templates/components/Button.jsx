@@ -1,9 +1,13 @@
 'use strict';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, forwardRef } from 'react';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 
-const Button = ({ to = null, text, className = null, before, after, ...props }) => {
+const Button = forwardRef(function Button({ to = null, text, className = null, before, after, ...props }, ref){
+
+
+	const localRef = useRef(null);
+	const btnRef = ref || localRef;
 
 	const Tag = to ? Link : 'button';
 
@@ -12,9 +16,6 @@ const Button = ({ to = null, text, className = null, before, after, ...props }) 
 		className: (className ? `btn ${className}` : 'btn'),
 		...props
 	}
-
-
-	const ref = useRef(null);
 
 
 	useEffect(() => {
@@ -33,14 +34,14 @@ const Button = ({ to = null, text, className = null, before, after, ...props }) 
 		});
 
 		anim1
-		?.to(ref.current.querySelector('span'), .1, {
+		?.to(btnRef.current.querySelector('span'), .1, {
 			y: 10,
 			opacity: 0
 		})
-		.set(ref.current.querySelector('span'), {
+		.set(btnRef.current.querySelector('span'), {
 			y: -10
 		})
-		.to(ref.current.querySelector('span'), .1, {
+		.to(btnRef.current.querySelector('span'), .1, {
 			y: 0,
 			opacity: 1
 		})
@@ -59,12 +60,12 @@ const Button = ({ to = null, text, className = null, before, after, ...props }) 
 		}
 
 
-		ref.current.addEventListener('mouseenter', handleMouseEnter);
+		btnRef.current.addEventListener('mouseenter', handleMouseEnter);
 
 
 		return () => {
 
-			ref.current?.removeEventListener('mouseenter', handleMouseEnter);
+			btnRef.current?.removeEventListener('mouseenter', handleMouseEnter);
 
 			if(anim1){
 				anim1?.kill();
@@ -76,13 +77,13 @@ const Button = ({ to = null, text, className = null, before, after, ...props }) 
 	}, []);
 
 	return(
-		<Tag ref={ref} {...tagProps}>
+		<Tag ref={btnRef} {...tagProps}>
 			{before && (<div className="btn-before">{before}</div>)}
 			{text && (<span>{text}</span>)}
 			{after && (<div className="btn-after">{after}</div>)}
 		</Tag>
 	);
 
-}
+});
 
 export default Button;

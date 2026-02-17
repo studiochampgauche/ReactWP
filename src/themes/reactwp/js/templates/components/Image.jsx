@@ -1,10 +1,10 @@
 'use strict';
-import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import React, { forwardRef, useRef } from 'react';
 
-const Image = ({ className = null, ...props }) => {
+const Image = forwardRef(function Image({ className = null, ...props }, ref){
 
-	const ref = useRef(null);
+	const localRef = useRef(null);
+	const imageRef = ref || localRef;
 
 	const tagProps = {
 		className: (className ? `img-container ${className}` : 'img-container'),
@@ -12,13 +12,13 @@ const Image = ({ className = null, ...props }) => {
 	}
 
 	return(
-		<div {...tagProps}>
-			<div ref={ref} className="inner-img">
+		<div ref={imageRef} {...tagProps}>
+			<div className="inner-img">
 				<div className="img"></div>
 			</div>
 		</div>
 	);
 
-}
+});
 
 export default Image;
