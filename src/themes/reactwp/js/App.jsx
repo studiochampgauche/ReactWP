@@ -9,6 +9,8 @@ import PageTransition from './inc/PageTransition';
 import Metas from './inc/Metas';
 import './inc/Loader';
 import './inc/Scroller';
+import '../scss/inc/base.scss';
+
 
 const templates = {
     DefaultTemplate
