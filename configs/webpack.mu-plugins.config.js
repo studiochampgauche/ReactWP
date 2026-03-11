@@ -17,7 +17,6 @@ const main = {
 
 		entries[pluginName] = [
 			`../src/mu-plugins/plugins/${pluginName}/js/App.js`,
-			`../src/mu-plugins/plugins/${pluginName}/scss/App.scss`,
 			`../src/mu-plugins/plugins/${pluginName}/medias/Medias.js`
 		];
 
@@ -40,19 +39,8 @@ const main = {
 			{
 				test: /\.s[ac]ss$/i,
 				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: (file) => {
-
-
-								const index = plugins.findIndex(plugin => file.includes(plugin));
-								const pluginName = plugins[index];
-
-								return `${pluginName}/assets/css/${pluginName}.min.css`;
-							},
-						}
-					},
+					'style-loader',
+					'css-loader',
 					'sass-loader'
 				],
 			},
@@ -164,9 +152,9 @@ const main = {
 	},
 	resolve: {
 		modules: [
-			path.resolve(__dirname, 'node_modules')
+			path.resolve(__dirname, 'node_modules'),
 		],
-		extensions: ['.js', '.jsx']
+		extensions: ['.js', '.jsx', '.css', '.scss']
 	}
 };
 

@@ -17,7 +17,6 @@ const main = {
 
 		entries[themeName] = [
 			`../src/themes/${themeName}/js/App.jsx`,
-			`../src/themes/${themeName}/scss/App.scss`,
 			`../src/themes/${themeName}/medias/Medias.js`
 		];
 
@@ -40,21 +39,10 @@ const main = {
 			{
 				test: /\.s[ac]ss$/i,
 				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: (file) => {
-
-
-								const index = themes.findIndex(theme => file.includes(theme));
-								const themeName = themes[index];
-
-								return `${themeName}/assets/css/${themeName}.min.css`;
-							}
-						}
-					},
+					'style-loader',
+					'css-loader',
 					'sass-loader'
-				],
+				]
 			},
 			{
 				test: /\.(png|jpg|jpeg|gif|svg|webp)$/i,
@@ -164,9 +152,9 @@ const main = {
 	},
 	resolve: {
 		modules: [
-			path.resolve(__dirname, 'node_modules')
+			path.resolve(__dirname, 'node_modules'),
 		],
-		extensions: ['.js', '.jsx']
+		extensions: ['.js', '.jsx', '.css', '.scss']
 	}
 };
 
