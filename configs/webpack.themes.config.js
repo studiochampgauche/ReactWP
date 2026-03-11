@@ -46,54 +46,51 @@ const main = {
 			},
 			{
 				test: /\.(png|jpg|jpeg|gif|svg|webp)$/i,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: (file) => {
+				type: 'asset/resource',
+				generator: {
+					filename: (pathData) => {
 
-								const index = themes.findIndex(theme => file.includes(theme));
-								const themeName = themes[index];
+						const file = pathData.filename;
+						const themeName = themes.find(theme => file.includes(theme));
 
-								return `${themeName}/assets/images/[name].[ext]`;
-							}
-						}
+						const ext = path.extname(file);
+						const name = path.basename(file, ext);
+
+						return `${themeName}/assets/images/${name}${ext}`;
 					}
-				]
+				}
 			},
 			{
 				test: /\.(mp4)$/i,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: (file) => {
+				type: 'asset/resource',
+				generator: {
+					filename: (pathData) => {
 
-								const index = themes.findIndex(theme => file.includes(theme));
-								const themeName = themes[index];
+						const file = pathData.filename;
+						const themeName = themes.find(theme => file.includes(theme));
 
-								return `${themeName}/assets/videos/[name].[ext]`;
-							}
-						}
+						const ext = path.extname(file);
+						const name = path.basename(file, ext);
+
+						return `${themeName}/assets/videos/${name}${ext}`;
 					}
-				]
+				}
 			},
 			{
 				test: /\.(mp3)$/i,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: (file) => {
+				type: 'asset/resource',
+				generator: {
+					filename: (pathData) => {
 
-								const index = themes.findIndex(theme => file.includes(theme));
-								const themeName = themes[index];
+						const file = pathData.filename;
+						const themeName = themes.find(theme => file.includes(theme));
 
-								return `${themeName}/assets/audios/[name].[ext]`;
-							}
-						}
+						const ext = path.extname(file);
+						const name = path.basename(file, ext);
+
+						return `${themeName}/assets/audios/${name}${ext}`;
 					}
-				]
+				}
 			},
 			{
 				test: /\.(woff|woff2|eot|ttf|otf)$/i,
