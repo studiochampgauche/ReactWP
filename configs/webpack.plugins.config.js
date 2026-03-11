@@ -102,20 +102,19 @@ const main = {
 			},
 			{
 				test: /\.(woff|woff2|eot|ttf|otf)$/i,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: (file) => {
+				type: 'asset/resource',
+				generator: {
+					filename: (pathData) => {
 
-								const index = plugins.findIndex(plugin => file.includes(plugin));
-								const pluginName = plugins[index];
+						const file = pathData.filename;
+						const pluginName = plugins.find(plugin => file.includes(plugin));
 
-								return `${pluginName}/assets/fonts/[name].[ext]`;
-							}
-						}
+						const ext = path.extname(file);
+						const name = path.basename(file, ext);
+
+						return `${pluginName}/assets/fonts/${name}${ext}`;
 					}
-				]
+				}
 			},
 		],
 	},
