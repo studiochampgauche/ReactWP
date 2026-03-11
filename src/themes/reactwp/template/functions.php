@@ -8,7 +8,7 @@ add_action('wp_enqueue_scripts', function(){
 	/*
 	* CSS
 	*/
-	wp_enqueue_style('rwp-main', get_stylesheet_directory_uri() . '/assets/css/reactwp.min.css', null, null, null);
+	//wp_enqueue_style('rwp-main', get_stylesheet_directory_uri() . '/assets/css/reactwp.min.css', null, null, null);
 
 
 	/*
@@ -43,9 +43,7 @@ add_action('wp_enqueue_scripts', function(){
     * Routes
     */
     $routes = [];
-    $data = rwp::cpt(['page', 'post'], [
-        'posts_per_page' => -1
-    ])->posts;
+    $data = rwp::cpt(['page'])->posts;
 
 
 
@@ -183,6 +181,7 @@ add_action('wp_head', function(){
         }
 
         body{
+            background: var(--black-color);
             max-height: 100lvh;
             overflow: hidden;
         }
