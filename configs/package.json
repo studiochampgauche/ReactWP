@@ -32,7 +32,7 @@
     "css-loader": "7.1.4",
     "file-loader": "6.2.0",
     "gsap": "3.14.2",
-    "html-react-parser": "^5.2.17",
+    "html-react-parser": "5.2.17",
     "image-minimizer-webpack-plugin": "5.0.0",
     "imagemin": "9.0.1",
     "imagemin-gifsicle": "7.0.0",
