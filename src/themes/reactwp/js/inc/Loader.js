@@ -22,7 +22,6 @@ const Loader = {
 		return new Promise(done => {
 
 			let tl = gsap.timeline({
-				delay: .4,
 				onComplete: () => {
 
 					tl.kill();
@@ -35,7 +34,7 @@ const Loader = {
 
 
 			tl
-			.to({}, .4, {})
+			.to({}, .1, {})
 			.add(() => {
 
 				if(
