@@ -1,6 +1,7 @@
 'use strict';
 import React, { useEffect, useRef, forwardRef } from 'react';
 import { Link } from 'react-router-dom';
+import parse from 'html-react-parser';
 import { gsap } from 'gsap';
 
 const Button = forwardRef(function Button({ to = null, text, className = null, before, after, ...props }, ref){
@@ -20,6 +21,9 @@ const Button = forwardRef(function Button({ to = null, text, className = null, b
 
 	useEffect(() => {
 
+		const textElement = btnRef.current.querySelector('span');
+		if(!textElement) return;
+		
 		let canEnter = true;
 
 		let anim1 = gsap.timeline({
@@ -34,14 +38,14 @@ const Button = forwardRef(function Button({ to = null, text, className = null, b
 		});
 
 		anim1
-		?.to(btnRef.current.querySelector('span'), .1, {
+		?.to(textElement, .1, {
 			y: 10,
 			opacity: 0
 		})
-		.set(btnRef.current.querySelector('span'), {
+		.set(textElement, {
 			y: -10
 		})
-		.to(btnRef.current.querySelector('span'), .1, {
+		.to(textElement, .1, {
 			y: 0,
 			opacity: 1
 		})
@@ -78,9 +82,9 @@ const Button = forwardRef(function Button({ to = null, text, className = null, b
 
 	return(
 		<Tag ref={btnRef} {...tagProps}>
-			{before && (<div className="btn-before">{before}</div>)}
-			{text && (<span>{text}</span>)}
-			{after && (<div className="btn-after">{after}</div>)}
+			{before && (<div className="btn-before">{parse(before)}</div>)}
+			{text && (<span>{parse(text)}</span>)}
+			{after && (<div className="btn-after">{parse(after)}</div>)}
 		</Tag>
 	);
 
