@@ -41,6 +41,8 @@ const Contents = forwardRef(function Contents({ uptitle, title, subtitle, text, 
 									key={i}
 									to={button?.url}
 									text={button?.text}
+									before={button?.before}
+									after={button?.after}
 									target={button?.target ? button.target : (button?.new_tab ? '_blank' : undefined)}
 									className={button.className}
 								/>
