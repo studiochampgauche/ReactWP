@@ -6,36 +6,13 @@
 
 # ReactWP - Build WordPress Like It's 2030
 
-ReactWP is not for everyone.
+ReactWP is a powerful starting point for building WordPress projects.
+A solid foundation you can extend in any direction, whether you're crafting something simple or highly complex.
 
-It's for people who want to push WordPress beyond basic blogs and bloated page builders. Whether you're building high-end front-end experiences worthy of Awwwards **or scaling robust plugins and mu-plugins for production use**, ReactWP gives you the structure, performance, and consistency to do it right.
-
-Use modern tools. Write real code. Deliver premium results.
-
-## Why ReactWP?
-
-Because building something custom, clean, fast, and scalable in WordPress shouldn't feel like a hack. ReactWP gives you a modern dev stack, while still respecting what WordPress does best.
-
-### For Themes (React-powered)
-
-- Full React + Webpack setup
-- GSAP included for complex animations
-- Media-based preloader system
-- Media-based page transition system
-- Clean integration with WordPress functions
-- Advanced Custom Fields (ACF) supported out-of-the-box
-- React Helmet Async for SEO control
-
-### For Plugins & MU-Plugins (Standard)
-
-- Structured and boilerplate-ready
-- Pure PHP and JS, no React
-- Same conventions as the theme side
-- Easy to maintain and scale
+Built on over 18 years of experience across hundreds of real-world projects, it focuses on performance, structure, and scalability, helping you build reliable applications without unnecessary overhead.
 
 ## Useful links
 
-- [Demo](https://github.com/studiochampgauche/studiochampgauche-network)
 - [ReactWP website](https://reactwp.com) (Coming soon)
 - [Documentation](https://reactwp.com/docs) (In progress)
 
