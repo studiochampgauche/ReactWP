@@ -4,18 +4,20 @@
 ![Multisite](https://img.shields.io/badge/Multisite-Supported-brightgreen)
 ![Server](https://img.shields.io/badge/Server-PHP-orange)
 
-# ReactWP - Build WordPress Like It's 2030
+# Introduction
+
+***Build WordPress like it's 2030.***
 
 ReactWP is a powerful starting point for building WordPress projects.
 A solid foundation you can extend in any direction, whether you're crafting something simple or highly complex.
 
 Built on over 18 years of experience across hundreds of real-world projects, it focuses on performance, structure, and scalability, helping you build reliable applications without unnecessary overhead.
 
-## Useful links
+# Useful links
 
 - [ReactWP website](https://reactwp.com) (Coming soon)
 - [Documentation](https://reactwp.com/docs) (In progress)
 
-## Want to contribute?
+# Want to contribute?
 
 Open issues, submit pull requests, or just fork it and build something wild.
