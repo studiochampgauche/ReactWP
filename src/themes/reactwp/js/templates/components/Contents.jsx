@@ -39,12 +39,9 @@ const Contents = forwardRef(function Contents({ uptitle, title, subtitle, text, 
 							{buttons.map((button, i) => (
 								<Button
 									key={i}
-									to={button?.url}
-									text={button?.text}
-									before={button?.before}
-									after={button?.after}
-									target={button?.target ? button.target : (button?.new_tab ? '_blank' : undefined)}
-									className={button.className}
+									{...button}
+									to={button?.url || button?.to}
+									target={button?.target ?? (button?.new_tab ? '_blank' : undefined)}
 								/>
 							))}
 						</div>
