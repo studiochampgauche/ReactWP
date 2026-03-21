@@ -2,6 +2,8 @@
 /*
 * Plugin Name: ReactWP Accept SVG
 * Description: Upload your SVGs
+* Author: Studio Champ Gauche
+* Author URI: https://champgauche.studio
 * Update URI: false
 * Version: 1.0.0
 */

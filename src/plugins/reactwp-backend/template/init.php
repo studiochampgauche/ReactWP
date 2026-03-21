@@ -2,6 +2,8 @@
 /*
 * Plugin Name: ReactWP Backend
 * Description: Clean your admin panel
+* Author: Studio Champ Gauche
+* Author URI: https://champgauche.studio
 * Update URI: false
 * Version: 1.0.0
 */

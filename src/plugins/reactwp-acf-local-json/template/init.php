@@ -2,6 +2,8 @@
 /*
 * Plugin Name: ReactWP ACF Local JSON
 * Description: Save ACF field groups, post types, taxonomies, and option pages as JSON files within your theme
+* Author: Studio Champ Gauche
+* Author URI: https://champgauche.studio
 * Update URI: false
 * Version: 1.0.0
 */
