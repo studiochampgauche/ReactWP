@@ -2,6 +2,8 @@
 /*
 * Plugin Name: ReactWP Frontend
 * Description: Clean your frontend
+* Author: Studio Champ Gauche
+* Author URI: https://champgauche.studio
 * Update URI: false
 * Version: 1.0.0
 */
