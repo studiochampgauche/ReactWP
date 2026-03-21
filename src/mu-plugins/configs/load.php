@@ -1,7 +1,9 @@
 <?php
 /*
-Plugin Name: Loader
-Description: Core plugins
+* Plugin Name: Core plugins
+* Description: ACF + ReactWP
+* Author: Studio Champ Gauche
+* Author URI: https://champgauche.studio
 Version: 1.0.0
 */
 
