@@ -116,7 +116,9 @@ const Loader = {
 	                            .then(() => isLoaded())
 	                            .catch(() => {
 
-	                                throw new Error(`${font.family} weight ${font.weight} can\'t be loaded.`);
+	                            	console.warn(`${font.family} weight ${font.weight} can\'t be loaded.`);
+
+	                            	isLoaded();
 
 	                            });
 
