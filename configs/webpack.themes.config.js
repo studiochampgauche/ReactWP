@@ -25,7 +25,16 @@ const main = {
 	}, {}),
 	output: {
 		filename: '[name]/assets/js/[name].min.js',
-		path: path.resolve(__dirname, '../dist/wp-content/themes/')
+		path: path.resolve(__dirname, '../dist/wp-content/themes/'),
+		chunkFilename: (pathData) => {
+
+			const chunkName = pathData.chunk.name || '';
+
+			const theme = themes.find(t => chunkName.includes(t));
+
+			return `${theme}/assets/js/chunks/[name].[contenthash].js`;
+		},
+		publicPath: '/wp-content/themes/'
 	},
 	module: {
 		rules: [
