@@ -216,6 +216,8 @@ const Loader = {
 
 						}
 
+						const currentTime = `${i}${j}`;
+
 
 						let mediaElement = mediaTypes[media.type];
 
@@ -223,7 +225,7 @@ const Loader = {
 
 						mediaElement = mediaElement();
 
-						RWPCache.use(media.src).then(cachedSrc => {
+						RWPCache.use(media.src + '?t=' + currentTime).then(cachedSrc => {
 
 							mediaElement.src = cachedSrc;
 
@@ -249,7 +251,7 @@ const Loader = {
 
 									}
 
-									RWPCache.use(source.src).then(cachedSrc => {
+									RWPCache.use(source.src + `?t=${currentTime}${k}`).then(cachedSrc => {
 
 										if(media.type === 'image'){
 
