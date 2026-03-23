@@ -33,9 +33,9 @@ const main = {
 		path: path.resolve(__dirname, '../dist/wp-content/plugins/'),
 		chunkFilename: (pathData) => {
 
-			const chunkName = pathData.chunk.name || '';
+			const runtime = pathData.chunk?.runtime;
 
-			const plugin = plugins.find(t => chunkName.includes(t));
+			const plugin = Array.isArray(runtime) ? runtime[0] : runtime;
 
 			return `${plugin}/assets/js/chunks/[name].[contenthash].js`;
 		},

@@ -28,9 +28,9 @@ const main = {
 		path: path.resolve(__dirname, '../dist/wp-content/themes/'),
 		chunkFilename: (pathData) => {
 
-			const chunkName = pathData.chunk.name || '';
+			const runtime = pathData.chunk?.runtime;
 
-			const theme = themes.find(t => chunkName.includes(t));
+			const theme = Array.isArray(runtime) ? runtime[0] : runtime;
 
 			return `${theme}/assets/js/chunks/[name].[contenthash].js`;
 		},
