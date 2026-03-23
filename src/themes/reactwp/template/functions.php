@@ -186,9 +186,13 @@ add_action('wp_head', function(){
 			top: 0;
 			left: 0;
 			width: 100%;
-			height: 100svh;
+			height: 100vh;
 			z-index: 999;
 		}
+
+        @media screen and (pointer: coarse), (pointer: none){
+            height: 100svh;
+        }
 	</style>
 	';
 
