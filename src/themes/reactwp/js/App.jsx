@@ -1,10 +1,9 @@
 'use strict';
-import React, { StrictMode, useEffect, useState } from 'react';
+import React, { StrictMode, useEffect, useState, lazy } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider, Routes, Route, Outlet } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import NotFoundTemplate from './templates/NotFound';
-import DefaultTemplate from './templates/Default';
 import PageTransition from './inc/PageTransition';
 import Metas from './inc/Metas';
 import './inc/Loader';
@@ -13,7 +12,7 @@ import '../scss/default.scss';
 
 
 const templates = {
-    DefaultTemplate
+    DefaultTemplate: lazy(() => import('./templates/Default'))
 };
 
 const App = () => {
