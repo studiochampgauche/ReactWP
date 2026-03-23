@@ -25,7 +25,16 @@ const main = {
 	}, {}),
 	output: {
 		filename: '[name]/assets/js/[name].min.js',
-		path: path.resolve(__dirname, '../dist/wp-content/mu-plugins/')
+		path: path.resolve(__dirname, '../dist/wp-content/mu-plugins/'),
+		chunkFilename: (pathData) => {
+
+			const chunkName = pathData.chunk.name || '';
+
+			const plugin = plugins.find(t => chunkName.includes(t));
+
+			return `${plugin}/assets/js/chunks/[name].[contenthash].js`;
+		},
+		publicPath: '/wp-content/mu-plugins/'
 	},
 	module: {
 		rules: [
