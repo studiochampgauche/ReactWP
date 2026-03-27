@@ -120,6 +120,102 @@ class ReactWP{
         
     }
 
+    static function sanitize($type, $args = []){
+        
+        if(!is_array($args)) return null;
+        
+        switch ($type) {
+            case 'email':
+                return ReactWP\Utils\Sanitize::email($args);
+                break;
+                
+            case 'file_name':
+                return ReactWP\Utils\Sanitize::file_name($args);
+                break;
+                
+            case 'hex_color':
+                return ReactWP\Utils\Sanitize::hex_color($args);
+                break;
+                
+            case 'hex_color_no_hash':
+                return ReactWP\Utils\Sanitize::hex_color_no_hash($args);
+                break;
+                
+            case 'html_class':
+                return ReactWP\Utils\Sanitize::html_class($args);
+                break;
+                
+            case 'key':
+                return ReactWP\Utils\Sanitize::key($args);
+                break;
+                
+            case 'meta':
+                return ReactWP\Utils\Sanitize::meta($args);
+                break;
+                
+            case 'mime_type':
+                return ReactWP\Utils\Sanitize::mime_type($args);
+                break;
+
+            case 'option':
+                return ReactWP\Utils\Sanitize::option($args);
+                break;
+                
+            case 'sql_orderby':
+                return ReactWP\Utils\Sanitize::sql_orderby($args);
+                break;
+                
+            case 'term':
+                return ReactWP\Utils\Sanitize::term($args);
+                break;
+                
+            case 'term_field':
+                return ReactWP\Utils\Sanitize::term_field($args);
+                break;
+                
+            case 'text_field':
+                return ReactWP\Utils\Sanitize::text_field($args);
+                break;
+                
+            case 'textarea_field':
+                return ReactWP\Utils\Sanitize::textarea_field($args);
+                break;
+                
+            case 'title':
+                return ReactWP\Utils\Sanitize::title($args);
+                break;
+                
+            case 'title_for_query':
+                return ReactWP\Utils\Sanitize::title_for_query($args);
+                break;
+                
+            case 'title_with_dashes':
+                return ReactWP\Utils\Sanitize::title_with_dashes($args);
+                break;
+                
+            case 'user':
+                return ReactWP\Utils\Sanitize::user($args);
+                break;
+                
+            case 'url':
+                return ReactWP\Utils\Sanitize::url($args);
+                break;
+                
+            case 'html':
+                return ReactWP\Utils\Sanitize::html($args);
+                break;
+                
+            case 'post_content':
+                return ReactWP\Utils\Sanitize::post_content($args);
+                break;
+                
+            default:
+                return null;
+                break;
+        }
+        
+    }
+
 }
 
 class_alias('ReactWP', 'rwp');
