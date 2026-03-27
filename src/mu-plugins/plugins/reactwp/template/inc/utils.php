@@ -206,3 +206,152 @@ class Source{
     }
 
 }
+
+class Sanitize {
+
+    public static function email($args){
+        return isset($args['value']) ? sanitize_email(
+            $args['value']
+        ) : null;
+    }
+
+    public static function file_name($args){
+        return isset($args['value']) ? sanitize_file_name(
+            $args['value']
+        ) : null;
+    }
+
+    public static function hex_color($args){
+        return isset($args['value']) ? sanitize_hex_color(
+            $args['value']
+        ) : null;
+    }
+
+    public static function hex_color_no_hash($args){
+        return isset($args['value']) ? sanitize_hex_color_no_hash(
+            $args['value']
+        ) : null;
+    }
+
+    public static function html_class($args){
+        return isset($args['value']) ? sanitize_html_class(
+            $args['value'],
+            $args['fallback'] ?? ''
+        ) : null;
+    }
+
+    public static function key($args){
+        return isset($args['value']) ? sanitize_key(
+            $args['value']
+        ) : null;
+    }
+
+    public static function meta($args){
+        return isset($args['key'], $args['value'], $args['object_type']) ? sanitize_meta(
+            $args['key'],
+            $args['value'],
+            $args['object_type'],
+            $args['object_subtype'] ?? ''
+        ) : null;
+    }
+
+    public static function mime_type($args){
+        return isset($args['value']) ? sanitize_mime_type(
+            $args['value']
+        ) : null;
+    }
+
+    public static function option($args){
+        return isset($args['option'], $args['value']) ? sanitize_option(
+            $args['option'],
+            $args['value']
+        ) : null;
+    }
+
+    public static function sql_orderby($args){
+        return isset($args['value']) ? sanitize_sql_orderby(
+            $args['value']
+        ) : null;
+    }
+
+    public static function term($args){
+        return isset($args['value'], $args['taxonomy']) ? sanitize_term(
+            $args['value'],
+            $args['taxonomy'],
+            $args['context'] ?? 'display'
+        ) : null;
+    }
+
+    public static function term_field($args){
+        return isset($args['field'], $args['value'], $args['term_id'], $args['taxonomy']) ? sanitize_term_field(
+            $args['field'],
+            $args['value'],
+            (int)$args['term_id'],
+            $args['taxonomy'],
+            $args['context'] ?? 'display'
+        ) : null;
+    }
+
+    public static function text_field($args){
+        return isset($args['value']) ? sanitize_text_field(
+            $args['value']
+        ) : null;
+    }
+
+    public static function textarea_field($args){
+        return isset($args['value']) ? sanitize_textarea_field(
+            $args['value']
+        ) : null;
+    }
+
+    public static function title($args){
+        return isset($args['value']) ? sanitize_title(
+            $args['value'],
+            $args['fallback'] ?? '',
+            $args['context'] ?? 'save'
+        ) : null;
+    }
+
+    public static function title_for_query($args){
+        return isset($args['value']) ? sanitize_title_for_query(
+            $args['value']
+        ) : null;
+    }
+
+    public static function title_with_dashes($args){
+        return isset($args['value']) ? sanitize_title_with_dashes(
+            $args['value'],
+            $args['raw_title'] ?? '',
+            $args['context'] ?? 'display'
+        ) : null;
+    }
+
+    public static function user($args){
+        return isset($args['value']) ? sanitize_user(
+            $args['value'],
+            $args['strict'] ?? false
+        ) : null;
+    }
+
+    public static function url($args){
+        return isset($args['value']) ? sanitize_url(
+            $args['value'],
+            $args['protocols'] ?? null
+        ) : null;
+    }
+
+    public static function html($args){
+        return isset($args['value']) ? wp_kses(
+            $args['value'],
+            $args['allowed_html'] ?? 'post',
+            $args['allowed_protocols'] ?? []
+        ) : null;
+    }
+
+    public static function post_content($args){
+        return isset($args['value']) ? wp_kses_post(
+            $args['value']
+        ) : null;
+    }
+    
+}
