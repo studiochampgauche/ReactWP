@@ -73,6 +73,14 @@ add_filter('wp_handle_upload_prefilter', function($file){
         preg_match('/<object\b/i', $contents)
         ||
         preg_match('/<embed\b/i', $contents)
+        ||
+        preg_match('/<\?xml-stylesheet\b/i', $contents)
+        ||
+        preg_match('/(?:href|xlink:href)\s*=\s*["\']\s*(?!#)/i', $contents)
+        ||
+        preg_match('/url\(\s*["\']?\s*(?!#)/i', $contents)
+        ||
+        preg_match('/@import\b/i', $contents)
     ){
         $file['error'] = __('This SVG contains unsafe markup.', 'reactwp-accept-svg');
         return $file;
