@@ -27,10 +27,22 @@ add_filter('wp_handle_upload_prefilter', function($file){
         $file['error'] = __('You are not allowed to upload SVG files.', 'reactwp-accept-svg');
         return $file;
     }
-
-    $file['name'] = rwp::sanitize('file_name', [
+    
+    $filename = rwp::sanitize('file_name', [
         'value' => $file['name']
-    ]) ?: $file['name'];
+    ]);
+
+    if(!$filename){
+        $file['error'] = __('This SVG can\'t be sanitize.', 'reactwp-accept-svg');
+        return $file;
+    }
+
+    if(strtolower((string) pathinfo($filename, PATHINFO_EXTENSION)) !== 'svg'){
+        $file['error'] = __('Invalid SVG file name.', 'reactwp-accept-svg');
+        return $file;
+    }
+
+    $file['name'] = $filename;
 
     if(
         empty($file['tmp_name'])
