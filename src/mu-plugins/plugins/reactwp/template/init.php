@@ -123,7 +123,7 @@ class ReactWP{
     static function sanitize($type, $args = []){
         
         if(!is_array($args)) return null;
-        
+
         switch ($type) {
             case 'email':
                 return ReactWP\Utils\Sanitize::email($args);
@@ -172,7 +172,7 @@ class ReactWP{
             case 'term_field':
                 return ReactWP\Utils\Sanitize::term_field($args);
                 break;
-                
+
             case 'text_field':
                 return ReactWP\Utils\Sanitize::text_field($args);
                 break;
@@ -181,6 +181,7 @@ class ReactWP{
                 return ReactWP\Utils\Sanitize::textarea_field($args);
                 break;
                 
+            case 'slug':
             case 'title':
                 return ReactWP\Utils\Sanitize::title($args);
                 break;
@@ -207,6 +208,62 @@ class ReactWP{
                 
             case 'post_content':
                 return ReactWP\Utils\Sanitize::post_content($args);
+                break;
+                
+            default:
+                return null;
+                break;
+        }
+        
+    }
+
+    static function escape($type, $value, $args = []){
+        
+        if(!is_array($args)) return null;
+
+        switch ($type) {
+            case 'html':
+                return ReactWP\Utils\Escape::html($value);
+                break;
+                
+            case 'js':
+                return ReactWP\Utils\Escape::js($value);
+                break;
+                
+            case 'url':
+                return ReactWP\Utils\Escape::url($value);
+                break;
+                
+            case 'url_raw':
+                return ReactWP\Utils\Escape::url_raw($value);
+                break;
+                
+            case 'xml':
+                return ReactWP\Utils\Escape::xml($value);
+                break;
+                
+            case 'attr':
+                return ReactWP\Utils\Escape::attr($value);
+                break;
+                
+            case 'textarea':
+                return ReactWP\Utils\Escape::textarea($value);
+                break;
+                
+            case 'html__':
+                return ReactWP\Utils\Escape::html__($value, $args);
+                break;
+                
+            case 'html_x':
+                return ReactWP\Utils\Escape::html_x($value, $args);
+                break;
+                
+            case 'attr__':
+                return ReactWP\Utils\Escape::attr__($value, $args);
+                break;
+
+            case 'attr_x':
+                return ReactWP\Utils\Escape::attr_x($value, $args);
                 break;
                 
             default:
