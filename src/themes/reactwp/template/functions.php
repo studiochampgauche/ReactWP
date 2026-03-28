@@ -5,27 +5,6 @@
 */
 add_action('wp_enqueue_scripts', function(){
 
-	/*
-	* JS
-	*/
-	wp_enqueue_script('rwp-main', get_stylesheet_directory_uri() . '/assets/js/reactwp.min.js', null, null, false);
-
-
-
-	/*
-    * Remove rwp-main script type attribute
-    */
-    add_filter('script_loader_tag', function($tag, $handle, $src){
-        if($handle !== 'rwp-main')
-            return $tag;
-
-        $tag = '<script src="' . rwp::escape('url', $src) . '" defer></script>';
-
-        return $tag;
-
-    } , 10, 3);
-
-
     /*
     * Medias to Download
     */

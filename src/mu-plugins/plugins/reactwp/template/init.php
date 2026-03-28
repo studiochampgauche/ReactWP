@@ -22,9 +22,29 @@ class ReactWP{
 
 
         /*
-        * Spread Constante Language in JavaScript
+        * Enqueue scripts
         */
         add_action('wp_enqueue_scripts', function(){
+
+            /*
+            * JS
+            */
+            wp_enqueue_script('rwp-main', self::source(['path' => '/assets/js/reactwp.min.js', 'url' => true]), null, null, false);
+
+
+            /*
+            * Remove rwp-main script type attribute and add defer
+            */
+            add_filter('script_loader_tag', function($tag, $handle, $src){
+                if($handle !== 'rwp-main')
+                    return $tag;
+
+                $tag = '<script src="' . rwp::escape('url', $src) . '" defer></script>';
+
+                return $tag;
+
+            } , 10, 3);
+            
 
             /*
             * Lang Reference
@@ -44,7 +64,7 @@ class ReactWP{
             ]);
 
             
-        }, 11);
+        });
 
 
         /*
