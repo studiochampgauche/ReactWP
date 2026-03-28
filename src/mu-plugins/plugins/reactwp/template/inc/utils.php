@@ -130,25 +130,19 @@ class Field{
 class CustomPostType{
 
     public static $defaults = [];
-    public static $configs = [];
 
     public static function get($post_type = 'post', $args = []){
 
-        if(!is_array(self::$configs)) return;
-		
-		self::$configs = self::$defaults;
-		
-        if($args && is_array($args)){
-            foreach($args as $arg_key => $arg){
-                self::$configs[$arg_key] = $arg;
-            }
+        $configs = wp_parse_args(
+            is_array($args) ? $args : [],
+            self::$defaults
+        );
+
+        if($post_type){
+            $configs['post_type'] = $post_type;
         }
-        
-        if($post_type)
-            self::$configs['post_type'] = $post_type;
 
-
-        return new \WP_Query(self::$configs);
+        return new \WP_Query($configs);
 
     }
 
