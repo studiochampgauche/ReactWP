@@ -173,10 +173,6 @@ class Seo{
             return $context_title;
         }
 
-        if((is_front_page() || is_home()) && self::has_value(self::option_value('seo_title_' . CL))){
-            return self::option_value('seo_title_' . CL);
-        }
-
         if(is_author() && $obj instanceof \WP_User){
             return (CL === 'fr' ? 'Publication(s) de' : 'Post(s) of') . ' ' . $obj->display_name . ' - ' . self::site_name();
         }
