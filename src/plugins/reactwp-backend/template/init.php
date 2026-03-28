@@ -132,7 +132,7 @@ add_action('admin_bar_menu', function(){
             'class' => 'is-menus'
         )
     );
-    if(current_user_can('edit_theme_options') && rwp::field('theme_locations'))
+    if(current_user_can('edit_theme_options') && rwp::field('theme_locations', 'option'))
         $wp_admin_bar->add_node($args);
 
 
