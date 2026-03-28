@@ -19,7 +19,7 @@ add_action('wp_enqueue_scripts', function(){
         if($handle !== 'rwp-main')
             return $tag;
 
-        $tag = '<script src="' . esc_url( $src ) . '" defer></script>';
+        $tag = '<script src="' . rwp::escape('url', $src) . '" defer></script>';
 
         return $tag;
 
