@@ -52,18 +52,9 @@ class ReactWP{
         */
         add_filter('acf/format_value', function ($value, $post_id, $field){
 
-            $return = $value;
-
-            if($return && is_array($return) && \ReactWP\Utils\Field::$elementsToReplace)
-                \ReactWP\Utils\Field::recursive(\ReactWP\Utils\Field::$elementsToReplace[0], \ReactWP\Utils\Field::$elementsToReplace[1], $return);
-            elseif($return && is_string($return) && \ReactWP\Utils\Field::$elementsToReplace)
-                $return = str_replace(\ReactWP\Utils\Field::$elementsToReplace[0], \ReactWP\Utils\Field::$elementsToReplace[1], $return);
-
-
-            return $return;
+            return \ReactWP\Utils\Field::apply_replacement($value);
             
         }, 10, 3);
-
 
 
         /*
@@ -75,15 +66,7 @@ class ReactWP{
 
         add_filter('acf/rest/format_value_for_rest', function ($value_formatted, $post_id, $field, $value, $format){
 
-            $return = $value_formatted;
-
-            if($return && is_array($return) && \ReactWP\Utils\Field::$elementsToReplace)
-                \ReactWP\Utils\Field::recursive(\ReactWP\Utils\Field::$elementsToReplace[0], \ReactWP\Utils\Field::$elementsToReplace[1], $return);
-            elseif($return && is_string($return) && \ReactWP\Utils\Field::$elementsToReplace)
-                $return = str_replace(\ReactWP\Utils\Field::$elementsToReplace[0], \ReactWP\Utils\Field::$elementsToReplace[1], $return);
-
-
-            return $return;
+            return \ReactWP\Utils\Field::apply_replacement($value_formatted);
             
         }, 10, 5);
 
