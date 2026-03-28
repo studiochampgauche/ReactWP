@@ -4,35 +4,126 @@ namespace ReactWP\Utils;
 
 class Field{
 
-    public static $elementsToReplace = [];
+    public static $replacements = [];
 
     public static function get($field, $id = false, $format = true, $escape = false){
 
-        if(!is_array(self::$elementsToReplace)) return;
+        $value = get_field($field, $id, $format, $escape);
 
-		
-        return ($id ? get_field($field, $id, $format, $escape) : (!empty(get_field($field, 'option', $format, $escape)) ? get_field($field, 'option', $format, $escape) : get_field($field, $id, $format, $escape)));
+        if(!$format && $value){
+            return self::apply_replacement($value);
+        }
+
+        return $value;
+
+    }
+
+    public static function replace($search, $replace){
+
+        if(is_array($search)){
+            foreach($search as $key => $search_value){
+                $replace_value = is_array($replace) && array_key_exists($key, $replace) ? $replace[$key] : '';
+                self::add_replacement($search_value, $replace_value);
+            }
+
+            return;
+        }
+
+        self::add_replacement($search, $replace);
 
     }
 
-    public static function replace($elementToReplace, $replacedElement){
+    public static function remove($search){
 
-        self::$elementsToReplace = [
-            $elementToReplace,
-            $replacedElement
-        ];
+        if(is_array($search)){
+            foreach($search as $search_value){
+                self::remove($search_value);
+            }
+
+            return;
+        }
+
+        if($search === null || $search === ''){
+            return;
+        }
+
+        unset(self::$replacements[(string)$search]);
 
     }
-	
-	public static function recursive($search, $replace, &$array) {
-		foreach ($array as $key => &$value) {
-			if (is_array($value)) {
-				self::recursive($search, $replace, $array[$key]);
-			} else {
-				$array[$key] = !is_null($value) && !is_bool($value) ? (is_numeric($value) && !is_string($value) ? +str_replace($search, $replace, $value) : str_replace($search, $replace, $value)) : $value;
-			}
-		}
-	}
+
+    public static function clear(){
+
+        self::$replacements = [];
+
+    }
+
+    public static function has_replacement(){
+
+        return !empty(self::$replacements);
+
+    }
+
+    public static function apply_replacement($value){
+
+        if(!self::has_replacement()){
+            return $value;
+        }
+
+        $search = array_keys(self::$replacements);
+        $replace = array_map([self::class, 'normalize_replacement'], array_values(self::$replacements));
+
+        if(is_string($value)){
+            return str_replace($search, $replace, $value);
+        }
+
+        if(is_array($value)){
+            self::recursive($search, $replace, $value);
+        }
+
+        return $value;
+
+    }
+
+    public static function recursive($search, $replace, &$array){
+
+        foreach($array as &$value){
+
+            if(is_array($value)){
+                self::recursive($search, $replace, $value);
+                continue;
+            }
+
+            if(is_string($value)){
+                $value = str_replace($search, $replace, $value);
+            }
+
+        }
+
+    }
+
+    private static function add_replacement($search, $replace){
+
+        if($search === null || $search === ''){
+            return;
+        }
+
+        self::$replacements[(string)$search] = $replace;
+
+    }
+
+    private static function normalize_replacement($value){
+
+        if(is_bool($value)){
+            return $value ? '1' : '0';
+        }
+
+        if(is_scalar($value) || $value === null){
+            return (string)$value;
+        }
+
+        return '';
+
+    }
 
 }
 
