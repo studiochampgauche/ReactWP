@@ -25,7 +25,7 @@ const RWPCache = {
             return this.mediaPending.get(url);
         }
 
-        const promise = async () => {
+        const promise = (async () => {
 
             try{
 
@@ -72,11 +72,11 @@ const RWPCache = {
 
             }
 
-        };
+        })();
 
         this.mediaPending.set(url, promise);
 
-        return promise ();
+        return promise;
 
     },
 
@@ -94,7 +94,7 @@ const RWPCache = {
             return this.jsonPending.get(url);
         }
 
-        const promise = async () => {
+        const promise = (async () => {
 
             try{
 
@@ -141,11 +141,11 @@ const RWPCache = {
 
             }
 
-        };
+        })();
 
         this.jsonPending.set(url, promise);
 
-        return promise();
+        return promise;
 
     },
 
