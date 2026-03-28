@@ -20,7 +20,7 @@ add_action('init', function(){
         * Create Home Page
         */
         $homePageArgs = array(
-            'post_title' => CL === 'fr' ? 'Accueil' : 'Home',
+            'post_title' => 'Lorem ipsum',
             'post_type' => 'page',
             'post_content' => '',
             'post_status' => 'publish',
