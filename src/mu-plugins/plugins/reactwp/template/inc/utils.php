@@ -205,59 +205,6 @@ class Menu{
 
 }
 
-class Button{
-    
-    public static $defaults = [
-        'text' => null,
-        'href' => null,
-        'class' => null,
-        'attr' => null,
-        'before' => null,
-        'after' => null
-    ];
-    
-    
-    public static $configs = [];
-
-    public static function get($text = null, $args = []){
-
-        if(!is_array(self::$configs)) return;
-        
-        self::$configs = self::$defaults;
-
-        if($args && is_array($args)){
-            foreach($args as $arg_key => $arg){
-                self::$configs[$arg_key] = $arg;
-            }
-        }
-        
-        if($text)
-            self::$configs['text'] = $text;
-            
-        return self::$configs['href'] ? '
-            <a href="'. self::$configs['href'] .'" class="btn'. (self::$configs['class'] ? ' ' . self::$configs['class'] : null) .'"'. (self::$configs['attr'] ? ' ' . self::$configs['attr'] : null) .'>
-
-            '. (self::$configs['before'] ? '<div class="btn-before">'. self::$configs['before'] .'</div>' : null) . (self::$configs['text'] ? '<span>'. self::$configs['text'] .'</span>' : null) . (self::$configs['after'] ? '<div class="btn-after">'. self::$configs['after'] .'</div>' : null) .'
-
-            </a>
-        ' : '
-            <button class="btn'. (self::$configs['class'] ? ' ' . self::$configs['class'] : null) .'"'. (self::$configs['attr'] ? ' ' . self::$configs['attr'] : null) .'>
-
-            '. (self::$configs['before'] ? '<div class="btn-before">'. self::$configs['before'] .'</div>' : null) . (self::$configs['text'] ? '<span>'. self::$configs['text'] .'</span>' : null) . (self::$configs['after'] ? '<div class="btn-after">'. self::$configs['after'] .'</div>' : null) .'
-
-            </button>
-        ';
-
-    }
-
-    public static function default($parameter, $value){
-
-        self::$defaults[$parameter] = $value;
-
-    }
-
-}
-
 class Source{
 
     public static $defaults = [
