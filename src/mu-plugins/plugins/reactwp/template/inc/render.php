@@ -125,7 +125,7 @@ add_action('init', function(){
     ) );
     
 
-    $langs = rwp::field('langs');
+    $langs = rwp::field('langs', 'option');
 
     $themeLocationName = [];
     if($langs){
@@ -262,7 +262,8 @@ add_action('init', function(){
     /*
     * Register theme locations
     */
-    $locations = rwp::field('theme_locations');
+    $locations = rwp::field('theme_locations', 'option');
+
     $__locations = [];
 
     if($locations){
@@ -311,7 +312,7 @@ add_action('init', function(){
     }
 
 
-    $mediaGroupsPostTypes =  rwp::field('mediaGroups_post_types') ? rwp::field('mediaGroups_post_types') : [];
+    $mediaGroupsPostTypes =  rwp::field('mediaGroups_post_types', 'option') ? rwp::field('mediaGroups_post_types', 'option') : [];
 
 
     $mediaGroupsPts = [
