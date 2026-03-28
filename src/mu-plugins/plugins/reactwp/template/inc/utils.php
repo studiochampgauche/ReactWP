@@ -163,36 +163,37 @@ class Menu{
 
     public static function get($theme_location = null, $args = []){
 
-        if(!is_array(self::$configs)) return;
-        
-        self::$configs = self::$defaults;
-        
-        if($args && is_array($args)){
-            foreach($args as $arg_key => $arg){
-                self::$configs[$arg_key] = $arg;
-            }
+        $configs = wp_parse_args(
+            is_array($args) ? $args : [],
+            self::$defaults
+        );
+
+        if($theme_location){
+            $configs['theme_location'] = $theme_location;
         }
 
-
-        if(isset(self::$configs['mobile_bars']) && (int)self::$configs['mobile_bars'] > 0){
+        if(
+            isset($configs['mobile_bars'])
+            && (int)$configs['mobile_bars'] > 0
+        ){
+            $items_wrap = isset($configs['items_wrap']) && is_string($configs['items_wrap'])
+                ? $configs['items_wrap']
+                : '<ul id="%1$s" class="%2$s">%3$s</ul>';
 
             $html = '<div class="ham-menu">';
                 $html .= '<div class="inner">';
-                for ($i=0; $i < (int)self::$configs['mobile_bars']; $i++) {
-                    $html .= '<span></span>';
-                }
+                    for($i = 0; $i < (int)$configs['mobile_bars']; $i++){
+                        $html .= '<span></span>';
+                    }
                 $html .= '</div>';
             $html .= '</div>';
 
-            self::$configs['items_wrap'] = self::$configs['items_wrap'] . $html;
-
+            $configs['items_wrap'] = $items_wrap . $html;
         }
-        
-        if($theme_location)
-            self::$configs['theme_location'] = $theme_location;
 
+        unset($configs['mobile_bars']);
 
-        return wp_nav_menu(self::$configs);
+        return wp_nav_menu($configs);
 
     }
 
