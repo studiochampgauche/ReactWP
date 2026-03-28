@@ -71,6 +71,41 @@ class ReactWP{
         }, 10, 5);
 
 
+        /*
+        * Manage REST API
+        */
+        add_filter('rest_authentication_errors', function ($result) {
+    
+            if (!empty($result)) {
+                return $result;
+            }
+
+            $allowed_routes = apply_filters('rwp_allowed_rest_routes', []);
+
+            $requested_route = $_SERVER['REQUEST_URI'] ?? '';
+
+            if($allowed_routes){
+
+                foreach ($allowed_routes as $route) {
+
+                    if (strpos($requested_route, $route) !== false) {
+                        return null;
+                    }
+
+                }
+                
+            }
+
+            return new WP_Error(
+                'rest_api_disabled',
+                __('The REST API is disable.'),
+                ['status' => 403]
+            );
+            
+        });
+        
+
+
     }
 
     static function field($field, $id = false, $format = true, $escape = false){
