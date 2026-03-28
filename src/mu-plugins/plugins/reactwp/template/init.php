@@ -1,7 +1,7 @@
 <?php
 
 require_once 'inc/utils.php';
-require_once 'inc/render.php';
+require_once 'inc/admin.php';
 require_once 'inc/firstload.php';
 
 
