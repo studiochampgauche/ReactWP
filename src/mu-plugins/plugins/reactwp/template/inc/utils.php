@@ -355,3 +355,51 @@ class Sanitize {
     }
     
 }
+
+class Escape {
+
+    public static function html($v){
+        return esc_html($v);
+    }
+
+    public static function js($v){
+        return esc_js($v);
+    }
+
+    public static function url($v){
+        return esc_url($v);
+    }
+
+    public static function url_raw($v){
+        return esc_url_raw($v);
+    }
+
+    public static function xml($v){
+        return esc_xml($v);
+    }
+
+    public static function attr($v){
+        return esc_attr($v);
+    }
+
+    public static function textarea($v){
+        return esc_textarea($v);
+    }
+
+    public static function html__($v, $args = []){
+        return esc_html__($v, $args['domain'] ?? 'default');
+    }
+
+    public static function html_x($v, $args = []){
+        return isset($args['context']) ? esc_html_x($v, $args['context'], $args['domain'] ?? 'default') : null;
+    }
+
+    public static function attr__($v, $args = []){
+        return esc_attr__($v, $args['domain'] ?? 'default');
+    }
+
+    public static function attr_x($v, $args = []){
+        return isset($args['context']) ? esc_attr_x($v, $args['context'], $args['domain'] ?? 'default') : null;
+    }
+
+}
