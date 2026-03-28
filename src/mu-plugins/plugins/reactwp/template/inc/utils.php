@@ -210,31 +210,42 @@ class Source{
     public static $defaults = [
         'base' => '/',
         'path' => null,
-        'url' => false
+        'url' => false,
+        'theme' => 'stylesheet'
     ];
-		
-	public static $configs = [];
 
     public static function get($args = []){
 
-        if(!is_array(self::$configs)) return;
-		
-		self::$configs = self::$defaults;
+        $configs = wp_parse_args(
+            is_array($args) ? $args : [],
+            self::$defaults
+        );
 
-        if($args && is_array($args)){
-            foreach($args as $arg_key => $arg){
-                self::$configs[$arg_key] = $arg;
-            }
-        }
+        $root = self::root($configs['url'], $configs['theme']);
+        $base = trim((string)($configs['base'] ?? ''), '/');
+        $path = ltrim((string)($configs['path'] ?? ''), '/');
 
+        $relative = implode('/', array_filter([$base, $path], 'strlen'));
 
-        return self::$configs['url'] ? ((get_template_directory() === get_stylesheet_directory() ? get_template_directory_uri() : get_stylesheet_directory_uri()) . self::$configs['base'] . self::$configs['path']) : ((get_template_directory() === get_stylesheet_directory() ? get_template_directory() : get_stylesheet_directory()) . self::$configs['base'] . self::$configs['path']);
+        return $relative !== ''
+            ? trailingslashit($root) . $relative
+            : trailingslashit($root);
 
     }
 
     public static function default($parameter, $value){
 
         self::$defaults[$parameter] = $value;
+
+    }
+
+    private static function root($url = false, $theme = 'stylesheet'){
+
+        if($theme === 'template'){
+            return $url ? get_template_directory_uri() : get_template_directory();
+        }
+
+        return $url ? get_stylesheet_directory_uri() : get_stylesheet_directory();
 
     }
 
