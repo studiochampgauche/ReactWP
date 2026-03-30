@@ -15,7 +15,7 @@ Built on over 18 years of experience across hundreds of real-world projects, it 
 
 # Useful links
 
-- [Documentation](https://github.com/studiochampgauche/ReactWP/wiki) (In progress)
+- [Documentation](https://github.com/studiochampgauche/ReactWP/wiki)
 
 # Want to contribute?
 
