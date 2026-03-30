@@ -4,62 +4,94 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollSmoother } from 'gsap/ScrollSmoother';
 
 
-const Scroller = () => {
+/*
+* Register ScrollTrigger, ScrollSmoother
+*/
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
-	window.gscroll = null;
+const Scroller = {
+	bodyEl: document.body,
+	mm: null,
+	init(){
 
-	gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
-
-
-	const mm = gsap.matchMedia();
-	mm.add({
-		isPointer: '(pointer: fine)',
-		isNotPointer: '(pointer: coarse), (pointer: none)'
-	}, async (context) => {
+		/*
+		* Kill
+		*/
+		this.kill();
 		
-		let { isPointer, isNotPointer } = context.conditions;
-		
-		gsap.set('body', {
-			maxHeight: 'initial',
-			overflow: 'initial'
-		});
+		/*
+		* Return a Promise
+		*/
+		return new Promise(done => {
 
-		if(
-			navigator.userAgent
+			this.mm = gsap.matchMedia();
 
-			&&
+			this.mm.add({
+				all: true,
+				isPointer: '(pointer: fine)'
+			}, (context) => {
+				
+				const { isPointer } = context.conditions;
 
-			!/IPAD|IPOD|IPHONE|MACINTOSH/.test(navigator.userAgent.toUpperCase())
+				/*
+				* Init smooth scroll
+				*/
+				window.gscroll = ScrollSmoother.create({
+					wrapper: '#pageWrapper',
+					content: '#pageContent',
+					ignoreMobileResize: true,
+					normalizeScroll: isPointer,
+					smooth: 2.25
+				});
 
-		){
-			window.gscroll = await ScrollSmoother.create({
-				wrapper: '#pageWrapper',
-				content: '#pageContent',
-				ignoreMobileResize: true,
-				normalizeScroll: (isPointer ? true : false),
-				smooth: 2.25
+				/*
+				* Pause the scroll via GSAP
+				*/
+				window.gscroll.paused(true);
+
+				/*
+				* Stop pausing the scroll with the body
+				*/
+				this.bodyEl.style.maxHeight = 'initial';
+				this.bodyEl.style.overflow = 'initial';
+
+				/*
+				* Refresh Scroller according to new body height
+				*/
+				ScrollTrigger.refresh();
+
+				/*
+				* Resolve
+				*/
+				done();
+
+				return () => {
+
+					window.gscroll?.kill();
+					window.gscroll = null;
+
+				};
+				
 			});
 
-			window.gscroll.paused(true);
-		}
+		});
 
+	},
+	kill(){
+		
+		/*
+		* Kill Scroller
+		*/
+		window.gscroll?.kill();
+		window.gscroll = null;
 
-		window.loader.isLoaded.gscroll = true;
-		
-		
-		return () => {
-			
-			if(window.gscroll){
-				
-				window.gscroll.kill();
-				window.gscroll = null;
-				
-			}
-			
-		}
-		
-	});
+		/*
+		* Kill matchMedia
+		*/
+		this.mm?.revert();
+		this.mm = null;
 
+	}
 }
 
-Scroller();
+Scroller.init();

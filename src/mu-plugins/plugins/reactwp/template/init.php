@@ -3,6 +3,7 @@
 require_once 'inc/utils.php';
 require_once 'inc/admin.php';
 require_once 'inc/firstload.php';
+require_once 'inc/routes/rest.php';
 
 
 class ReactWP{
@@ -55,12 +56,22 @@ class ReactWP{
             /*
             * System management
             */
-            wp_localize_script('rwp-main', 'SYSTEM', [
+            wp_localize_script('rwp-main', 'SYSTEM', apply_filters('rwp_system', [
                 'public' => get_option('blog_public'),
-                'baseUrl' => site_url(),
+                'baseUrl' => site_url('/'),
+                'homeUrl' => home_url('/'),
                 'adminUrl' => admin_url(),
-                'ajaxPath' => '/wp-admin/admin-ajax.php',
-                'restPath' => '/wp-json'
+                'ajaxUrl' => admin_url('admin-ajax.php'),
+                'restUrl' => rest_url()
+            ]));
+
+
+            /*
+            * Assets Management
+            */
+            wp_localize_script('rwp-main', 'CRITICAL_ASSETS', [
+                'medias' => apply_filters('rwp_critical_medias', []),
+                'fonts' => apply_filters('rwp_critical_fonts', []),
             ]);
 
             

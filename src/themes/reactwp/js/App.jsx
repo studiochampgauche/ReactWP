@@ -1,36 +1,137 @@
 'use strict';
-import React, { StrictMode, useEffect, useState, lazy } from 'react';
+import React, { StrictMode, createContext, useContext, useEffect, useState, lazy } from 'react';
 import { createRoot } from 'react-dom/client';
-import { createBrowserRouter, RouterProvider, Routes, Route, Outlet } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import NotFoundTemplate from './templates/NotFound';
 import PageTransition from './inc/PageTransition';
 import Metas from './inc/Metas';
-import './inc/Loader';
+import Loader from './inc/Loader';
+import PageTransitionAnimation from './inc/PageTransitionAnimation';
 import './inc/Scroller';
 import '../scss/default.scss';
 
+export const RouteContext = createContext(null);
 
-const templates = {
-    DefaultTemplate: lazy(() => import('./templates/Default'))
+
+window.loader = {
+    isLoaded: false
 };
 
-const App = () => {
+Loader.setRoute(CURRENT_ROUTE);
+Loader.download();
 
-    const [isLoaded, setLoaded] = useState(false);
+Loader.setAnimation(({ gsap, ScrollTrigger, done }) => {
+
+    let tl = gsap.timeline({
+        onComplete: () => {
+            tl.kill();
+            tl = null;
+
+            window.gscroll?.paused(false);
+            done();
+        }
+    });
+
+    tl
+    .to({}, .1, {})
+    .add(() => {
+        if(!window.loader?.isLoaded){
+            tl.restart();
+            return;
+        }
+    })
+    .to('#loader', .4, {
+        opacity: 0,
+        pointerEvents: 'none',
+        onStart: () => {
+            ScrollTrigger?.refresh();
+        }
+    });
+
+    return tl;
+
+});
+
+window.loader.init = Loader.init();
+
+
+PageTransitionAnimation
+.setLeave(({ gsap }) => {
+    return gsap.to('#viewport', .2, {
+        opacity: 0,
+        pointerEvents: 'none'
+    });
+})
+.setEnter(({ gsap }) => {
+    return gsap.to('#viewport', .2, {
+        opacity: 1,
+        pointerEvents: 'initial'
+    });
+});
+
+
+const templates = {
+    Default: lazy(() => import('./templates/Default'))
+};
+
+const Template = templates[CURRENT_ROUTE.template] || templates['Default'];
+
+function LoaderBridge(){
+    const { currentRoute } = useContext(RouteContext);
 
     useEffect(() => {
-        setLoaded(true);
-    }, []);
+        Loader.setRoute(currentRoute);
+    }, [currentRoute]);
+
+    return null;
+}
+
+
+function CurrentRouteElement(){
+    const { currentRoute } = useContext(RouteContext);
+
+    const Template = templates[currentRoute.template] || templates.Default;
+
+    const seo = {
+        ...currentRoute.seo,
+        pageName: currentRoute.pageName
+    };
+
+    const routeProps = {
+        id: currentRoute.id,
+        type: currentRoute.type,
+        template: currentRoute.template,
+        pageName: currentRoute.pageName,
+        path: currentRoute.path,
+        mediaGroups: currentRoute.mediaGroups,
+        data: currentRoute.data
+    };
 
     return (
         <>
-            <PageTransition />
-            <Outlet />
+            <Metas seo={seo} />
+            <Template {...routeProps} />
+        </>
+    );
+}
+
+const App = () => {
+
+    const [currentRoute, setCurrentRoute] = useState(CURRENT_ROUTE);
+
+    return (
+        <>
+            <RouteContext.Provider value={{ currentRoute, setCurrentRoute }}>
+                <LoaderBridge />
+                <PageTransition />
+                <Outlet />
+            </RouteContext.Provider>
         </>
     );
     
 };
+
 
 
 const router = createBrowserRouter([
@@ -38,39 +139,14 @@ const router = createBrowserRouter([
         path: "/",
         element: <App />,
         children: [
-            ...ROUTES.map((route, i) => {
-                const Template = templates[route.template] || templates['DefaultTemplate'];
-
-                route.seo.pageTitle = route.pageName;
-
-                return {
-                    path: route.path,
-                    element: (
-                        <>
-                            <Metas extraDatas={route?.extraDatas} seo={route?.seo} />
-                            <Template
-                                id={route.id}
-                                type={route.type}
-                                routeName={route.routeName}
-                                pageName={route.pageName}
-                                path={route.path}
-                                seo={route.seo}
-                                acf={route.acf}
-                                extraDatas={route?.extraDatas}
-                            />
-                        </>
-                    ),
-                };
-            }),
             {
-                path: "*",
-                element: (
-                    <>
-                        <Metas seo={{ pageTitle: CL.value === 'fr' ? 'Erreur 404' : 'Error 404', do_not_index: true }} />
-                        <NotFoundTemplate />
-                    </>
-                ),
+                index: true,
+                element: <CurrentRouteElement />
             },
+            {
+                path: '*',
+                element: <CurrentRouteElement />
+            }
         ],
     },
 ]);
