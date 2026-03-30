@@ -5,116 +5,88 @@
 */
 add_action('wp_enqueue_scripts', function(){
 
-    /*
-    * Medias to Download
-    */
-    $mediasToDownload = [];
-    wp_localize_script('rwp-main', 'MEDIAS', $mediasToDownload);
-
+    global $template;
 
     /*
     * Routes
     */
-    $routes = [];
-    $data = rwp::cpt(['page'])->posts;
+    $obj = get_queried_object();
+
+    if(is_singular() && $obj instanceof \WP_Post){
+        $id = $obj->ID;
+        $type = $obj->post_type;
+        $url = get_the_permalink($id);
+        $pageName = rwp::field('page_title', $id) ?? get_the_title($id);
+        $acfGroups = acf_get_field_groups(['post_id' => $id]);
+    } elseif(is_author() && $obj instanceof \WP_User){
+        $id = 'user_' . $obj->ID;
+        $type = 'user';
+        $url = get_author_posts_url($obj->ID);
+        $pageName = rwp::field('page_title', $id) ?? 'Post(s) of ' . $obj->user_firstname;
+        $acfGroups = acf_get_field_groups(['user_id' => $obj->ID, 'rest' => true]);
+    } elseif((is_category() || is_tag() || is_tax()) && $obj instanceof \WP_Term){
+        $id = 'term_' . $obj->term_id;
+        $type = 'term';
+        $url = get_term_link($obj->term_id);
+        $pageName = rwp::field('page_title', $id) ?? $obj->name;
+        $acfGroups = acf_get_field_groups(['term_id' => $obj->ID, 'rest' => true]);
+    } else {
+        $id = null;
+        $type = null;
+        $url = null;
+        $pageName = null;
+    }
+
+    $acf = [];
+    $seo = [];
+    $mediaGroups = '';
+    $pageTemplate = implode('', array_map('ucfirst', explode('-', str_replace(['.php', ' '], ['', '-'], basename($template)))));
+
+    if($acfGroups){
+
+        foreach($acfGroups as $l => $group){
+
+            if(!$group['active'] || !$group['show_in_rest']) continue;
 
 
+            $fields = acf_get_fields($group['key']);
 
+            if(!$fields) continue;
 
-    if($data){
+            foreach($fields as $m => $field){
 
-	    foreach($data as $k => $v){
-
-
-	    	$pageTemplate = implode('', array_map('ucfirst', explode('-', str_replace(['.php', ' '], ['', '-'], get_page_template_slug($v->ID)))));
-
-
-	    	$acfGroups = acf_get_field_groups(['post_id' => $v->ID]);
-	    	$acf = [];
-
-	    	if($acfGroups){
-
-	    		foreach($acfGroups as $l => $group){
-
-	    			if(!$group['active'] || !$group['show_in_rest']) continue;
-
-
-	    			$fields = acf_get_fields($group['key']);
-
-	    			if(!$fields) continue;
-
-	    			foreach($fields as $m => $field){
-
-	    				$acf[$field['name']] = rwp::field($field['name'], $v->ID);
-
-	    			}
-
-	    		}
-
-	    	}
-
-	    	$pageName = rwp::field('name', $v->ID);
-
-            $routes[] = [
-            	'id' => $v->ID,
-            	'template' => $pageTemplate,
-            	'routeName' => $v->post_name,
-            	'pageName' => ($pageName ? $pageName : $v->post_title),
-            	'path' => str_replace(site_url(), '', get_the_permalink($v->ID)),
-            	'type' => $v->post_type,
-            	'seo' => (isset($acf['seo']) ? $acf['seo'] : []),
-            	'mediaGroups' => (isset($acf['media_groups']) ? str_replace(', ', ',', $acf['media_groups']) : null),
-            	'main' => ($v->ID === get_the_ID() ? true : false)
-            ];
-
-
-            if(isset($acf['name']))
-            	unset($acf['name']);
-
-            if(isset($acf['seo']))
-            	unset($acf['seo']);
-
-            if(isset($acf['media_groups']))
-            	unset($acf['media_groups']);
-
-
-            $routes[$k]['acf'] = $acf;
-
-
-            if($routes[$k]['type'] === 'post'){
-
-                //$routes[$k]['template'] = 'SinglePost';
-                $routes[$k]['seo']['og_type'] = 'article';
-
-                $routes[$k]['extraDatas'] = [
-                    'date' => $v->post_date,
-                    'modified' => $v->post_modified,
-                    'author' => get_author_posts_url($v->post_author)
-                ];
-
-            } elseif($routes[$k]['type'] === 'author'){
-
-                $routes[$k]['seo']['og_type'] = 'profile';
-
-                $routes[$k]['extraDatas'] = [
-                    'username' => '',
-                    'name' => [
-                        'firstname' => '',
-                        'lastname' => ''
-                    ]
-                ];
-
-            } else {
-
-            	$routes[$k]['seo']['og_type'] = 'website';
+                $acf[$field['name']] = rwp::field($field['name'], $id);
 
             }
 
+        }
 
-	    }
-	}
+    }
 
-    wp_localize_script('rwp-main', 'ROUTES', $routes);
+    if(isset($acf['seo'])){
+        $seo = $acf['seo'];
+        unset($acf['seo']);
+    }
+
+    if(isset($acf['media_groups'])){
+        $mediaGroups = $acf['media_groups'];
+        unset($acf['media_groups']);
+    }
+
+    
+    wp_localize_script('rwp-main', 'CURRENT_ROUTE', [
+        'id' => $id,
+        'type' => $type,
+        'template' => $pageTemplate,
+        'pageName' => $pageName,
+        'path' => wp_parse_url($url, PHP_URL_PATH),
+        'seo' => [
+            ...$seo,
+            'pageName' => $pageName
+        ],
+        'mediaGroups' => $mediaGroups ?? '',
+        'data' => $acf
+    ]);
 
 });
 
@@ -210,5 +182,25 @@ add_action('acf/init', function(){
     */
     ReactWP\Utils\Menu::default('container', null);
     ReactWP\Utils\Menu::default('items_wrap', '<ul>%3$s</ul>');
+
+});
+
+
+/*
+* Add critical fonts
+*/
+add_filter('rwp_critical_fonts', function($fonts){
+
+    //$fonts['all'][] = 'normal 400 1rem "font-family"';
+
+    return $fonts;
+
+});
+
+add_filter('rwp_critical_medias', function($medias){
+
+    //$medias['all'][] = [];
+
+    return $medias;
 
 });

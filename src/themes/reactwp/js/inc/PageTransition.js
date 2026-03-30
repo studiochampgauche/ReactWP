@@ -1,19 +1,23 @@
 'use strict';
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useContext, useEffect, useState, useRef } from 'react'
 import { useBlocker, useLocation, useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { RouteContext } from '../App';
+import Loader from './Loader';
+import RWPCache from './Cache';
+import PageTransitionAnimation from './PageTransitionAnimation';
 
 
 const PageTransition = () => {
 	
-
-	const firstload = useRef(true);
-
-
 	const location = useLocation();
 	const navigate = useNavigate();
 	const blocker = useBlocker(true);
+
+	const [ firstLoad, firstLoadSet] = useState(true);
+
+	const { currentRoute, setCurrentRoute } = useContext(RouteContext);
 
 	useEffect(() => {
 
@@ -41,141 +45,80 @@ const PageTransition = () => {
 			}
 
 
-			const currentRouteIndex = ROUTES.findIndex(({main}) => main);
-			const newRouteIndex = ROUTES.findIndex(({path}) => [blocker.location.pathname, blocker.location.pathname + '/'].includes(path));
 
-			if(currentRouteIndex >= 0)
-				ROUTES[currentRouteIndex].main = false;
+			const blockerAction = async () => {
 
-			if(newRouteIndex >= 0)
-				ROUTES[newRouteIndex].main = true;
+				const newRouteData = await RWPCache.json(`${SYSTEM.restUrl}reactwp/v1/route?view=${encodeURIComponent(blocker.location.pathname)}`);
 
-
-			window.loader.display = null;
-
-			window.loader.download = window.loader.instance.download();
+				Loader.setRoute(newRouteData);
+				setCurrentRoute(newRouteData);
+				window.loader.download = Loader.download();
 
 
-			let tl = gsap.timeline({
-				onComplete: () => {
+				let animation = PageTransitionAnimation.leave({
+					blocker,
+					location
+				});
 
-					tl.kill();
-					tl = null;
+				const previousOnComplete = animation?.eventCallback
+					? animation.eventCallback('onComplete')
+					: null;
 
+				animation?.eventCallback?.('onComplete', () => {
+					previousOnComplete?.();
 
-					/*
-					* Return to top
-					*/
+					animation.kill();
+					animation = null;
+
 					if(window.gscroll){
-
 						window.gscroll.paused(true);
 						window.gscroll.scrollTop(0);
-
 					} else {
-
-						window.scrollTo({top: 0, behavior: 'instant'});
-
+						window.scrollTo({ top: 0, behavior: 'instant' });
 					}
 
-
-					/*
-					* Kill images
-					*/
-					document.querySelectorAll('.inner-img')?.forEach(img => {
-
+					document.querySelectorAll('.inner-img')?.forEach((img) => {
 						if(img.querySelector('img')){
-
 							img.innerHTML = '<div class="img"></div>';
-							
 						}
-
 					});
 
-
-					/*
-					* Kill videos
-					*/
-					document.querySelectorAll('.inner-video')?.forEach(video => {
-
+					document.querySelectorAll('.inner-video')?.forEach((video) => {
 						const videoEl = video.querySelector('video');
 
 						if(videoEl){
-
 							videoEl.pause();
 							videoEl.currentTime = 0;
-
-
 							video.innerHTML = '<div class="video"></div>';
-							
 						}
-
 					});
 
-
-					/*
-					* Kill audios
-					*/
-					document.querySelectorAll('.inner-audio')?.forEach(audio => {
-
+					document.querySelectorAll('.inner-audio')?.forEach((audio) => {
 						const audioEl = audio.querySelector('audio');
 
 						if(audioEl){
-
 							audioEl.pause();
 							audioEl.currentTime = 0;
-
-
 							audio.innerHTML = '<div class="audio"></div>';
-							
 						}
-
 					});
 
-
 					window.loader.download.then(() => blocker.proceed());
+				});
 
-				}
-			});
-
-
-			tl
-			.to('#viewport', .2, {
-				opacity: 0,
-				pointerEvents: 'none'
-			});
+			}
+			blockerAction();
 
 		}
 
 	}, [blocker]);
 
-
 	useEffect(() => {
 
-		const killEvents = [];
+		let killEvents = [];
 
 
-		window.loader.display = window.loader.instance.display();
-
-
-		window.loader.display.then(() => {
-
-			//ScrollTrigger.refresh();
-
-			if(location.hash && document.querySelector(location.hash)){
-
-				if(window.gscroll){
-
-					window.gscroll?.scrollTo(location.hash, false, 'top top');
-
-				} else {
-
-					window.scrollTo({top: (location.hash ? document.querySelector(location.hash).getBoundingClientRect().top : 0), behavior: 'instant'});
-
-				}
-
-			}
-
-		});
+		window.loader.display = Loader.display();
 
 
 		document.querySelectorAll('a')?.forEach(linkElement => {
@@ -237,46 +180,49 @@ const PageTransition = () => {
 		});
 
 
-		if(firstload.current){
+		if(firstLoad){
 
-			window.loader.display.then(() => window.loader.isLoaded.app = true);
-
-			firstload.current = false;
+			firstLoadSet(false);
 
 			return;
 
 		}
 
+		window.loader.display.then(() => {
 
-		let tl = gsap.timeline({
-			onStart: () => {
+			let animation = PageTransitionAnimation.enter({
+				location
+			});
+
+			const previousOnComplete = animation?.eventCallback
+				? animation.eventCallback('onComplete')
+				: null;
+
+			animation?.eventCallback?.('onComplete', () => {
+				previousOnComplete?.();
+
+				animation.kill();
+				animation = null;
 
 				ScrollTrigger?.refresh();
 
-			},
-			onComplete: () => {
+				requestAnimationFrame(() => {
+					window.gscroll?.paused(false);
+				});
+			});
 
-				tl.kill();
-				tl = null;
-
-				window.gscroll?.paused(false);
-
-			}
 		});
 
 
-		tl
-		.to('#viewport', .2, {
-			opacity: 1,
-			pointerEvents: 'initial'
-		});
+		return () => {
 
+			killEvents?.forEach(killEvent => killEvent());
+			killEvents = null;
 
-		return () => killEvents?.forEach(killEvent => killEvent());
+		}
 
 
 	}, [location.pathname]);
-
 	
 }
 
