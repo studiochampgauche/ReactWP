@@ -11,8 +11,6 @@
 ReactWP is a powerful starting point for building WordPress projects.
 A solid foundation you can extend in any direction, whether you're crafting something simple or highly complex.
 
-Built on over 18 years of experience across hundreds of real-world projects, it focuses on performance, structure, and scalability, helping you build reliable applications without unnecessary overhead.
-
 # Installation Guide
 1. Clone the repo or [download it directly](https://github.com/studiochampgauche/ReactWP/archive/refs/heads/master.zip);
 2. From `src > core`, duplicate the wp-config-sample.php to wp-config.php and setup it;
