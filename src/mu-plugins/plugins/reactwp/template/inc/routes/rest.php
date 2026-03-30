@@ -98,6 +98,7 @@ function get_route(WP_REST_Request $request){
     $acf = [];
     $seo = [];
     $mediaGroups = '';
+    $pageTemplate = null;
 
     if($acfGroups){
 
@@ -127,9 +128,15 @@ function get_route(WP_REST_Request $request){
         unset($acf['media_groups']);
     }
 
+    if(isset($acf['react_template'])){
+        $pageTemplate = $acf['react_template'];
+        unset($acf['react_template']);
+    }
+
     return new WP_REST_Response([
         'id' => $id,
         'type' => $type,
+        'template' => $pageTemplate,
         'pageName' => $pageName,
         'path' => wp_parse_url($url, PHP_URL_PATH),
         'seo' => [

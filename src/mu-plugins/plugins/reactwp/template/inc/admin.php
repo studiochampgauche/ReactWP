@@ -360,6 +360,53 @@ add_action('init', function(){
     }
 
 
+    $reactTemplatePostTypes =  rwp::field('react_template_post_types', 'option') ? rwp::field('react_template_post_types', 'option') : [];
+
+    $reactTemplatePts = [
+        [
+            [
+                'param' => 'post_type',
+                'operator' => '==',
+                'value' => 'post',
+            ]
+        ],
+        [
+            [
+                'param' => 'post_type',
+                'operator' => '==',
+                'value' => 'page',
+            ]
+        ],
+        [
+            [
+                'param' => 'user_form',
+                'operator' => '==',
+                'value' => 'all',
+            ]
+        ],
+        [
+            [
+                'param' => 'taxonomy',
+                'operator' => '==',
+                'value' => 'all',
+            ]
+        ]
+    ];
+
+
+    if($reactTemplatePostTypes){
+        foreach ($reactTemplatePostTypes as $pt) {
+            $reactTemplatePts[] = [
+                [
+                    'param' => 'post_type',
+                    'operator' => '==',
+                    'value' => $pt,
+                ]
+            ];
+        }
+    }
+
+
     acf_add_local_field_group( array(
         'key' => 'acf-group_60983478kjhsad54323',
         'title' => 'Media Groups Global Settings',
@@ -368,6 +415,57 @@ add_action('init', function(){
                 'key' => 'field_60983478kjhsad54324',
                 'label' => 'Media Groups Post Types',
                 'name' => 'mediaGroups_post_types',
+                'aria-label' => '',
+                'type' => 'checkbox',
+                'instructions' => (CL === 'fr' ? 'Les articles, les pages, les utilisateurs et les taxonomies ont le module. Si vous ne voyez pas de sélection, créez un nouveau type d\'article.' : 'Posts, pages, users and taxonomies have the module. If you don\'t see a selection, create a new post type.'),
+                'required' => 0,
+                'conditional_logic' => 0,
+                'wrapper' => array(
+                    'width' => '33.3333333333',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'choices' => $postTypes,
+                'default_value' => array(
+                ),
+                'return_format' => 'value',
+                'allow_custom' => 0,
+                'allow_in_bindings' => 0,
+                'layout' => 'vertical',
+                'toggle' => 0,
+                'save_custom' => 0,
+                'custom_choice_button_text' => 'Add new choice',
+            ),
+        ),
+        'location' => array(
+            array(
+                array(
+                    'param' => 'options_page',
+                    'operator' => '==',
+                    'value' => 'site-settings',
+                ),
+            ),
+        ),
+        'menu_order' => 12,
+        'position' => 'normal',
+        'style' => 'seamless',
+        'label_placement' => 'top',
+        'instruction_placement' => 'label',
+        'hide_on_screen' => '',
+        'active' => true,
+        'description' => '',
+        'show_in_rest' => 0,
+    ) );
+
+
+    acf_add_local_field_group( array(
+        'key' => 'acf-group_609asdas7d6uj12gh854323',
+        'title' => 'React Template Global Settings',
+        'fields' => array(
+            array(
+                'key' => 'field_609asdas7d6uj12gh854324',
+                'label' => 'React Template Post Types',
+                'name' => 'react_template_post_types',
                 'aria-label' => '',
                 'type' => 'checkbox',
                 'instructions' => (CL === 'fr' ? 'Les articles, les pages, les utilisateurs et les taxonomies ont le module. Si vous ne voyez pas de sélection, créez un nouveau type d\'article.' : 'Posts, pages, users and taxonomies have the module. If you don\'t see a selection, create a new post type.'),
@@ -441,6 +539,48 @@ add_action('init', function(){
             ),
         ),
         'location' => $mediaGroupsPts,
+        'menu_order' => 10,
+        'position' => 'side',
+        'style' => 'seamless',
+        'label_placement' => 'top',
+        'instruction_placement' => 'label',
+        'hide_on_screen' => '',
+        'active' => true,
+        'description' => '',
+        'show_in_rest' => 1,
+    ) );
+
+
+    /*
+    * Add React Template field
+    */
+    acf_add_local_field_group( array(
+        'key' => 'group_67kjasd7ayu12g31j8skj33',
+        'title' => 'Media Groups',
+        'fields' => array(
+            array(
+                'key' => 'field_67kjasd7ayu12g31j8skj34',
+                'label' => 'React Template',
+                'name' => 'react_template',
+                'aria-label' => '',
+                'type' => 'text',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' => 0,
+                'wrapper' => array(
+                    'width' => '',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+                'maxlength' => '',
+                'allow_in_bindings' => 0,
+                'placeholder' => '',
+                'prepend' => '',
+                'append' => ''
+            ),
+        ),
+        'location' => $reactTemplatePts,
         'menu_order' => 10,
         'position' => 'side',
         'style' => 'seamless',

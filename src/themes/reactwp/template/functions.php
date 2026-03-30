@@ -40,7 +40,7 @@ add_action('wp_enqueue_scripts', function(){
     $acf = [];
     $seo = [];
     $mediaGroups = '';
-    $pageTemplate = implode('', array_map('ucfirst', explode('-', str_replace(['.php', ' '], ['', '-'], basename($template)))));
+    $pageTemplate = null;
 
     if($acfGroups){
 
@@ -71,6 +71,11 @@ add_action('wp_enqueue_scripts', function(){
     if(isset($acf['media_groups'])){
         $mediaGroups = $acf['media_groups'];
         unset($acf['media_groups']);
+    }
+
+    if(isset($acf['react_template'])){
+        $pageTemplate = $acf['react_template'];
+        unset($acf['react_template']);
     }
 
     
