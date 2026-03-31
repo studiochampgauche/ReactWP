@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import NotFoundTemplate from './templates/NotFound';
 import PageTransition from './inc/PageTransition';
+import Footer from './templates/components/Footer';
 import Metas from './inc/Metas';
 import Loader from './inc/Loader';
 import PageTransitionAnimation from './inc/PageTransitionAnimation';
@@ -112,6 +113,7 @@ function CurrentRouteElement(){
         <>
             <Metas seo={seo} />
             <Template {...routeProps} />
+            <Footer />
         </>
     );
 }
