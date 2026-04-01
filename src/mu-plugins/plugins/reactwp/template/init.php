@@ -27,10 +27,13 @@ class ReactWP{
         */
         add_action('wp_enqueue_scripts', function(){
 
+            $theme = wp_get_theme();
+            $slug = $theme->get_stylesheet();
+
             /*
             * JS
             */
-            wp_enqueue_script('rwp-main', self::source(['path' => '/assets/js/reactwp.min.js', 'url' => true]), null, null, false);
+            wp_enqueue_script('rwp-main', self::source(['path' => '/assets/js/'. $slug .'.min.js', 'url' => true]), null, null, false);
 
 
             /*
