@@ -11,7 +11,7 @@ A solid foundation you can extend in any direction, whether you're crafting some
 1. Clone the repo or [download it directly](https://github.com/studiochampgauche/ReactWP/archive/refs/heads/master.zip);
 2. From `src > core`, duplicate the wp-config-sample.php to wp-config.php and setup it;
 3. Navigate to the configs directory;
-4. Install cores, node modules and build the app with npm `run get:core && npm i --legacy-peer-deps && npm run watch`;
+4. Install cores, node modules and build the app with `npm run get:core && npm i --legacy-peer-deps && npm run watch`;
 5. Manage your local URL to point to the `dist` directory
 6. Setup your backend by adding `/wp-admin` to your url;
 7. Start working!
