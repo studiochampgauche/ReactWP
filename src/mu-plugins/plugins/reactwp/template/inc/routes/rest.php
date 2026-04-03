@@ -27,6 +27,7 @@ function get_route(WP_REST_Request $request){
 
     $obj = null;
     $url = site_url($path);
+    $acfGroups = [];
 
     $post_id = url_to_postid($url);
 
@@ -90,7 +91,7 @@ function get_route(WP_REST_Request $request){
         $type = 'term';
         $url = get_term_link($obj->term_id);
         $pageName = rwp::field('page_title', $id) ?? $obj->name;
-        $acfGroups = acf_get_field_groups(['term_id' => $obj->ID, 'rest' => true]);
+        $acfGroups = acf_get_field_groups(['term_id' => $obj->term_id, 'rest' => true]);
     } else {
         return new WP_REST_Response(null, 404);
     }
