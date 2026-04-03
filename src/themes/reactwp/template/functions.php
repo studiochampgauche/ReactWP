@@ -6,6 +6,7 @@
 add_action('wp_enqueue_scripts', function(){
 
     global $template;
+    $acfGroups = [];
 
     /*
     * Routes
@@ -29,7 +30,7 @@ add_action('wp_enqueue_scripts', function(){
         $type = 'term';
         $url = get_term_link($obj->term_id);
         $pageName = rwp::field('page_title', $id) ?? $obj->name;
-        $acfGroups = acf_get_field_groups(['term_id' => $obj->ID, 'rest' => true]);
+        $acfGroups = acf_get_field_groups(['term_id' => $obj->term_id, 'rest' => true]);
     } else {
         $id = null;
         $type = null;
