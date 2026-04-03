@@ -1,7 +1,8 @@
 ![ReactWP](https://reactwp.com/github-image/banner-black.jpg)
 
 ![Built](https://img.shields.io/badge/Bundled%20with-Webpack-1C78C0)
-![PHP](https://img.shields.io/badge/PHP-8.1+-4F5B93)
+![Backend](https://img.shields.io/badge/Backend%20WordPress%20PHP-8.1+-4F5B93)
+![Frontend](https://img.shields.io/badge/Frontend%20React-19-087ea4)
 ![Node](https://img.shields.io/badge/Node.js-20.12.2+-417e38)
 
 # Introduction
