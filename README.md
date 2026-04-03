@@ -1,5 +1,8 @@
 ![ReactWP](https://reactwp.com/github-image/banner-black.jpg)
 
+![Built](https://img.shields.io/badge/Built-Webpack-blue)
+![Server](https://img.shields.io/badge/Server-PHP%208.1+-4F5B93)
+
 # Introduction
 
 ***Build WordPress like it's 2030.***
