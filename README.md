@@ -1,6 +1,6 @@
 ![ReactWP](https://reactwp.com/github-image/banner-black.jpg)
 
-![Built](https://img.shields.io/badge/Bundled%20with-Webpack-1C78C0)
+![Built](https://img.shields.io/badge/Bundler-Webpack-1C78C0)
 ![Backend](https://img.shields.io/badge/Backend%20WordPress-PHP%208.1+-4F5B93)
 ![Frontend](https://img.shields.io/badge/Frontend%20React-19-087ea4)
 ![Node](https://img.shields.io/badge/Node.js-20.12.2+-417e38)
