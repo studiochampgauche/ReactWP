@@ -8,6 +8,9 @@ const Loader = {
     fontsPerPage: true,
     mediasPerPage: true,
     currentRoute: null,
+    routeReadyPath: null,
+    routeReadyResolve: null,
+    routeReady: Promise.resolve(),
 	animation: null,
 	setAnimation(factory){
         this.animation = factory;
@@ -43,8 +46,62 @@ const Loader = {
         return tl;
     },
     setRoute(route){
+        const previousPath = this.currentRoute?.path || null;
+        const nextPath = route?.path || null;
+
         this.currentRoute = route || null;
+
+        if(nextPath !== previousPath || this.routeReadyPath !== nextPath){
+            this.resetRouteReady(nextPath);
+        }
+
         return this;
+    },
+    resetRouteReady(path = null){
+        this.routeReadyPath = path || null;
+        this.routeReady = new Promise((resolve) => {
+            this.routeReadyResolve = resolve;
+        });
+        return this.routeReady;
+    },
+    markRouteReady(path = null){
+        if(this.routeReadyPath && path && this.routeReadyPath !== path){
+            return false;
+        }
+
+        const resolve = this.routeReadyResolve;
+
+        this.routeReadyResolve = null;
+        resolve?.(path || this.routeReadyPath || null);
+
+        return true;
+    },
+    waitForRouteReady(timeout = 10000){
+        if(!this.routeReadyResolve){
+            return this.waitForPaint();
+        }
+
+        return Promise.race([
+            this.routeReady,
+            new Promise((resolve) => {
+                window.setTimeout(resolve, timeout);
+            })
+        ]).then(() => this.waitForPaint());
+    },
+    waitForPaint(frames = 2){
+        return new Promise((resolve) => {
+            const nextFrame = () => {
+                if(frames <= 0){
+                    resolve();
+                    return;
+                }
+
+                frames -= 1;
+                window.requestAnimationFrame(nextFrame);
+            };
+
+            window.requestAnimationFrame(nextFrame);
+        });
     },
     route(){
         return this.currentRoute || CURRENT_ROUTE || null;
@@ -201,6 +258,161 @@ const Loader = {
         }
 
         return sourceElement;
+    },
+    waitForMediaDisplay(type, mediaElement){
+        if(!mediaElement){
+            return Promise.resolve();
+        }
+
+        if(type === 'image'){
+            if(typeof mediaElement.decode === 'function'){
+                return mediaElement.decode()
+                    .catch(() => {})
+                    .then(() => this.waitForPaint(1));
+            }
+
+            if(mediaElement.complete){
+                return this.waitForPaint(1);
+            }
+
+            return new Promise((resolve) => {
+                const finalize = () => {
+                    mediaElement.onload = null;
+                    mediaElement.onerror = null;
+                    this.waitForPaint(1).then(resolve);
+                };
+
+                mediaElement.onload = finalize;
+                mediaElement.onerror = finalize;
+            });
+        }
+
+        if(type === 'video'){
+            if(mediaElement.readyState >= 2){
+                return this.waitForPaint(1);
+            }
+
+            return new Promise((resolve) => {
+                const finalize = () => {
+                    mediaElement.removeEventListener('loadeddata', finalize);
+                    mediaElement.removeEventListener('error', finalize);
+                    this.waitForPaint(1).then(resolve);
+                };
+
+                mediaElement.addEventListener('loadeddata', finalize, { once: true });
+                mediaElement.addEventListener('error', finalize, { once: true });
+            });
+        }
+
+        return Promise.resolve();
+    },
+    renderMedias(mediaPromise){
+        return Promise.resolve(mediaPromise)
+            .then((medias) => {
+                if(!medias || !Object.keys(medias).length){
+                    return medias || {};
+                }
+
+                const values = Object.values(medias).flat();
+
+                if(!values.length){
+                    return medias;
+                }
+
+                return Promise.allSettled(values.map((media) => {
+                    const target = this.resolveTarget(media.target);
+
+                    if(!target){
+                        return Promise.resolve();
+                    }
+
+                    const {
+                        target: _target,
+                        src,
+                        cachedSrc,
+                        sources,
+                        type,
+                        ...props
+                    } = media;
+
+                    let mediaElement = this.createMediaElement(type);
+
+                    if(!mediaElement){
+                        return Promise.resolve();
+                    }
+
+                    this.applyProps(mediaElement, props);
+
+                    if(type === 'video'){
+                        mediaElement.playsInline = true;
+                    }
+
+                    if(type === 'image'){
+                        mediaElement.src = cachedSrc || src;
+
+                        if(Array.isArray(sources) && sources.length){
+                            const pictureElement = document.createElement('picture');
+
+                            sources.forEach((source) => {
+                                const sourceElement = this.createSourceElement('image', source);
+
+                                if(sourceElement){
+                                    pictureElement.appendChild(sourceElement);
+                                }
+                            });
+
+                            pictureElement.appendChild(mediaElement);
+                            target.replaceWith(pictureElement);
+
+                            return this.waitForMediaDisplay(type, mediaElement);
+                        }
+
+                        target.replaceWith(mediaElement);
+                        return this.waitForMediaDisplay(type, mediaElement);
+                    }
+
+                    if(['video', 'audio'].includes(type)){
+                        let hasSourceChildren = false;
+
+                        if(Array.isArray(sources) && sources.length){
+                            sources.forEach((source) => {
+                                const sourceElement = this.createSourceElement(type, source);
+
+                                if(sourceElement){
+                                    hasSourceChildren = true;
+                                    mediaElement.appendChild(sourceElement);
+                                }
+                            });
+                        }
+
+                        if(!hasSourceChildren){
+                            mediaElement.src = cachedSrc || src;
+                        }
+
+                        target.replaceWith(mediaElement);
+                        mediaElement.load();
+
+                        const displayPromise = this.waitForMediaDisplay(type, mediaElement);
+
+                        if(mediaElement.autoplay){
+                            const tryPlay = () => {
+                                mediaElement.play()?.catch(() => {});
+                            };
+
+                            if(mediaElement.readyState >= 2){
+                                tryPlay();
+                            } else {
+                                mediaElement.addEventListener('loadeddata', tryPlay, { once: true });
+                            }
+                        }
+
+                        return displayPromise;
+                    }
+
+                    target.replaceWith(mediaElement);
+                    return Promise.resolve();
+                })).then(() => medias);
+            });
     },
     preloadMedia(type, item){
         if(!item?.src){
@@ -388,134 +600,13 @@ const Loader = {
                     window.loader.isLoaded = true;
                     done(medias);
                 });
-            };
+			};
 
-			if(!window.loader?.medias){
-				finalize({});
-				return;
-			}
-
-			window.loader.medias.then((medias) => {
-
-				if(!medias || !Object.keys(medias).length){
-					finalize(medias || {});
-					return;
-				}
-
-				const values = Object.values(medias).flat();
-
-				if(!values.length){
-					finalize(medias);
-					return;
-				}
-
-				let processed = 0;
-
-				const next = () => {
-					processed += 1;
-
-					if(processed === values.length){
-						finalize(medias);
-					}
-				};
-
-				values.forEach((media) => {
-					const target = this.resolveTarget(media.target);
-
-					if(!target){
-						next();
-						return;
-					}
-
-					const {
-						target: _target,
-						src,
-						cachedSrc,
-						sources,
-						type,
-						...props
-					} = media;
-
-					let mediaElement = this.createMediaElement(type);
-
-					if(!mediaElement){
-						next();
-						return;
-					}
-
-					this.applyProps(mediaElement, props);
-
-					if(type === 'video'){
-						mediaElement.playsInline = true;
-					}
-
-					if(type === 'image'){
-						mediaElement.src = cachedSrc || src;
-
-						if(Array.isArray(sources) && sources.length){
-							const pictureElement = document.createElement('picture');
-
-							sources.forEach((source) => {
-								const sourceElement = this.createSourceElement('image', source);
-
-								if(sourceElement){
-									pictureElement.appendChild(sourceElement);
-								}
-							});
-
-							pictureElement.appendChild(mediaElement);
-							target.replaceWith(pictureElement);
-							next();
-							return;
-						}
-
-						target.replaceWith(mediaElement);
-						next();
-						return;
-					}
-
-					if(['video', 'audio'].includes(type)){
-						let hasSourceChildren = false;
-
-						if(Array.isArray(sources) && sources.length){
-							sources.forEach((source) => {
-								const sourceElement = this.createSourceElement(type, source);
-
-								if(sourceElement){
-									hasSourceChildren = true;
-									mediaElement.appendChild(sourceElement);
-								}
-							});
-						}
-
-						if(!hasSourceChildren){
-							mediaElement.src = cachedSrc || src;
-						}
-
-						target.replaceWith(mediaElement);
-						mediaElement.load();
-
-						if(mediaElement.autoplay){
-							const tryPlay = () => {
-								mediaElement.play()?.catch(() => {});
-							};
-
-							if(mediaElement.readyState >= 2){
-								tryPlay();
-							} else {
-								mediaElement.addEventListener('loadeddata', tryPlay, { once: true });
-							}
-						}
-
-						next();
-						return;
-					}
-
-					target.replaceWith(mediaElement);
-					next();
-				});
-
-			});
+            this.waitForRouteReady()
+                .then(() => this.renderMedias(window.loader?.medias))
+                .then((medias) => {
+                    finalize(medias);
+                });
 
 		});
 	},
@@ -526,132 +617,11 @@ const Loader = {
                 done(medias);
             };
 
-			if(!window.loader?.noCriticalMedias){
-                finalize({});
-                return;
-            }
-
-			window.loader.noCriticalMedias.then((medias) => {
-
-				if(!medias || !Object.keys(medias).length){
-					finalize(medias || {});
-					return;
-				}
-
-				const values = Object.values(medias).flat();
-
-				if(!values.length){
-					finalize(medias);
-					return;
-				}
-
-				let processed = 0;
-
-				const next = () => {
-					processed += 1;
-
-					if(processed === values.length){
-						finalize(medias);
-					}
-				};
-
-				values.forEach((media) => {
-					const target = this.resolveTarget(media.target);
-
-					if(!target){
-						next();
-						return;
-					}
-
-					const {
-						target: _target,
-						src,
-						cachedSrc,
-						sources,
-						type,
-						...props
-					} = media;
-
-					let mediaElement = this.createMediaElement(type);
-
-					if(!mediaElement){
-						next();
-						return;
-					}
-
-					this.applyProps(mediaElement, props);
-
-					if(type === 'video'){
-						mediaElement.playsInline = true;
-					}
-
-					if(type === 'image'){
-						mediaElement.src = cachedSrc || src;
-
-						if(Array.isArray(sources) && sources.length){
-							const pictureElement = document.createElement('picture');
-
-							sources.forEach((source) => {
-								const sourceElement = this.createSourceElement('image', source);
-
-								if(sourceElement){
-									pictureElement.appendChild(sourceElement);
-								}
-							});
-
-							pictureElement.appendChild(mediaElement);
-							target.replaceWith(pictureElement);
-							next();
-							return;
-						}
-
-						target.replaceWith(mediaElement);
-						next();
-						return;
-					}
-
-					if(['video', 'audio'].includes(type)){
-						let hasSourceChildren = false;
-
-						if(Array.isArray(sources) && sources.length){
-							sources.forEach((source) => {
-								const sourceElement = this.createSourceElement(type, source);
-
-								if(sourceElement){
-									hasSourceChildren = true;
-									mediaElement.appendChild(sourceElement);
-								}
-							});
-						}
-
-						if(!hasSourceChildren){
-							mediaElement.src = cachedSrc || src;
-						}
-
-						target.replaceWith(mediaElement);
-						mediaElement.load();
-
-						if(mediaElement.autoplay){
-							const tryPlay = () => {
-								mediaElement.play()?.catch(() => {});
-							};
-
-							if(mediaElement.readyState >= 2){
-								tryPlay();
-							} else {
-								mediaElement.addEventListener('loadeddata', tryPlay, { once: true });
-							}
-						}
-
-						next();
-						return;
-					}
-
-					target.replaceWith(mediaElement);
-					next();
-				});
-
-			});
+            this.waitForRouteReady()
+                .then(() => this.renderMedias(window.loader?.noCriticalMedias))
+                .then((medias) => {
+                    finalize(medias);
+                });
 
 		});
 	}

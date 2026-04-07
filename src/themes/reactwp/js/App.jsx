@@ -1,5 +1,5 @@
 'use strict';
-import React, { StrictMode, createContext, useContext, useEffect, useState, lazy } from 'react';
+import React, { StrictMode, createContext, useContext, useEffect, useLayoutEffect, useState, lazy } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
@@ -73,7 +73,7 @@ PageTransitionAnimation
 
 
 const templates = {
-    Default: lazy(() => import('./templates/Default'))
+    Default: lazy(() => import('./templates/Default')),
 };
 
 const Template = templates[CURRENT_ROUTE.template] || templates['Default'];
@@ -91,6 +91,10 @@ function LoaderBridge(){
 
 function CurrentRouteElement(){
     const { currentRoute } = useContext(RouteContext);
+
+    useLayoutEffect(() => {
+        Loader.markRouteReady(currentRoute.path);
+    }, [currentRoute.path]);
 
     const Template = templates[currentRoute.template] || templates.Default;
 
