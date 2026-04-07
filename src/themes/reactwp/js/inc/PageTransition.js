@@ -1,5 +1,5 @@
 'use strict';
-import React, { useContext, useEffect, useState, useRef } from 'react'
+import React, { useContext, useEffect, useLayoutEffect, useState, useRef } from 'react'
 import { useBlocker, useLocation, useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -18,6 +18,14 @@ const PageTransition = () => {
 	const [ firstLoad, firstLoadSet] = useState(true);
 
 	const { currentRoute, setCurrentRoute } = useContext(RouteContext);
+
+
+	useLayoutEffect(() => {
+		if(!currentRoute) return;
+
+		window.loader.display = Loader.display();
+		window.loader.noCriticalDisplay = Loader.noCriticalDisplay();
+	}, [currentRoute?.path]);
 
 	useEffect(() => {
 
@@ -102,6 +110,7 @@ const PageTransition = () => {
 						}
 					});
 
+
 					
 					setCurrentRoute(newRouteData);
 
@@ -118,9 +127,6 @@ const PageTransition = () => {
 	useEffect(() => {
 
 		let killEvents = [];
-
-
-		window.loader.display = Loader.display();
 
 
 		document.querySelectorAll('a')?.forEach(linkElement => {
