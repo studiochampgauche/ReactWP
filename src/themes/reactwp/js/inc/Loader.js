@@ -59,18 +59,22 @@ const Loader = {
     getFontsMap(){
         const fontGroups = this.getMediaGroups();
 
-        return ASSETS?.critical_fonts
-            ? (
-                this.fontsPerPage
-                    ? Object.fromEntries(
-                        fontGroups.map((key) => [key, ASSETS.critical_fonts[key] || []])
-                    )
-                    : ASSETS.critical_fonts
-            )
-            : {};
+        if(!ASSETS?.critical_fonts){
+            return {};
+        }
+
+        if(!this.fontsPerPage){
+            return ASSETS.critical_fonts;
+        }
+
+        const groups = [...new Set(['all', ...fontGroups])];
+
+        return Object.fromEntries(
+            groups.map((key) => [key, ASSETS.critical_fonts[key] || []])
+        );
     },
     getMediasMap(){
-        const mediaGroups = this.getMediaGroups();
+        const mediaGroups = [...new Set(['all', ...this.getMediaGroups()])];
 
         return ASSETS?.critical_medias
             ? (
@@ -82,8 +86,9 @@ const Loader = {
             )
             : {};
     },
+
     getNoCriticalMediasMap(){
-        const mediaGroups = this.getMediaGroups();
+        const mediaGroups = [...new Set(['all', ...this.getMediaGroups()])];
 
         return ASSETS?.no_critical_medias
             ? (
