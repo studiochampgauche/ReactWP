@@ -9,6 +9,13 @@ import RWPCache from './Cache';
 import PageTransitionAnimation from './PageTransitionAnimation';
 
 
+const normalizePath = (path = '/') => {
+	const normalized = `/${String(path || '').replace(/^\/+|\/+$/g, '')}/`;
+
+	return normalized === '//' ? '/' : normalized;
+};
+
+
 const PageTransition = () => {
 	
 	const location = useLocation();
@@ -27,12 +34,13 @@ const PageTransition = () => {
 
 		window.loader.display = Loader.display();
 		window.loader.noCriticalDisplay = Loader.noCriticalDisplay();
+		
 	}, [currentRoute?.path]);
 
 	useLayoutEffect(() => {
 		const pendingRoute = pendingRouteRef.current;
 
-		if(!pendingRoute || pendingRoute.path !== location.pathname){
+		if(!pendingRoute || normalizePath(pendingRoute.path) !== normalizePath(location.pathname)){
 			return;
 		}
 
@@ -44,7 +52,7 @@ const PageTransition = () => {
 
 		if(blocker.state === 'blocked'){
 
-			if([blocker.location.pathname, blocker.location.pathname + '/'].includes(location.pathname)){
+			if(normalizePath(blocker.location.pathname) === normalizePath(location.pathname)){
 
 				if(blocker.location.hash){
 
@@ -130,8 +138,10 @@ const PageTransition = () => {
 					});
 
 
-					window.loader.download.then(() => blocker.proceed());
 					
+					//setCurrentRoute(newRouteData);
+
+					window.loader.download.then(() => blocker.proceed());
 				});
 
 			}
@@ -205,6 +215,22 @@ const PageTransition = () => {
 		});
 
 
+		return () => {
+
+			killEvents?.forEach(killEvent => killEvent());
+			killEvents = null;
+
+		}
+
+
+	}, [location.pathname]);
+
+	useEffect(() => {
+
+		if(!currentRoute?.path || normalizePath(currentRoute.path) !== normalizePath(location.pathname)){
+			return;
+		}
+
 		if(firstLoad){
 
 			firstLoadSet(false);
@@ -213,9 +239,20 @@ const PageTransition = () => {
 
 		}
 
-		window.loader.display.then(() => {
+		const displayPromise = window.loader.display;
+		let cancelled = false;
+
+		Promise.resolve(displayPromise).then(() => {
+
+			if(cancelled){
+				return;
+			}
 
 			requestAnimationFrame(() => {
+
+				if(cancelled){
+					return;
+				}
 
 				if(window.gscroll){
 					window.gscroll.scrollTop(0);
@@ -226,6 +263,10 @@ const PageTransition = () => {
 				ScrollTrigger?.refresh();
 
 				requestAnimationFrame(() => {
+
+					if(cancelled){
+						return;
+					}
 
 					let animation = PageTransitionAnimation.enter({
 						location
@@ -238,13 +279,17 @@ const PageTransition = () => {
 					animation?.eventCallback?.('onComplete', () => {
 						previousOnComplete?.();
 
-						animation.kill();
-						animation = null;
+							animation.kill();
+							animation = null;
 
-						requestAnimationFrame(() => {
-							window.gscroll?.paused(false);
+							requestAnimationFrame(() => {
+								if(cancelled){
+									return;
+								}
+
+								window.gscroll?.paused(false);
+							});
 						});
-					});
 
 				});
 
@@ -254,14 +299,12 @@ const PageTransition = () => {
 
 
 		return () => {
-
-			killEvents?.forEach(killEvent => killEvent());
-			killEvents = null;
+			cancelled = true;
 
 		}
 
 
-	}, [location.pathname]);
+	}, [currentRoute?.path, location.pathname]);
 	
 }
 
