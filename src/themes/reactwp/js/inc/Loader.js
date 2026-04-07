@@ -59,26 +59,39 @@ const Loader = {
     getFontsMap(){
         const fontGroups = this.getMediaGroups();
 
-        return CRITICAL_ASSETS?.fonts
+        return ASSETS?.critical_fonts
             ? (
                 this.fontsPerPage
                     ? Object.fromEntries(
-                        fontGroups.map((key) => [key, CRITICAL_ASSETS.fonts[key] || []])
+                        fontGroups.map((key) => [key, ASSETS.critical_fonts[key] || []])
                     )
-                    : CRITICAL_ASSETS.fonts
+                    : ASSETS.critical_fonts
             )
             : {};
     },
     getMediasMap(){
         const mediaGroups = this.getMediaGroups();
 
-        return CRITICAL_ASSETS?.medias
+        return ASSETS?.critical_medias
             ? (
                 this.mediasPerPage
                     ? Object.fromEntries(
-                        mediaGroups.map((key) => [key, CRITICAL_ASSETS.medias[key] || []])
+                        mediaGroups.map((key) => [key, ASSETS.critical_medias[key] || []])
                     )
-                    : CRITICAL_ASSETS.medias
+                    : ASSETS.critical_medias
+            )
+            : {};
+    },
+    getNoCriticalMediasMap(){
+        const mediaGroups = this.getMediaGroups();
+
+        return ASSETS?.no_critical_medias
+            ? (
+                this.mediasPerPage
+                    ? Object.fromEntries(
+                        mediaGroups.map((key) => [key, ASSETS.no_critical_medias[key] || []])
+                    )
+                    : ASSETS.no_critical_medias
             )
             : {};
     },
@@ -317,6 +330,34 @@ const Loader = {
 
         return Promise.allSettled(tasks).then(() => medias);
     },
+    noCriticalMedias(){
+        const medias = this.getNoCriticalMediasMap();
+
+        if(!Object.keys(medias).length){
+            return Promise.resolve(medias);
+        }
+
+        const tasks = [];
+
+        Object.values(medias).flat().forEach((media) => {
+            if(!media?.type || !media?.src) return;
+
+            tasks.push(this.preloadMedia(media.type, media));
+
+            if(Array.isArray(media.sources)){
+                media.sources.forEach((subMedia) => {
+                    if(!subMedia?.src) return;
+                    tasks.push(this.preloadMedia(media.type, subMedia));
+                });
+            }
+        });
+
+        if(!tasks.length){
+            return Promise.resolve(medias);
+        }
+
+        return Promise.allSettled(tasks).then(() => medias);
+    },
     download(){
 
 		window.loader = window.loader || {};
@@ -324,6 +365,7 @@ const Loader = {
 
 		window.loader.fonts = this.fonts();
 		window.loader.medias = this.medias();
+        window.loader.noCriticalMedias = this.noCriticalMedias();
 
 		window.loader.download = Promise.allSettled([
 			window.loader.fonts,
@@ -336,16 +378,12 @@ const Loader = {
 		return new Promise((done) => {
 
 			const finalize = (medias = {}) => {
-				done(medias);
-
-				if(window.loader?.fonts){
-					window.loader.fonts.then(() => {
-						window.loader.isLoaded = true;
-					});
-				} else {
-					window.loader.isLoaded = true;
-				}
-			};
+                Promise.resolve(window.loader?.fonts)
+                .finally(() => {
+                    window.loader.isLoaded = true;
+                    done(medias);
+                });
+            };
 
 			if(!window.loader?.medias){
 				finalize({});
@@ -353,6 +391,142 @@ const Loader = {
 			}
 
 			window.loader.medias.then((medias) => {
+
+				if(!medias || !Object.keys(medias).length){
+					finalize(medias || {});
+					return;
+				}
+
+				const values = Object.values(medias).flat();
+
+				if(!values.length){
+					finalize(medias);
+					return;
+				}
+
+				let processed = 0;
+
+				const next = () => {
+					processed += 1;
+
+					if(processed === values.length){
+						finalize(medias);
+					}
+				};
+
+				values.forEach((media) => {
+					const target = this.resolveTarget(media.target);
+
+					if(!target){
+						next();
+						return;
+					}
+
+					const {
+						target: _target,
+						src,
+						cachedSrc,
+						sources,
+						type,
+						...props
+					} = media;
+
+					let mediaElement = this.createMediaElement(type);
+
+					if(!mediaElement){
+						next();
+						return;
+					}
+
+					this.applyProps(mediaElement, props);
+
+					if(type === 'video'){
+						mediaElement.playsInline = true;
+					}
+
+					if(type === 'image'){
+						mediaElement.src = cachedSrc || src;
+
+						if(Array.isArray(sources) && sources.length){
+							const pictureElement = document.createElement('picture');
+
+							sources.forEach((source) => {
+								const sourceElement = this.createSourceElement('image', source);
+
+								if(sourceElement){
+									pictureElement.appendChild(sourceElement);
+								}
+							});
+
+							pictureElement.appendChild(mediaElement);
+							target.replaceWith(pictureElement);
+							next();
+							return;
+						}
+
+						target.replaceWith(mediaElement);
+						next();
+						return;
+					}
+
+					if(['video', 'audio'].includes(type)){
+						let hasSourceChildren = false;
+
+						if(Array.isArray(sources) && sources.length){
+							sources.forEach((source) => {
+								const sourceElement = this.createSourceElement(type, source);
+
+								if(sourceElement){
+									hasSourceChildren = true;
+									mediaElement.appendChild(sourceElement);
+								}
+							});
+						}
+
+						if(!hasSourceChildren){
+							mediaElement.src = cachedSrc || src;
+						}
+
+						target.replaceWith(mediaElement);
+						mediaElement.load();
+
+						if(mediaElement.autoplay){
+							const tryPlay = () => {
+								mediaElement.play()?.catch(() => {});
+							};
+
+							if(mediaElement.readyState >= 2){
+								tryPlay();
+							} else {
+								mediaElement.addEventListener('loadeddata', tryPlay, { once: true });
+							}
+						}
+
+						next();
+						return;
+					}
+
+					target.replaceWith(mediaElement);
+					next();
+				});
+
+			});
+
+		});
+	},
+    noCriticalDisplay(){
+		return new Promise((done) => {
+
+            const finalize = (medias = {}) => {
+                done(medias);
+            };
+
+			if(!window.loader?.noCriticalMedias){
+                finalize({});
+                return;
+            }
+
+			window.loader.noCriticalMedias.then((medias) => {
 
 				if(!medias || !Object.keys(medias).length){
 					finalize(medias || {});

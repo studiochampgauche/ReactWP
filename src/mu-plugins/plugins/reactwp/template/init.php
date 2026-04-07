@@ -72,9 +72,10 @@ class ReactWP{
             /*
             * Assets Management
             */
-            wp_localize_script('rwp-main', 'CRITICAL_ASSETS', [
-                'medias' => apply_filters('rwp_critical_medias', []),
-                'fonts' => apply_filters('rwp_critical_fonts', []),
+            wp_localize_script('rwp-main', 'ASSETS', [
+                'no_critical_medias' => apply_filters('rwp_no_critical_medias', []),
+                'critical_medias' => apply_filters('rwp_critical_medias', []),
+                'critical_fonts' => apply_filters('rwp_critical_fonts', [])
             ]);
 
             
