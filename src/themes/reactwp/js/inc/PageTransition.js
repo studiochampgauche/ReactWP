@@ -51,7 +51,6 @@ const PageTransition = () => {
 				const newRouteData = await RWPCache.json(`${SYSTEM.restUrl}reactwp/v1/route?view=${encodeURIComponent(blocker.location.pathname)}`);
 
 				Loader.setRoute(newRouteData);
-				setCurrentRoute(newRouteData);
 				window.loader.download = Loader.download();
 
 
@@ -102,6 +101,9 @@ const PageTransition = () => {
 							audio.innerHTML = '<div class="audio"></div>';
 						}
 					});
+
+					
+					setCurrentRoute(newRouteData);
 
 					window.loader.download.then(() => blocker.proceed());
 				});
