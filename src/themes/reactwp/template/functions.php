@@ -148,7 +148,9 @@ add_action('wp_head', function(){
 		}
 
         @media screen and (pointer: coarse), (pointer: none){
-            height: 100svh;
+            #loader{
+                height: 100svh;
+            }
         }
 	</style>
 	';
