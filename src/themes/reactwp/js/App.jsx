@@ -112,7 +112,7 @@ function CurrentRouteElement(){
     return (
         <>
             <Metas seo={seo} />
-            <Template {...routeProps} />
+            <Template key={currentRoute.path} {...routeProps} />
             <Footer />
         </>
     );

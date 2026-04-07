@@ -15,6 +15,8 @@ const PageTransition = () => {
 	const navigate = useNavigate();
 	const blocker = useBlocker(true);
 
+	const pendingRouteRef = useRef(null);
+
 	const [ firstLoad, firstLoadSet] = useState(true);
 
 	const { currentRoute, setCurrentRoute } = useContext(RouteContext);
@@ -26,6 +28,17 @@ const PageTransition = () => {
 		window.loader.display = Loader.display();
 		window.loader.noCriticalDisplay = Loader.noCriticalDisplay();
 	}, [currentRoute?.path]);
+
+	useLayoutEffect(() => {
+		const pendingRoute = pendingRouteRef.current;
+
+		if(!pendingRoute || pendingRoute.path !== location.pathname){
+			return;
+		}
+
+		setCurrentRoute(pendingRoute);
+		pendingRouteRef.current = null;
+	}, [location.pathname, setCurrentRoute]);
 
 	useEffect(() => {
 
@@ -58,6 +71,12 @@ const PageTransition = () => {
 
 				const newRouteData = await RWPCache.json(`${SYSTEM.restUrl}reactwp/v1/route?view=${encodeURIComponent(blocker.location.pathname)}`);
 
+				if(!newRouteData){
+					blocker.proceed();
+					return;
+				}
+
+				pendingRouteRef.current = newRouteData;
 				Loader.setRoute(newRouteData);
 				window.loader.download = Loader.download();
 
@@ -111,10 +130,8 @@ const PageTransition = () => {
 					});
 
 
-					
-					setCurrentRoute(newRouteData);
-
 					window.loader.download.then(() => blocker.proceed());
+					
 				});
 
 			}
@@ -198,25 +215,39 @@ const PageTransition = () => {
 
 		window.loader.display.then(() => {
 
-			let animation = PageTransitionAnimation.enter({
-				location
-			});
+			requestAnimationFrame(() => {
 
-			const previousOnComplete = animation?.eventCallback
-				? animation.eventCallback('onComplete')
-				: null;
-
-			animation?.eventCallback?.('onComplete', () => {
-				previousOnComplete?.();
-
-				animation.kill();
-				animation = null;
+				if(window.gscroll){
+					window.gscroll.scrollTop(0);
+				} else {
+					window.scrollTo({ top: 0, behavior: 'instant' });
+				}
 
 				ScrollTrigger?.refresh();
 
 				requestAnimationFrame(() => {
-					window.gscroll?.paused(false);
+
+					let animation = PageTransitionAnimation.enter({
+						location
+					});
+
+					const previousOnComplete = animation?.eventCallback
+						? animation.eventCallback('onComplete')
+						: null;
+
+					animation?.eventCallback?.('onComplete', () => {
+						previousOnComplete?.();
+
+						animation.kill();
+						animation = null;
+
+						requestAnimationFrame(() => {
+							window.gscroll?.paused(false);
+						});
+					});
+
 				});
+
 			});
 
 		});
