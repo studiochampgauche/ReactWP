@@ -29,11 +29,14 @@ section{
 
 #viewport{
 	height: 100%;
-	min-height: 100lvh;
+	min-height: 100vh;
 	#pageWrapper{
 		#pageContent{
 			will-change: transform;
 		}
+	}
+	@media screen and (pointer: coarse), (pointer: none){
+		min-height: 100lvh;
 	}
 }
 
