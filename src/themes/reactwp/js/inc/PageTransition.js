@@ -15,6 +15,41 @@ const normalizePath = (path = '/') => {
 	return normalized === '//' ? '/' : normalized;
 };
 
+const getHashTarget = (hash) => {
+	if(!hash) return null;
+
+	const id = decodeURIComponent(hash.replace(/^#/, ''));
+
+	if(id){
+		const element = document.getElementById(id);
+
+		if(element) return element;
+	}
+
+	try{
+		return document.querySelector(hash);
+	} catch(_){
+		return null;
+	}
+};
+
+const scrollToHash = (hash, behavior = 'instant') => {
+	const target = getHashTarget(hash);
+
+	if(!target) return false;
+
+	if(window.gscroll){
+		window.gscroll.scrollTo(target, false, 'top top');
+	} else {
+		window.scrollTo({
+			top: target.getBoundingClientRect().top + window.scrollY,
+			behavior
+		});
+	}
+
+	return true;
+};
+
 
 const PageTransition = () => {
 	
@@ -254,13 +289,16 @@ const PageTransition = () => {
 					return;
 				}
 
-				if(window.gscroll){
-					window.gscroll.scrollTop(0);
-				} else {
-					window.scrollTo({ top: 0, behavior: 'instant' });
+				ScrollTrigger?.refresh();
+
+				if(!scrollToHash(location.hash)){
+					if(window.gscroll){
+						window.gscroll.scrollTop(0);
+					} else {
+						window.scrollTo({ top: 0, behavior: 'instant' });
+					}
 				}
 
-				ScrollTrigger?.refresh();
 
 				requestAnimationFrame(() => {
 
@@ -304,7 +342,7 @@ const PageTransition = () => {
 		}
 
 
-	}, [currentRoute?.path, location.pathname]);
+	}, [currentRoute?.path, location.pathname, location.hash]);
 	
 }
 
