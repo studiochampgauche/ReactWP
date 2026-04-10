@@ -31,6 +31,30 @@ function get_route(WP_REST_Request $request){
 
     $post_id = url_to_postid($url);
 
+    if(!$post_id){
+
+        $segments = array_values(array_filter(explode('/', trim($path, '/'))));
+        $front_page_id = (int) get_option('page_on_front');
+
+        if($front_page_id && $path === '/'){
+
+            $post_id = $front_page_id;
+
+        } elseif(
+            $front_page_id
+            && count($segments) === 1
+            && function_exists('pll_languages_list')
+            && function_exists('pll_get_post')
+            && in_array($segments[0], pll_languages_list(['fields' => 'slug']), true)
+        ){
+
+            $translated_front_page_id = (int) pll_get_post($front_page_id, $segments[0]);
+            $post_id = $translated_front_page_id ?: $front_page_id;
+
+        }
+
+    }
+
     if($post_id){
         $obj = get_post($post_id);
     } else {
