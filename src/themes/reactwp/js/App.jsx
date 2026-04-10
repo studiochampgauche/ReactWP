@@ -1,4 +1,5 @@
 'use strict';
+import '../scss/default.scss';
 import React, { StrictMode, createContext, useContext, useEffect, useLayoutEffect, useState, lazy } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
@@ -10,7 +11,6 @@ import Metas from './inc/Metas';
 import Loader from './inc/Loader';
 import PageTransitionAnimation from './inc/PageTransitionAnimation';
 import './inc/Scroller';
-import '../scss/default.scss';
 
 export const RouteContext = createContext(null);
 
