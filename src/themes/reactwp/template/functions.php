@@ -205,10 +205,51 @@ add_filter('rwp_critical_fonts', function($fonts){
 
 });
 
+/*
+* Add critical medias
+*/
 add_filter('rwp_critical_medias', function($medias){
 
     //$medias['all'][] = [];
 
     return $medias;
+
+});
+
+/*
+* Add no critical medias
+*/
+add_filter('rwp_no_critical_medias', function($medias){
+
+    //$medias['all'][] = [];
+
+    return $medias;
+
+});
+
+/*
+* Force React Template
+*/
+add_filter('acf/load_value/name=react_template', function($value, $post_id, $field) {
+
+    /*if (is_front_page() && is_user_logged_in()) {
+        return 'DashboardPage';
+    } elseif (is_front_page()) {
+        return 'LoginPage';
+    }*/
+
+    return $value;
+
+}, 10, 3);
+
+
+/*
+* Manage SYSTEM variable in JS
+*/
+add_filter('rwp_system', function($system){
+
+    //$system['potato'] = 'Vegetable';
+
+    return $system;
 
 });
