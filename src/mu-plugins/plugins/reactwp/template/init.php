@@ -65,7 +65,8 @@ class ReactWP{
                 'homeUrl' => home_url('/'),
                 'adminUrl' => admin_url(),
                 'ajaxUrl' => admin_url('admin-ajax.php'),
-                'restUrl' => rest_url()
+                'restUrl' => rest_url(),
+                'restNonce' => wp_create_nonce('wp_rest')
             ]));
 
 
