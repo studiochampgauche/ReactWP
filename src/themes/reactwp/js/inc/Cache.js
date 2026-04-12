@@ -86,6 +86,14 @@ const RWPCache = {
 
         if(!url) return null;
 
+        const requestOptions = {
+            headers: {
+                'X-WP-Nonce': SYSTEM?.restNonce || '',
+                'Accept': 'application/json',
+            },
+            credentials: 'include',
+        };
+
         if(this.jsonMemory.has(url)){
             return this.jsonMemory.get(url);
         }
@@ -105,7 +113,7 @@ const RWPCache = {
                     response = await cache.match(url);
 
                     if(!response){
-                        response = await fetch(url);
+                        response = await fetch(url, requestOptions);
 
                         if(!response.ok){
                             console.warn(`Fetch failed for ${url}`);
@@ -115,7 +123,7 @@ const RWPCache = {
                         await cache.put(url, response.clone());
                     }
                 } else {
-                    response = await fetch(url);
+                    response = await fetch(url, requestOptions);
 
                     if(!response.ok){
                         console.warn(`Fetch failed for ${url}`);
