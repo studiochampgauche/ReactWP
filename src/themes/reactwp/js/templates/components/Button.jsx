@@ -21,7 +21,7 @@ const Button = forwardRef(function Button({ to = null, text, className = null, b
 
 	useEffect(() => {
 
-		const textElement = btnRef.current.querySelector('span');
+		const textElement = btnRef.current?.querySelector('span');
 		if(!textElement) return;
 		
 		let canEnter = true;
