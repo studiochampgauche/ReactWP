@@ -8,46 +8,10 @@ import Loader from './Loader';
 import RWPCache from './Cache';
 import PageTransitionAnimation from './PageTransitionAnimation';
 
-
 const normalizePath = (path = '/') => {
 	const normalized = `/${String(path || '').replace(/^\/+|\/+$/g, '')}/`;
 
 	return normalized === '//' ? '/' : normalized;
-};
-
-const getHashTarget = (hash) => {
-	if(!hash) return null;
-
-	const id = decodeURIComponent(hash.replace(/^#/, ''));
-
-	if(id){
-		const element = document.getElementById(id);
-
-		if(element) return element;
-	}
-
-	try{
-		return document.querySelector(hash);
-	} catch(_){
-		return null;
-	}
-};
-
-const scrollToHash = (hash, behavior = 'instant') => {
-	const target = getHashTarget(hash);
-
-	if(!target) return false;
-
-	if(window.gscroll){
-		window.gscroll.scrollTo(target, false, 'top top');
-	} else {
-		window.scrollTo({
-			top: target.getBoundingClientRect().top + window.scrollY,
-			behavior
-		});
-	}
-
-	return true;
 };
 
 
@@ -63,6 +27,8 @@ const PageTransition = () => {
 
 	const { currentRoute, setCurrentRoute } = useContext(RouteContext);
 
+	const currentPath = normalizePath(location.pathname);
+
 
 	useLayoutEffect(() => {
 		if(!currentRoute) return;
@@ -75,19 +41,25 @@ const PageTransition = () => {
 	useLayoutEffect(() => {
 		const pendingRoute = pendingRouteRef.current;
 
-		if(!pendingRoute || normalizePath(pendingRoute.path) !== normalizePath(location.pathname)){
+		if(!pendingRoute || normalizePath(pendingRoute.path) !== currentPath){
 			return;
 		}
 
-		setCurrentRoute(pendingRoute);
+		setCurrentRoute({
+			...pendingRoute,
+			path: normalizePath(pendingRoute.path)
+		});
+
 		pendingRouteRef.current = null;
-	}, [location.pathname, setCurrentRoute]);
+	}, [currentPath, setCurrentRoute]);
 
 	useEffect(() => {
 
 		if(blocker.state === 'blocked'){
 
-			if(normalizePath(blocker.location.pathname) === normalizePath(location.pathname)){
+			const blockerPath = normalizePath(blocker.location.pathname);
+
+			if(blockerPath === currentPath){
 
 				if(blocker.location.hash){
 
@@ -112,15 +84,20 @@ const PageTransition = () => {
 
 			const blockerAction = async () => {
 
-				const newRouteData = await RWPCache.json(`${SYSTEM.restUrl}reactwp/v1/route?view=${encodeURIComponent(blocker.location.pathname)}`);
+				const newRouteData = await RWPCache.json(`${SYSTEM.restUrl}reactwp/v1/route?view=${encodeURIComponent(blockerPath)}`);
 
 				if(!newRouteData){
 					blocker.proceed();
 					return;
 				}
 
-				pendingRouteRef.current = newRouteData;
-				Loader.setRoute(newRouteData);
+				const normalizedRouteData = {
+					...newRouteData,
+					path: normalizePath(newRouteData.path || blockerPath)
+				};
+
+				pendingRouteRef.current = normalizedRouteData;
+				Loader.setRoute(normalizedRouteData);
 				window.loader.download = Loader.download();
 
 
@@ -262,7 +239,7 @@ const PageTransition = () => {
 
 	useEffect(() => {
 
-		if(!currentRoute?.path || normalizePath(currentRoute.path) !== normalizePath(location.pathname)){
+		if(!currentRoute?.path || normalizePath(currentRoute.path) !== currentPath){
 			return;
 		}
 
@@ -289,16 +266,13 @@ const PageTransition = () => {
 					return;
 				}
 
-				ScrollTrigger?.refresh();
-
-				if(!scrollToHash(location.hash)){
-					if(window.gscroll){
-						window.gscroll.scrollTop(0);
-					} else {
-						window.scrollTo({ top: 0, behavior: 'instant' });
-					}
+				if(window.gscroll){
+					window.gscroll.scrollTop(0);
+				} else {
+					window.scrollTo({ top: 0, behavior: 'instant' });
 				}
 
+				ScrollTrigger?.refresh();
 
 				requestAnimationFrame(() => {
 
@@ -342,7 +316,7 @@ const PageTransition = () => {
 		}
 
 
-	}, [currentRoute?.path, location.pathname, location.hash]);
+	}, [currentRoute?.path, currentPath]);
 	
 }
 
