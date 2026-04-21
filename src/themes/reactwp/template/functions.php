@@ -253,3 +253,17 @@ add_filter('rwp_system', function($system){
     return $system;
 
 });
+
+
+/*
+* Manage redirection
+*/
+add_action('template_redirect', function(){
+
+    /*if(!is_404()) return;
+
+    wp_redirect(home_url());
+
+    exit;*/
+
+});
