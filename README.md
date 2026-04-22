@@ -174,9 +174,14 @@ The `get:core` script prepares the WordPress distribution by:
 - creating or refreshing `dist/`
 - removing default themes and some default plugins
 - downloading ACF Pro
-- installing ACF Pro into `wp-content/mu-plugins/`
+- installing/updating ACF Pro into `wp-content/mu-plugins/`
 
 That makes `dist/` a real WordPress output, not just a frontend build folder.
+
+> [!IMPORTANT]
+> ReactWP ships with ACF PRO so the project can be installed and started quickly, but that does not mean the bundled version is always the latest one, even if it may sometimes be up to date.
+>
+> Keeping ACF PRO updated remains the responsibility of the person installing the project. In practice, each project owner should use their own valid ACF license if they want official updates and long-term version control.
 
 ## Theme
 
