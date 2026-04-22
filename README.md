@@ -106,21 +106,6 @@ That means `get:core` is expected to work in:
 If you are on Windows, do not assume `cmd.exe` or plain PowerShell will behave the same way.
 For the safest setup, run `npm run get:core` from Git Bash.
 
-Why this matters:
-
-- the script uses Bash
-- it also relies on Unix-style tools and behavior such as `curl`, `unzip`, `cp`, and `mktemp`
-
-So if you are on Windows, the recommended workflow is:
-
-```bash
-cd configs
-npm i --legacy-peer-deps
-npm run get:core
-```
-
-from Git Bash.
-
 ## Build commands
 
 ReactWP gives you three command families:
