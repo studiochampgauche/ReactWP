@@ -55,7 +55,6 @@ remove_action('wp_head', 'rest_output_link_wp_head');
 remove_action('wp_head', 'wp_oembed_add_discovery_links');
 remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles');
 remove_action('wp_footer', 'wp_enqueue_global_styles', 1);
-remove_action('wp_head', 'rel_canonical');
 remove_action('wp_head', 'feed_links', 2);
 remove_action('wp_head', 'feed_links_extra', 3);
 remove_action('wp_head', 'wp_resource_hints', 2);
