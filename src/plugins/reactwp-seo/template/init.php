@@ -47,18 +47,18 @@ class Seo{
 
         });
         
-        add_filter('rwp_wp_head', function($wp_heads){
+        add_filter('rwp_wp_head', function($wp_heads, $context = []){
 
-            $obj = self::queried_object();
+            $obj = self::queried_object($context);
 
-            $title = self::title();
-            $description = self::description();
-            $og_type = self::og_type();
-            $og_url = self::og_url();
-            $og_site_name = self::og_site_name();
-            $og_title = self::og_title();
-            $og_description = self::og_description();
-            $og_image = self::og_image();
+            $title = self::title($context);
+            $description = self::description($context);
+            $og_type = self::og_type($context);
+            $og_url = self::og_url($context);
+            $og_site_name = self::og_site_name($context);
+            $og_title = self::og_title($context);
+            $og_description = self::og_description($context);
+            $og_image = self::og_image($context);
             $favicon = self::image_url(\ReactWP\Utils\Field::get('seo_favicon', 'option'));
 
             $charset = get_bloginfo('charset');
@@ -142,7 +142,7 @@ class Seo{
 
             return $wp_heads;
 
-        });
+        }, 10, 2);
         
     }
 
@@ -152,9 +152,29 @@ class Seo{
 
     }
 
-    public static function title(){
+    public static function title($context = []){
 
-        $obj = self::queried_object();
+        $route = self::route($context);
+
+        if($route){
+            $language = self::route_language($context);
+            $seo = self::route_seo($context);
+            $page_name = $route['pageName'] ?? self::site_name();
+
+            if(self::has_value($seo['title_' . $language] ?? null)){
+                return $seo['title_' . $language];
+            }
+
+            if(self::has_value($seo['title'] ?? null)){
+                return $seo['title'];
+            }
+
+            return self::has_value($page_name)
+                ? $page_name . ' - ' . self::site_name()
+                : self::site_name();
+        }
+
+        $obj = self::queried_object($context);
         $search_query = self::search_query();
 
         if(is_search()){
@@ -189,13 +209,44 @@ class Seo{
 
     }
 
-    public static function description(){
+    public static function description($context = []){
+
+        $route = self::route($context);
+
+        if($route){
+            $language = self::route_language($context);
+            $seo = self::route_seo($context);
+
+            if(self::has_value($seo['description_' . $language] ?? null)){
+                return $seo['description_' . $language];
+            }
+
+            if(self::has_value($seo['description'] ?? null)){
+                return $seo['description'];
+            }
+        }
 
         return self::resolve_value('seo_description_' . CL);
 
     }
 
-    public static function og_type(){
+    public static function og_type($context = []){
+
+        $seo = self::route_seo($context);
+
+        if(self::has_value($seo['og_type'] ?? null)){
+            return $seo['og_type'];
+        }
+
+        $obj = self::queried_object($context);
+
+        if($obj instanceof \WP_Post && $obj->post_type === 'post'){
+            return 'article';
+        }
+
+        if($obj instanceof \WP_User){
+            return 'profile';
+        }
 
         if(is_singular(['post'])){
             return 'article';
@@ -209,33 +260,79 @@ class Seo{
 
     }
 
-    public static function og_site_name(){
+    public static function og_site_name($context = []){
 
         return self::site_name();
 
     }
 
-    public static function og_title(){
+    public static function og_title($context = []){
+
+        $route = self::route($context);
+
+        if($route){
+            $language = self::route_language($context);
+            $seo = self::route_seo($context);
+
+            if(self::has_value($seo['og_title_' . $language] ?? null)){
+                return $seo['og_title_' . $language];
+            }
+
+            if(self::has_value($seo['og_title'] ?? null)){
+                return $seo['og_title'];
+            }
+
+            return self::title($context);
+        }
 
         return self::resolve_value('seo_og_title_' . CL, self::title());
 
     }
 
-    public static function og_description(){
+    public static function og_description($context = []){
+
+        $route = self::route($context);
+
+        if($route){
+            $language = self::route_language($context);
+            $seo = self::route_seo($context);
+
+            if(self::has_value($seo['og_description_' . $language] ?? null)){
+                return $seo['og_description_' . $language];
+            }
+
+            if(self::has_value($seo['og_description'] ?? null)){
+                return $seo['og_description'];
+            }
+
+            return self::description($context);
+        }
 
         return self::resolve_value('seo_og_description_' . CL, self::description());
 
     }
 
-    public static function og_image(){
+    public static function og_image($context = []){
+
+        $seo = self::route_seo($context);
+
+        if(self::has_value($seo['og_image'] ?? null)){
+            return self::image_url($seo['og_image']);
+        }
 
         return self::image_url(self::resolve_value('seo_og_image'));
 
     }
 
-    public static function og_url(){
+    public static function og_url($context = []){
 
-        $obj = self::queried_object();
+        $route = self::route($context);
+
+        if(self::has_value($route['url'] ?? null)){
+            return $route['url'];
+        }
+
+        $obj = self::queried_object($context);
 
         if(is_search()){
             $search_query = self::search_query();
@@ -265,9 +362,44 @@ class Seo{
 
     }
 
-    private static function queried_object(){
+    private static function queried_object($context = []){
+
+        if(isset($context['object'])){
+            return $context['object'];
+        }
 
         return get_queried_object();
+
+    }
+
+    private static function route($context = []){
+
+        if(isset($context['route']) && is_array($context['route'])){
+            return $context['route'];
+        }
+
+        return null;
+
+    }
+
+    private static function route_seo($context = []){
+
+        $route = self::route($context);
+        $seo = $route['seo'] ?? [];
+
+        return is_array($seo) ? $seo : [];
+
+    }
+
+    private static function route_language($context = []){
+
+        $route = self::route($context);
+
+        if(self::has_value($route['language'] ?? null)){
+            return $route['language'];
+        }
+
+        return defined('CL') ? CL : substr(get_locale(), 0, 2);
 
     }
 

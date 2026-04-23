@@ -17,7 +17,7 @@ class Render{
 		/*
 		* Display ACF Fields in admin
 		*/
-		add_action('init', [$this, 'acf']);
+		add_action('acf/init', [$this, 'acf'], 20);
 
 
 		/*
@@ -37,14 +37,23 @@ class Render{
     
     public function wp_head(){
 
-        self::$wp_heads = apply_filters('rwp_wp_head', self::$wp_heads);
-        echo implode('', self::$wp_heads);
+        self::$wp_heads = apply_filters('rwp_wp_head', self::$wp_heads, [
+            'source' => 'wp_head',
+            'object' => get_queried_object(),
+        ]);
+        echo implode('', array_filter(self::$wp_heads, 'is_string'));
 
     }
 
     public function acf(){
 
-    	$postTypes = get_post_types();
+        if(!function_exists('acf_add_local_field_group')){
+            return;
+        }
+
+    	$postTypes = get_post_types([
+            'public' => true
+        ], 'objects');
 
 		$unsets = [
 			'post',
@@ -75,8 +84,13 @@ class Render{
 			unset($postTypes[$unset]);
 		}
 
+        $postTypeChoices = [];
 
-		$seoPostTypes = \rwp::field('seo_post_types') ? \rwp::field('seo_post_types') : [];
+        foreach($postTypes as $slug => $postType){
+            $postTypeChoices[$slug] = $postType->labels->singular_name ?: $slug;
+        }
+
+		$seoPostTypes = self::option_checkbox_values('seo_post_types');
 
 
 		$seoPts = [
@@ -123,7 +137,7 @@ class Render{
 			}
 		}
 
-		$langs = \rwp::field('langs', 'option');
+		$langs = self::langs();
 		$fields = [];
 		$global_fields = [];
 
@@ -446,7 +460,7 @@ class Render{
 								'class' => '',
 								'id' => '',
 							),
-							'choices' => $postTypes,
+							'choices' => $postTypeChoices,
 							'default_value' => array(
 							),
 							'return_format' => 'value',
@@ -532,6 +546,56 @@ class Render{
 			'description' => '',
 			'show_in_rest' => 1,
 		) );
+
+    }
+
+    private static function option_checkbox_values($name){
+
+        $value = get_option('options_' . $name, []);
+
+        if(is_array($value)){
+            return array_values(array_filter($value));
+        }
+
+        if($value === null || $value === ''){
+            return [];
+        }
+
+        return [(string)$value];
+
+    }
+
+    private static function option_repeater_rows($name, $subFields = []){
+
+        $rowsCount = (int)get_option('options_' . $name, 0);
+        $rows = [];
+
+        if($rowsCount < 1){
+            return [];
+        }
+
+        for($index = 0; $index < $rowsCount; $index++){
+            $row = [];
+
+            foreach($subFields as $subField){
+                $row[$subField] = get_option("options_{$name}_{$index}_{$subField}");
+            }
+
+            $rows[] = $row;
+        }
+
+        return $rows;
+
+    }
+
+    private static function langs(){
+
+        return array_values(array_filter(
+            self::option_repeater_rows('langs', ['name', 'code']),
+            function($lang){
+                return !empty($lang['code']);
+            }
+        ));
 
     }
 

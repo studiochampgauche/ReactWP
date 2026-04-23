@@ -1,55 +1,335 @@
-'use strict';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import RWPCache from './Cache';
+import { runtime } from './Runtime';
+import { fetchRoute } from './RouteService';
+import { resolveTemplateEntry } from './TemplateRegistry';
+import { gsap, ScrollTrigger, prefersReducedMotion, runAnimation } from './motion';
 
-const Loader = {
-    el: document.getElementById('loader'),
-    fontsPerPage: true,
-    mediasPerPage: true,
-    currentRoute: null,
-    routeReadyPath: null,
-    routeReadyResolve: null,
-    routeReady: Promise.resolve(),
-	animation: null,
-	setAnimation(factory){
-        this.animation = factory;
-        return this;
-    },
-	defaultAnimation(done){
-        let tl = gsap.timeline({
-            onComplete: () => {
-                tl.kill();
-                tl = null;
+const getLoader = () => document.getElementById('loader');
+const getLoaderLabel = () => document.querySelector('#loader .loader-label');
+const resolvedPromise = (value = null) => Promise.resolve(value);
+const createLoaderState = () => ({
+    __reactwpLoaderState: true,
+    isLoaded: false,
+    init: resolvedPromise(null),
+    criticalDisplay: resolvedPromise(null),
+    noCriticalDisplay: resolvedPromise(null),
+    template: resolvedPromise(null),
+    criticalFonts: resolvedPromise([]),
+    criticalMedias: resolvedPromise([]),
+    noCriticalMedias: resolvedPromise([]),
+    criticalDownload: resolvedPromise(null),
+    noCriticalDownload: resolvedPromise(null),
+    route: null
+});
+let fallbackLoaderState = createLoaderState();
 
-                window.gscroll?.paused(false);
-                done();
+const ensureLoaderState = (reset = false) => {
+    if(typeof window === 'undefined'){
+        if(reset){
+            fallbackLoaderState = createLoaderState();
+        }
+
+        return fallbackLoaderState;
+    }
+
+    if(reset || !window.loader?.__reactwpLoaderState){
+        window.loader = createLoaderState();
+    }
+
+    return window.loader;
+};
+
+const mediaRequests = new Map();
+const fontRequests = new Map();
+const criticalRouteRequests = new Map();
+const deferredRouteRequests = new Map();
+
+const syncLoaderState = (route = null) => {
+    const state = ensureLoaderState();
+    const criticalRequest = route?.path ? criticalRouteRequests.get(route.path) : null;
+    const deferredRequest = route?.path ? deferredRouteRequests.get(route.path) : null;
+
+    state.route = route || null;
+    state.template = criticalRequest?.template || resolvedPromise(route || null);
+    state.criticalFonts = criticalRequest?.fonts || resolvedPromise([]);
+    state.criticalMedias = criticalRequest?.medias || resolvedPromise([]);
+    state.noCriticalMedias = deferredRequest?.medias || resolvedPromise([]);
+    state.criticalDownload = criticalRequest?.download || resolvedPromise(route || null);
+    state.noCriticalDownload = deferredRequest?.download || resolvedPromise(route || null);
+
+    return state;
+};
+
+const getGroups = (route) => {
+    const groups = new Set(['all']);
+
+    String(route?.mediaGroups || '')
+        .split(',')
+        .map((group) => group.trim())
+        .filter(Boolean)
+        .forEach((group) => groups.add(group));
+
+    return [...groups];
+};
+
+const collectAssets = (map = {}, route) => {
+    return getGroups(route)
+        .flatMap((group) => map[group] || [])
+        .filter(Boolean);
+};
+
+const preloadFonts = async (route) => {
+    if(!document.fonts){
+        return;
+    }
+
+    const fonts = collectAssets(runtime.assets.criticalFonts || {}, route);
+
+    await Promise.allSettled(
+        fonts.map((font) => {
+            if(fontRequests.has(font)){
+                return fontRequests.get(font);
             }
-        });
 
-        tl
-        .to({}, .1, {})
+            const request = document.fonts.load(font).catch(() => null);
+            fontRequests.set(font, request);
+
+            return request;
+        })
+    );
+};
+
+const preloadMediaEntries = async (entries = []) => {
+    await Promise.allSettled(
+        entries
+            .filter((item) => item?.src)
+            .map((media) => {
+                if(mediaRequests.has(media.src)){
+                    return mediaRequests.get(media.src);
+                }
+
+                const request = fetch(media.src, {
+                    credentials: 'same-origin'
+                }).catch(() => null);
+
+                mediaRequests.set(media.src, request);
+
+                return request;
+            })
+    );
+};
+
+const preloadCriticalMedia = async (route) => {
+    await preloadMediaEntries(
+        collectAssets(runtime.assets.criticalMedias || {}, route)
+    );
+};
+
+const preloadDeferredMedia = async (route) => {
+    await preloadMediaEntries(
+        collectAssets(runtime.assets.noCriticalMedias || {}, route)
+    );
+};
+
+const preloadTemplate = async (route) => {
+    const templateEntry = resolveTemplateEntry(route.template);
+    await templateEntry.preload();
+};
+
+const createContext = (done = () => null) => {
+    return {
+        Loader,
+        gsap,
+        ScrollTrigger,
+        loader: getLoader(),
+        labelNode: getLoaderLabel(),
+        loaderState: ensureLoaderState(),
+        reducedMotion: prefersReducedMotion,
+        done
+    };
+};
+
+const defaultLoaderAnimation = ({ gsap, ScrollTrigger, loader, loaderState, done }) => {
+    if(!loader){
+        done();
+        return null;
+    }
+
+    let timeline = gsap.timeline({
+        onComplete: () => {
+            timeline.kill();
+            timeline = null;
+            done();
+        }
+    });
+
+    timeline
+        .to({}, {
+            duration: 0.1
+        })
         .add(() => {
-            if(!window.loader?.isLoaded){
-                tl.restart();
+            if(!loaderState.isLoaded){
+                timeline.restart();
                 return;
             }
         })
-        .to(this.el, .4, {
-            opacity: 0,
+        .to(loader, {
+            autoAlpha: 0,
             pointerEvents: 'none',
+            duration: 0.24,
+            ease: 'power2.out',
+            overwrite: 'auto',
             onStart: () => {
                 ScrollTrigger?.refresh();
             }
         });
 
-        return tl;
+    return timeline;
+};
+
+const defaultLoaderImmediate = ({ gsap, loader, loaderState }) => {
+    if(!loader){
+        return null;
+    }
+
+    return new Promise((resolve) => {
+        const check = () => {
+            if(loaderState.isLoaded){
+                gsap.set(loader, {
+                    autoAlpha: 0,
+                    pointerEvents: 'none'
+                });
+                resolve();
+                return;
+            }
+
+            window.requestAnimationFrame(check);
+        };
+
+        check();
+    });
+};
+
+const createCriticalRequest = (route) => {
+    if(!route?.path){
+        return {
+            route,
+            template: resolvedPromise(route),
+            fonts: resolvedPromise([]),
+            medias: resolvedPromise([]),
+            download: resolvedPromise(route)
+        };
+    }
+
+    if(criticalRouteRequests.has(route.path)){
+        return criticalRouteRequests.get(route.path);
+    }
+
+    const template = preloadTemplate(route);
+    const fonts = preloadFonts(route);
+    const medias = preloadCriticalMedia(route);
+    const download = Promise.allSettled([
+        template,
+        fonts,
+        medias
+    ]).then(() => route);
+
+    const request = {
+        route,
+        template,
+        fonts,
+        medias,
+        download
+    };
+
+    criticalRouteRequests.set(route.path, request);
+
+    return request;
+};
+
+const createDeferredRequest = (route) => {
+    const key = route?.path || '__global__';
+
+    if(deferredRouteRequests.has(key)){
+        return deferredRouteRequests.get(key);
+    }
+
+    const medias = preloadDeferredMedia(route);
+    const download = medias.then(() => route);
+    const request = {
+        route,
+        medias,
+        download
+    };
+
+    deferredRouteRequests.set(key, request);
+
+    return request;
+};
+
+export const Loader = {
+    animation: defaultLoaderAnimation,
+    immediateAnimation: defaultLoaderImmediate,
+    isLoaded: false,
+    currentRoute: null,
+    routeReadyPath: null,
+    routeReadyResolve: null,
+    routeReady: Promise.resolve(),
+    initialRoutePath: null,
+    initialCriticalRequest: null,
+    initialDeferredRequest: null,
+    initialAnimationPromise: null,
+    configure(){
+        this.reset();
+        ensureLoaderState(true);
+        syncLoaderState(null);
+        return this;
+    },
+    reset(){
+        this.animation = defaultLoaderAnimation;
+        this.immediateAnimation = defaultLoaderImmediate;
+        this.isLoaded = false;
+        this.currentRoute = null;
+        this.routeReadyPath = null;
+        this.routeReadyResolve = null;
+        this.routeReady = Promise.resolve();
+        this.initialRoutePath = null;
+        this.initialCriticalRequest = null;
+        this.initialDeferredRequest = null;
+        this.initialAnimationPromise = null;
+
+        return this;
+    },
+    state(reset = false){
+        const state = ensureLoaderState(reset);
+
+        if(reset){
+            syncLoaderState(this.currentRoute);
+        }
+
+        return state;
+    },
+    syncState(route = this.currentRoute){
+        return syncLoaderState(route || null);
+    },
+    setAnimation(animationFactory, immediateFactory = null){
+        this.animation = typeof animationFactory === 'function'
+            ? animationFactory
+            : defaultLoaderAnimation;
+
+        this.immediateAnimation = typeof immediateFactory === 'function'
+            ? immediateFactory
+            : animationFactory
+                ? null
+                : defaultLoaderImmediate;
+
+        return this;
     },
     setRoute(route){
         const previousPath = this.currentRoute?.path || null;
         const nextPath = route?.path || null;
 
         this.currentRoute = route || null;
+        this.syncState(this.currentRoute);
 
         if(nextPath !== previousPath || this.routeReadyPath !== nextPath){
             this.resetRouteReady(nextPath);
@@ -104,527 +384,143 @@ const Loader = {
         });
     },
     route(){
-        return this.currentRoute || CURRENT_ROUTE || null;
+        return this.currentRoute || runtime.route || null;
     },
-    getMediaGroups(){
-        const route = this.route();
+    setLabel(label){
+        const labelNode = getLoaderLabel();
 
-        return route?.mediaGroups
-            ? route.mediaGroups.split(',').map((value) => value.trim()).filter(Boolean)
-            : [];
-    },
-    getFontsMap(){
-        const fontGroups = this.getMediaGroups();
-
-        if(!ASSETS?.critical_fonts){
-            return {};
+        if(labelNode && label){
+            labelNode.textContent = label;
         }
 
-        if(!this.fontsPerPage){
-            return ASSETS.critical_fonts;
-        }
-
-        const groups = [...new Set(['all', ...fontGroups])];
-
-        return Object.fromEntries(
-            groups.map((key) => [key, ASSETS.critical_fonts[key] || []])
-        );
+        return this;
     },
-    getMediasMap(){
-        const mediaGroups = [...new Set(['all', ...this.getMediaGroups()])];
-
-        return ASSETS?.critical_medias
-            ? (
-                this.mediasPerPage
-                    ? Object.fromEntries(
-                        mediaGroups.map((key) => [key, ASSETS.critical_medias[key] || []])
-                    )
-                    : ASSETS.critical_medias
-            )
-            : {};
+    play(){
+        return runAnimation({
+            animationFactory: this.animation,
+            immediateFactory: this.immediateAnimation,
+            createContext
+        });
     },
-
-    getNoCriticalMediasMap(){
-        const mediaGroups = [...new Set(['all', ...this.getMediaGroups()])];
-
-        return ASSETS?.no_critical_medias
-            ? (
-                this.mediasPerPage
-                    ? Object.fromEntries(
-                        mediaGroups.map((key) => [key, ASSETS.no_critical_medias[key] || []])
-                    )
-                    : ASSETS.no_critical_medias
-            )
-            : {};
+    init(){
+        return this.play();
     },
-    resolveTarget(target){
-        if(!target) return null;
+    async download(routeOrPath = this.route()){
+        const route = typeof routeOrPath === 'string'
+            ? await fetchRoute(routeOrPath)
+            : routeOrPath;
 
-        if(Array.isArray(target)){
-            for(const item of target){
-                const targetElement = document.querySelector(item);
-
-                if(targetElement){
-                    return targetElement;
-                }
-            }
-
+        if(!route){
             return null;
         }
 
-        return typeof target === 'string'
-            ? document.querySelector(target)
-            : target;
+        this.isLoaded = false;
+        this.state().isLoaded = false;
+        this.setRoute(route);
+        createCriticalRequest(route);
+        createDeferredRequest(route);
+        this.syncState(route);
+
+        return this.state().criticalDownload;
     },
-    createMediaElement(type){
-        switch(type){
-            case 'video':
-                return document.createElement('video');
+    async prepareRoute(routeOrPath){
+        const route = typeof routeOrPath === 'string'
+            ? await fetchRoute(routeOrPath)
+            : routeOrPath;
 
-            case 'audio':
-                return new Audio();
+        const criticalRequest = createCriticalRequest(route);
+        createDeferredRequest(route);
 
-            case 'image':
-                return new Image();
-
-            default:
-                return null;
+        if(route?.path && route.path === this.currentRoute?.path){
+            this.syncState(route);
         }
+
+        await criticalRequest.download;
+
+        return route;
     },
-    applyProps(element, props = {}){
-        Object.entries(props).forEach(([key, value]) => {
-            if(value == null) return;
+    preloadDeferred(route){
+        createDeferredRequest(route);
 
-            if(key === 'className'){
-                element.className = value;
-                return;
-            }
+        if(route?.path && route.path === this.currentRoute?.path){
+            this.syncState(route);
+        }
 
-            if(key === 'style' && typeof value === 'object'){
-                Object.assign(element.style, value);
-                return;
-            }
-
-            if(key === 'dataset' && typeof value === 'object'){
-                Object.entries(value).forEach(([datasetKey, datasetValue]) => {
-                    if(datasetValue == null) return;
-                    element.dataset[datasetKey] = datasetValue;
-                });
-                return;
-            }
-
-            if(typeof value === 'boolean'){
-                if(key in element){
-                    element[key] = value;
-                }
-
-                if(value){
-                    element.setAttribute(key, '');
-                } else {
-                    element.removeAttribute(key);
-                }
-
-                return;
-            }
-
-            if(key in element){
-                try{
-                    element[key] = value;
-                    return;
-                } catch(_){}
-            }
-
-            element.setAttribute(key, value);
-        });
-
-        return element;
+        return this;
     },
-    createSourceElement(mediaType, source){
-        if(!source?.src && !source?.cachedSrc) return null;
+    prepareInitialLoad(route = runtime.route){
+        this.isLoaded = false;
+        this.state().isLoaded = false;
+        this.setRoute(route);
+        this.initialRoutePath = route?.path || runtime.route.path;
+        const criticalRequest = createCriticalRequest(route);
+        const deferredRequest = createDeferredRequest(route);
 
-        const sourceElement = document.createElement('source');
-        const {
-            src,
-            cachedSrc,
-            ...sourceProps
-        } = source;
+        this.initialCriticalRequest = criticalRequest.download;
+        this.initialDeferredRequest = deferredRequest.download;
+        this.syncState(route);
 
-        this.applyProps(sourceElement, sourceProps);
-
-        if(mediaType === 'image'){
-            sourceElement.srcset = cachedSrc || src;
-        } else {
-            sourceElement.src = cachedSrc || src;
-        }
-
-        return sourceElement;
+        return this;
     },
-    waitForMediaDisplay(type, mediaElement){
-        if(!mediaElement){
-            return Promise.resolve();
+    async finishInitialLoad(route = runtime.route){
+        const resolvedRoute = route || runtime.route;
+
+        if(!this.initialCriticalRequest || this.initialRoutePath !== resolvedRoute.path){
+            this.prepareInitialLoad(resolvedRoute);
         }
 
-        if(type === 'image'){
-            if(typeof mediaElement.decode === 'function'){
-                return mediaElement.decode()
-                    .catch(() => {})
-                    .then(() => this.waitForPaint(1));
-            }
-
-            if(mediaElement.complete){
-                return this.waitForPaint(1);
-            }
-
-            return new Promise((resolve) => {
-                const finalize = () => {
-                    mediaElement.onload = null;
-                    mediaElement.onerror = null;
-                    this.waitForPaint(1).then(resolve);
-                };
-
-                mediaElement.onload = finalize;
-                mediaElement.onerror = finalize;
-            });
+        if(!this.initialAnimationPromise){
+            this.initialAnimationPromise = this.init();
         }
 
-        if(type === 'video'){
-            if(mediaElement.readyState >= 2){
-                return this.waitForPaint(1);
-            }
+        await this.display(resolvedRoute);
+        await this.initialAnimationPromise;
 
-            return new Promise((resolve) => {
-                const finalize = () => {
-                    mediaElement.removeEventListener('loadeddata', finalize);
-                    mediaElement.removeEventListener('error', finalize);
-                    this.waitForPaint(1).then(resolve);
-                };
+        this.initialDeferredRequest?.catch(() => null);
 
-                mediaElement.addEventListener('loadeddata', finalize, { once: true });
-                mediaElement.addEventListener('error', finalize, { once: true });
-            });
-        }
-
-        return Promise.resolve();
+        return resolvedRoute;
     },
-    renderMedias(mediaPromise){
-        return Promise.resolve(mediaPromise)
-            .then((medias) => {
-                if(!medias || !Object.keys(medias).length){
-                    return medias || {};
-                }
+    display(route = this.route()){
+        const resolvedRoute = route || this.route();
+        const state = this.syncState(resolvedRoute);
 
-                const values = Object.values(medias).flat();
-
-                if(!values.length){
-                    return medias;
-                }
-
-                return Promise.allSettled(values.map((media) => {
-                    const target = this.resolveTarget(media.target);
-
-                    if(!target){
-                        return Promise.resolve();
-                    }
-
-                    const {
-                        target: _target,
-                        src,
-                        cachedSrc,
-                        sources,
-                        type,
-                        ...props
-                    } = media;
-
-                    let mediaElement = this.createMediaElement(type);
-
-                    if(!mediaElement){
-                        return Promise.resolve();
-                    }
-
-                    this.applyProps(mediaElement, props);
-
-                    if(type === 'video'){
-                        mediaElement.playsInline = true;
-                    }
-
-                    if(type === 'image'){
-                        mediaElement.src = cachedSrc || src;
-
-                        if(Array.isArray(sources) && sources.length){
-                            const pictureElement = document.createElement('picture');
-
-                            sources.forEach((source) => {
-                                const sourceElement = this.createSourceElement('image', source);
-
-                                if(sourceElement){
-                                    pictureElement.appendChild(sourceElement);
-                                }
-                            });
-
-                            pictureElement.appendChild(mediaElement);
-                            target.replaceWith(pictureElement);
-
-                            return this.waitForMediaDisplay(type, mediaElement);
-                        }
-
-                        target.replaceWith(mediaElement);
-                        return this.waitForMediaDisplay(type, mediaElement);
-                    }
-
-                    if(['video', 'audio'].includes(type)){
-                        let hasSourceChildren = false;
-
-                        if(Array.isArray(sources) && sources.length){
-                            sources.forEach((source) => {
-                                const sourceElement = this.createSourceElement(type, source);
-
-                                if(sourceElement){
-                                    hasSourceChildren = true;
-                                    mediaElement.appendChild(sourceElement);
-                                }
-                            });
-                        }
-
-                        if(!hasSourceChildren){
-                            mediaElement.src = cachedSrc || src;
-                        }
-
-                        target.replaceWith(mediaElement);
-                        mediaElement.load();
-
-                        const displayPromise = this.waitForMediaDisplay(type, mediaElement);
-
-                        if(mediaElement.autoplay){
-                            const tryPlay = () => {
-                                mediaElement.play()?.catch(() => {});
-                            };
-
-                            if(mediaElement.readyState >= 2){
-                                tryPlay();
-                            } else {
-                                mediaElement.addEventListener('loadeddata', tryPlay, { once: true });
-                            }
-                        }
-
-                        return displayPromise;
-                    }
-
-                    target.replaceWith(mediaElement);
-                    return Promise.resolve();
-                })).then(() => medias);
-            });
-    },
-    preloadMedia(type, item){
-        if(!item?.src){
-            return Promise.resolve(item);
+        if(!resolvedRoute){
+            const promise = Promise.resolve(null);
+            state.criticalDisplay = promise;
+            return promise;
         }
 
-        if(item.cachedSrc){
-            return Promise.resolve(item);
-        }
-
-        let mediaElement = this.createMediaElement(type);
-
-        if(!mediaElement){
-            return Promise.resolve(item);
-        }
-
-        return RWPCache.media(item.src).then((cachedSrc) => {
-            item.cachedSrc = cachedSrc || item.src;
-
-            return new Promise((resolve) => {
-
-                const cleanup = () => {
-                    if(!mediaElement){
-                        resolve(item);
-                        return;
-                    }
-
-                    if(type === 'image'){
-                        mediaElement.onload = null;
-                        mediaElement.onerror = null;
-                    } else {
-                        mediaElement.onloadeddata = null;
-                        mediaElement.onerror = null;
-                    }
-
-                    mediaElement = null;
-                    resolve(item);
-                };
-
-                if(type === 'image'){
-                    mediaElement.onload = cleanup;
-                    mediaElement.onerror = cleanup;
-                    mediaElement.src = item.cachedSrc;
-
-                    if(mediaElement.complete){
-                        cleanup();
-                    }
-
-                    return;
-                }
-
-                if(['video', 'audio'].includes(type)){
-                    if(type === 'video'){
-                        mediaElement.playsInline = true;
-                    }
-
-                    mediaElement.preload = 'auto';
-                    mediaElement.onloadeddata = cleanup;
-                    mediaElement.onerror = cleanup;
-                    mediaElement.src = item.cachedSrc;
-                    mediaElement.load();
-
-                    if(mediaElement.readyState >= 2){
-                        cleanup();
-                    }
-
-                    return;
-                }
-
-                cleanup();
-
-            });
-        }).catch(() => item);
-    },
-    init(){
-        return new Promise((done) => {
-
-            const animation = this.animation
-                ? this.animation({
-                    Loader: this,
-                    gsap,
-                    ScrollTrigger,
-                    done
-                })
-                : this.defaultAnimation(done);
-
-            if(!animation){
-                done();
-            }
-
-        });
-    },
-    fonts(){
-        const fonts = this.getFontsMap();
-
-        if(!Object.keys(fonts).length || !document.fonts){
-            return Promise.resolve(fonts);
-        }
-
-        return Promise.allSettled(
-            Object.values(fonts)
-                .flat()
-                .filter(Boolean)
-                .map((font) => document.fonts.load(font))
-        ).then(() => fonts);
-    },
-    medias(){
-        const medias = this.getMediasMap();
-
-        if(!Object.keys(medias).length){
-            return Promise.resolve(medias);
-        }
-
-        const tasks = [];
-
-        Object.values(medias).flat().forEach((media) => {
-            if(!media?.type || !media?.src) return;
-
-            tasks.push(this.preloadMedia(media.type, media));
-
-            if(Array.isArray(media.sources)){
-                media.sources.forEach((subMedia) => {
-                    if(!subMedia?.src) return;
-                    tasks.push(this.preloadMedia(media.type, subMedia));
-                });
-            }
-        });
-
-        if(!tasks.length){
-            return Promise.resolve(medias);
-        }
-
-        return Promise.allSettled(tasks).then(() => medias);
-    },
-    noCriticalMedias(){
-        const medias = this.getNoCriticalMediasMap();
-
-        if(!Object.keys(medias).length){
-            return Promise.resolve(medias);
-        }
-
-        const tasks = [];
-
-        Object.values(medias).flat().forEach((media) => {
-            if(!media?.type || !media?.src) return;
-
-            tasks.push(this.preloadMedia(media.type, media));
-
-            if(Array.isArray(media.sources)){
-                media.sources.forEach((subMedia) => {
-                    if(!subMedia?.src) return;
-                    tasks.push(this.preloadMedia(media.type, subMedia));
-                });
-            }
-        });
-
-        if(!tasks.length){
-            return Promise.resolve(medias);
-        }
-
-        return Promise.allSettled(tasks).then(() => medias);
-    },
-    download(){
-
-		window.loader = window.loader || {};
-		window.loader.isLoaded = false;
-
-		window.loader.fonts = this.fonts();
-		window.loader.medias = this.medias();
-        window.loader.noCriticalMedias = this.noCriticalMedias();
-
-		window.loader.download = Promise.allSettled([
-			window.loader.fonts,
-			window.loader.medias
-		]);
-
-		return window.loader.download;
-	},
-    display(){
-		return new Promise((done) => {
-
-			const finalize = (medias = {}) => {
-                Promise.resolve(window.loader?.fonts)
-                .finally(() => {
-                    window.loader.isLoaded = true;
-                    done(medias);
-                });
-			};
-
+        const promise = Promise.allSettled([
+            state.criticalDownload || resolvedPromise(resolvedRoute),
             this.waitForRouteReady()
-                .then(() => this.renderMedias(window.loader?.medias))
-                .then((medias) => {
-                    finalize(medias);
-                });
+        ]).then(() => {
+            this.isLoaded = true;
+            state.isLoaded = true;
+            return resolvedRoute;
+        });
 
-		});
-	},
-    noCriticalDisplay(){
-		return new Promise((done) => {
+        state.criticalDisplay = promise;
 
-            const finalize = (medias = {}) => {
-                done(medias);
-            };
+        return promise;
+    },
+    noCriticalDisplay(route = this.route()){
+        const resolvedRoute = route || this.route();
 
-            this.waitForRouteReady()
-                .then(() => this.renderMedias(window.loader?.noCriticalMedias))
-                .then((medias) => {
-                    finalize(medias);
-                });
+        if(!resolvedRoute){
+            const promise = Promise.resolve(null);
+            this.state().noCriticalDisplay = promise;
+            return promise;
+        }
 
-		});
-	}
+        const deferredRequest = createDeferredRequest(resolvedRoute);
+        const state = this.syncState(resolvedRoute);
+        const promise = Promise.allSettled([
+            state.criticalDisplay || this.display(resolvedRoute),
+            deferredRequest.download.catch(() => resolvedRoute)
+        ]).then(() => resolvedRoute);
+
+        state.noCriticalDisplay = promise;
+
+        return promise;
+    }
 };
-
-export default Loader;

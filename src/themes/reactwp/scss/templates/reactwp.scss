@@ -1,0 +1,178 @@
+.status-screen{
+    --starter-color-bg: #f4efe8;
+    --starter-color-ink: #12221f;
+    --starter-color-ink-soft: rgba(18,34,31,.72);
+    --starter-color-accent: #0f766e;
+    --starter-color-accent-strong: #0b5f59;
+    --starter-color-border: rgba(18,34,31,.12);
+    --starter-radius-pill: 999px;
+    --starter-container-width: 76rem;
+    --starter-gutter: clamp(1.2rem, 2vw, 2rem);
+    --starter-font-sans: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
+    --starter-font-serif: "Fraunces", "Iowan Old Style", Georgia, serif;
+
+    color: #14263a;
+    font-family: var(--starter-font-sans);
+}
+
+.status-screen h1,
+.status-screen h2{
+    font-family: var(--starter-font-serif);
+}
+
+.status-screen code,
+.status-screen pre{
+    font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+}
+
+.status-screen code{
+    font-size: .92em;
+    padding: .15rem .35rem;
+    border-radius: .35rem;
+    background: rgba(18,34,31,.08);
+}
+
+.status-screen pre{
+    margin: 0;
+    overflow: auto;
+}
+
+.status-screen .container{
+    width: min(calc(100% - (var(--starter-gutter) * 2)), var(--starter-container-width));
+    margin-inline: auto;
+}
+
+.status-screen .button{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .55rem;
+    min-height: 3.25rem;
+    padding: .85rem 1.35rem;
+    border: 1px solid transparent;
+    border-radius: var(--starter-radius-pill);
+    font-weight: 700;
+    letter-spacing: .01em;
+    transition: transform .22s ease, background-color .22s ease, border-color .22s ease, color .22s ease, box-shadow .22s ease;
+}
+
+.status-screen .button__before,
+.status-screen .button__text,
+.status-screen .button__after{
+    display: inline-flex;
+    align-items: center;
+}
+
+.status-screen .button:hover{
+    transform: translateY(-2px);
+}
+
+.status-screen .button--primary{
+    color: #fff;
+    background: linear-gradient(135deg, #14263a, #27425e);
+    box-shadow: 0 18px 34px rgba(20,38,58,.14);
+}
+
+.status-screen .button--ghost{
+    color: #14263a;
+    border-color: rgba(20,38,58,.14);
+    background: rgba(255,255,255,.52);
+}
+
+.status-screen__section{
+    min-height: 100vh;
+    padding: clamp(1.5rem, 4vw, 3rem) 0;
+}
+
+.status-screen__shell{
+    min-height: calc(100vh - clamp(3rem, 8vw, 6rem));
+    display: grid;
+    place-items: center;
+}
+
+.status-card{
+    position: relative;
+    width: min(100%, 38rem);
+    display: grid;
+    justify-items: center;
+    gap: 1.15rem;
+    padding: clamp(2rem, 5vw, 3.2rem);
+    text-align: center;
+    border: 1px solid rgba(20,38,58,.07);
+    border-radius: 1.75rem;
+    background: linear-gradient(180deg, rgba(255,252,247,.94), rgba(255,248,240,.88));
+    box-shadow:
+        0 28px 60px rgba(20,38,58,.08),
+        inset 0 1px 0 rgba(255,255,255,.72);
+    backdrop-filter: blur(12px);
+}
+
+.status-card::before{
+    content: "";
+    position: absolute;
+    inset: 1rem;
+    border: 1px solid rgba(20,38,58,.05);
+    border-radius: 1.2rem;
+    pointer-events: none;
+}
+
+.status-card__eyebrow{
+    color: #b9834d;
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+}
+
+.status-card h1{
+    max-width: 10ch;
+    font-size: clamp(2.3rem, 6vw, 4rem);
+    letter-spacing: -.06em;
+    line-height: .94;
+}
+
+.status-card__lead{
+    max-width: 29rem;
+    color: rgba(20,38,58,.7);
+    font-size: clamp(1rem, 1.8vw, 1.14rem);
+}
+
+.status-card__meta{
+    color: rgba(20,38,58,.58);
+    font-size: .96rem;
+}
+
+.status-card__actions{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .85rem;
+    padding-top: .25rem;
+}
+
+.status-screen--ready{
+    background:
+        radial-gradient(circle at top center, rgba(42,69,100,.08), transparent 30%),
+        linear-gradient(180deg, #f7f3ec 0%, #f1ebe4 100%);
+}
+
+.status-screen--not-found{
+    background:
+        radial-gradient(circle at top center, rgba(20,38,58,.08), transparent 32%),
+        linear-gradient(180deg, #f5f1ea 0%, #ece4d8 100%);
+}
+
+.status-card--not-found h1{
+    max-width: 12ch;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+}
+
+@media (max-width: 720px){
+    .status-screen__shell{
+        min-height: calc(100vh - 3rem);
+    }
+
+    .status-card h1{
+        max-width: 100%;
+    }
+}
