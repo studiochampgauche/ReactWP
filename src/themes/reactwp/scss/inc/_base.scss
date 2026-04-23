@@ -1,15 +1,76 @@
+*,
+*::before,
+*::after{
+	box-sizing: border-box;
+}
+
+html{
+	scroll-behavior: smooth;
+}
+
+html,
+body{
+	&.has-smooth-scroll{
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+		&.is-scroll-locked{
+			overflow: hidden;
+			overscroll-behavior: none;
+		}
+		&::-webkit-scrollbar{
+			width: 0;
+			height: 0;
+			display: none;
+		}
+	}
+}
+
+body{
+	&.is-scroll-locked{
+		touch-action: none;
+	}
+}
+
+body{
+	margin: 0;
+	min-height: 100vh;
+	line-height: 1.6;
+}
+
 a{
+	color: inherit;
 	text-decoration: none;
 }
 
-p{
-	margin: 0;
+img,
+svg,
+video{
+	display: block;
+	max-width: 100%;
 }
 
+button,
+input,
+textarea,
+select{
+	font: inherit;
+}
 
+button{
+	border: 0;
+	background: none;
+	padding: 0;
+	cursor: pointer;
+}
+
+p,
 ul,
 ol{
 	margin: 0;
+}
+
+ul,
+ol{
 	padding: 0;
 	list-style: none;
 }
@@ -21,32 +82,27 @@ h4,
 h5,
 h6{
 	margin: 0;
+	line-height: 1.05;
 }
 
-section{
-	position: relative;
-}
-
-#viewport{
-	height: 100%;
+#viewport,
+#pageWrapper,
+#pageContent,
+#app,
+.app-shell{
 	min-height: 100vh;
-	#pageWrapper{
-		#pageContent{
-			will-change: transform;
-		}
-	}
-	@media screen and (pointer: coarse), (pointer: none){
-		min-height: 100lvh;
-	}
 }
 
-.cbg{
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
+html.has-smooth-scroll #pageContent{
+	will-change: transform;
 }
 
-.cobj{
-    object-fit: cover;
-    object-position: center center;
+.app-shell{
+	min-height: inherit;
+	display: flex;
+	flex-direction: column;
+}
+
+.app-shell__body{
+	flex: 1 0 auto;
 }

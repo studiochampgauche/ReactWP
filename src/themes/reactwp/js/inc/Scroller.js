@@ -1,97 +1,134 @@
-'use strict';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollSmoother } from 'gsap/ScrollSmoother';
 
-
-/*
-* Register ScrollTrigger, ScrollSmoother
-*/
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
-const Scroller = {
-	bodyEl: document.body,
-	mm: null,
-	init(){
+const prefersReducedMotion = () => {
+    return typeof window !== 'undefined'
+        && window.matchMedia
+        ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        : false;
+};
 
-		/*
-		* Kill
-		*/
-		this.kill();
-		
-		/*
-		* Return a Promise
-		*/
-		return new Promise(done => {
+const resolveTarget = (target) => {
+    if(target == null){
+        return 0;
+    }
 
-			this.mm = gsap.matchMedia();
+    if(typeof target === 'string' || typeof target === 'number'){
+        return target;
+    }
 
-			this.mm.add({
-				all: true,
-				isPointer: '(pointer: fine)'
-			}, (context) => {
-				
-				const { isPointer } = context.conditions;
+    return 0;
+};
 
-				/*
-				* Init smooth scroll
-				*/
-				window.gscroll = ScrollSmoother.create({
-					wrapper: '#pageWrapper',
-					content: '#pageContent',
-					ignoreMobileResize: true,
-					normalizeScroll: isPointer,
-					smooth: 2.25
-				});
+export const scroller = {
+    media: null,
+    setState(active){
+        document.documentElement.classList.toggle('has-smooth-scroll', active);
+        document.body.classList.toggle('has-smooth-scroll', active);
+    },
+    setLockState(active){
+        document.documentElement.classList.toggle('is-scroll-locked', active);
+        document.body.classList.toggle('is-scroll-locked', active);
+    },
+    init(){
+        this.kill();
 
-				/*
-				* Pause the scroll via GSAP
-				*/
-				window.gscroll.paused(true);
+        if(prefersReducedMotion()){
+            return null;
+        }
 
-				/*
-				* Stop pausing the scroll with the body
-				*/
-				this.bodyEl.style.maxHeight = 'initial';
-				this.bodyEl.style.overflow = 'initial';
+        this.media = gsap.matchMedia();
+        this.media.add(
+            {
+                isPointer: '(pointer: fine)'
+            },
+            (context) => {
+                const { isPointer } = context.conditions;
 
-				/*
-				* Refresh Scroller according to new body height
-				*/
-				ScrollTrigger.refresh();
+                window.gscroll = ScrollSmoother.create({
+                    wrapper: '#pageWrapper',
+                    content: '#pageContent',
+                    ignoreMobileResize: true,
+                    normalizeScroll: Boolean(isPointer),
+                    smooth: isPointer ? 1.35 : 0
+                });
 
-				/*
-				* Resolve
-				*/
-				done();
+                this.setState(true);
+                ScrollTrigger.refresh();
 
-				return () => {
+                return () => {
+                    this.setState(false);
+                    window.gscroll?.kill();
+                    window.gscroll = null;
+                };
+            }
+        );
 
-					window.gscroll?.kill();
-					window.gscroll = null;
+        return window.gscroll || null;
+    },
+    kill(){
+        this.unlock();
+        this.setState(false);
+        window.gscroll?.kill();
+        window.gscroll = null;
 
-				};
-				
-			});
+        this.media?.revert();
+        this.media = null;
+    },
+    refresh(){
+        if(window.gscroll){
+            window.gscroll.refresh();
+            return;
+        }
 
-		});
+        ScrollTrigger.refresh();
+    },
+    scrollTo(target, smooth = true){
+        const nextTarget = resolveTarget(target);
 
-	},
-	kill(){
-		
-		/*
-		* Kill Scroller
-		*/
-		window.gscroll?.kill();
-		window.gscroll = null;
+        if(window.gscroll){
+            window.gscroll.scrollTo(nextTarget, smooth);
+            return;
+        }
 
-		/*
-		* Kill matchMedia
-		*/
-		this.mm?.revert();
-		this.mm = null;
+        if(typeof nextTarget === 'string'){
+            const element = document.querySelector(nextTarget);
 
-	}
-}
+            if(element){
+                element.scrollIntoView({
+                    behavior: smooth ? 'smooth' : 'auto',
+                    block: 'start'
+                });
+            }
 
-Scroller.init();
+            return;
+        }
+
+        window.scrollTo({
+            top: nextTarget,
+            behavior: smooth ? 'smooth' : 'auto'
+        });
+    },
+    jumpToTop(){
+        if(window.gscroll){
+            window.gscroll.scrollTo(0, false);
+            return;
+        }
+
+        window.scrollTo({
+            top: 0,
+            behavior: 'auto'
+        });
+    },
+    lock(){
+        this.setLockState(true);
+        return this;
+    },
+    unlock(){
+        this.setLockState(false);
+        return this;
+    }
+};
