@@ -26,15 +26,13 @@ body{
 }
 
 body{
-	&.is-scroll-locked{
-		touch-action: none;
-	}
-}
-
-body{
 	margin: 0;
 	min-height: 100vh;
 	line-height: 1.6;
+	font-family: 'ppn';
+	&.is-scroll-locked{
+		touch-action: none;
+	}
 }
 
 a{
