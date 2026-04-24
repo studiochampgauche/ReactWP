@@ -75,6 +75,13 @@ export const scroller = {
             behavior: 'auto'
         });
     },
+    setLockScrollTop(value = this.getScrollTop()){
+        this.lockedScrollTop = Number.isFinite(value)
+            ? value
+            : 0;
+
+        return this;
+    },
     setState(active){
         document.documentElement.classList.toggle('has-smooth-scroll', active);
         document.body.classList.toggle('has-smooth-scroll', active);
@@ -175,7 +182,7 @@ export const scroller = {
     },
     lock(){
         if(this.lockDepth === 0){
-            this.lockedScrollTop = this.getScrollTop();
+            this.setLockScrollTop(this.getScrollTop());
             window.gscroll?.paused?.(true);
             this.attachLockListeners();
             this.setLockState(true);
