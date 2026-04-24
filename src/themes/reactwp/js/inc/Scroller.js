@@ -23,8 +23,58 @@ const resolveTarget = (target) => {
     return 0;
 };
 
+const SCROLL_KEYS = new Set([
+    ' ',
+    'ArrowDown',
+    'ArrowUp',
+    'End',
+    'Home',
+    'PageDown',
+    'PageUp'
+]);
+
 export const scroller = {
     media: null,
+    lockDepth: 0,
+    lockedScrollTop: 0,
+    preventScrollEvent(event){
+        event.preventDefault();
+    },
+    preventScrollKey(event){
+        if(!SCROLL_KEYS.has(event.key)){
+            return;
+        }
+
+        event.preventDefault();
+    },
+    attachLockListeners(){
+        window.addEventListener('wheel', this.preventScrollEvent, { passive: false });
+        window.addEventListener('touchmove', this.preventScrollEvent, { passive: false });
+        window.addEventListener('keydown', this.preventScrollKey, { passive: false });
+    },
+    detachLockListeners(){
+        window.removeEventListener('wheel', this.preventScrollEvent);
+        window.removeEventListener('touchmove', this.preventScrollEvent);
+        window.removeEventListener('keydown', this.preventScrollKey);
+    },
+    getScrollTop(){
+        if(window.gscroll && typeof window.gscroll.scrollTop === 'function'){
+            return window.gscroll.scrollTop();
+        }
+
+        return window.scrollY || window.pageYOffset || 0;
+    },
+    restoreScrollTop(){
+        if(window.gscroll && typeof window.gscroll.scrollTop === 'function'){
+            window.gscroll.scrollTop(this.lockedScrollTop);
+            return;
+        }
+
+        window.scrollTo({
+            top: this.lockedScrollTop,
+            behavior: 'auto'
+        });
+    },
     setState(active){
         document.documentElement.classList.toggle('has-smooth-scroll', active);
         document.body.classList.toggle('has-smooth-scroll', active);
@@ -70,7 +120,7 @@ export const scroller = {
         return window.gscroll || null;
     },
     kill(){
-        this.unlock();
+        this.unlock(true);
         this.setState(false);
         window.gscroll?.kill();
         window.gscroll = null;
@@ -124,11 +174,35 @@ export const scroller = {
         });
     },
     lock(){
-        this.setLockState(true);
+        if(this.lockDepth === 0){
+            this.lockedScrollTop = this.getScrollTop();
+            window.gscroll?.paused?.(true);
+            this.attachLockListeners();
+            this.setLockState(true);
+            this.restoreScrollTop();
+        }
+
+        this.lockDepth += 1;
+
         return this;
     },
-    unlock(){
+    unlock(force = false){
+        if(force){
+            this.lockDepth = 0;
+        } else if(this.lockDepth > 0){
+            this.lockDepth -= 1;
+        }
+
+        if(this.lockDepth > 0){
+            return this;
+        }
+
+        this.lockDepth = 0;
+        this.detachLockListeners();
         this.setLockState(false);
+        this.restoreScrollTop();
+        window.gscroll?.paused?.(false);
+
         return this;
     }
 };
