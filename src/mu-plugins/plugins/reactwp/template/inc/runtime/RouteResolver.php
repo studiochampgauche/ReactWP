@@ -6,10 +6,12 @@ class RouteResolver {
 
     public static function current() {
 
+        $request_uri = $_SERVER['REQUEST_URI'] ?? '/';
+        $request_query = self::parse_query($request_uri);
         $object = get_queried_object();
 
         if($object){
-            return self::payload_from_object($object);
+            return self::payload_from_object($object, $request_uri, $request_query);
         }
 
         if(is_front_page()){
@@ -19,25 +21,32 @@ class RouteResolver {
                 $front_page = get_post($front_page_id);
 
                 if($front_page instanceof \WP_Post){
-                    return self::payload_from_object($front_page);
+                    return self::payload_from_object($front_page, $request_uri, $request_query);
                 }
             }
         }
 
-        return self::not_found(self::normalize_path($_SERVER['REQUEST_URI'] ?? '/'));
+        $resolved_object = self::resolve_object_from_path($request_uri);
+
+        if($resolved_object){
+            return self::payload_from_object($resolved_object, $request_uri, $request_query);
+        }
+
+        return self::not_found($request_uri, $request_query);
 
     }
 
     public static function from_path($path) {
 
         $normalized_path = self::normalize_path($path);
-        $object = self::resolve_object_from_path($normalized_path);
+        $query = self::parse_query($path);
+        $object = self::resolve_object_from_path($path);
 
         if(!$object){
-            return self::not_found($normalized_path);
+            return self::not_found($normalized_path, $query);
         }
 
-        return self::payload_from_object($object);
+        return self::payload_from_object($object, $normalized_path, $query);
 
     }
 
@@ -50,9 +59,46 @@ class RouteResolver {
 
     }
 
-    public static function not_found($path = '/') {
+    public static function normalize_search($value = '') {
+
+        return self::build_search(self::parse_query($value));
+
+    }
+
+    public static function parse_query($value = '/') {
+
+        if(is_array($value)){
+            return $value;
+        }
+
+        $string_value = trim((string)$value);
+        $parsed_query = wp_parse_url($string_value, PHP_URL_QUERY);
+
+        if($parsed_query === null || $parsed_query === false){
+            if($string_value === '' || $string_value[0] !== '?'){
+                return [];
+            }
+
+            $raw_query = substr($string_value, 1);
+        } else {
+            $raw_query = (string)$parsed_query;
+        }
+
+        if($raw_query === ''){
+            return [];
+        }
+
+        $query = [];
+        wp_parse_str($raw_query, $query);
+
+        return is_array($query) ? $query : [];
+
+    }
+
+    public static function not_found($path = '/', $query = null) {
 
         $normalized_path = self::normalize_path($path);
+        $resolved_query = is_array($query) ? $query : self::parse_query($path);
         $site_name = get_bloginfo('name');
         $page_name = defined('CL') && CL === 'fr' ? 'Page introuvable' : 'Page not found';
 
@@ -62,7 +108,9 @@ class RouteResolver {
             'template' => 'NotFound',
             'pageName' => $page_name,
             'path' => $normalized_path,
-            'url' => home_url($normalized_path),
+            'search' => self::build_search($resolved_query),
+            'query' => $resolved_query,
+            'url' => self::build_url($normalized_path, $resolved_query),
             'seo' => [
                 'pageName' => $page_name,
                 'title' => $page_name . ' - ' . $site_name,
@@ -152,13 +200,14 @@ class RouteResolver {
 
     }
 
-    private static function payload_from_object($object) {
+    private static function payload_from_object($object, $request = '/', $query = null) {
 
         $id = null;
         $type = null;
         $url = home_url('/');
         $page_name = get_bloginfo('name');
         $acf_context = [];
+        $resolved_query = is_array($query) ? $query : self::parse_query($request);
 
         if($object instanceof \WP_Post){
             $id = $object->ID;
@@ -180,13 +229,19 @@ class RouteResolver {
             $page_name = \rwp::field('page_title', $id) ?: $object->name;
             $acf_context = ['term_id' => $object->term_id, 'rest' => true];
         } else {
-            return self::not_found('/');
+            return self::not_found($request, $resolved_query);
         }
 
         $acf = self::resolve_acf_payload($id, $acf_context);
         $seo = isset($acf['seo']) && is_array($acf['seo']) ? $acf['seo'] : [];
         $media_groups = isset($acf['media_groups']) ? (string)$acf['media_groups'] : '';
         $page_template = isset($acf['react_template']) && $acf['react_template'] ? $acf['react_template'] : 'Default';
+        $normalized_path = self::normalize_path(wp_parse_url($url, PHP_URL_PATH) ?: '/');
+        $search = self::build_search($resolved_query);
+
+        if($resolved_query){
+            $url = add_query_arg($resolved_query, $url);
+        }
 
         unset($acf['seo'], $acf['media_groups'], $acf['react_template']);
 
@@ -195,7 +250,9 @@ class RouteResolver {
             'type' => $type,
             'template' => $page_template,
             'pageName' => $page_name,
-            'path' => self::normalize_path(wp_parse_url($url, PHP_URL_PATH) ?: '/'),
+            'path' => $normalized_path,
+            'search' => $search,
+            'query' => $resolved_query,
             'url' => $url,
             'seo' => [
                 ...$seo,
@@ -266,6 +323,30 @@ class RouteResolver {
         }
 
         return $payload;
+
+    }
+
+    private static function build_search($query = []) {
+
+        if(!$query || !is_array($query)){
+            return '';
+        }
+
+        $query_string = http_build_query($query);
+
+        return $query_string !== '' ? '?' . $query_string : '';
+
+    }
+
+    private static function build_url($path = '/', $query = []) {
+
+        $url = home_url(self::normalize_path($path));
+
+        if($query && is_array($query)){
+            return add_query_arg($query, $url);
+        }
+
+        return $url;
 
     }
 

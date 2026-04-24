@@ -109,7 +109,12 @@ export const useDocumentMeta = (route) => {
         const ogTitle = seo[`og_title_${language}`] || seo.og_title || title;
         const ogDescription = seo[`og_description_${language}`] || seo.og_description || description;
         const ogImage = seo.og_image || defaults.ogImage || '';
-        const canonical = new URL(route.path || '/', runtime.system.baseUrl || window.location.origin).toString().replace(/\/$/, '');
+        const canonicalUrl = route.url
+            || new URL(
+                `${route.path || '/'}${route.search || ''}`,
+                runtime.system.baseUrl || window.location.origin
+            ).toString();
+        const canonical = canonicalUrl.replace(/\/$/, '');
 
         document.title = title;
 
