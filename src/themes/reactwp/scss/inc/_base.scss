@@ -6,6 +6,10 @@
 
 html{
 	scroll-behavior: smooth;
+	&.is-scroll-locked{
+		overflow: hidden;
+		overscroll-behavior: none;
+	}
 }
 
 html,
@@ -31,6 +35,8 @@ body{
 	line-height: 1.6;
 	font-family: 'ppn';
 	&.is-scroll-locked{
+		overflow: hidden;
+		overscroll-behavior: none;
 		touch-action: none;
 	}
 }
