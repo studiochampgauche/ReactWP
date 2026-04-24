@@ -16,9 +16,40 @@ const createMappings = () => themes.map((themeName) => {
   const input = path.resolve(projectRoot, 'src', 'themes', themeName, 'scss', 'default.scss');
   const output = path.resolve(projectRoot, 'dist', 'wp-content', 'themes', themeName, 'assets', 'css', `${themeName}.min.css`);
   const legacyOutput = path.resolve(projectRoot, 'dist', 'wp-content', 'themes', themeName, 'assets', 'css', `${themeName}.css`);
+  const mediasRoot = path.resolve(projectRoot, 'src', 'themes', themeName, 'medias');
+  const assetsRoot = path.resolve(projectRoot, 'dist', 'wp-content', 'themes', themeName, 'assets');
 
-  return { input, output, legacyOutput };
+  return { input, output, legacyOutput, mediasRoot, assetsRoot };
 });
+
+const copyThemeMediaAssets = async (mappings) => {
+  await Promise.all(
+    mappings.map(async ({ mediasRoot, assetsRoot }) => {
+      try {
+        const mediaEntries = await fs.readdir(mediasRoot, { withFileTypes: true });
+
+        await Promise.all(
+          mediaEntries
+            .filter((entry) => entry.isDirectory())
+            .map((entry) => fs.cp(
+              path.join(mediasRoot, entry.name),
+              path.join(assetsRoot, entry.name),
+              {
+                recursive: true,
+                force: true
+              }
+            ))
+        );
+      } catch (error) {
+        if (error && error.code === 'ENOENT') {
+          return;
+        }
+
+        throw error;
+      }
+    })
+  );
+};
 
 const run = async () => {
   const mappings = createMappings();
@@ -34,6 +65,8 @@ const run = async () => {
       }
     })
   );
+
+  await copyThemeMediaAssets(mappings);
 
   const args = [
     sassCli
