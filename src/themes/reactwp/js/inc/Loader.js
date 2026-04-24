@@ -1,4 +1,4 @@
-import { runtime } from './Runtime';
+import { runtime, createRouteKey } from './Runtime';
 import { fetchRoute } from './RouteService';
 import { resolveTemplateEntry } from './TemplateRegistry';
 import { gsap, ScrollTrigger, prefersReducedMotion, runAnimation } from './motion';
@@ -57,6 +57,10 @@ const syncLoaderState = (route = null) => {
     state.noCriticalDownload = deferredRequest?.download || resolvedPromise(route || null);
 
     return state;
+};
+
+const getRouteKey = (route = null) => {
+    return createRouteKey(route?.path || '/', route?.search || '');
 };
 
 const getGroups = (route) => {
@@ -274,7 +278,7 @@ export const Loader = {
     routeReadyPath: null,
     routeReadyResolve: null,
     routeReady: Promise.resolve(),
-    initialRoutePath: null,
+    initialRouteKey: null,
     initialCriticalRequest: null,
     initialDeferredRequest: null,
     initialAnimationPromise: null,
@@ -292,7 +296,7 @@ export const Loader = {
         this.routeReadyPath = null;
         this.routeReadyResolve = null;
         this.routeReady = Promise.resolve();
-        this.initialRoutePath = null;
+        this.initialRouteKey = null;
         this.initialCriticalRequest = null;
         this.initialDeferredRequest = null;
         this.initialAnimationPromise = null;
@@ -325,14 +329,14 @@ export const Loader = {
         return this;
     },
     setRoute(route){
-        const previousPath = this.currentRoute?.path || null;
-        const nextPath = route?.path || null;
+        const previousKey = getRouteKey(this.currentRoute);
+        const nextKey = getRouteKey(route);
 
         this.currentRoute = route || null;
         this.syncState(this.currentRoute);
 
-        if(nextPath !== previousPath || this.routeReadyPath !== nextPath){
-            this.resetRouteReady(nextPath);
+        if(nextKey !== previousKey || this.routeReadyPath !== nextKey){
+            this.resetRouteReady(nextKey);
         }
 
         return this;
@@ -452,7 +456,7 @@ export const Loader = {
         this.isLoaded = false;
         this.state().isLoaded = false;
         this.setRoute(route);
-        this.initialRoutePath = route?.path || runtime.route.path;
+        this.initialRouteKey = getRouteKey(route || runtime.route);
         const criticalRequest = createCriticalRequest(route);
         const deferredRequest = createDeferredRequest(route);
 
@@ -465,7 +469,7 @@ export const Loader = {
     async finishInitialLoad(route = runtime.route){
         const resolvedRoute = route || runtime.route;
 
-        if(!this.initialCriticalRequest || this.initialRoutePath !== resolvedRoute.path){
+        if(!this.initialCriticalRequest || this.initialRouteKey !== getRouteKey(resolvedRoute)){
             this.prepareInitialLoad(resolvedRoute);
         }
 

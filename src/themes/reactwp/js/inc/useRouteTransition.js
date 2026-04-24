@@ -1,6 +1,6 @@
 import { useEffect, useEffectEvent, useLayoutEffect, useRef, useState } from 'react';
 import { useBlocker, useLocation, useNavigate } from 'react-router-dom';
-import { runtime, normalizePath } from './Runtime';
+import { runtime, normalizePath, normalizeSearch, createRouteKey, normalizeRoute } from './Runtime';
 import { fetchRoute } from './RouteService';
 import { Loader } from './Loader';
 import { PageTransitionAnimation, pageTransition } from './PageTransition';
@@ -61,6 +61,10 @@ const onAnimationComplete = (animation, callback) => {
     done();
 };
 
+const resolveRouteKey = (route) => {
+    return route?.key || createRouteKey(route?.path || route?.pathname || '/', route?.search || '');
+};
+
 export const useRouteTransition = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -70,15 +74,19 @@ export const useRouteTransition = () => {
     const firstLoadRef = useRef(true);
 
     const currentPath = normalizePath(location.pathname);
+    const currentSearch = normalizeSearch(location.search || '');
+    const currentRouteKey = createRouteKey(currentPath, currentSearch);
 
     useInternalNavigation(navigate);
 
-    const handleRouteReady = useEffectEvent((path) => {
-        if(normalizePath(path) !== normalizePath(currentRoute.path)){
+    const handleRouteReady = useEffectEvent((route) => {
+        const routeKey = resolveRouteKey(route);
+
+        if(routeKey !== currentRoute.key){
             return;
         }
 
-        Loader.markRouteReady(path);
+        Loader.markRouteReady(routeKey);
     });
 
     useEffect(() => {
@@ -105,17 +113,13 @@ export const useRouteTransition = () => {
     useLayoutEffect(() => {
         const pendingRoute = pendingRouteRef.current;
 
-        if(!pendingRoute || normalizePath(pendingRoute.path) !== currentPath){
+        if(!pendingRoute || resolveRouteKey(pendingRoute) !== currentRouteKey){
             return;
         }
 
-        setCurrentRoute({
-            ...pendingRoute,
-            path: normalizePath(pendingRoute.path)
-        });
-
+        setCurrentRoute(normalizeRoute(pendingRoute, pendingRoute.path, pendingRoute.search));
         pendingRouteRef.current = null;
-    }, [currentPath]);
+    }, [currentRouteKey]);
 
     useLayoutEffect(() => {
         if(!currentRoute){
@@ -128,10 +132,10 @@ export const useRouteTransition = () => {
 
         loaderState.criticalDisplay = displayPromise;
         loaderState.noCriticalDisplay = noCriticalDisplayPromise;
-    }, [currentRoute?.path]);
+    }, [currentRoute?.key]);
 
     useEffect(() => {
-        if(!currentRoute?.path || normalizePath(currentRoute.path) !== currentPath){
+        if(!currentRoute?.key || currentRoute.key !== currentRouteKey){
             return;
         }
 
@@ -212,7 +216,7 @@ export const useRouteTransition = () => {
         return () => {
             cancelled = true;
         };
-    }, [currentRoute?.path, currentPath, location.hash]);
+    }, [currentRoute?.key, currentRouteKey, location.hash]);
 
     useEffect(() => {
         if(blocker.state !== 'blocked'){
@@ -220,10 +224,11 @@ export const useRouteTransition = () => {
         }
 
         const nextPath = normalizePath(blocker.location.pathname);
-        const nextSearch = blocker.location.search || '';
+        const nextSearch = normalizeSearch(blocker.location.search || '');
         const nextHash = blocker.location.hash || '';
+        const nextRouteKey = createRouteKey(nextPath, nextSearch);
 
-        if(nextPath === currentPath){
+        if(nextRouteKey === currentRouteKey){
             blocker.proceed();
             requestAnimationFrame(() => scrollToHash(nextHash));
             return;
@@ -232,14 +237,11 @@ export const useRouteTransition = () => {
         let cancelled = false;
 
         const transition = async () => {
-            Loader.setLabel(`Preparing ${nextPath}`);
+            Loader.setLabel(`Preparing ${nextPath}${nextSearch}`);
             scroller.lock();
 
             const route = await fetchRoute(`${nextPath}${nextSearch}`);
-            const normalizedRoute = {
-                ...route,
-                path: normalizePath(route.path || nextPath)
-            };
+            const normalizedRoute = normalizeRoute(route, nextPath, nextSearch);
 
             pendingRouteRef.current = normalizedRoute;
             Loader.setRoute(normalizedRoute);
@@ -297,7 +299,7 @@ export const useRouteTransition = () => {
         return () => {
             cancelled = true;
         };
-    }, [blocker, currentPath]);
+    }, [blocker, currentRouteKey]);
 
     return {
         currentRoute,

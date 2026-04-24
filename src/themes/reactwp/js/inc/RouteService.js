@@ -1,7 +1,7 @@
-import { runtime, normalizePath } from './Runtime';
+import { runtime, normalizePath, normalizeSearch, createRouteKey, normalizeRoute } from './Runtime';
 
 const routeMemory = new Map([
-    [runtime.route.path, runtime.route]
+    [runtime.route.key, runtime.route]
 ]);
 
 const requestJson = async (url) => {
@@ -24,44 +24,43 @@ const requestJson = async (url) => {
     };
 };
 
-const normalizeRoute = (route, fallbackPath) => {
-    if(route){
+const normalizeRouteRequest = (input) => {
+    if(input && typeof input === 'object'){
+        const path = normalizePath(input.pathname || input.path || '/');
+        const search = normalizeSearch(input.search || '');
+
         return {
-            ...route,
-            template: route.template || (route.is404 ? 'NotFound' : 'Default'),
-            path: normalizePath(route.path || fallbackPath || '/'),
-            seo: route.seo || {},
-            data: route.data || {},
-            mediaGroups: route.mediaGroups || '',
-            is404: Boolean(route.is404),
+            path,
+            search,
+            key: createRouteKey(path, search),
+            view: `${path}${search}`
         };
     }
 
+    const url = new URL(String(input || '/'), runtime.system.baseUrl || window.location.origin);
+    const path = normalizePath(url.pathname || '/');
+    const search = normalizeSearch(url.search || '');
+
     return {
-        id: null,
-        type: '404',
-        template: 'NotFound',
-        pageName: 'Page not found',
-        path: normalizePath(fallbackPath || '/'),
-        seo: {},
-        data: {},
-        mediaGroups: '',
-        is404: true
+        path,
+        search,
+        key: createRouteKey(path, search),
+        view: `${path}${search}`
     };
 };
 
-export const fetchRoute = async (path) => {
-    const normalizedPath = normalizePath(path);
+export const fetchRoute = async (input) => {
+    const request = normalizeRouteRequest(input);
 
-    if(routeMemory.has(normalizedPath)){
-        return routeMemory.get(normalizedPath);
+    if(routeMemory.has(request.key)){
+        return routeMemory.get(request.key);
     }
 
     const endpoint = runtime.system.routeEndpoint || `${runtime.system.restUrl}reactwp/v1/route`;
-    const { data } = await requestJson(`${endpoint}?view=${encodeURIComponent(normalizedPath)}`);
-    const route = normalizeRoute(data, normalizedPath);
+    const { data } = await requestJson(`${endpoint}?view=${encodeURIComponent(request.view)}`);
+    const route = normalizeRoute(data, request.path, request.search);
 
-    routeMemory.set(route.path, route);
+    routeMemory.set(route.key, route);
 
     return route;
 };

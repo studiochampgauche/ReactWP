@@ -19,24 +19,24 @@ const RouteView = ({ route }) => {
     return (
         <>
             <Template
-                key={route.path}
+                key={route.key}
                 route={route}
                 site={runtime.site}
                 theme={runtime.theme}
                 system={runtime.system}
                 navigation={runtime.navigation}
             />
-            <RouteReadySignal path={route.path} />
+            <RouteReadySignal route={route} />
         </>
     );
 };
 
-const RouteReadySignal = ({ path }) => {
+const RouteReadySignal = ({ route }) => {
     const { handleRouteReady } = useContext(RouteContext);
 
     useLayoutEffect(() => {
-        handleRouteReady(path);
-    }, [path, handleRouteReady]);
+        handleRouteReady(route);
+    }, [route?.key, handleRouteReady, route]);
 
     return null;
 };
