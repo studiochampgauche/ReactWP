@@ -174,11 +174,13 @@ export const useRouteTransition = () => {
 
                 if(window.gscroll){
                     window.gscroll.scrollTop(0);
+                    scroller.setLockScrollTop(0);
                 } else if(!location.hash){
                     window.scrollTo({
                         top: 0,
                         behavior: 'auto'
                     });
+                    scroller.setLockScrollTop(0);
                 }
 
                 scroller.refresh();
@@ -268,11 +270,13 @@ export const useRouteTransition = () => {
 
                 if(window.gscroll){
                     window.gscroll.scrollTop(0);
+                    scroller.setLockScrollTop(0);
                 } else if(!nextHash){
                     window.scrollTo({
                         top: 0,
                         behavior: 'auto'
                     });
+                    scroller.setLockScrollTop(0);
                 }
 
                 Promise.resolve(criticalRequest).then(() => {
