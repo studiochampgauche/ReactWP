@@ -35,15 +35,18 @@ reactwp-v3/
 
 ## Theme Structure
 
-The default theme is organized around three JavaScript areas:
+The default theme is split across PHP, runtime JavaScript, React templates, and SCSS:
 
+- `src/themes/reactwp/template/` for the PHP shell and theme setup
 - `src/themes/reactwp/js/inc/` for runtime code
-- `src/themes/reactwp/js/components/` for reusable React components
-- `src/themes/reactwp/js/templates/` for page templates
+- `src/themes/reactwp/js/components/` for reusable components
+- `src/themes/reactwp/js/templates/` for route-level templates
+- `src/themes/reactwp/scss/default.scss` for the global stylesheet entrypoint
 
-The default SCSS entrypoint is:
+ReactWP uses a shared payload between WordPress and React, including `site`, `theme`, `system`, `assets`, `navigation`, `route`, and `seoDefaults`.
 
-- `src/themes/reactwp/scss/default.scss`
+SCSS can also be imported directly from JavaScript when a style should stay local to a template or component.
+
 
 ## Frontend Extension Points
 
