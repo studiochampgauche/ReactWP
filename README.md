@@ -111,7 +111,7 @@ On first boot, ReactWP prepares a usable starter setup:
 
 ## Principles
 
-- Keep WordPress boring and dependable
+- Keep WordPress reliable and content-focused
 - Keep React expressive but understandable
 - Prefer architectural clarity over tool churn
 - Minimize dependencies unless they clearly buy back time or capability
