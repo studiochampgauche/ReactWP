@@ -90,10 +90,6 @@ class ReactWP{
                 return $result;
             }
 
-            if(is_user_logged_in()){
-                return $result;
-            }
-
             $allowed_routes = apply_filters('rwp_allowed_rest_routes', []);
             $requested_route = $_SERVER['REQUEST_URI'] ?? '';
 
@@ -101,6 +97,10 @@ class ReactWP{
                 if(strpos($requested_route, $route) !== false){
                     return null;
                 }
+            }
+
+            if(current_user_can('manage_options')){
+                return $result;
             }
 
             return new WP_Error(
