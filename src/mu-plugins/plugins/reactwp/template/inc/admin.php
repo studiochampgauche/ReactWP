@@ -476,11 +476,10 @@ function rwp_register_nav_menus_from_options() {
 
 }
 
-add_action('init', function(){
+add_action('acf/init', function(){
 
     if(
         !is_admin()
-        || wp_doing_ajax()
         || (defined('REST_REQUEST') && REST_REQUEST)
         || !function_exists('acf_add_options_page')
         || !function_exists('acf_add_local_field_group')
