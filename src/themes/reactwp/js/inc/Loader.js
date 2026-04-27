@@ -24,6 +24,8 @@ const createLoaderState = () => ({
     noCriticalMedias: resolvedPromise({}),
     criticalDownload: resolvedPromise(null),
     noCriticalDownload: resolvedPromise(null),
+    noCriticalDownloadGroups: {},
+    noCriticalDisplayGroups: {},
     route: null
 });
 
@@ -137,6 +139,29 @@ const collectMediaMap = (map = {}, route) => {
     );
 };
 
+const createGroupPromiseMap = (groups = {}, phase = 'download') => {
+    return Object.fromEntries(
+        Object.entries(groups).map(([group, request]) => [
+            group,
+            request?.[phase] || resolvedPromise([])
+        ])
+    );
+};
+
+const resetDeferredDisplayRequest = (routeKey = null) => {
+    if(!routeKey || !deferredRouteRequests.has(routeKey)){
+        return;
+    }
+
+    const deferredRequest = deferredRouteRequests.get(routeKey);
+
+    deferredRequest.display = null;
+
+    Object.values(deferredRequest.groups || {}).forEach((request) => {
+        request.display = null;
+    });
+};
+
 const syncLoaderState = (route = null) => {
     const state = ensureLoaderState();
     const routeKey = getRouteKey(route);
@@ -150,6 +175,8 @@ const syncLoaderState = (route = null) => {
     state.noCriticalMedias = deferredRequest?.medias || resolvedPromise({});
     state.criticalDownload = criticalRequest?.download || resolvedPromise(route || null);
     state.noCriticalDownload = deferredRequest?.download || resolvedPromise(route || null);
+    state.noCriticalDownloadGroups = createGroupPromiseMap(deferredRequest?.groups || {}, 'download');
+    state.noCriticalDisplayGroups = createGroupPromiseMap(deferredRequest?.groups || {}, 'display');
 
     return state;
 };
@@ -210,6 +237,22 @@ const preloadMediaMap = async (map = {}) => {
     );
 
     return Object.fromEntries(groups);
+};
+
+const preloadMediaGroup = async (items = []) => {
+    const results = await Promise.allSettled(
+        items.map((item) => preloadMediaEntry(item))
+    );
+
+    return results
+        .map((result, index) => {
+            if(result.status === 'fulfilled'){
+                return result.value;
+            }
+
+            return cloneMediaEntry(items[index]);
+        })
+        .filter(Boolean);
 };
 
 const preloadCriticalMedia = async (route) => {
@@ -348,12 +391,30 @@ const createDeferredRequest = (route) => {
         return deferredRouteRequests.get(key);
     }
 
-    const medias = preloadDeferredMedia(route);
-    const download = medias.then(() => route);
+    const mediaMap = collectMediaMap(runtime.assets.noCriticalMedias || {}, route);
+    const groups = Object.fromEntries(
+        Object.entries(mediaMap).map(([group, items]) => [
+            group,
+            {
+                download: preloadMediaGroup(items),
+                display: null
+            }
+        ])
+    );
+    const medias = Promise.all(
+        Object.entries(groups).map(async ([group, request]) => {
+            return [group, await request.download];
+        })
+    ).then((entries) => Object.fromEntries(entries));
+    const download = Promise.allSettled(
+        Object.values(groups).map((request) => request.download)
+    ).then(() => route);
     const request = {
         route,
+        groups,
         medias,
-        download
+        download,
+        display: null
     };
 
     deferredRouteRequests.set(key, request);
@@ -661,6 +722,24 @@ const renderMedias = (mediaPromise) => {
     });
 };
 
+const renderMediaGroup = (mediaPromise) => {
+    return Promise.resolve(mediaPromise).then(async (medias) => {
+        const resolvedMedias = Array.isArray(medias)
+            ? medias.filter(Boolean)
+            : [];
+
+        if(!resolvedMedias.length){
+            return resolvedMedias;
+        }
+
+        await Promise.allSettled(
+            resolvedMedias.map((media) => renderMediaItem(media))
+        );
+
+        return resolvedMedias;
+    });
+};
+
 export const Loader = {
     animation: defaultLoaderAnimation,
     immediateAnimation: defaultLoaderImmediate,
@@ -722,6 +801,10 @@ export const Loader = {
     setRoute(route){
         const previousKey = getRouteKey(this.currentRoute);
         const nextKey = getRouteKey(route);
+
+        if(previousKey && previousKey !== nextKey){
+            resetDeferredDisplayRequest(previousKey);
+        }
 
         this.currentRoute = route || null;
         this.syncState(this.currentRoute);
@@ -911,14 +994,28 @@ export const Loader = {
 
         const deferredRequest = createDeferredRequest(resolvedRoute);
         const state = this.syncState(resolvedRoute);
-        const promise = Promise.allSettled([
-            state.criticalDisplay || this.display(resolvedRoute),
-            deferredRequest.download.catch(() => resolvedRoute)
-        ]).then(() => {
-            return renderMedias(state.noCriticalMedias || resolvedPromise({}));
-        }).then(() => resolvedRoute);
 
+        if(deferredRequest.display){
+            state.noCriticalDisplay = deferredRequest.display;
+            state.noCriticalDisplayGroups = createGroupPromiseMap(deferredRequest.groups || {}, 'display');
+            return deferredRequest.display;
+        }
+
+        const criticalDisplay = state.criticalDisplay || this.display(resolvedRoute);
+
+        Object.values(deferredRequest.groups || {}).forEach((request) => {
+            request.display = Promise.resolve(criticalDisplay)
+                .then(() => request.download.catch(() => []))
+                .then((medias) => renderMediaGroup(medias));
+        });
+
+        const promise = Promise.allSettled(
+            Object.values(deferredRequest.groups || {}).map((request) => request.display)
+        ).then(() => resolvedRoute);
+
+        deferredRequest.display = promise;
         state.noCriticalDisplay = promise;
+        state.noCriticalDisplayGroups = createGroupPromiseMap(deferredRequest.groups || {}, 'display');
 
         return promise;
     }
