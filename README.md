@@ -4,6 +4,10 @@ ReactWP is a WordPress starter designed for teams who want WordPress to stay in 
 
 Current starter version: `3.0.0`
 
+Changelog:
+
+- [CHANGELOG.md](./CHANGELOG.md)
+
 ## Goals
 
 - Keep WordPress reliable, familiar, and editor-friendly
