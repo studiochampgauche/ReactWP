@@ -89,7 +89,7 @@ export const useRouteTransition = () => {
         Loader.markRouteReady(routeKey);
     });
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         Loader.configure();
         configureLoader();
         Loader.setRoute(runtime.route);
