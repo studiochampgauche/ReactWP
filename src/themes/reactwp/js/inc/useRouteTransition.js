@@ -172,7 +172,7 @@ export const useRouteTransition = () => {
                     return;
                 }
 
-                if(window.gscroll){
+                if(window.gscroll && !location.hash){
                     window.gscroll.scrollTop(0);
                     scroller.setLockScrollTop(0);
                 } else if(!location.hash){
@@ -218,7 +218,7 @@ export const useRouteTransition = () => {
         return () => {
             cancelled = true;
         };
-    }, [currentRoute?.key, currentRouteKey, location.hash]);
+    }, [currentRoute?.key, currentRouteKey]);
 
     useEffect(() => {
         if(blocker.state !== 'blocked'){
@@ -268,7 +268,7 @@ export const useRouteTransition = () => {
 
                 window.gscroll?.paused(true);
 
-                if(window.gscroll){
+                if(window.gscroll && !nextHash){
                     window.gscroll.scrollTop(0);
                     scroller.setLockScrollTop(0);
                 } else if(!nextHash){

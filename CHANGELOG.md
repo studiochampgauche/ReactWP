@@ -2,6 +2,12 @@
 
 This file tracks notable project-level changes for `reactwp`.
 
+## 2026-04-28
+
+### Fixed
+
+- Hash-only anchor links now scroll to their target without triggering route transitions or being reset to the top by `ScrollSmoother`.
+
 ## 2026-04-27
 
 ### Changed
