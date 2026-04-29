@@ -16,7 +16,18 @@ class Bootstrap {
             'restNonce' => wp_create_nonce('wp_rest'),
             'themeUrl' => get_stylesheet_directory_uri(),
             'themeDirectory' => get_stylesheet_directory(),
-            'routeEndpoint' => rest_url('reactwp/v1/route')
+            'routeEndpoint' => rest_url('reactwp/v1/route'),
+            'headless' => [
+                'bootstrapEndpoint' => rest_url('reactwp/v1/bootstrap'),
+                'routeEndpoint' => rest_url('reactwp/v1/route'),
+                'navigationEndpoint' => rest_url('reactwp/v1/navigation'),
+                'settingsEndpoint' => rest_url('reactwp/v1/settings'),
+                'sitemapEndpoint' => rest_url('reactwp/v1/sitemap'),
+                'previewEndpoint' => rest_url('reactwp/v1/preview'),
+                'currentUserEndpoint' => rest_url('reactwp/v1/auth/me'),
+                'loginEndpoint' => rest_url('reactwp/v1/auth/login'),
+                'logoutEndpoint' => rest_url('reactwp/v1/auth/logout')
+            ]
         ]);
 
     }

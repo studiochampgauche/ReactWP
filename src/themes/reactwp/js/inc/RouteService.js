@@ -58,7 +58,10 @@ export const fetchRoute = async (input) => {
 
     const endpoint = runtime.system.routeEndpoint || `${runtime.system.restUrl}reactwp/v1/route`;
     const { data } = await requestJson(`${endpoint}?view=${encodeURIComponent(request.view)}`);
-    const route = normalizeRoute(data, request.path, request.search);
+    const routePayload = data && typeof data === 'object' && data.route
+        ? data.route
+        : data;
+    const route = normalizeRoute(routePayload, request.path, request.search);
 
     routeMemory.set(route.key, route);
 

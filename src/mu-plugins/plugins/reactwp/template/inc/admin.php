@@ -2,33 +2,63 @@
 
 function rwp_admin_locale_code() {
 
-    return defined('CL') ? CL : substr(get_locale(), 0, 2);
+    static $locale = null;
+
+    if($locale !== null){
+        return $locale;
+    }
+
+    $locale = defined('CL') ? CL : substr(get_locale(), 0, 2);
+
+    return $locale;
 
 }
 
 function rwp_admin_option_checkbox_values($name) {
 
+    static $cache = [];
+
+    $cache_key = (string)$name;
+
+    if(array_key_exists($cache_key, $cache)){
+        return $cache[$cache_key];
+    }
+
     $value = get_option('options_' . $name, []);
 
     if(is_array($value)){
-        return array_values(array_filter($value));
+        $cache[$cache_key] = array_values(array_filter($value));
+        return $cache[$cache_key];
     }
 
     if($value === null || $value === ''){
-        return [];
+        $cache[$cache_key] = [];
+        return $cache[$cache_key];
     }
 
-    return [(string)$value];
+    $cache[$cache_key] = [(string)$value];
+
+    return $cache[$cache_key];
 
 }
 
 function rwp_admin_option_repeater_rows($name, $sub_fields = []) {
 
+    static $cache = [];
+
+    $sub_fields = array_values(array_map('strval', (array)$sub_fields));
+    $cache_key = (string)$name . '|' . implode('|', $sub_fields);
+
+    if(array_key_exists($cache_key, $cache)){
+        return $cache[$cache_key];
+    }
+
     $rows_count = (int)get_option('options_' . $name, 0);
     $rows = [];
 
     if($rows_count < 1){
-        return [];
+        $cache[$cache_key] = [];
+        return $cache[$cache_key];
     }
 
     for($index = 0; $index < $rows_count; $index++){
@@ -41,24 +71,40 @@ function rwp_admin_option_repeater_rows($name, $sub_fields = []) {
         $rows[] = $row;
     }
 
-    return $rows;
+    $cache[$cache_key] = $rows;
+
+    return $cache[$cache_key];
 
 }
 
 function rwp_admin_langs() {
+
+    static $langs = null;
+
+    if($langs !== null){
+        return $langs;
+    }
 
     $langs = rwp_admin_option_repeater_rows('langs', [
         'name',
         'code',
     ]);
 
-    return array_values(array_filter($langs, function($lang){
+    $langs = array_values(array_filter($langs, function($lang){
         return !empty($lang['code']);
     }));
+
+    return $langs;
 
 }
 
 function rwp_admin_theme_locations() {
+
+    static $locations = null;
+
+    if($locations !== null){
+        return $locations;
+    }
 
     $langs = rwp_admin_langs();
     $sub_fields = ['slug'];
@@ -69,13 +115,21 @@ function rwp_admin_theme_locations() {
 
     $locations = rwp_admin_option_repeater_rows('theme_locations', $sub_fields);
 
-    return array_values(array_filter($locations, function($location){
+    $locations = array_values(array_filter($locations, function($location){
         return !empty($location['slug']);
     }));
+
+    return $locations;
 
 }
 
 function rwp_admin_post_type_choices() {
+
+    static $choices = null;
+
+    if($choices !== null){
+        return $choices;
+    }
 
     $post_types = get_post_types();
     $excluded = [
@@ -106,7 +160,42 @@ function rwp_admin_post_type_choices() {
         unset($post_types[$post_type]);
     }
 
-    return $post_types;
+    $choices = $post_types;
+
+    return $choices;
+
+}
+
+function rwp_admin_request_value($key) {
+
+    if(!isset($_REQUEST[$key]) || !is_scalar($_REQUEST[$key])){
+        return '';
+    }
+
+    return sanitize_text_field(wp_unslash((string)$_REQUEST[$key]));
+
+}
+
+function rwp_admin_is_site_settings_context() {
+
+    if(!is_admin()){
+        return false;
+    }
+
+    $page = sanitize_key(rwp_admin_request_value('page'));
+
+    if($page === 'site-settings'){
+        return true;
+    }
+
+    if(!wp_doing_ajax()){
+        return false;
+    }
+
+    $screen = rwp_admin_request_value('screen');
+    $post_id = rwp_admin_request_value('post_id');
+
+    return strpos($screen, 'site-settings') !== false || $post_id === 'options';
 
 }
 
@@ -449,6 +538,75 @@ function rwp_admin_register_settings_field_groups() {
         'show_in_rest' => 0,
     ]);
 
+    acf_add_local_field_group([
+        'key' => 'group_rwp_headless_api_settings',
+        'title' => 'Headless API',
+        'fields' => [
+            [
+                'key' => 'field_rwp_headless_allowed_origins',
+                'label' => 'Allowed Headless Origins',
+                'name' => 'headless_allowed_origins',
+                'aria-label' => '',
+                'type' => 'repeater',
+                'instructions' => ($locale === 'fr'
+                    ? 'Ajoutez uniquement les origines frontend autorisees a utiliser les requetes authentifiees. Exemple: https://app.example.com'
+                    : 'Only add frontend origins that may use authenticated requests. Example: https://app.example.com'),
+                'required' => 0,
+                'conditional_logic' => 0,
+                'wrapper' => [
+                    'width' => '',
+                    'class' => '',
+                    'id' => '',
+                ],
+                'layout' => 'table',
+                'pagination' => 0,
+                'min' => 0,
+                'max' => 20,
+                'collapsed' => '',
+                'button_label' => 'Add origin',
+                'rows_per_page' => 20,
+                'sub_fields' => [
+                    [
+                        'key' => 'field_rwp_headless_allowed_origin',
+                        'label' => 'Origin',
+                        'name' => 'origin',
+                        'aria-label' => '',
+                        'type' => 'url',
+                        'instructions' => '',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'default_value' => '',
+                        'placeholder' => 'https://app.example.com',
+                        'parent_repeater' => 'field_rwp_headless_allowed_origins',
+                    ],
+                ],
+            ],
+        ],
+        'location' => [
+            [
+                [
+                    'param' => 'options_page',
+                    'operator' => '==',
+                    'value' => 'site-settings',
+                ],
+            ],
+        ],
+        'menu_order' => 14,
+        'position' => 'normal',
+        'style' => 'seamless',
+        'label_placement' => 'top',
+        'instruction_placement' => 'label',
+        'hide_on_screen' => '',
+        'active' => true,
+        'description' => '',
+        'show_in_rest' => 0,
+    ]);
+
 }
 
 function rwp_register_nav_menus_from_options() {
@@ -476,6 +634,27 @@ function rwp_register_nav_menus_from_options() {
 
 }
 
+function rwp_should_register_nav_menus_from_options() {
+
+    if(!is_admin()){
+        return true;
+    }
+
+    if((defined('REST_REQUEST') && REST_REQUEST) || wp_doing_ajax()){
+        return true;
+    }
+
+    $script = isset($_SERVER['PHP_SELF'])
+        ? strtolower(basename((string)$_SERVER['PHP_SELF']))
+        : '';
+
+    return in_array($script, [
+        'nav-menus.php',
+        'customize.php',
+    ], true);
+
+}
+
 add_action('acf/init', function(){
 
     if(
@@ -488,12 +667,17 @@ add_action('acf/init', function(){
     }
 
     rwp_admin_register_options_pages();
-    rwp_admin_register_settings_field_groups();
+
+    if(rwp_admin_is_site_settings_context()){
+        rwp_admin_register_settings_field_groups();
+    }
 
 }, 20);
 
 add_action('init', function(){
 
-    rwp_register_nav_menus_from_options();
+    if(rwp_should_register_nav_menus_from_options()){
+        rwp_register_nav_menus_from_options();
+    }
 
 }, 12);

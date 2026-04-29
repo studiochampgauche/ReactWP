@@ -14,22 +14,8 @@
 */
 add_filter('use_block_editor_for_post_type', '__return_false', 10);
 
+function rwp_backend_clean_dashboard() {
 
-/*
-* Shot events on admin_init action
-*/
-add_action('admin_init', function(){
-
-    /*
-    * Remove editor
-    */
-    remove_post_type_support('post', 'editor');
-    remove_post_type_support('page', 'editor');
-
-
-    /*
-    * Clean Dashboard
-    */
     remove_action('welcome_panel', 'wp_welcome_panel');
     remove_meta_box('dashboard_incoming_links', 'dashboard', 'normal');
     remove_meta_box('dashboard_plugins', 'dashboard', 'normal');
@@ -42,7 +28,27 @@ add_action('admin_init', function(){
     remove_meta_box('dashboard_quick_press', 'dashboard', 'side');
     remove_meta_box('dashboard_recent_drafts', 'dashboard', 'side');
 
+}
+
+
+/*
+* Shot events on admin_init action
+*/
+add_action('admin_init', function(){
+
+    /*
+    * Remove editor
+    */
+    remove_post_type_support('post', 'editor');
+    remove_post_type_support('page', 'editor');
+
 });
+
+
+/*
+* Clean Dashboard
+*/
+add_action('wp_dashboard_setup', 'rwp_backend_clean_dashboard', 99);
 
 
 /*

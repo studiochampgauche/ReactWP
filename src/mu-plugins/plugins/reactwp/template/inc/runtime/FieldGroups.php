@@ -4,21 +4,41 @@ namespace ReactWP\Runtime;
 
 function option_checkbox_values($name) {
 
+    static $cache = [];
+
+    $cache_key = (string)$name;
+
+    if(array_key_exists($cache_key, $cache)){
+        return $cache[$cache_key];
+    }
+
     $value = get_option('options_' . $name, []);
 
     if(is_array($value)){
-        return array_values(array_filter($value));
+        $cache[$cache_key] = array_values(array_filter($value));
+        return $cache[$cache_key];
     }
 
     if($value === null || $value === ''){
-        return [];
+        $cache[$cache_key] = [];
+        return $cache[$cache_key];
     }
 
-    return [(string)$value];
+    $cache[$cache_key] = [(string)$value];
+
+    return $cache[$cache_key];
 
 }
 
 function content_field_locations($option_name) {
+
+    static $cache = [];
+
+    $cache_key = (string)$option_name;
+
+    if(array_key_exists($cache_key, $cache)){
+        return $cache[$cache_key];
+    }
 
     $locations = [
         [
@@ -61,15 +81,51 @@ function content_field_locations($option_name) {
         ];
     }
 
-    return $locations;
+    $cache[$cache_key] = $locations;
+
+    return $cache[$cache_key];
+
+}
+
+function should_register_runtime_field_groups() {
+
+    if(!is_admin()){
+        return true;
+    }
+
+    if((defined('REST_REQUEST') && REST_REQUEST) || wp_doing_ajax()){
+        return true;
+    }
+
+    $script = isset($_SERVER['PHP_SELF'])
+        ? strtolower(basename((string)$_SERVER['PHP_SELF']))
+        : '';
+
+    return in_array($script, [
+        'post.php',
+        'post-new.php',
+        'profile.php',
+        'user-edit.php',
+        'user-new.php',
+        'term.php',
+        'edit-tags.php',
+    ], true);
 
 }
 
 function register_runtime_field_groups() {
 
-    if(!function_exists('acf_add_local_field_group')){
+    static $registered = false;
+
+    if(
+        $registered
+        || !function_exists('acf_add_local_field_group')
+        || !should_register_runtime_field_groups()
+    ){
         return;
     }
+
+    $registered = true;
 
     acf_add_local_field_group([
         'key' => 'group_67kjhb39087sdh233',
