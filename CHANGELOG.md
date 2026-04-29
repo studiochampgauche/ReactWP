@@ -2,6 +2,13 @@
 
 This file tracks notable project-level changes for `reactwp`.
 
+## 2026-04-29
+
+### Fixed
+
+- Header and footer instances can now remount after route transitions complete so scroll-driven layout animations are recreated after page changes.
+- Layout remount keys are now namespaced per component to avoid duplicate React keys when multiple persistent shell components remount on the same route.
+
 ## 2026-04-28
 
 ### Fixed
