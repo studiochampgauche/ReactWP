@@ -50,8 +50,6 @@ The default theme is split across PHP, runtime JavaScript, React templates, and 
 
 ReactWP uses a shared payload between WordPress and React, including `site`, `theme`, `system`, `assets`, `navigation`, `route`, and `seoDefaults`.
 
-Headless contracts for external frontends live in `contracts/`, including a JSON Schema for the public API shape.
-
 SCSS can also be imported directly from JavaScript when a style should stay local to a template or component.
 
 
