@@ -1,0 +1,202 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://reactwp.com/contracts/reactwp-api.schema.json",
+  "title": "ReactWP Headless API",
+  "type": "object",
+  "required": ["apiVersion", "generatedAt"],
+  "properties": {
+    "apiVersion": {
+      "const": "1.0"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "integer",
+      "enum": [200, 404]
+    },
+    "route": {
+      "$ref": "#/$defs/route"
+    },
+    "navigation": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/navigationItem"
+        }
+      }
+    },
+    "currentUser": {
+      "$ref": "#/$defs/currentUser"
+    }
+  },
+  "$defs": {
+    "route": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "template",
+        "status",
+        "lang",
+        "title",
+        "path",
+        "search",
+        "query",
+        "url",
+        "seo",
+        "data",
+        "head",
+        "is404",
+        "links"
+      ],
+      "properties": {
+        "id": {
+          "type": ["integer", "string", "null"]
+        },
+        "type": {
+          "type": "string"
+        },
+        "template": {
+          "type": "string"
+        },
+        "status": {
+          "type": "integer",
+          "enum": [200, 404]
+        },
+        "lang": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "pageName": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "search": {
+          "type": "string"
+        },
+        "query": {
+          "type": "object"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "seo": {
+          "type": "object"
+        },
+        "mediaGroups": {
+          "type": "string"
+        },
+        "data": {
+          "type": "object"
+        },
+        "head": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "is404": {
+          "type": "boolean"
+        },
+        "links": {
+          "type": "object",
+          "required": ["self"],
+          "properties": {
+            "self": {
+              "type": "string",
+              "format": "uri"
+            }
+          }
+        }
+      }
+    },
+    "navigationItem": {
+      "type": "object",
+      "required": ["id", "label", "title", "url", "path", "target", "classes", "children"],
+      "properties": {
+        "id": {
+          "type": ["integer", "null"]
+        },
+        "label": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "target": {
+          "type": ["string", "null"]
+        },
+        "classes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/navigationItem"
+          }
+        }
+      }
+    },
+    "currentUser": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["authenticated"],
+          "properties": {
+            "authenticated": {
+              "const": false
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["authenticated", "id", "slug", "displayName", "email", "roles", "restNonce"],
+          "properties": {
+            "authenticated": {
+              "const": true
+            },
+            "id": {
+              "type": "integer"
+            },
+            "slug": {
+              "type": "string"
+            },
+            "displayName": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "roles": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "restNonce": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

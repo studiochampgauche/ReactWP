@@ -50,6 +50,33 @@ class RouteResolver {
 
     }
 
+    public static function from_post_id($post_id, $request = null, $query = null) {
+
+        $post = get_post((int)$post_id);
+
+        if(!$post instanceof \WP_Post){
+            return self::not_found('/', []);
+        }
+
+        $resolved_request = $request;
+
+        if($resolved_request === null){
+            $permalink = get_permalink($post);
+            $resolved_request = !is_wp_error($permalink) && $permalink
+                ? $permalink
+                : '/?p=' . (int)$post->ID;
+        }
+
+        return self::payload_from_object($post, $resolved_request, $query);
+
+    }
+
+    public static function from_object($object, $request = '/', $query = null) {
+
+        return self::payload_from_object($object, $request, $query);
+
+    }
+
     public static function normalize_path($path = '/') {
 
         $parsed_path = wp_parse_url((string)$path, PHP_URL_PATH);
@@ -200,7 +227,7 @@ class RouteResolver {
 
     }
 
-    private static function payload_from_object($object, $request = '/', $query = null) {
+    public static function payload_from_object($object, $request = '/', $query = null) {
 
         $id = null;
         $type = null;

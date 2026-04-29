@@ -23,6 +23,7 @@ Changelog:
 - A shared payload shape powers both first render and client-side navigation
 - The frontend reads a single bootstrap payload instead of scattered globals
 - Theme CSS is compiled as a real stylesheet asset
+- Headless consumers can use a stable public API contract without coupling to the PHP theme shell
 
 ## Project Structure
 
@@ -48,6 +49,8 @@ The default theme is split across PHP, runtime JavaScript, React templates, and 
 - `src/themes/reactwp/scss/default.scss` for the global stylesheet entrypoint
 
 ReactWP uses a shared payload between WordPress and React, including `site`, `theme`, `system`, `assets`, `navigation`, `route`, and `seoDefaults`.
+
+Headless contracts for external frontends live in `contracts/`, including a JSON Schema for the public API shape.
 
 SCSS can also be imported directly from JavaScript when a style should stay local to a template or component.
 
@@ -115,6 +118,7 @@ On first boot, ReactWP prepares a usable starter setup:
 16. [Page Transitions](https://reactwp.com/docs/page-transitions)
 17. [Styling](https://reactwp.com/docs/styling)
 18. [Content and Menus](https://reactwp.com/docs/content-and-menus)
+19. [Headless API](https://reactwp.com/docs/headless-api)
 
 ## Principles
 

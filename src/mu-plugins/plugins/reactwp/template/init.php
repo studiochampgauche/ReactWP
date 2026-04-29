@@ -9,6 +9,70 @@ require_once 'inc/admin.php';
 require_once 'inc/firstload.php';
 require_once 'inc/routes/rest.php';
 
+function rwp_require_headless_api_runtime() {
+
+    static $loaded = false;
+
+    if($loaded){
+        return;
+    }
+
+    $loaded = true;
+
+    require_once __DIR__ . '/inc/runtime/PublicPayload.php';
+    require_once __DIR__ . '/inc/runtime/PreviewToken.php';
+    require_once __DIR__ . '/inc/runtime/HeadlessApi.php';
+
+}
+
+function rwp_is_headless_rest_request() {
+
+    $request_uri = $_SERVER['REQUEST_URI'] ?? '';
+
+    return strpos($request_uri, '/wp-json/reactwp/v1/') !== false
+        || strpos($request_uri, 'rest_route=/reactwp/v1/') !== false
+        || strpos($request_uri, 'rest_route=%2Freactwp%2Fv1%2F') !== false;
+
+}
+
+add_filter('rwp_allowed_rest_routes', function($routes){
+
+    $routes = is_array($routes) ? $routes : [];
+
+    return array_values(array_unique(array_merge($routes, [
+        '/reactwp/v1/bootstrap',
+        '/reactwp/v1/route',
+        '/reactwp/v1/navigation',
+        '/reactwp/v1/settings',
+        '/reactwp/v1/sitemap',
+        '/reactwp/v1/preview',
+        '/reactwp/v1/auth/me',
+        '/reactwp/v1/auth/login',
+        '/reactwp/v1/auth/logout',
+    ])));
+
+});
+
+add_filter('allowed_http_origins', function($origins){
+
+    if(!rwp_is_headless_rest_request()){
+        return $origins;
+    }
+
+    rwp_require_headless_api_runtime();
+
+    return \ReactWP\Runtime\HeadlessApi::allowed_http_origins($origins);
+
+});
+
+add_action('rest_api_init', function(){
+
+    rwp_require_headless_api_runtime();
+
+    \ReactWP\Runtime\HeadlessApi::register_routes();
+
+});
+
 class ReactWP{
     
     function __construct(){
@@ -146,6 +210,14 @@ class ReactWP{
     static function bootstrap(){
 
         return \ReactWP\Runtime\Bootstrap::payload();
+
+    }
+
+    static function preview_token($post_id, $ttl = null){
+
+        rwp_require_headless_api_runtime();
+
+        return \ReactWP\Runtime\PreviewToken::create($post_id, $ttl);
 
     }
 
