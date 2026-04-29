@@ -10,7 +10,6 @@ This file tracks notable project-level changes for `reactwp`.
 - Added signed, expiring preview tokens through `ReactWP\Runtime\PreviewToken::create()` and `rwp::preview_token()`.
 - Added headless login/logout/current-user endpoints so authenticated REST requests can resolve `wp_get_current_user()`.
 - Added a headless CORS allowlist backed by the new Site settings > Headless API origin repeater and the `rwp_headless_allowed_origins` filter.
-- Added a JSON Schema in `contracts/` for external frontend integrations.
 
 ### Changed
 
