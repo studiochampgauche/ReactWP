@@ -70,6 +70,7 @@ export const useRouteTransition = () => {
     const location = useLocation();
     const blocker = useBlocker(true);
     const [currentRoute, setCurrentRoute] = useState(runtime.route);
+    const [headerKey, setHeaderKey] = useState(resolveRouteKey(runtime.route));
     const pendingRouteRef = useRef(null);
     const firstLoadRef = useRef(true);
 
@@ -158,6 +159,7 @@ export const useRouteTransition = () => {
 
                 scroller.unlock();
                 scrollToHash(location.hash);
+                setHeaderKey(resolveRouteKey(currentRoute));
                 return;
             }
 
@@ -206,6 +208,7 @@ export const useRouteTransition = () => {
                             window.gscroll?.paused(false);
                             scroller.unlock();
                             scrollToHash(location.hash);
+                            setHeaderKey(resolveRouteKey(currentRoute));
                             Loader.preloadDeferred(currentRoute);
                         });
                     });
@@ -307,6 +310,8 @@ export const useRouteTransition = () => {
 
     return {
         currentRoute,
+        headerKey,
+        footerKey: headerKey,
         handleRouteReady
     };
 };

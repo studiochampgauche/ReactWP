@@ -61,6 +61,8 @@ const ReactWPApplication = () => {
             <AppShell
                 showHeader={false}
                 showFooter={false}
+                headerKey={routeTransition.headerKey}
+                footerKey={routeTransition.footerKey}
             >
                 <Outlet />
             </AppShell>
