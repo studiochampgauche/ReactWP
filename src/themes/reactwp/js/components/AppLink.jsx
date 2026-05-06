@@ -66,34 +66,10 @@ const resolveHashTarget = (hash) => {
     return Math.max(0, element.getBoundingClientRect().top + scroller.getScrollTop());
 };
 
-const restoreScrollTop = (scrollTop) => {
-    if(!Number.isFinite(scrollTop)){
-        return;
-    }
-
-    if(window.gscroll && typeof window.gscroll.scrollTop === 'function'){
-        window.gscroll.scrollTop(scrollTop);
-        return;
-    }
-
-    window.scrollTo({
-        top: scrollTop,
-        behavior: 'auto'
-    });
-};
-
-const scrollToHash = (hash) => {
+const scrollToHash = (hash, target = resolveHashTarget(hash)) => {
     requestAnimationFrame(() => {
-        const previousScrollTop = scroller.getScrollTop();
-
         window.gscroll?.paused?.(false);
-        scroller.refresh();
-
-        if(hash !== '#' && Math.abs(scroller.getScrollTop() - previousScrollTop) > 1){
-            restoreScrollTop(previousScrollTop);
-        }
-
-        scroller.scrollTo(resolveHashTarget(hash), true);
+        scroller.scrollTo(target, true);
     });
 };
 
@@ -123,11 +99,13 @@ const AppLink = ({ to = '/', onMouseEnter, onFocus, onClick, ...props }) => {
 
                     event.preventDefault();
 
+                    const target = resolveHashTarget(localHash);
+
                     if(window.location.hash !== localHash){
                         window.history.pushState(null, '', localHash);
                     }
 
-                    scrollToHash(localHash);
+                    scrollToHash(localHash, target);
                 }}
                 onMouseEnter={onMouseEnter}
                 onFocus={onFocus}

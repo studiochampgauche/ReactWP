@@ -33,26 +33,43 @@ const resolveHashTarget = (hash) => {
     return Math.max(0, element.getBoundingClientRect().top + scroller.getScrollTop());
 };
 
-const scrollToHash = (hash, attempts = 8) => {
+const waitForFrame = () => new Promise((resolve) => requestAnimationFrame(resolve));
+
+const resolveRouteScrollTarget = async (hash, attempts = 8) => {
     if(!hash){
-        scroller.scrollTo(0, true);
-        return;
+        return 0;
     }
 
-    requestAnimationFrame(() => {
-        window.gscroll?.paused?.(false);
+    for(let attempt = 0; attempt <= attempts; attempt += 1){
         scroller.refresh();
 
         const target = resolveHashTarget(hash);
 
-        if(target == null){
-            if(attempts > 0){
-                scrollToHash(hash, attempts - 1);
-            }
-
-            return;
+        if(target != null){
+            return target;
         }
 
+        await waitForFrame();
+    }
+
+    return 0;
+};
+
+const setRouteScrollPosition = async (hash, attempts = 8) => {
+    const target = await resolveRouteScrollTarget(hash, attempts);
+
+    scroller.scrollTo(target, false);
+    scroller.setLockScrollTop(target);
+
+    return target;
+};
+
+const scrollToHash = async (hash, attempts = 8) => {
+    const target = await resolveRouteScrollTarget(hash, attempts);
+
+    requestAnimationFrame(() => {
+        window.gscroll?.paused?.(false);
+        scroller.refresh();
         scroller.scrollTo(target, true);
     });
 };
@@ -196,8 +213,13 @@ export const useRouteTransition = () => {
                     return;
                 }
 
+                await setRouteScrollPosition(location.hash);
+
+                if(cancelled){
+                    return;
+                }
+
                 scroller.unlock();
-                scrollToHash(location.hash);
                 setHeaderKey(resolveRouteKey(currentRoute));
                 return;
             }
@@ -209,27 +231,18 @@ export const useRouteTransition = () => {
             }
 
             requestAnimationFrame(() => {
-                if(cancelled){
-                    return;
-                }
-
-                if(window.gscroll && !location.hash){
-                    window.gscroll.scrollTop(0);
-                    scroller.setLockScrollTop(0);
-                } else if(!location.hash){
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'auto'
-                    });
-                    scroller.setLockScrollTop(0);
-                }
-
-                scroller.refresh();
-
-                requestAnimationFrame(() => {
+                const prepare = async () => {
                     if(cancelled){
                         return;
                     }
+
+                    await setRouteScrollPosition(location.hash);
+
+                    if(cancelled){
+                        return;
+                    }
+
+                    scroller.refresh();
 
                     let animation = PageTransitionAnimation.enter({
                         location
@@ -240,17 +253,47 @@ export const useRouteTransition = () => {
                         animation = null;
 
                         requestAnimationFrame(() => {
-                            if(cancelled){
-                                return;
-                            }
+                            const complete = async () => {
+                                if(cancelled){
+                                    return;
+                                }
 
-                            window.gscroll?.paused(false);
-                            scroller.unlock();
-                            scrollToHash(location.hash);
-                            setHeaderKey(resolveRouteKey(currentRoute));
-                            Loader.preloadDeferred(currentRoute);
+                                window.gscroll?.paused(false);
+                                await setRouteScrollPosition(location.hash, 2);
+
+                                if(cancelled){
+                                    return;
+                                }
+
+                                scroller.unlock();
+                                setHeaderKey(resolveRouteKey(currentRoute));
+                                Loader.preloadDeferred(currentRoute);
+                            };
+
+                            complete().catch((error) => {
+                                console.warn('ReactWP route scroll failed.', error);
+                                if(cancelled){
+                                    return;
+                                }
+
+                                window.gscroll?.paused(false);
+                                scroller.unlock();
+                                setHeaderKey(resolveRouteKey(currentRoute));
+                                Loader.preloadDeferred(currentRoute);
+                            });
                         });
                     });
+                };
+
+                prepare().catch((error) => {
+                    console.warn('ReactWP route scroll failed.', error);
+
+                    if(cancelled){
+                        return;
+                    }
+
+                    scroller.refresh();
+                    scroller.unlock();
                 });
             });
         };
