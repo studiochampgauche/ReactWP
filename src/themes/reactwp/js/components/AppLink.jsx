@@ -66,10 +66,33 @@ const resolveHashTarget = (hash) => {
     return Math.max(0, element.getBoundingClientRect().top + scroller.getScrollTop());
 };
 
+const restoreScrollTop = (scrollTop) => {
+    if(!Number.isFinite(scrollTop)){
+        return;
+    }
+
+    if(window.gscroll && typeof window.gscroll.scrollTop === 'function'){
+        window.gscroll.scrollTop(scrollTop);
+        return;
+    }
+
+    window.scrollTo({
+        top: scrollTop,
+        behavior: 'auto'
+    });
+};
+
 const scrollToHash = (hash) => {
     requestAnimationFrame(() => {
+        const previousScrollTop = scroller.getScrollTop();
+
         window.gscroll?.paused?.(false);
         scroller.refresh();
+
+        if(hash !== '#' && Math.abs(scroller.getScrollTop() - previousScrollTop) > 1){
+            restoreScrollTop(previousScrollTop);
+        }
+
         scroller.scrollTo(resolveHashTarget(hash), true);
     });
 };
