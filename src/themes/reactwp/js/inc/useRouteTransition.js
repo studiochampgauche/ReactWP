@@ -9,13 +9,52 @@ import { useInternalNavigation } from './useInternalNavigation';
 import { configureLoader } from './config/configureLoader';
 import { configurePageTransition } from './config/configurePageTransition';
 
-const scrollToHash = (hash) => {
+const getHashElement = (hash) => {
+    if(!hash || hash === '#'){
+        return null;
+    }
+
+    const id = decodeURIComponent(hash.slice(1));
+
+    return document.getElementById(id) || document.querySelector(hash);
+};
+
+const resolveHashTarget = (hash) => {
+    if(hash === '#'){
+        return 0;
+    }
+
+    const element = getHashElement(hash);
+
+    if(!element){
+        return null;
+    }
+
+    return Math.max(0, element.getBoundingClientRect().top + scroller.getScrollTop());
+};
+
+const scrollToHash = (hash, attempts = 8) => {
     if(!hash){
         scroller.scrollTo(0, true);
         return;
     }
 
-    scroller.scrollTo(hash, true);
+    requestAnimationFrame(() => {
+        window.gscroll?.paused?.(false);
+        scroller.refresh();
+
+        const target = resolveHashTarget(hash);
+
+        if(target == null){
+            if(attempts > 0){
+                scrollToHash(hash, attempts - 1);
+            }
+
+            return;
+        }
+
+        scroller.scrollTo(target, true);
+    });
 };
 
 const onAnimationComplete = (animation, callback) => {
