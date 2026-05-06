@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Loader } from '../inc/Loader';
 import { scroller } from '../inc/Scroller';
+import { normalizePath, normalizeSearch } from '../inc/Runtime';
 
 const resolveHref = (to = '/') => {
     if(typeof to === 'string'){
@@ -24,6 +25,33 @@ const getHashElement = (hash) => {
     return document.getElementById(id) || document.querySelector(hash);
 };
 
+const getLocalHash = (href = '') => {
+    if(typeof href !== 'string' || !href.includes('#')){
+        return '';
+    }
+
+    if(href.startsWith('#')){
+        return href;
+    }
+
+    try{
+        const destination = new URL(href, window.location.origin);
+
+        if(
+            destination.origin !== window.location.origin
+            || !destination.hash
+            || normalizePath(destination.pathname) !== normalizePath(window.location.pathname)
+            || normalizeSearch(destination.search) !== normalizeSearch(window.location.search)
+        ){
+            return '';
+        }
+
+        return destination.hash;
+    } catch(_error){
+        return '';
+    }
+};
+
 const resolveHashTarget = (hash) => {
     if(hash === '#'){
         return 0;
@@ -38,33 +66,24 @@ const resolveHashTarget = (hash) => {
     return Math.max(0, element.getBoundingClientRect().top + scroller.getScrollTop());
 };
 
-const scrollToHash = (hash, done = () => null) => {
-    const scroll = () => {
+const scrollToHash = (hash) => {
+    requestAnimationFrame(() => {
         window.gscroll?.paused?.(false);
         scroller.refresh();
         scroller.scrollTo(resolveHashTarget(hash), true);
-    };
-
-    requestAnimationFrame(() => {
-        scroll();
-        requestAnimationFrame(scroll);
-        window.setTimeout(() => {
-            scroll();
-            done();
-        }, 80);
     });
 };
 
 const AppLink = ({ to = '/', onMouseEnter, onFocus, onClick, ...props }) => {
     const href = resolveHref(to);
     const routerEnabled = !(props['data-router'] === false || props['data-router'] === 'false');
-    const isHashOnly = typeof href === 'string' && href.startsWith('#');
+    const localHash = getLocalHash(href);
 
     const prefetch = () => {
         Loader.prepareRoute(href).catch(() => null);
     };
 
-    if(!routerEnabled || isHashOnly){
+    if(!routerEnabled || localHash){
         return (
             <a
                 href={href}
@@ -72,7 +91,7 @@ const AppLink = ({ to = '/', onMouseEnter, onFocus, onClick, ...props }) => {
                     onClick?.(event);
 
                     if(
-                        !isHashOnly
+                        !localHash
                         || isModifiedEvent(event)
                         || event.defaultPrevented
                     ){
@@ -81,16 +100,11 @@ const AppLink = ({ to = '/', onMouseEnter, onFocus, onClick, ...props }) => {
 
                     event.preventDefault();
 
-                    scrollToHash(href, () => {
-                        if(window.location.hash !== href){
-                            window.history.pushState(null, '', href);
-                        }
+                    if(window.location.hash !== localHash){
+                        window.history.pushState(null, '', localHash);
+                    }
 
-                        requestAnimationFrame(() => {
-                            scroller.refresh();
-                            scroller.scrollTo(resolveHashTarget(href), true);
-                        });
-                    });
+                    scrollToHash(localHash);
                 }}
                 onMouseEnter={onMouseEnter}
                 onFocus={onFocus}
