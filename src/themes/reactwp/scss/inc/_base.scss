@@ -5,7 +5,7 @@
 }
 
 html{
-	scroll-behavior: smooth;
+	scroll-behavior: auto;
 	&.is-scroll-locked{
 		overflow: hidden;
 		overscroll-behavior: none;

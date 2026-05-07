@@ -14,39 +14,39 @@ const getHashElement = (hash) => {
         return null;
     }
 
-    const id = decodeURIComponent(hash.slice(1));
+    let id = hash.slice(1);
 
-    return document.getElementById(id) || document.querySelector(hash);
-};
-
-const resolveHashTarget = (hash) => {
-    if(hash === '#'){
-        return 0;
+    try {
+        id = decodeURIComponent(id);
+    } catch(error){
+        id = hash.slice(1);
     }
 
-    const element = getHashElement(hash);
+    const element = document.getElementById(id);
 
-    if(!element){
+    if(element){
+        return element;
+    }
+
+    try {
+        return document.querySelector(hash);
+    } catch(error){
         return null;
     }
-
-    return Math.max(0, element.getBoundingClientRect().top + scroller.getScrollTop());
 };
 
 const waitForFrame = () => new Promise((resolve) => requestAnimationFrame(resolve));
 
-const resolveRouteScrollTarget = async (hash, attempts = 8) => {
-    if(!hash){
+const waitForHashTarget = async (hash, attempts = 8) => {
+    if(!hash || hash === '#'){
         return 0;
     }
 
     for(let attempt = 0; attempt <= attempts; attempt += 1){
         scroller.refresh();
 
-        const target = resolveHashTarget(hash);
-
-        if(target != null){
-            return target;
+        if(getHashElement(hash)){
+            return hash;
         }
 
         await waitForFrame();
@@ -55,23 +55,18 @@ const resolveRouteScrollTarget = async (hash, attempts = 8) => {
     return 0;
 };
 
-const setRouteScrollPosition = async (hash, attempts = 8) => {
-    const target = await resolveRouteScrollTarget(hash, attempts);
+const scrollToRouteTarget = async (hash, smooth = false, attempts = 8) => {
+    const target = await waitForHashTarget(hash, attempts);
 
-    scroller.scrollTo(target, false);
-    scroller.setLockScrollTop(target);
+    window.gscroll?.paused?.(false);
+    scroller.refresh();
+    scroller.scrollTo(target, smooth);
 
-    return target;
-};
-
-const scrollToHash = async (hash, attempts = 8) => {
-    const target = await resolveRouteScrollTarget(hash, attempts);
-
-    requestAnimationFrame(() => {
-        window.gscroll?.paused?.(false);
+    if(!smooth){
+        await waitForFrame();
         scroller.refresh();
-        scroller.scrollTo(target, true);
-    });
+        scroller.scrollTo(target, false);
+    }
 };
 
 const onAnimationComplete = (animation, callback) => {
@@ -155,6 +150,10 @@ export const useRouteTransition = () => {
         configurePageTransition();
         pageTransition.setup();
 
+        if('scrollRestoration' in window.history){
+            window.history.scrollRestoration = 'manual';
+        }
+
         scroller.init();
         scroller.lock();
 
@@ -198,6 +197,27 @@ export const useRouteTransition = () => {
 
         let cancelled = false;
 
+        const finishEnter = () => {
+            let animation = PageTransitionAnimation.enter({
+                location
+            });
+
+            onAnimationComplete(animation, () => {
+                animation?.kill?.();
+                animation = null;
+
+                requestAnimationFrame(() => {
+                    if(cancelled){
+                        return;
+                    }
+
+                    window.gscroll?.paused?.(false);
+                    setHeaderKey(resolveRouteKey(currentRoute));
+                    Loader.preloadDeferred(currentRoute);
+                });
+            });
+        };
+
         const run = async () => {
             if(firstLoadRef.current){
                 firstLoadRef.current = false;
@@ -213,13 +233,13 @@ export const useRouteTransition = () => {
                     return;
                 }
 
-                await setRouteScrollPosition(location.hash);
+                scroller.unlock();
+                await scrollToRouteTarget(location.hash, false);
 
                 if(cancelled){
                     return;
                 }
 
-                scroller.unlock();
                 setHeaderKey(resolveRouteKey(currentRoute));
                 return;
             }
@@ -232,57 +252,15 @@ export const useRouteTransition = () => {
 
             requestAnimationFrame(() => {
                 const prepare = async () => {
-                    if(cancelled){
-                        return;
-                    }
-
-                    await setRouteScrollPosition(location.hash);
+                    scroller.unlock();
+                    await scrollToRouteTarget(location.hash, false);
 
                     if(cancelled){
                         return;
                     }
 
                     scroller.refresh();
-
-                    let animation = PageTransitionAnimation.enter({
-                        location
-                    });
-
-                    onAnimationComplete(animation, () => {
-                        animation?.kill?.();
-                        animation = null;
-
-                        requestAnimationFrame(() => {
-                            const complete = async () => {
-                                if(cancelled){
-                                    return;
-                                }
-
-                                window.gscroll?.paused(false);
-                                await setRouteScrollPosition(location.hash, 2);
-
-                                if(cancelled){
-                                    return;
-                                }
-
-                                scroller.unlock();
-                                setHeaderKey(resolveRouteKey(currentRoute));
-                                Loader.preloadDeferred(currentRoute);
-                            };
-
-                            complete().catch((error) => {
-                                console.warn('ReactWP route scroll failed.', error);
-                                if(cancelled){
-                                    return;
-                                }
-
-                                window.gscroll?.paused(false);
-                                scroller.unlock();
-                                setHeaderKey(resolveRouteKey(currentRoute));
-                                Loader.preloadDeferred(currentRoute);
-                            });
-                        });
-                    });
+                    finishEnter();
                 };
 
                 prepare().catch((error) => {
@@ -292,8 +270,9 @@ export const useRouteTransition = () => {
                         return;
                     }
 
-                    scroller.refresh();
                     scroller.unlock();
+                    scroller.refresh();
+                    finishEnter();
                 });
             });
         };
@@ -317,7 +296,9 @@ export const useRouteTransition = () => {
 
         if(nextRouteKey === currentRouteKey){
             blocker.proceed();
-            requestAnimationFrame(() => scrollToHash(nextHash));
+            requestAnimationFrame(() => {
+                scrollToRouteTarget(nextHash, true);
+            });
             return;
         }
 

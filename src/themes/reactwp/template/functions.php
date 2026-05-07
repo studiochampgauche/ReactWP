@@ -28,7 +28,7 @@ add_action('wp_head', function(){
 
         html{
             font-size: 16px;
-            scroll-behavior: smooth;
+            scroll-behavior: auto;
             -webkit-font-smoothing: antialiased;
         }
 
