@@ -20,9 +20,25 @@ const isModifiedEvent = (event) => {
 };
 
 const getHashElement = (hash) => {
-    const id = decodeURIComponent(hash.slice(1));
+    let id = hash.slice(1);
 
-    return document.getElementById(id) || document.querySelector(hash);
+    try {
+        id = decodeURIComponent(id);
+    } catch(error){
+        id = hash.slice(1);
+    }
+
+    const element = document.getElementById(id);
+
+    if(element){
+        return element;
+    }
+
+    try {
+        return document.querySelector(hash);
+    } catch(error){
+        return null;
+    }
 };
 
 const getLocalHash = (href = '') => {
@@ -57,18 +73,13 @@ const resolveHashTarget = (hash) => {
         return 0;
     }
 
-    const element = getHashElement(hash);
-
-    if(!element){
-        return hash;
-    }
-
-    return Math.max(0, element.getBoundingClientRect().top + scroller.getScrollTop());
+    return getHashElement(hash) ? hash : 0;
 };
 
 const scrollToHash = (hash, target = resolveHashTarget(hash)) => {
     requestAnimationFrame(() => {
         window.gscroll?.paused?.(false);
+        scroller.refresh();
         scroller.scrollTo(target, true);
     });
 };
