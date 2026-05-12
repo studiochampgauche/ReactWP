@@ -2,6 +2,12 @@
 
 This file tracks notable project-level changes for `reactwp`.
 
+## 2026-05-11
+
+### Fixed
+
+- Disabled Webpack filesystem cache for production builds to avoid stale asset metadata conflicts during optimized image emission.
+
 ## 2026-04-29
 
 ### Added
