@@ -58,11 +58,13 @@ export const createBundleConfig = ({
 
     return {
       mode,
-      cache: {
-        type: 'filesystem',
-        cacheDirectory: filesystemCacheDirectory,
-        name: filesystemCacheName
-      },
+      cache: isProduction
+        ? false
+        : {
+            type: 'filesystem',
+            cacheDirectory: filesystemCacheDirectory,
+            name: filesystemCacheName
+          },
       devtool: isProduction ? false : 'source-map',
       entry: items.reduce((entries, itemName) => {
         entries[itemName] = [
