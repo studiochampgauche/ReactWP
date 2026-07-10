@@ -2,6 +2,14 @@
 
 This file tracks notable project-level changes for `reactwp`.
 
+## 2026-07-10
+
+### Changed
+
+- Updated the Node tooling packages declared in `configs/package.json`.
+- Confirmed the build tooling against Node.js `26.5.0`.
+- Removed the obsolete `@babel/preset-env` `bugfixes` option now that Babel 8 always enables bugfix plugins.
+
 ## 2026-05-11
 
 ### Fixed
