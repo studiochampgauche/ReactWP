@@ -4,7 +4,7 @@ import Button from '../components/Button';
 const Default = ({ route, site }) => {
 	const headline = route.data.hero_title || 'Installation ready';
 	const intro = route.data.hero_intro || 'Your ReactWP starter is installed and ready. You can now edit the site in WordPress and start customizing the frontend.';
-
+	
 	return(
 		<div className="status-screen status-screen--ready">
 			<section className="status-screen__section">
