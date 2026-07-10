@@ -1,10 +1,7 @@
 export default {
   presets: [
     [
-      '@babel/preset-env',
-      {
-        bugfixes: true
-      }
+      '@babel/preset-env'
     ],
     [
       '@babel/preset-react',
