@@ -1,8 +1,43 @@
-const MEDIA_CACHE_NAME = 'rwp-cache-media';
-const JSON_CACHE_NAME = 'rwp-cache-json';
+import { runtime } from './Runtime';
+
+const MEDIA_CACHE_PREFIX = 'rwp-cache-media';
+const JSON_CACHE_PREFIX = 'rwp-cache-json';
+
+const normalizeCacheVersion = (value) => {
+    const version = String(value || '1').replace(/[^a-zA-Z0-9._-]/g, '-');
+
+    return version || '1';
+};
+
+const CACHE_VERSION = normalizeCacheVersion(runtime.system.cacheVersion);
+const MEDIA_CACHE_NAME = `${MEDIA_CACHE_PREFIX}-${CACHE_VERSION}`;
+const JSON_CACHE_NAME = `${JSON_CACHE_PREFIX}-${CACHE_VERSION}`;
 
 const supportsCacheStorage = () => {
     return typeof window !== 'undefined' && 'caches' in window;
+};
+
+const isManagedCache = (name = '') => {
+    return name === MEDIA_CACHE_PREFIX
+        || name === JSON_CACHE_PREFIX
+        || name.startsWith(`${MEDIA_CACHE_PREFIX}-`)
+        || name.startsWith(`${JSON_CACHE_PREFIX}-`);
+};
+
+const getVersionedMediaUrl = (url) => {
+    try{
+        const target = new URL(url, window.location.origin);
+
+        if(target.origin !== window.location.origin || !['http:', 'https:'].includes(target.protocol)){
+            return url;
+        }
+
+        target.searchParams.set('rwp-cache-version', CACHE_VERSION);
+
+        return target.href;
+    } catch(_error){
+        return url;
+    }
 };
 
 const ReactWPCache = {
@@ -10,6 +45,34 @@ const ReactWPCache = {
     mediaPending: new Map(),
     jsonMemory: new Map(),
     jsonPending: new Map(),
+    initializePromise: null,
+
+    initialize(){
+        if(!supportsCacheStorage()){
+            return Promise.resolve([]);
+        }
+
+        if(!this.initializePromise){
+            this.initializePromise = caches.keys()
+                .then((names) => {
+                    const staleCaches = names.filter((name) => {
+                        return isManagedCache(name)
+                            && name !== MEDIA_CACHE_NAME
+                            && name !== JSON_CACHE_NAME;
+                    });
+
+                    return Promise.allSettled(
+                        staleCaches.map((name) => caches.delete(name))
+                    );
+                })
+                .catch((error) => {
+                    console.warn('ReactWP stale cache cleanup failed.', error);
+                    return [];
+                });
+        }
+
+        return this.initializePromise;
+    },
 
     async media(url, {
         asBlob = true,
@@ -39,11 +102,15 @@ const ReactWPCache = {
                 let response = null;
 
                 if(useCache && supportsCacheStorage()){
+                    await this.initialize();
                     const cache = await caches.open(MEDIA_CACHE_NAME);
                     response = await cache.match(url);
 
                     if(!response){
-                        response = await fetch(url, requestInit);
+                        response = await fetch(getVersionedMediaUrl(url), {
+                            cache: 'reload',
+                            ...requestInit
+                        });
 
                         if(!response.ok){
                             return url;
@@ -52,7 +119,10 @@ const ReactWPCache = {
                         await cache.put(url, response.clone());
                     }
                 } else {
-                    response = await fetch(url, requestInit);
+                    response = await fetch(getVersionedMediaUrl(url), {
+                        cache: 'reload',
+                        ...requestInit
+                    });
 
                     if(!response.ok){
                         return url;
@@ -97,11 +167,15 @@ const ReactWPCache = {
                 let response = null;
 
                 if(useCache && supportsCacheStorage()){
+                    await this.initialize();
                     const cache = await caches.open(JSON_CACHE_NAME);
                     response = await cache.match(url);
 
                     if(!response){
-                        response = await fetch(url, requestInit);
+                        response = await fetch(url, {
+                            cache: 'reload',
+                            ...requestInit
+                        });
 
                         if(!response.ok){
                             return null;
@@ -110,7 +184,10 @@ const ReactWPCache = {
                         await cache.put(url, response.clone());
                     }
                 } else {
-                    response = await fetch(url, requestInit);
+                    response = await fetch(url, {
+                        cache: 'reload',
+                        ...requestInit
+                    });
 
                     if(!response.ok){
                         return null;
@@ -154,6 +231,7 @@ const ReactWPCache = {
         }
 
         try{
+            await this.initialize();
             const mediaCache = await caches.open(MEDIA_CACHE_NAME);
             const jsonCache = await caches.open(JSON_CACHE_NAME);
 
@@ -181,14 +259,19 @@ const ReactWPCache = {
         }
 
         try{
-            await Promise.allSettled([
-                caches.delete(MEDIA_CACHE_NAME),
-                caches.delete(JSON_CACHE_NAME)
-            ]);
+            const names = await caches.keys();
+
+            await Promise.allSettled(
+                names.filter(isManagedCache).map((name) => caches.delete(name))
+            );
+
+            this.initializePromise = null;
         } catch(error){
             console.warn('ReactWP cache clear failed.', error);
         }
     }
 };
+
+ReactWPCache.initialize();
 
 export default ReactWPCache;

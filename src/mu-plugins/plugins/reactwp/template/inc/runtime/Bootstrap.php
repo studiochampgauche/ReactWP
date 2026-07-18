@@ -14,6 +14,7 @@ class Bootstrap {
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'restUrl' => rest_url(),
             'restNonce' => wp_create_nonce('wp_rest'),
+            'cacheVersion' => ClientCache::version(),
             'themeUrl' => get_stylesheet_directory_uri(),
             'themeDirectory' => get_stylesheet_directory(),
             'routeEndpoint' => rest_url('reactwp/v1/route'),

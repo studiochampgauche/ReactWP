@@ -4,6 +4,7 @@ require_once 'inc/utils.php';
 require_once 'inc/runtime/RouteResolver.php';
 require_once 'inc/runtime/MenuBuilder.php';
 require_once 'inc/runtime/Bootstrap.php';
+require_once 'inc/runtime/ClientCache.php';
 require_once 'inc/runtime/FieldGroups.php';
 require_once 'inc/admin.php';
 require_once 'inc/firstload.php';
@@ -89,15 +90,63 @@ class ReactWP{
 
             $theme = wp_get_theme();
             $slug = $theme->get_stylesheet();
+            $asset_version = $theme->get('Version') ?: null;
+            $client_cache_version = \ReactWP\Runtime\ClientCache::version();
+            $version_asset = static function($version) use ($client_cache_version){
+                $parts = array_filter([
+                    is_scalar($version) ? (string)$version : '',
+                    $client_cache_version,
+                ], static function($part){
+                    return $part !== '';
+                });
 
-            $script_path = self::source([
-                'path' => '/assets/js/' . $slug . '.min.js',
+                return implode('-', $parts);
+            };
+            $manifest_path = self::source([
+                'path' => '/assets/js/entrypoints.json',
                 'url' => false
             ]);
-            $script_url = self::source([
-                'path' => '/assets/js/' . $slug . '.min.js',
-                'url' => true
-            ]);
+            $manifest = [];
+
+            if(file_exists($manifest_path)){
+                $manifest = json_decode((string)file_get_contents($manifest_path), true);
+                $manifest = is_array($manifest) ? $manifest : [];
+            }
+
+            $normalize_assets = static function($assets, $extension){
+                if(!is_array($assets)){
+                    return [];
+                }
+
+                return array_values(array_filter($assets, static function($asset) use ($extension){
+                    if(!is_string($asset) || strpos($asset, '..') !== false){
+                        return false;
+                    }
+
+                    return substr($asset, -strlen($extension)) === $extension;
+                }));
+            };
+
+            $script_assets = $normalize_assets($manifest['scripts'] ?? [], '.js');
+            $style_assets = $normalize_assets($manifest['styles'] ?? [], '.css');
+
+            if(empty($script_assets)){
+                foreach([
+                    'assets/js/' . $slug . '.min.js',
+                    'assets/js/' . $slug . '.js'
+                ] as $fallback_asset){
+                    $fallback_path = self::source([
+                        'path' => '/' . $fallback_asset,
+                        'url' => false
+                    ]);
+
+                    if(file_exists($fallback_path)){
+                        $script_assets[] = $fallback_asset;
+                        break;
+                    }
+                }
+            }
+
             $style_path = self::source([
                 'path' => '/assets/css/' . $slug . '.min.css',
                 'url' => false
@@ -106,19 +155,77 @@ class ReactWP{
                 'path' => '/assets/css/' . $slug . '.min.css',
                 'url' => true
             ]);
-
-            $asset_version = $theme->get('Version') ?: null;
-            $script_version = file_exists($script_path) ? filemtime($script_path) : $asset_version;
-            $style_version = file_exists($style_path) ? filemtime($style_path) : $asset_version;
+            $style_version = $version_asset(file_exists($style_path) ? filemtime($style_path) : $asset_version);
 
             if(file_exists($style_path)){
                 wp_enqueue_style('rwp-theme', $style_url, [], $style_version);
             }
 
-            wp_enqueue_script('rwp-main', $script_url, [], $script_version, false);
+            foreach($style_assets as $index => $style_asset){
+                $asset_path = self::source([
+                    'path' => '/' . ltrim($style_asset, '/'),
+                    'url' => false
+                ]);
 
-            add_filter('script_loader_tag', function($tag, $handle, $src){
-                if($handle !== 'rwp-main'){
+                if(!file_exists($asset_path)){
+                    continue;
+                }
+
+                wp_enqueue_style(
+                    'rwp-theme-chunk-' . ($index + 1),
+                    self::source([
+                        'path' => '/' . ltrim($style_asset, '/'),
+                        'url' => true
+                    ]),
+                    file_exists($style_path) ? ['rwp-theme'] : [],
+                    $version_asset(filemtime($asset_path))
+                );
+            }
+
+            $script_entries = [];
+
+            foreach($script_assets as $script_asset){
+                $asset_path = self::source([
+                    'path' => '/' . ltrim($script_asset, '/'),
+                    'url' => false
+                ]);
+
+                if(file_exists($asset_path)){
+                    $script_entries[] = [
+                        'asset' => $script_asset,
+                        'path' => $asset_path
+                    ];
+                }
+            }
+
+            $script_handles = [];
+            $previous_handle = null;
+            $last_script_index = count($script_entries) - 1;
+
+            foreach($script_entries as $index => $script_entry){
+                $script_asset = $script_entry['asset'];
+
+                $handle = $index === $last_script_index
+                    ? 'rwp-main'
+                    : 'rwp-main-chunk-' . ($index + 1);
+
+                wp_enqueue_script(
+                    $handle,
+                    self::source([
+                        'path' => '/' . ltrim($script_asset, '/'),
+                        'url' => true
+                    ]),
+                    $previous_handle ? [$previous_handle] : [],
+                    $version_asset(filemtime($script_entry['path'])),
+                    false
+                );
+
+                $script_handles[] = $handle;
+                $previous_handle = $handle;
+            }
+
+            add_filter('script_loader_tag', function($tag, $handle, $src) use ($script_handles){
+                if(!in_array($handle, $script_handles, true)){
                     return $tag;
                 }
 
@@ -210,6 +317,18 @@ class ReactWP{
     static function bootstrap(){
 
         return \ReactWP\Runtime\Bootstrap::payload();
+
+    }
+
+    static function client_cache_version(){
+
+        return \ReactWP\Runtime\ClientCache::version();
+
+    }
+
+    static function bust_client_cache(){
+
+        return \ReactWP\Runtime\ClientCache::bust();
 
     }
 

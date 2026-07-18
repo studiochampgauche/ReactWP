@@ -1,0 +1,72 @@
+RewriteEngine On
+
+<IfModule mod_mime.c>
+AddEncoding br .br
+AddEncoding gzip .gz
+</IfModule>
+
+<FilesMatch "\.(?:js|mjs)(?:\.(?:br|gz))$">
+ForceType application/javascript
+</FilesMatch>
+<FilesMatch "\.css(?:\.(?:br|gz))$">
+ForceType text/css
+</FilesMatch>
+<FilesMatch "\.json(?:\.(?:br|gz))$">
+ForceType application/json
+</FilesMatch>
+<FilesMatch "\.svg(?:\.(?:br|gz))$">
+ForceType image/svg+xml
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+RewriteCond %{HTTP:Accept-Encoding} \bbr\b [NC]
+RewriteCond %{REQUEST_FILENAME}.br -s
+RewriteRule ^(.+\.(?:css|js|mjs|json|svg))$ $1.br [QSA,L]
+
+RewriteCond %{HTTP:Accept-Encoding} \bgzip\b [NC]
+RewriteCond %{REQUEST_FILENAME}.gz -s
+RewriteRule ^(.+\.(?:css|js|mjs|json|svg))$ $1.gz [QSA,L]
+</IfModule>
+
+<IfModule mod_brotli.c>
+AddOutputFilterByType BROTLI_COMPRESS application/javascript application/json application/manifest+json application/xml application/xhtml+xml image/svg+xml text/css text/html text/javascript text/plain text/xml
+</IfModule>
+
+<IfModule mod_deflate.c>
+AddOutputFilterByType DEFLATE application/javascript application/json application/manifest+json application/xml application/xhtml+xml image/svg+xml text/css text/html text/javascript text/plain text/xml
+</IfModule>
+
+<IfModule mod_expires.c>
+ExpiresActive On
+ExpiresByType application/javascript "access plus 1 year"
+ExpiresByType text/javascript "access plus 1 year"
+ExpiresByType text/css "access plus 1 year"
+ExpiresByType font/woff "access plus 1 year"
+ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+<FilesMatch "\.(?:css|js|mjs|woff2?)(?:\.(?:br|gz))?$">
+Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+<FilesMatch "\.(?:avif|gif|jpe?g|png|svg|webp)$">
+Header set Cache-Control "public, max-age=2592000"
+</FilesMatch>
+<FilesMatch "\.(?:br|gz)$">
+Header merge Vary Accept-Encoding
+</FilesMatch>
+</IfModule>
+
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+
+# add a trailing slash to /wp-admin
+RewriteRule ^wp-admin$ wp-admin/ [R=301,L]
+
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+RewriteRule ^(wp-(content|admin|includes).*) $1 [L]
+RewriteRule ^(.*\.php)$ $1 [L]
+RewriteRule . index.php [L]

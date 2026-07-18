@@ -3,4 +3,5 @@ node_modules
 package-lock.json
 wp-config.php
 .htaccess
+!src/core/.htaccess
 .npmrc
