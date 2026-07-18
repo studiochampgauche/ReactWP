@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
+import { brotliCompressSync, constants, gzipSync } from 'node:zlib';
 import imagemin from 'imagemin';
 import imageminGifsicle from 'imagemin-gifsicle';
 import imageminMozjpeg from 'imagemin-mozjpeg';
@@ -147,6 +148,34 @@ const optimizeThemeMediaAssets = async (copiedRoots) => {
   await optimizeRasterImages(assetPaths);
 };
 
+const removePrecompressedStyles = async (mappings) => {
+  await Promise.all(
+    mappings.flatMap(({ output }) => [
+      fs.rm(`${output}.br`, { force: true }),
+      fs.rm(`${output}.gz`, { force: true })
+    ])
+  );
+};
+
+const precompressStyles = async (mappings) => {
+  await Promise.all(
+    mappings.map(async ({ output }) => {
+      const buffer = await fs.readFile(output);
+      const gzipSource = gzipSync(buffer, { level: 9 });
+      const brotliSource = brotliCompressSync(buffer, {
+        params: {
+          [constants.BROTLI_PARAM_QUALITY]: 11
+        }
+      });
+
+      await Promise.all([
+        fs.writeFile(`${output}.br`, brotliSource),
+        fs.writeFile(`${output}.gz`, gzipSource)
+      ]);
+    })
+  );
+};
+
 const run = async () => {
   const mappings = createMappings();
 
@@ -161,6 +190,10 @@ const run = async () => {
       }
     })
   );
+
+  if (mode !== 'prod') {
+    await removePrecompressedStyles(mappings);
+  }
 
   const copiedRoots = await copyThemeMediaAssets(mappings);
 
@@ -189,8 +222,17 @@ const run = async () => {
     stdio: 'inherit'
   });
 
-  child.on('exit', (code) => {
-    process.exit(code ?? 0);
+  child.on('exit', async (code) => {
+    if (code && code !== 0) {
+      process.exit(code);
+      return;
+    }
+
+    if (mode === 'prod') {
+      await precompressStyles(mappings);
+    }
+
+    process.exit(0);
   });
 };
 

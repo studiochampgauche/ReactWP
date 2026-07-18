@@ -232,8 +232,8 @@ add_action('admin_bar_menu', function(){
             )
         );
         $wp_admin_bar->add_node($args);
-        
-        
+
+
         // Themes Management
         if(current_user_can('switch_themes')){
             $args = array(
@@ -246,8 +246,6 @@ add_action('admin_bar_menu', function(){
                 )
             );
             $wp_admin_bar->add_node($args);
-
-
 
             // Edit Themes
             $args = array(
@@ -278,6 +276,20 @@ add_action('admin_bar_menu', function(){
                 )
             );
             $wp_admin_bar->add_node($args);
+
+
+            // Public cache
+            $args = array(
+                'id' => 'is-client-cache',
+                'title' => __('Cache', 'rwp-core'),
+                'href' => $admin_url . 'admin.php?page=reactwp-cache',
+                'parent' => 'is-site',
+                'meta' => array(
+                    'class' => 'is-client-cache'
+                )
+            );
+            if(current_user_can('manage_options'))
+                $wp_admin_bar->add_node($args);
             
             
             // Edit Plugins

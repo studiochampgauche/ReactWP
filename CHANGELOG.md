@@ -2,6 +2,28 @@
 
 This file tracks notable project-level changes for `reactwp`.
 
+## 2026-07-17
+
+### Added
+
+- Added an entrypoint manifest so WordPress automatically loads the JavaScript files emitted by the current build mode in dependency order.
+- Added an automatic production bundle report with raw, gzip, and Brotli sizes plus configurable bundle budgets.
+- Added a nonce-protected **ReactWP > Cache** admin action and `rwp::bust_client_cache()` API for invalidating public visitor caches on demand.
+
+### Changed
+
+- Development commands now emit `<theme>.js`, while `npm run prod` emits `<theme>.min.js`; the obsolete counterpart is removed automatically after a successful build.
+- Split the initial theme bundle into stable framework, router, motion, vendor, and application assets for smaller individual files and better browser caching.
+- Extracted template SCSS into standalone CSS chunks instead of injecting it through the JavaScript bundle.
+- Production JavaScript and CSS chunks now use content-hashed `.min` filenames, while development chunks use stable readable filenames.
+- Successful builds now remove stale JavaScript, source map, license, and extracted CSS chunks for themes, plugins, and mu-plugins.
+- Production builds now emit precompressed Brotli and gzip variants of theme JavaScript and CSS; Apache serves the best supported variant even when dynamic compression modules are unavailable and sends long-lived cache headers for versioned assets.
+- Browser Cache Storage names and initial asset versions now include the server-controlled cache generation; visitors automatically discard older ReactWP JSON and media cache generations on their next page load.
+
+### Fixed
+
+- Production Webpack mode is now passed explicitly to Babel so production bundles use `jsx-runtime` instead of the incompatible `jsx-dev-runtime`.
+
 ## 2026-07-10
 
 ### Changed

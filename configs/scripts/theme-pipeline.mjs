@@ -7,6 +7,7 @@ const __dirname = path.dirname(__filename);
 const configsRoot = path.resolve(__dirname, '..');
 const webpackCli = path.resolve(configsRoot, 'node_modules', 'webpack-cli', 'bin', 'cli.js');
 const stylesScript = path.resolve(__dirname, 'build-theme-styles.mjs');
+const bundleReportScript = path.resolve(__dirname, 'report-bundle-sizes.mjs');
 
 const mode = process.argv[2] || 'build';
 const webpackMode = mode === 'prod' ? 'production' : 'development';
@@ -73,7 +74,16 @@ if (isWatch) {
     completed += 1;
 
     if (completed === 2) {
-      process.exit(0);
+      if (mode !== 'prod') {
+        process.exit(0);
+        return;
+      }
+
+      const reportProcess = spawnChild('themes:report', process.execPath, [bundleReportScript]);
+
+      reportProcess.on('exit', (reportCode) => {
+        process.exit(reportCode ?? 0);
+      });
     }
   };
 

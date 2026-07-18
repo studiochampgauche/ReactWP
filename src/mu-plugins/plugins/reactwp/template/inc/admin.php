@@ -609,6 +609,77 @@ function rwp_admin_register_settings_field_groups() {
 
 }
 
+function rwp_admin_register_client_cache_page() {
+
+    add_submenu_page(
+        'site-settings',
+        'ReactWP cache',
+        'Cache',
+        'manage_options',
+        'reactwp-cache',
+        'rwp_admin_render_client_cache_page'
+    );
+
+}
+
+function rwp_admin_render_client_cache_page() {
+
+    if(!current_user_can('manage_options')){
+        return;
+    }
+
+    $is_french = rwp_admin_locale_code() === 'fr';
+    $was_busted = rwp_admin_request_value('rwp-cache-busted') === '1';
+    $version = \ReactWP\Runtime\ClientCache::version();
+
+    ?>
+    <div class="wrap">
+        <h1>ReactWP cache</h1>
+
+        <?php if($was_busted) : ?>
+            <div class="notice notice-success is-dismissible">
+                <p><?php echo esc_html($is_french
+                    ? 'Le cache public ReactWP a ete invalide.'
+                    : 'The public ReactWP cache was invalidated.'); ?></p>
+            </div>
+        <?php endif; ?>
+
+        <p><?php echo esc_html($is_french
+            ? 'Invalidez les caches JSON, medias, JavaScript et CSS des visiteurs. La nouvelle generation sera appliquee lors de leur prochain chargement de page.'
+            : 'Invalidate visitor JSON, media, JavaScript, and CSS caches. The new generation will apply on their next page load.'); ?></p>
+        <p>
+            <strong><?php echo esc_html($is_french ? 'Generation actuelle :' : 'Current generation:'); ?></strong>
+            <code><?php echo esc_html($version); ?></code>
+        </p>
+
+        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+            <input type="hidden" name="action" value="rwp_bust_client_cache">
+            <?php wp_nonce_field('rwp_bust_client_cache'); ?>
+            <?php submit_button($is_french ? 'Invalider le cache public' : 'Invalidate public cache', 'primary'); ?>
+        </form>
+    </div>
+    <?php
+
+}
+
+function rwp_admin_handle_client_cache_bust() {
+
+    if(!current_user_can('manage_options')){
+        wp_die(esc_html__('You are not allowed to perform this action.'));
+    }
+
+    check_admin_referer('rwp_bust_client_cache');
+    \ReactWP\Runtime\ClientCache::bust();
+
+    wp_safe_redirect(add_query_arg(
+        'rwp-cache-busted',
+        '1',
+        admin_url('admin.php?page=reactwp-cache')
+    ));
+    exit;
+
+}
+
 function rwp_register_nav_menus_from_options() {
 
     if(!function_exists('register_nav_menus')){
@@ -673,6 +744,9 @@ add_action('acf/init', function(){
     }
 
 }, 20);
+
+add_action('admin_menu', 'rwp_admin_register_client_cache_page', 99);
+add_action('admin_post_rwp_bust_client_cache', 'rwp_admin_handle_client_cache_bust');
 
 add_action('init', function(){
 
