@@ -273,10 +273,10 @@ for(const routePath of paths){
     }
 }
 
-const fragmentsDirectory = path.join(outputDirectory, 'fragments');
 await assertSafeDirectory(outputDirectory, 'Static output directory');
 await mkdir(outputDirectory, { recursive: true });
 const outputRealPath = await realpath(outputDirectory);
+const fragmentsDirectory = path.join(outputRealPath, 'fragments');
 const fragmentsRelativePath = path.relative(outputRealPath, path.resolve(fragmentsDirectory));
 
 if(fragmentsRelativePath.startsWith('..') || path.isAbsolute(fragmentsRelativePath)){

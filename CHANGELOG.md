@@ -19,6 +19,7 @@ This file tracks notable project-level changes for `reactwp`.
 ### Fixed
 
 - Fixed the first rendering build on a clean checkout by materializing the emitted server bundle before generating its template manifest.
+- Fixed static generation under Windows path aliases by deriving fragment paths from the canonical output directory.
 - Updated the CI workflow to the current major releases of the official checkout and Node.js setup actions.
 
 ## 2026-07-20
