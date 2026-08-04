@@ -16,6 +16,11 @@ This file tracks notable project-level changes for `reactwp`.
 - Aligned project licensing metadata with WordPress and the bundled GPL SVG sanitizer.
 - Prepared the v3 release history for removal of legacy ACF PRO files and historical runtime configuration without changing the existing GitHub repository.
 
+### Fixed
+
+- Fixed the first rendering build on a clean checkout by materializing the emitted server bundle before generating its template manifest.
+- Updated the CI workflow to the current major releases of the official checkout and Node.js setup actions.
+
 ## 2026-07-20
 
 ### Changed

@@ -18,10 +18,33 @@ class TemplateRenderManifestPlugin {
     }
 
     apply(compiler){
-        compiler.hooks.afterEmit.tapPromise('ReactWPTemplateRenderManifestPlugin', async () => {
+        compiler.hooks.done.tapPromise('ReactWPTemplateRenderManifestPlugin', async (stats) => {
+            if(stats.hasErrors()){
+                return;
+            }
+
+            const compilation = stats.compilation;
             const outputPath = compiler.options.output.path;
             const renderPath = path.join(outputPath, this.renderDirectory);
             const bundlePath = path.join(renderPath, 'server.cjs');
+            const bundleAssetName = `${this.renderDirectory.replace(/\\/g, '/')}/server.cjs`;
+
+            try{
+                await fs.promises.access(bundlePath, fs.constants.R_OK);
+            } catch(error){
+                if(error?.code !== 'ENOENT'){
+                    throw error;
+                }
+
+                const bundleAsset = compilation.getAsset(bundleAssetName);
+
+                if(!bundleAsset){
+                    throw new Error(`ReactWP render bundle was not emitted: ${bundleAssetName}`);
+                }
+
+                await fs.promises.mkdir(renderPath, { recursive: true });
+                await fs.promises.writeFile(bundlePath, bundleAsset.source.source());
+            }
 
             Object.keys(require.cache).forEach((modulePath) => {
                 if(modulePath.startsWith(outputPath)){
