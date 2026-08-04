@@ -8,6 +8,10 @@
 * Version: 1.0.0
 */
 
+if(!defined('ABSPATH')){
+    exit;
+}
+
 
 /*
 * Remove Gutenberg
@@ -208,30 +212,32 @@ add_action('admin_bar_menu', function(){
         $wp_admin_bar->add_node($args);
         
         
-        // Site settings
-        $args = array(
-            'id' => 'is-site-settings',
-            'title' => __('Site settings', 'rwp-core'),
-            'href' => $admin_url . 'admin.php?page=site-settings',
-            'parent' => 'is-site',
-            'meta' => array(
-                'class' => 'is-site-settings'
-            )
-        );
-        $wp_admin_bar->add_node($args);
+        if(function_exists('acf_add_options_page')){
+            // Site settings
+            $args = array(
+                'id' => 'is-site-settings',
+                'title' => __('Site settings', 'rwp-core'),
+                'href' => $admin_url . 'admin.php?page=site-settings',
+                'parent' => 'is-site',
+                'meta' => array(
+                    'class' => 'is-site-settings'
+                )
+            );
+            $wp_admin_bar->add_node($args);
 
 
-        // Theme settings
-        $args = array(
-            'id' => 'is-theme-settings',
-            'title' => __('Theme settings', 'rwp-core'),
-            'href' => $admin_url . 'admin.php?page=theme-settings',
-            'parent' => 'is-site',
-            'meta' => array(
-                'class' => 'is-theme-settings'
-            )
-        );
-        $wp_admin_bar->add_node($args);
+            // Theme settings
+            $args = array(
+                'id' => 'is-theme-settings',
+                'title' => __('Theme settings', 'rwp-core'),
+                'href' => $admin_url . 'admin.php?page=theme-settings',
+                'parent' => 'is-site',
+                'meta' => array(
+                    'class' => 'is-theme-settings'
+                )
+            );
+            $wp_admin_bar->add_node($args);
+        }
 
 
         // Themes Management
@@ -278,7 +284,7 @@ add_action('admin_bar_menu', function(){
             $wp_admin_bar->add_node($args);
 
 
-            // Public cache
+            // ReactWP cache
             $args = array(
                 'id' => 'is-client-cache',
                 'title' => __('Cache', 'rwp-core'),
@@ -306,17 +312,19 @@ add_action('admin_bar_menu', function(){
                 $wp_admin_bar->add_node($args);
             
             
-            // ACF PRO Management
-            $args = array(
-                'id' => 'is-acf',
-                'title' => __('ACF', 'rwp-core'),
-                'href' => $admin_url . 'edit.php?post_type=acf-field-group',
-                'parent' => 'is-site',
-                'meta' => array(
-                    'class' => 'is-acf'
-                )
-            );
-            $wp_admin_bar->add_node($args);
+            if(post_type_exists('acf-field-group')){
+                // ACF Management
+                $args = array(
+                    'id' => 'is-acf',
+                    'title' => __('ACF', 'rwp-core'),
+                    'href' => $admin_url . 'edit.php?post_type=acf-field-group',
+                    'parent' => 'is-site',
+                    'meta' => array(
+                        'class' => 'is-acf'
+                    )
+                );
+                $wp_admin_bar->add_node($args);
+            }
             
             
             // Import Management

@@ -12,6 +12,7 @@ class ClientCache {
         $version = get_option(self::OPTION_NAME, self::DEFAULT_VERSION);
         $version = is_scalar($version) ? (string)$version : self::DEFAULT_VERSION;
         $version = preg_replace('/[^a-zA-Z0-9._-]/', '-', $version);
+        $version = substr((string)$version, 0, 128);
 
         return $version !== '' ? $version : self::DEFAULT_VERSION;
 

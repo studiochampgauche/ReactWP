@@ -17,6 +17,12 @@ const supportsCacheStorage = () => {
     return typeof window !== 'undefined' && 'caches' in window;
 };
 
+const canPersistResponse = (response) => {
+    const cacheControl = response?.headers?.get('Cache-Control') || '';
+
+    return !/(?:^|,)\s*(?:no-store|private)(?:\s*=|\s|,|$)/i.test(cacheControl);
+};
+
 const isManagedCache = (name = '') => {
     return name === MEDIA_CACHE_PREFIX
         || name === JSON_CACHE_PREFIX
@@ -116,7 +122,9 @@ const ReactWPCache = {
                             return url;
                         }
 
-                        await cache.put(url, response.clone());
+                        if(canPersistResponse(response)){
+                            await cache.put(url, response.clone());
+                        }
                     }
                 } else {
                     response = await fetch(getVersionedMediaUrl(url), {
@@ -181,7 +189,9 @@ const ReactWPCache = {
                             return null;
                         }
 
-                        await cache.put(url, response.clone());
+                        if(canPersistResponse(response)){
+                            await cache.put(url, response.clone());
+                        }
                     }
                 } else {
                     response = await fetch(url, {

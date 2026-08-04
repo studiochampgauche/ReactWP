@@ -53,7 +53,11 @@ export const fetchRoute = async (input) => {
     const request = normalizeRouteRequest(input);
 
     if(routeMemory.has(request.key)){
-        return routeMemory.get(request.key);
+        const cachedRoute = routeMemory.get(request.key);
+
+        if(cachedRoute?.render?.cache?.payload !== false){
+            return cachedRoute;
+        }
     }
 
     const endpoint = runtime.system.routeEndpoint || `${runtime.system.restUrl}reactwp/v1/route`;
@@ -63,7 +67,9 @@ export const fetchRoute = async (input) => {
         : data;
     const route = normalizeRoute(routePayload, request.path, request.search);
 
-    routeMemory.set(route.key, route);
+    if(route.render?.cache?.payload !== false){
+        routeMemory.set(route.key, route);
+    }
 
     return route;
 };

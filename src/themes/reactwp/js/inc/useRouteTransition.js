@@ -1,5 +1,5 @@
 import { useEffect, useEffectEvent, useLayoutEffect, useRef, useState } from 'react';
-import { useBlocker, useLocation, useNavigate } from 'react-router-dom';
+import { useBlocker, useLocation, useNavigate } from 'react-router';
 import { runtime, normalizePath, normalizeSearch, createRouteKey, normalizeRoute } from './Runtime';
 import { fetchRoute } from './RouteService';
 import { Loader } from './Loader';

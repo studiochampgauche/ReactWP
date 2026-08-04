@@ -1,5 +1,6 @@
 'use strict';
 import React, { forwardRef, useRef } from 'react';
+import { sanitizeDomProps } from '../inc/domProps';
 
 const Video = forwardRef(function Video({ className = null, ...props }, ref){
 
@@ -8,7 +9,7 @@ const Video = forwardRef(function Video({ className = null, ...props }, ref){
 
 	const tagProps = {
 		className: (className ? `video-container ${className}` : 'video-container'),
-		...props
+		...sanitizeDomProps(props)
 	}
 
 	return(

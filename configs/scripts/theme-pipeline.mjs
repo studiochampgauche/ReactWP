@@ -8,6 +8,7 @@ const configsRoot = path.resolve(__dirname, '..');
 const webpackCli = path.resolve(configsRoot, 'node_modules', 'webpack-cli', 'bin', 'cli.js');
 const stylesScript = path.resolve(__dirname, 'build-theme-styles.mjs');
 const bundleReportScript = path.resolve(__dirname, 'report-bundle-sizes.mjs');
+const staticGeneratorScript = path.resolve(__dirname, 'generate-static.mjs');
 
 const mode = process.argv[2] || 'build';
 const webpackMode = mode === 'prod' ? 'production' : 'development';
@@ -51,6 +52,15 @@ const cssProcess = spawnChild('themes:css', process.execPath, [
   mode
 ]);
 
+const renderProcess = spawnChild('themes:render', process.execPath, [
+  webpackCli,
+  '--mode',
+  webpackMode,
+  '--config',
+  'webpack.render.config.js',
+  ...(isWatch ? ['--watch'] : [])
+]);
+
 if (isWatch) {
   jsProcess.on('exit', (code) => {
     if (code && code !== 0) {
@@ -59,6 +69,12 @@ if (isWatch) {
   });
 
   cssProcess.on('exit', (code) => {
+    if (code && code !== 0) {
+      process.exit(code);
+    }
+  });
+
+  renderProcess.on('exit', (code) => {
     if (code && code !== 0) {
       process.exit(code);
     }
@@ -73,7 +89,7 @@ if (isWatch) {
 
     completed += 1;
 
-    if (completed === 2) {
+    if (completed === 3) {
       if (mode !== 'prod') {
         process.exit(0);
         return;
@@ -82,11 +98,24 @@ if (isWatch) {
       const reportProcess = spawnChild('themes:report', process.execPath, [bundleReportScript]);
 
       reportProcess.on('exit', (reportCode) => {
-        process.exit(reportCode ?? 0);
+        if(reportCode && reportCode !== 0){
+          process.exit(reportCode);
+          return;
+        }
+
+        if(!process.env.RWP_SITE_URL){
+          process.stdout.write('[themes:ssg] Skipped. Set RWP_SITE_URL to generate static routes during production builds.\n');
+          process.exit(0);
+          return;
+        }
+
+        const staticProcess = spawnChild('themes:ssg', process.execPath, [staticGeneratorScript]);
+        staticProcess.on('exit', (staticCode) => process.exit(staticCode ?? 0));
       });
     }
   };
 
   jsProcess.on('exit', handleExit);
   cssProcess.on('exit', handleExit);
+  renderProcess.on('exit', handleExit);
 }

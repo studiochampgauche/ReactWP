@@ -1,0 +1,17 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /configs
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+  - package-ecosystem: composer
+    directory: /src/plugins/reactwp-accept-svg/template
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5

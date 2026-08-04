@@ -1,4 +1,23 @@
 RewriteEngine On
+ServerSignature Off
+
+<IfModule mod_autoindex.c>
+Options -Indexes
+</IfModule>
+
+<IfModule mod_authz_core.c>
+<FilesMatch "^(?:\.env(?:\..*)?|composer\.(?:json|lock)|package(?:-lock)?\.json|phpunit\.xml(?:\.dist)?|.*\.(?:bak|dist|log|old|orig|sql|swp))$">
+Require all denied
+</FilesMatch>
+</IfModule>
+
+<IfModule mod_headers.c>
+Header always unset X-Powered-By
+Header always set X-Content-Type-Options "nosniff"
+Header always set X-Frame-Options "SAMEORIGIN"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+Header always set Permissions-Policy "camera=(), geolocation=(), microphone=()"
+</IfModule>
 
 <IfModule mod_mime.c>
 AddEncoding br .br
@@ -19,6 +38,11 @@ ForceType image/svg+xml
 </FilesMatch>
 
 <IfModule mod_rewrite.c>
+RewriteRule ^wp-content/themes/[^/]+/assets/render(?:/|$) - [F,L,NC]
+RewriteRule ^wp-content/themes/[^/]+/datas/acf(?:/|$) - [F,L,NC]
+RewriteRule ^wp-content/uploads/reactwp/render(?:/|$) - [F,L,NC]
+RewriteRule ^wp-content/uploads/.*\.(?:php[0-9]?|phtml|phar)(?:/|$) - [F,L,NC]
+
 RewriteCond %{HTTP:Accept-Encoding} \bbr\b [NC]
 RewriteCond %{REQUEST_FILENAME}.br -s
 RewriteRule ^(.+\.(?:css|js|mjs|json|svg))$ $1.br [QSA,L]

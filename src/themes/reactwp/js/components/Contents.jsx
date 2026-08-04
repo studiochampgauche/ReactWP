@@ -2,6 +2,7 @@
 import React, { forwardRef, useRef } from 'react';
 import Button from './Button';
 import Wrapper from './Wrapper';
+import { normalizeHeadingTag, sanitizeDomProps } from '../inc/domProps';
 
 const Contents = forwardRef(function Contents({ uptitle, title, subtitle, text, buttons, titleTag, className = null, ...props }, ref){
 
@@ -10,11 +11,11 @@ const Contents = forwardRef(function Contents({ uptitle, title, subtitle, text, 
 
 	const pass = (uptitle || subtitle || title || text || buttons) ? true : false;
 
-	const TitleTag = titleTag || 'h2';
+	const TitleTag = normalizeHeadingTag(titleTag);
 
 	const tagProps = {
 		className: (className ? `contents ${className}` : 'contents'),
-		...props
+		...sanitizeDomProps(props)
 	}
 
 	return(

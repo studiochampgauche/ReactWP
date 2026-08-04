@@ -1,5 +1,6 @@
 'use strict';
 import React, { forwardRef, useRef } from 'react';
+import { sanitizeDomProps } from '../inc/domProps';
 
 const Footer = forwardRef(function Footer({ show = false, className = null, ...props }, ref){
 
@@ -12,7 +13,7 @@ const Footer = forwardRef(function Footer({ show = false, className = null, ...p
 
 	const tagProps = {
 		className: className,
-		...props
+		...sanitizeDomProps(props)
 	}
 
 	return(

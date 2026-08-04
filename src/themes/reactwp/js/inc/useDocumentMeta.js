@@ -14,11 +14,14 @@ const upsertMeta = (selector, attributes) => {
 
     Object.entries(attributes).forEach(([key, value]) => {
         if(value == null || value === ''){
+            node.removeAttribute(key);
             return;
         }
 
         node.setAttribute(key, value);
     });
+
+    node.setAttribute(managedHeadAttribute, managedHeadValue);
 };
 
 const clearManagedHead = () => {
@@ -28,18 +31,103 @@ const clearManagedHead = () => {
 };
 
 const parseHeadEntries = (entries = []) => {
-    return entries.flatMap((entry) => {
-        if(typeof entry !== 'string' || !entry.trim()){
+    return entries.slice(0, 100).flatMap((entry) => {
+        if(typeof entry !== 'string' || !entry.trim() || entry.length > 65536){
             return [];
         }
 
         const template = document.createElement('template');
         template.innerHTML = entry.trim();
 
-        return Array.from(template.content.childNodes).filter((node) => {
-            return node.nodeType === Node.ELEMENT_NODE;
-        });
+        return Array.from(template.content.childNodes)
+            .map(sanitizeHeadNode)
+            .filter(Boolean);
     });
+};
+
+const safeHeadUrl = (value) => {
+    try{
+        const url = new URL(String(value || ''), window.location.origin);
+        return String(value || '').length <= 4096
+            && !url.username
+            && !url.password
+            && ['http:', 'https:'].includes(url.protocol)
+            ? url.href
+            : '';
+    } catch(_error){
+        return '';
+    }
+};
+
+const sanitizeHeadNode = (node) => {
+    if(!(node instanceof Element)){
+        return null;
+    }
+
+    const tag = node.tagName.toLowerCase();
+
+    if(tag === 'title'){
+        const title = document.createElement('title');
+        title.textContent = String(node.textContent || '').slice(0, 4096);
+        return title;
+    }
+
+    if(tag === 'meta'){
+        const meta = document.createElement('meta');
+        const charset = String(node.getAttribute('charset') || '').trim();
+        const name = String(node.getAttribute('name') || '').trim();
+        const property = String(node.getAttribute('property') || '').trim();
+        const httpEquiv = String(node.getAttribute('http-equiv') || '').trim().toLowerCase();
+        const content = String(node.getAttribute('content') || '');
+
+        if(content.length > 65536){
+            return null;
+        }
+
+        if(charset && /^[a-z0-9._-]{1,40}$/i.test(charset)){
+            meta.setAttribute('charset', charset);
+            return meta;
+        }
+
+        if(name && /^[a-z0-9:._-]{1,100}$/i.test(name)){
+            meta.setAttribute('name', name);
+        } else if(property && /^[a-z0-9:._-]{1,100}$/i.test(property)){
+            meta.setAttribute('property', property);
+        } else if(httpEquiv === 'x-ua-compatible'){
+            meta.setAttribute('http-equiv', httpEquiv);
+        } else {
+            return null;
+        }
+
+        meta.setAttribute('content', content);
+        return meta;
+    }
+
+    if(tag === 'link'){
+        const rel = String(node.getAttribute('rel') || '').trim().toLowerCase();
+        const allowedRelations = new Set(['alternate', 'apple-touch-icon', 'canonical', 'icon', 'manifest']);
+        const href = safeHeadUrl(node.getAttribute('href'));
+
+        if(!allowedRelations.has(rel) || !href){
+            return null;
+        }
+
+        const link = document.createElement('link');
+        link.setAttribute('rel', rel);
+        link.setAttribute('href', href);
+
+        ['hreflang', 'media', 'sizes', 'type'].forEach((attribute) => {
+            const value = node.getAttribute(attribute);
+
+            if(value && value.length <= 1024){
+                link.setAttribute(attribute, value);
+            }
+        });
+
+        return link;
+    }
+
+    return null;
 };
 
 const normalizedHeadNode = (node) => {

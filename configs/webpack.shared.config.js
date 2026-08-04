@@ -118,6 +118,72 @@ class EntrypointManifestPlugin {
   }
 }
 
+class TemplateAssetsManifestPlugin {
+  constructor(items){
+    this.items = items;
+  }
+
+  apply(compiler){
+    const pluginName = 'ReactWPTemplateAssetsManifestPlugin';
+
+    compiler.hooks.thisCompilation.tap(pluginName, (compilation) => {
+      compilation.hooks.processAssets.tap(
+        {
+          name: pluginName,
+          stage: compiler.webpack.Compilation.PROCESS_ASSETS_STAGE_SUMMARIZE
+        },
+        () => {
+          this.items.forEach((itemName) => {
+            const templates = {};
+
+            for(const chunk of compilation.chunks){
+              const files = [...chunk.files];
+
+              if(!files.length){
+                continue;
+              }
+
+              for(const module of compilation.chunkGraph.getChunkModulesIterable(chunk)){
+                const resource = String(module.resource || '').replace(/\\/g, '/');
+                const marker = `/themes/${itemName}/js/templates/`;
+                const markerIndex = resource.indexOf(marker);
+
+                if(markerIndex < 0 || !/\.jsx?$/.test(resource)){
+                  continue;
+                }
+
+                const relativeTemplate = resource.slice(markerIndex + marker.length).replace(/\.jsx?$/, '');
+                const assetKey = path.posix.basename(relativeTemplate);
+                const prefix = `${itemName}/`;
+                const normalizedFiles = files.map((filename) => {
+                  return filename.startsWith(prefix) ? filename.slice(prefix.length) : filename;
+                });
+                const current = templates[assetKey] || { scripts: [], styles: [] };
+
+                templates[assetKey] = {
+                  scripts: [...new Set([
+                    ...current.scripts,
+                    ...normalizedFiles.filter((filename) => filename.endsWith('.js'))
+                  ])],
+                  styles: [...new Set([
+                    ...current.styles,
+                    ...normalizedFiles.filter((filename) => filename.endsWith('.css'))
+                  ])]
+                };
+              }
+            }
+
+            compilation.emitAsset(
+              `${itemName}/assets/render/template-assets.json`,
+              new compiler.webpack.sources.RawSource(`${JSON.stringify({ version: 1, templates }, null, 2)}\n`)
+            );
+          });
+        }
+      );
+    });
+  }
+}
+
 class PrecompressedAssetsPlugin {
   apply(compiler){
     const pluginName = 'ReactWPPrecompressedAssetsPlugin';
@@ -335,6 +401,7 @@ export const createBundleConfig = ({
                 chunkFilename: createChunkFilename(items, 'css', 'css', isProduction)
               }),
               new EntrypointManifestPlugin(items),
+              new TemplateAssetsManifestPlugin(items),
               ...(isProduction ? [new PrecompressedAssetsPlugin()] : [])
             ]
           : []),
@@ -369,7 +436,7 @@ export const createBundleConfig = ({
                   enforce: true
                 },
                 router: {
-                  test: /[\\/]node_modules[\\/](?:react-router|react-router-dom)[\\/]/,
+                  test: /[\\/]node_modules[\\/]react-router[\\/]/,
                   name: 'router',
                   priority: 30,
                   enforce: true
@@ -392,19 +459,37 @@ export const createBundleConfig = ({
         minimizer: isProduction
           ? [
               new ImageMinimizerPlugin({
-                minimizer: {
-                  implementation: ImageMinimizerPlugin.imageminMinify,
-                  options: {
-                    plugins: [
-                      ['gifsicle', { interlaced: true }],
-                      ['jpegtran', { progressive: true }],
-                      ['mozjpeg', { quality: 78 }],
-                      ['optipng', { optimizationLevel: 5 }],
-                      ['pngquant', { quality: [0.7, 0.9], speed: 4 }],
-                      ['svgo', { plugins: [{ name: 'preset-default', params: { overrides: { removeViewBox: false } } }] }]
-                    ]
+                minimizer: [
+                  {
+                    implementation: ImageMinimizerPlugin.sharpMinify,
+                    filter: (_source, sourcePath) => /\.(?:gif|jpe?g|png|webp)$/i.test(sourcePath),
+                    options: {
+                      encodeOptions: {
+                        jpeg: { quality: 78, progressive: true },
+                        png: { quality: 88, effort: 9 },
+                        gif: { effort: 9 },
+                        webp: { quality: 82, effort: 6 }
+                      }
+                    }
+                  },
+                  {
+                    implementation: ImageMinimizerPlugin.svgoMinify,
+                    filter: (_source, sourcePath) => /\.svg$/i.test(sourcePath),
+                    options: {
+                      encodeOptions: {
+                        multipass: true,
+                        plugins: [{
+                          name: 'preset-default',
+                          params: {
+                            overrides: {
+                              removeViewBox: false
+                            }
+                          }
+                        }]
+                      }
+                    }
                   }
-                }
+                ]
               }),
               new TerserPlugin()
             ]

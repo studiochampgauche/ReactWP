@@ -1,7 +1,6 @@
-import { Link } from 'react-router-dom';
-import { Loader } from '../inc/Loader';
-import { scroller } from '../inc/Scroller';
+import { Link } from 'react-router';
 import { normalizePath, normalizeSearch } from '../inc/Runtime';
+import { sanitizeDomProps } from '../inc/domProps';
 
 const resolveHref = (to = '/') => {
     if(typeof to === 'string'){
@@ -15,11 +14,26 @@ const resolveHref = (to = '/') => {
     return '/';
 };
 
+const isExternalHref = (href = '') => /^(?:(?:https?:)?\/\/|mailto:|tel:)/i.test(href);
+
+const isSafeHref = (href = '') => {
+    const value = String(href || '').trim();
+
+    return value !== ''
+        && value.length <= 4096
+        && !/[\u0000-\u001f\u007f\\]/.test(value)
+        && (!/^[a-z][a-z0-9+.-]*:/i.test(value) || isExternalHref(value));
+};
+
 const isModifiedEvent = (event) => {
     return event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
 };
 
 const getHashElement = (hash) => {
+    if(typeof document === 'undefined'){
+        return null;
+    }
+
     let id = hash.slice(1);
 
     try {
@@ -42,7 +56,11 @@ const getHashElement = (hash) => {
 };
 
 const getLocalHash = (href = '') => {
-    if(typeof href !== 'string' || !href.includes('#')){
+    if(
+        typeof window === 'undefined'
+        || typeof href !== 'string'
+        || !href.includes('#')
+    ){
         return '';
     }
 
@@ -78,24 +96,42 @@ const resolveHashTarget = (hash) => {
 
 const scrollToHash = (hash, target = resolveHashTarget(hash)) => {
     requestAnimationFrame(() => {
-        window.gscroll?.paused?.(false);
-        scroller.refresh();
-        scroller.scrollTo(target, true);
+        import('../inc/Scroller').then(({ scroller }) => {
+            window.gscroll?.paused?.(false);
+            scroller.refresh();
+            scroller.scrollTo(target, true);
+        });
     });
 };
 
-const AppLink = ({ to = '/', onMouseEnter, onFocus, onClick, ...props }) => {
-    const href = resolveHref(to);
+const AppLink = ({ to = '/', onMouseEnter, onFocus, onClick, children, ...props }) => {
+    const requestedHref = resolveHref(to);
+    const href = isSafeHref(requestedHref) ? requestedHref : '/';
+    const destination = href === requestedHref ? to : '/';
     const routerEnabled = !(props['data-router'] === false || props['data-router'] === 'false');
     const localHash = getLocalHash(href);
+    const external = isExternalHref(href);
+    const domProps = sanitizeDomProps(props);
+    const target = /^_(?:blank|self|parent|top)$/.test(String(domProps.target || ''))
+        ? domProps.target
+        : undefined;
+
+    delete domProps.target;
 
     const prefetch = () => {
-        Loader.prepareRoute(href).catch(() => null);
+        import('../inc/Loader').then(({ Loader }) => {
+            return Loader.prepareRoute(href);
+        }).catch(() => null);
     };
 
-    if(!routerEnabled || localHash){
+    if(!routerEnabled || localHash || external){
+        const rel = target === '_blank'
+            ? ['noopener', 'noreferrer', domProps.rel].filter(Boolean).join(' ')
+            : domProps.rel;
+
         return (
             <a
+                {...domProps}
                 href={href}
                 onClick={(event) => {
                     onClick?.(event);
@@ -120,14 +156,18 @@ const AppLink = ({ to = '/', onMouseEnter, onFocus, onClick, ...props }) => {
                 }}
                 onMouseEnter={onMouseEnter}
                 onFocus={onFocus}
-                {...props}
-            />
+                target={target}
+                rel={rel}
+            >
+                {children}
+            </a>
         );
     }
 
     return (
         <Link
-            to={to}
+            {...domProps}
+            to={destination}
             onMouseEnter={(event) => {
                 prefetch();
                 onMouseEnter?.(event);
@@ -136,8 +176,10 @@ const AppLink = ({ to = '/', onMouseEnter, onFocus, onClick, ...props }) => {
                 prefetch();
                 onFocus?.(event);
             }}
-            {...props}
-        />
+            target={target}
+        >
+            {children}
+        </Link>
     );
 };
 

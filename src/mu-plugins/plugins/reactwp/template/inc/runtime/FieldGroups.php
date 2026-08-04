@@ -203,6 +203,68 @@ function register_runtime_field_groups() {
         'show_in_rest' => 1,
     ]);
 
+    acf_add_local_field_group([
+        'key' => 'group_reactwp_rendering_v3',
+        'title' => 'React Rendering',
+        'fields' => [
+            [
+                'key' => 'field_reactwp_render_mode_v3',
+                'label' => 'Initial render',
+                'name' => 'react_render_mode',
+                'type' => 'select',
+                'choices' => [
+                    '' => 'Use template default',
+                    'client' => 'Client',
+                    'static' => 'Static (SSG)',
+                    'server' => 'Server (SSR)',
+                ],
+                'default_value' => '',
+                'allow_null' => 0,
+                'ui' => 0,
+                'return_format' => 'value',
+            ],
+            [
+                'key' => 'field_reactwp_render_cache_scope_v3',
+                'label' => 'SSR cache scope',
+                'name' => 'react_render_cache_scope',
+                'type' => 'select',
+                'choices' => [
+                    'private' => 'Private per user',
+                    'public' => 'Public guests',
+                ],
+                'default_value' => 'private',
+                'conditional_logic' => [[[
+                    'field' => 'field_reactwp_render_mode_v3',
+                    'operator' => '==',
+                    'value' => 'server',
+                ]]],
+                'return_format' => 'value',
+            ],
+            [
+                'key' => 'field_reactwp_render_cache_ttl_v3',
+                'label' => 'SSR cache TTL (seconds)',
+                'name' => 'react_render_cache_ttl',
+                'type' => 'number',
+                'default_value' => 0,
+                'min' => 0,
+                'step' => 1,
+                'conditional_logic' => [[[
+                    'field' => 'field_reactwp_render_mode_v3',
+                    'operator' => '==',
+                    'value' => 'server',
+                ]]],
+            ],
+        ],
+        'location' => content_field_locations('react_template_post_types'),
+        'menu_order' => 11,
+        'position' => 'side',
+        'style' => 'seamless',
+        'label_placement' => 'top',
+        'instruction_placement' => 'label',
+        'active' => true,
+        'show_in_rest' => 0,
+    ]);
+
 }
 
 \add_action('acf/init', __NAMESPACE__ . '\\register_runtime_field_groups', 20);

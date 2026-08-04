@@ -10,7 +10,7 @@ class MenuBuilder {
         $registered_locations = get_registered_nav_menus();
         $menus = [];
 
-        foreach($locations as $location => $menu_id){
+        foreach(array_slice((array)$locations, 0, 100, true) as $location => $menu_id){
             if(
                 !is_string($location)
                 || $location === ''
@@ -45,7 +45,7 @@ class MenuBuilder {
 
         $normalized_items = [];
 
-        foreach($items as $item){
+        foreach(array_slice((array)$items, 0, 5000) as $item){
             $normalized_items[$item->ID] = [
                 'id' => (int)$item->ID,
                 'parentId' => $item->menu_item_parent ? (int)$item->menu_item_parent : null,
@@ -53,8 +53,13 @@ class MenuBuilder {
                 'title' => $item->title,
                 'url' => $item->url,
                 'path' => RouteResolver::normalize_path(wp_parse_url($item->url, PHP_URL_PATH) ?: '/'),
-                'target' => $item->target ?: null,
-                'classes' => array_values(array_filter(array_map('sanitize_html_class', (array)$item->classes))),
+                'target' => in_array($item->target, ['_blank', '_self', '_parent', '_top'], true)
+                    ? $item->target
+                    : null,
+                'classes' => array_values(array_filter(array_map(
+                    'sanitize_html_class',
+                    array_slice((array)$item->classes, 0, 100)
+                ))),
                 'children' => []
             ];
         }
@@ -74,16 +79,32 @@ class MenuBuilder {
 
         unset($normalized_item);
 
-        return array_map([self::class, 'cleanup_item'], $tree);
+        $visited = [];
+
+        return array_values(array_filter(array_map(function($item) use (&$visited){
+            return self::cleanup_item($item, 0, $visited);
+        }, $tree)));
 
     }
 
-    private static function cleanup_item($item) {
+    private static function cleanup_item($item, $depth = 0, &$visited = []) {
+
+        $item_id = (int)($item['id'] ?? 0);
+
+        if($depth > 20 || !$item_id || isset($visited[$item_id])){
+            return null;
+        }
+
+        $visited[$item_id] = true;
 
         $children = [];
 
-        foreach($item['children'] as $child){
-            $children[] = self::cleanup_item($child);
+        foreach(array_slice((array)$item['children'], 0, 500) as $child){
+            $normalized_child = self::cleanup_item($child, $depth + 1, $visited);
+
+            if($normalized_child){
+                $children[] = $normalized_child;
+            }
         }
 
         unset($item['parentId']);

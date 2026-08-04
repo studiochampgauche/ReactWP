@@ -1,5 +1,6 @@
 import React, { forwardRef, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { sanitizeDomProps } from '../inc/domProps';
 
 const Header = forwardRef(function Header({
     show = false,
@@ -25,7 +26,7 @@ const Header = forwardRef(function Header({
 
     const tagProps = {
         className,
-        ...props
+        ...sanitizeDomProps(props)
     };
 
     return createPortal(

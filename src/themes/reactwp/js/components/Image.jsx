@@ -1,5 +1,6 @@
 'use strict';
 import React, { forwardRef, useRef } from 'react';
+import { sanitizeDomProps } from '../inc/domProps';
 
 const Image = forwardRef(function Image({ className = null, ...props }, ref){
 
@@ -8,7 +9,7 @@ const Image = forwardRef(function Image({ className = null, ...props }, ref){
 
 	const tagProps = {
 		className: (className ? `img-container ${className}` : 'img-container'),
-		...props
+		...sanitizeDomProps(props)
 	}
 
 	return(

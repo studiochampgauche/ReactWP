@@ -83,6 +83,8 @@ const normalizeRoute = (route = {}, fallbackPath = '/', fallbackSearch = '') => 
     const query = route.query && typeof route.query === 'object' && !Array.isArray(route.query)
         ? route.query
         : searchToQuery(search);
+    const cacheScope = route.render?.cache?.scope === 'public' ? 'public' : 'private';
+    const persistentCacheDefault = cacheScope === 'public';
 
     return {
         ...route,
@@ -94,11 +96,34 @@ const normalizeRoute = (route = {}, fallbackPath = '/', fallbackSearch = '') => 
         seo: route.seo || {},
         data: route.data || {},
         mediaGroups: route.mediaGroups || '',
+        render: {
+            mode: ['client', 'static', 'server'].includes(route.render?.mode)
+                ? route.render.mode
+                : 'client',
+            cache: {
+                html: Boolean(route.render?.cache?.html),
+                scope: cacheScope,
+                ttl: Math.max(0, Number.parseInt(route.render?.cache?.ttl || 0, 10)),
+                payload: route.render?.cache?.payload == null
+                    ? persistentCacheDefault
+                    : route.render.cache.payload !== false,
+                media: route.render?.cache?.media == null
+                    ? persistentCacheDefault
+                    : route.render.cache.media !== false,
+                tags: Array.isArray(route.render?.cache?.tags)
+                    ? [...route.render.cache.tags]
+                    : []
+            }
+        },
         is404: Boolean(route.is404),
     };
 };
 
 const parseBootstrap = () => {
+    if(typeof document === 'undefined'){
+        return {};
+    }
+
     const node = document.getElementById('reactwp-bootstrap');
 
     if(!node){
@@ -115,6 +140,9 @@ const parseBootstrap = () => {
 
 const bootstrap = parseBootstrap();
 const route = bootstrap.route || {};
+const currentLocation = typeof window !== 'undefined'
+    ? window.location
+    : { pathname: route.path || '/', search: route.search || '' };
 
 export const runtime = {
     bootstrap,
@@ -123,11 +151,12 @@ export const runtime = {
     system: bootstrap.system || {},
     assets: bootstrap.assets || {},
     navigation: bootstrap.navigation || {},
+    currentUser: bootstrap.currentUser || { authenticated: false },
     seoDefaults: bootstrap.seoDefaults || {},
     route: normalizeRoute(
         route,
-        route.path || window.location.pathname || '/',
-        route.search || window.location.search || ''
+        route.path || currentLocation.pathname || '/',
+        route.search || currentLocation.search || ''
     )
 };
 

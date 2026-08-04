@@ -11,7 +11,11 @@
 
 namespace ReactWP\Seo;
 
-require_once 'inc/render.php';
+if(!defined('ABSPATH')){
+    exit;
+}
+
+require_once __DIR__ . '/inc/render.php';
 
 class Seo{
     

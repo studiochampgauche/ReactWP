@@ -8,6 +8,10 @@
 * Version: 1.0.0
 */
 
+if(!defined('ABSPATH')){
+    exit;
+}
+
 
 /*
 * Stop resizing images

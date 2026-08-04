@@ -1,14 +1,29 @@
 <?php
 
-require_once 'inc/utils.php';
-require_once 'inc/runtime/RouteResolver.php';
-require_once 'inc/runtime/MenuBuilder.php';
-require_once 'inc/runtime/Bootstrap.php';
-require_once 'inc/runtime/ClientCache.php';
-require_once 'inc/runtime/FieldGroups.php';
-require_once 'inc/admin.php';
-require_once 'inc/firstload.php';
-require_once 'inc/routes/rest.php';
+if(!defined('ABSPATH')){
+    exit;
+}
+
+require_once __DIR__ . '/inc/utils.php';
+require_once __DIR__ . '/inc/runtime/RenderStrategy.php';
+require_once __DIR__ . '/inc/runtime/RestAccess.php';
+require_once __DIR__ . '/inc/runtime/RouteResolver.php';
+require_once __DIR__ . '/inc/runtime/MenuBuilder.php';
+require_once __DIR__ . '/inc/runtime/ClientCache.php';
+require_once __DIR__ . '/inc/runtime/RenderCache.php';
+require_once __DIR__ . '/inc/runtime/ServerRenderer.php';
+require_once __DIR__ . '/inc/runtime/InitialRender.php';
+require_once __DIR__ . '/inc/runtime/StaticRegenerator.php';
+require_once __DIR__ . '/inc/runtime/TemplateAssets.php';
+require_once __DIR__ . '/inc/runtime/Bootstrap.php';
+require_once __DIR__ . '/inc/runtime/PublicPayload.php';
+require_once __DIR__ . '/inc/runtime/FieldGroups.php';
+require_once __DIR__ . '/inc/admin.php';
+require_once __DIR__ . '/inc/firstload.php';
+require_once __DIR__ . '/inc/routes/rest.php';
+
+\ReactWP\Runtime\RenderCache::boot();
+\ReactWP\Runtime\StaticRegenerator::boot();
 
 function rwp_require_headless_api_runtime() {
 
@@ -20,19 +35,40 @@ function rwp_require_headless_api_runtime() {
 
     $loaded = true;
 
-    require_once __DIR__ . '/inc/runtime/PublicPayload.php';
     require_once __DIR__ . '/inc/runtime/PreviewToken.php';
     require_once __DIR__ . '/inc/runtime/HeadlessApi.php';
 
 }
 
+function rwp_requested_rest_route() {
+
+    global $wp;
+
+    $rewrite_route = isset($wp->query_vars['rest_route']) && is_string($wp->query_vars['rest_route'])
+        ? wp_unslash($wp->query_vars['rest_route'])
+        : null;
+    $query_route = isset($_GET['rest_route']) && is_string($_GET['rest_route'])
+        ? wp_unslash($_GET['rest_route'])
+        : null;
+    $request_uri = isset($_SERVER['REQUEST_URI']) && is_string($_SERVER['REQUEST_URI'])
+        ? wp_unslash($_SERVER['REQUEST_URI'])
+        : '';
+    $rest_prefix = function_exists('rest_get_url_prefix') ? rest_get_url_prefix() : 'wp-json';
+
+    return \ReactWP\Runtime\RestAccess::requested_route(
+        $request_uri,
+        $rewrite_route,
+        $query_route,
+        $rest_prefix
+    );
+
+}
+
 function rwp_is_headless_rest_request() {
 
-    $request_uri = $_SERVER['REQUEST_URI'] ?? '';
+    $requested_route = rwp_requested_rest_route();
 
-    return strpos($request_uri, '/wp-json/reactwp/v1/') !== false
-        || strpos($request_uri, 'rest_route=/reactwp/v1/') !== false
-        || strpos($request_uri, 'rest_route=%2Freactwp%2Fv1%2F') !== false;
+    return \ReactWP\Runtime\RestAccess::is_namespace($requested_route, '/reactwp/v1');
 
 }
 
@@ -70,7 +106,81 @@ add_action('rest_api_init', function(){
 
     rwp_require_headless_api_runtime();
 
+    remove_filter('rest_pre_serve_request', 'rest_send_cors_headers');
+    add_filter(
+        'rest_pre_serve_request',
+        [\ReactWP\Runtime\HeadlessApi::class, 'send_cors_headers'],
+        10,
+        4
+    );
+
     \ReactWP\Runtime\HeadlessApi::register_routes();
+
+});
+
+add_action('send_headers', function(){
+
+    if(is_admin()){
+        return;
+    }
+
+    if(function_exists('header_remove')){
+        header_remove('X-Powered-By');
+    }
+
+    if(is_user_logged_in()){
+        nocache_headers();
+        header('Vary: Cookie', false);
+    }
+
+    header('X-Content-Type-Options: nosniff');
+    header('X-Frame-Options: SAMEORIGIN');
+    header('Referrer-Policy: strict-origin-when-cross-origin');
+    header('Permissions-Policy: ' . apply_filters(
+        'rwp_permissions_policy',
+        'camera=(), geolocation=(), microphone=()'
+    ));
+
+    $content_security_policy = trim((string)apply_filters(
+        'rwp_content_security_policy',
+        "base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'"
+    ));
+
+    if($content_security_policy !== ''){
+        header('Content-Security-Policy: ' . $content_security_policy);
+    }
+
+    if(is_ssl() && wp_get_environment_type() === 'production'){
+        $hsts = trim((string)apply_filters('rwp_hsts_header', 'max-age=31536000'));
+
+        if($hsts !== ''){
+            header('Strict-Transport-Security: ' . $hsts);
+        }
+    }
+
+});
+
+add_filter('xmlrpc_enabled', function($enabled){
+
+    return (bool)apply_filters('rwp_allow_xmlrpc', false, $enabled);
+
+});
+
+add_filter('xmlrpc_methods', function($methods){
+
+    return apply_filters('rwp_allow_xmlrpc', false, true)
+        ? $methods
+        : [];
+
+});
+
+add_filter('wp_headers', function($headers){
+
+    if(!apply_filters('rwp_allow_xmlrpc', false, true)){
+        unset($headers['X-Pingback']);
+    }
+
+    return $headers;
 
 });
 
@@ -262,16 +372,33 @@ class ReactWP{
             }
 
             $allowed_routes = apply_filters('rwp_allowed_rest_routes', []);
-            $requested_route = $_SERVER['REQUEST_URI'] ?? '';
+            $requested_route = rwp_requested_rest_route();
 
-            foreach($allowed_routes as $route){
-                if(strpos($requested_route, $route) !== false){
-                    return null;
-                }
+            if(\ReactWP\Runtime\RestAccess::is_allowed($requested_route, $allowed_routes)){
+                return null;
             }
 
             if(current_user_can('manage_options')){
-                return $result;
+                rwp_require_headless_api_runtime();
+
+                if(\ReactWP\Runtime\HeadlessApi::is_same_origin_request()){
+                    return $result;
+                }
+
+                $cross_origin_routes = apply_filters(
+                    'rwp_authenticated_cross_origin_rest_routes',
+                    []
+                );
+
+                if(\ReactWP\Runtime\RestAccess::is_allowed($requested_route, $cross_origin_routes)){
+                    return $result;
+                }
+
+                return new WP_Error(
+                    'reactwp_cross_origin_rest_denied',
+                    __('This REST route is not available to an authenticated cross-origin frontend.', 'reactwp'),
+                    ['status' => 403]
+                );
             }
 
             return new WP_Error(
@@ -329,6 +456,12 @@ class ReactWP{
     static function bust_client_cache(){
 
         return \ReactWP\Runtime\ClientCache::bust();
+
+    }
+
+    static function invalidate_render_cache($tags = 'render:all'){
+
+        \ReactWP\Runtime\RenderCache::invalidate($tags);
 
     }
 

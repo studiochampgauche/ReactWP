@@ -7,16 +7,15 @@ class Bootstrap {
     public static function system() {
 
         return apply_filters('rwp_system', [
-            'public' => get_option('blog_public'),
+            'public' => (int)get_option('blog_public'),
             'baseUrl' => site_url('/'),
             'homeUrl' => home_url('/'),
             'adminUrl' => admin_url(),
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'restUrl' => rest_url(),
-            'restNonce' => wp_create_nonce('wp_rest'),
+            'restNonce' => is_user_logged_in() ? wp_create_nonce('wp_rest') : '',
             'cacheVersion' => ClientCache::version(),
             'themeUrl' => get_stylesheet_directory_uri(),
-            'themeDirectory' => get_stylesheet_directory(),
             'routeEndpoint' => rest_url('reactwp/v1/route'),
             'headless' => [
                 'bootstrapEndpoint' => rest_url('reactwp/v1/bootstrap'),
@@ -33,10 +32,17 @@ class Bootstrap {
 
     }
 
-    public static function payload() {
+    public static function payload($resolved_route = null) {
 
         $theme = wp_get_theme();
-        $route = RouteResolver::current();
+        $route = is_array($resolved_route) ? $resolved_route : RouteResolver::current();
+
+        if(!is_user_logged_in()){
+            foreach(['data', 'seo'] as $key){
+                $route[$key] = PublicPayload::sanitize_value($route[$key] ?? []);
+            }
+        }
+
         $payload = [
             'site' => [
                 'name' => get_bloginfo('name'),
@@ -59,6 +65,7 @@ class Bootstrap {
             ],
             'navigation' => MenuBuilder::all(),
             'route' => $route,
+            'currentUser' => self::current_user(),
             'seoDefaults' => [
                 'title' => get_bloginfo('name'),
                 'description' => get_bloginfo('description'),
@@ -70,17 +77,47 @@ class Bootstrap {
 
     }
 
-    public static function json() {
+    private static function current_user() {
 
-        return wp_json_encode(
-            self::payload(),
+        if(!is_user_logged_in()){
+            return [
+                'authenticated' => false,
+            ];
+        }
+
+        $user = wp_get_current_user();
+
+        if(!$user || !$user->exists()){
+            return [
+                'authenticated' => false,
+            ];
+        }
+
+        return apply_filters('rwp_current_user_payload', [
+            'authenticated' => true,
+            'id' => (int)$user->ID,
+            'slug' => $user->user_nicename,
+            'displayName' => $user->display_name,
+            'email' => $user->user_email,
+            'roles' => array_values((array)$user->roles),
+        ], $user);
+
+    }
+
+    public static function json($payload = null) {
+
+        $json = wp_json_encode(
+            is_array($payload) ? $payload : self::payload(),
             JSON_UNESCAPED_SLASHES
             | JSON_UNESCAPED_UNICODE
+            | JSON_INVALID_UTF8_SUBSTITUTE
             | JSON_HEX_TAG
             | JSON_HEX_AMP
             | JSON_HEX_APOS
             | JSON_HEX_QUOT
         );
+
+        return is_string($json) ? $json : '{}';
 
     }
 

@@ -7,6 +7,17 @@ import ReactWPCache from './Cache';
 const IMAGE_EXTENSIONS = new Set(['.avif', '.gif', '.jpeg', '.jpg', '.png', '.svg', '.webp']);
 const VIDEO_EXTENSIONS = new Set(['.m4v', '.mov', '.mp4', '.ogv', '.webm']);
 const AUDIO_EXTENSIONS = new Set(['.aac', '.flac', '.m4a', '.mp3', '.oga', '.ogg', '.wav']);
+const MEDIA_ATTRIBUTES = new Set([
+    'alt', 'aria-hidden', 'autoplay', 'className', 'controls', 'crossOrigin',
+    'dataset', 'decoding', 'fetchPriority', 'height', 'id', 'loading', 'loop', 'media',
+    'muted', 'playsInline', 'poster', 'preload', 'role', 'sizes', 'style',
+    'title', 'type', 'width'
+]);
+const PROTECTED_MEDIA_TARGETS = new Set([
+    'HTML', 'HEAD', 'BODY', 'SCRIPT', 'STYLE', 'LINK', 'META', 'TITLE', 'NOSCRIPT',
+    'IFRAME', 'OBJECT', 'EMBED', 'FORM', 'app', 'app-header', 'viewport',
+    'pageWrapper', 'pageContent'
+]);
 
 const getLoader = () => document.getElementById('loader');
 const getLoaderLabel = () => document.querySelector('#loader .loader-label');
@@ -204,20 +215,28 @@ const preloadFonts = async (route) => {
     return fonts;
 };
 
-const preloadMediaEntry = async (entry = {}) => {
+const preloadMediaEntry = async (entry = {}, useCache = true) => {
     const media = cloneMediaEntry(entry);
+    const mediaSource = safeMediaUrl(media.src);
 
-    if(media.src){
-        media.cachedSrc = await ReactWPCache.media(media.src).catch(() => media.src);
+    if(mediaSource){
+        media.src = mediaSource;
+        media.cachedSrc = await ReactWPCache.media(mediaSource, { useCache }).catch(() => mediaSource);
+    } else {
+        media.src = '';
     }
 
     if(Array.isArray(media.sources) && media.sources.length){
         media.sources = await Promise.all(
             media.sources.map(async (source) => {
                 const nextSource = cloneMediaSource(source, media.type);
+                const sourceUrl = safeMediaUrl(nextSource.src);
 
-                if(nextSource.src){
-                    nextSource.cachedSrc = await ReactWPCache.media(nextSource.src).catch(() => nextSource.src);
+                if(sourceUrl){
+                    nextSource.src = sourceUrl;
+                    nextSource.cachedSrc = await ReactWPCache.media(sourceUrl, { useCache }).catch(() => sourceUrl);
+                } else {
+                    nextSource.src = '';
                 }
 
                 return nextSource;
@@ -228,10 +247,10 @@ const preloadMediaEntry = async (entry = {}) => {
     return media;
 };
 
-const preloadMediaMap = async (map = {}) => {
+const preloadMediaMap = async (map = {}, useCache = true) => {
     const groups = await Promise.all(
         Object.entries(map).map(async ([group, items]) => {
-            const medias = await Promise.all(items.map((item) => preloadMediaEntry(item)));
+            const medias = await Promise.all(items.map((item) => preloadMediaEntry(item, useCache)));
             return [group, medias];
         })
     );
@@ -239,9 +258,9 @@ const preloadMediaMap = async (map = {}) => {
     return Object.fromEntries(groups);
 };
 
-const preloadMediaGroup = async (items = []) => {
+const preloadMediaGroup = async (items = [], useCache = true) => {
     const results = await Promise.allSettled(
-        items.map((item) => preloadMediaEntry(item))
+        items.map((item) => preloadMediaEntry(item, useCache))
     );
 
     return results
@@ -257,12 +276,12 @@ const preloadMediaGroup = async (items = []) => {
 
 const preloadCriticalMedia = async (route) => {
     const mediaMap = collectMediaMap(runtime.assets.criticalMedias || {}, route);
-    return preloadMediaMap(mediaMap);
+    return preloadMediaMap(mediaMap, route?.render?.cache?.media !== false);
 };
 
 const preloadDeferredMedia = async (route) => {
     const mediaMap = collectMediaMap(runtime.assets.noCriticalMedias || {}, route);
-    return preloadMediaMap(mediaMap);
+    return preloadMediaMap(mediaMap, route?.render?.cache?.media !== false);
 };
 
 const preloadTemplate = async (route) => {
@@ -396,7 +415,7 @@ const createDeferredRequest = (route) => {
         Object.entries(mediaMap).map(([group, items]) => [
             group,
             {
-                download: preloadMediaGroup(items),
+                download: preloadMediaGroup(items, route?.render?.cache?.media !== false),
                 display: null
             }
         ])
@@ -438,44 +457,112 @@ const resolveTargets = (target) => {
     }
 
     if(target instanceof Element){
-        return [target];
+        return isProtectedMediaTarget(target) ? [] : [target];
     }
 
     if(target instanceof NodeList || target instanceof HTMLCollection){
-        return toUniqueArray(Array.from(target).filter((node) => node instanceof Element));
+        return toUniqueArray(Array.from(target).filter((node) => {
+            return node instanceof Element && !isProtectedMediaTarget(node);
+        })).slice(0, 100);
     }
 
     if(typeof target === 'string'){
-        return Array.from(document.querySelectorAll(target));
+        try{
+            return Array.from(document.querySelectorAll(target))
+                .filter((node) => !isProtectedMediaTarget(node))
+                .slice(0, 100);
+        } catch(_error){
+            return [];
+        }
     }
 
     return [];
 };
 
+const isProtectedMediaTarget = (element) => {
+    return PROTECTED_MEDIA_TARGETS.has(element.tagName)
+        || PROTECTED_MEDIA_TARGETS.has(element.id);
+};
+
+const safeMediaUrl = (value) => {
+    const source = String(value || '').trim();
+
+    if(!source || /[\u0000-\u001f\u007f\\]/.test(source)){
+        return '';
+    }
+
+    try{
+        const url = new URL(source, window.location.origin);
+        return ['http:', 'https:', 'blob:'].includes(url.protocol) ? url.href : '';
+    } catch(_error){
+        return '';
+    }
+};
+
 const applyProps = (element, props = {}) => {
     Object.entries(props).forEach(([key, value]) => {
-        if(value == null){
+        if(
+            value == null
+            || /^on/i.test(key)
+            || (!MEDIA_ATTRIBUTES.has(key) && !/^aria-[a-z0-9_.-]+$/i.test(key))
+        ){
             return;
         }
 
         if(key === 'className'){
-            element.className = value;
+            if(typeof value === 'string' && value.length <= 1024){
+                element.className = value;
+            }
             return;
         }
 
         if(key === 'style' && typeof value === 'object'){
-            Object.assign(element.style, value);
+            Object.entries(value).slice(0, 100).forEach(([property, styleValue]) => {
+                if(
+                    !/^(?:--[a-z0-9_-]+|[a-z][a-z0-9]*)$/i.test(property)
+                    || !['string', 'number'].includes(typeof styleValue)
+                ){
+                    return;
+                }
+
+                const normalizedValue = String(styleValue);
+
+                if(normalizedValue.length > 2048 || /(?:expression\s*\(|@import|javascript:|-moz-binding)/i.test(normalizedValue)){
+                    return;
+                }
+
+                if(property.startsWith('--')){
+                    element.style.setProperty(property, normalizedValue);
+                } else {
+                    element.style[property] = styleValue;
+                }
+            });
             return;
         }
 
         if(key === 'dataset' && typeof value === 'object'){
-            Object.entries(value).forEach(([datasetKey, datasetValue]) => {
-                if(datasetValue == null){
+            Object.entries(value).slice(0, 100).forEach(([datasetKey, datasetValue]) => {
+                if(
+                    datasetValue == null
+                    || !/^[a-z][a-z0-9]*$/i.test(datasetKey)
+                    || !['string', 'number', 'boolean'].includes(typeof datasetValue)
+                    || String(datasetValue).length > 4096
+                ){
                     return;
                 }
 
                 element.dataset[datasetKey] = datasetValue;
             });
+            return;
+        }
+
+        if(key === 'poster'){
+            const poster = safeMediaUrl(value);
+
+            if(poster){
+                element.poster = poster;
+            }
+
             return;
         }
 
@@ -490,6 +577,13 @@ const applyProps = (element, props = {}) => {
                 element.removeAttribute(key);
             }
 
+            return;
+        }
+
+        if(
+            (typeof value === 'string' && value.length > 4096)
+            || !['string', 'number'].includes(typeof value)
+        ){
             return;
         }
 
@@ -520,10 +614,16 @@ const createSourceElement = (mediaType, source = {}) => {
 
     applyProps(sourceElement, sourceProps);
 
+    const safeSource = safeMediaUrl(cachedSrc || src);
+
+    if(!safeSource){
+        return null;
+    }
+
     if(mediaType === 'image'){
-        sourceElement.srcset = cachedSrc || src;
+        sourceElement.srcset = safeSource;
     } else {
-        sourceElement.src = cachedSrc || src;
+        sourceElement.src = safeSource;
     }
 
     return sourceElement;
@@ -615,7 +715,13 @@ const buildMediaNode = (media = {}) => {
     }
 
     if(resolvedType === 'image'){
-        mediaElement.src = cachedSrc || src;
+        const safeSource = safeMediaUrl(cachedSrc || src);
+
+        if(!safeSource){
+            return null;
+        }
+
+        mediaElement.src = safeSource;
 
         if(Array.isArray(sources) && sources.length){
             const pictureElement = document.createElement('picture');
@@ -658,7 +764,13 @@ const buildMediaNode = (media = {}) => {
     }
 
     if(!hasSourceChildren && (cachedSrc || src)){
-        mediaElement.src = cachedSrc || src;
+        const safeSource = safeMediaUrl(cachedSrc || src);
+
+        if(!safeSource){
+            return null;
+        }
+
+        mediaElement.src = safeSource;
     }
 
     return {

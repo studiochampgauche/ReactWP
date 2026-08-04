@@ -2,13 +2,117 @@
 
 This file tracks notable project-level changes for `reactwp`.
 
+## 2026-08-04
+
+### Added
+
+- Added an explicit GPL-2.0-or-later project license, contribution guide, code of conduct, GitHub issue forms, pull request guidance, Dependabot configuration, and a cross-platform CI matrix.
+- Added automated production builds, rendering tests, PHP security regressions, npm auditing, Composer validation, and Composer security auditing to pull requests and the default branch.
+
+### Changed
+
+- Added public package metadata and documented the supported Node.js and npm versions directly in `configs/package.json`.
+- Updated React, React Router, Sass, Webpack, and vulnerable transitive packages; React Router 8 now provides the browser APIs directly without `react-router-dom`, and the minimum supported Node.js version is `22.22.0`.
+- Aligned project licensing metadata with WordPress and the bundled GPL SVG sanitizer.
+- Prepared the v3 release history for removal of legacy ACF PRO files and historical runtime configuration without changing the existing GitHub repository.
+
+## 2026-07-20
+
+### Changed
+
+- Expanded the documentation for current-route language access, template props, focused build and test commands, SSG/SSR limits, security controls, and every public ReactWP filter currently exposed by the source.
+- `npm run get:core` now asks whether to install ACF Free, ACF PRO, or preserve the existing installation. PRO credentials are requested only after PRO is selected, and license input is masked.
+- Non-interactive builds can select `REACTWP_ACF_EDITION=free|pro|none`; without an explicit selection or PRO credentials, ACF Free is installed from WordPress.org.
+- ACF PRO is resolved through its official authenticated Composer repository with `REACTWP_ACF_LICENSE_KEY` and `REACTWP_ACF_SITE_URL`. `REACTWP_ACF_VERSION` can optionally pin either edition, while URL, SHA-256, and host settings remain available for private PRO archive overrides.
+
+### Fixed
+
+- ACF Free now loads correctly as a must-use plugin. ReactWP hides unavailable Site settings and Theme settings links and displays a clear notice that those pages, repeaters, and other PRO fields require ACF PRO.
+- The optional first-load scaffold now recognizes empty ACF repeater options, writes the required ACF field references, repairs previously seeded rows without replacing their content, and records completion only after the home page, languages, and theme locations are ready.
+
+## 2026-07-19
+
+### Added
+
+- Added dedicated security regressions for exact headless origins, cross-site origin omission, preview-token authorization/signatures/expiry, encoded route bypasses, public route normalization, and cache-lock contention.
+- Added a complete deployment security reference covering REST boundaries, browser rendering, SSR/SSG limits, private and public caches, ACF licensing, archive integrity, Nginx rules, and production operations.
+
+### Changed
+
+- Public contract version `1.4` now reserves response metadata, bounds nested values and navigation, validates template names, preserves typed user/term identifiers, and excludes private nested ACF relations from guest integrated bootstraps as well as headless payloads.
+- Headless authentication now requires secure JSON requests by default, applies separate address and username limits, rejects credentialed or ambiguous origins, and restricts authenticated cross-origin administrators to explicitly approved REST routes.
+- Preview tokens now require `edit_post`, include version and issue time, enforce bounded lifetimes and sizes, and reject malformed base64, future, mismatched, expired, or oversized payloads.
+- SSR now requires a 32-character secret on loopback by default, while the Node service bounds body, response, headers, timeout, concurrency, and error disclosure. Remote PHP requests reject redirects, unsafe URLs, non-JSON responses, and oversized bodies.
+- Static generation now confines output to the project by default, validates decoded paths and searches, restricts API redirects to the WordPress origin, and bounds routes, manifests, API bodies, and HTML fragments.
+- `npm run get:core` now performs a clean verified WordPress core replacement without touching `wp-content` or `wp-config.php`, validates local and central ZIP metadata, and no longer embeds or advertises a public ACF PRO archive.
+- Licensed private ACF archives now require an explicit URL, version, SHA-256 digest, and approved host; official authenticated Composer installation remains supported.
+- SVG uploads now default to `manage_options` and require a valid XML SVG root before and after parser-based sanitation.
+- Production configuration now rejects short or duplicate WordPress salts, logged-in frontend responses are explicitly non-cacheable, and public guest bootstraps no longer emit a REST nonce.
+
+### Fixed
+
+- Prevented encoded protocol-relative route values, lookalike REST namespaces, unrelated query parameters, and arbitrary cross-origin admin REST requests from bypassing route controls.
+- Prevented private posts, authors, terms, attachments, and attachment parents from leaking through nested public or guest ACF values.
+- Prevented stale HTML resurrection during concurrent invalidation by serializing writes and recording a future fail-safe watermark when the lock cannot be acquired.
+- Prevented unsafe template registry property names, raw DOM property overrides, unsafe form actions and destinations, arbitrary route head nodes, oversized rich text, unsafe media attributes/styles, and replacement of structural document nodes.
+- Prevented stale WordPress core files, ZIP path traversal, archive symlinks, duplicate paths, encrypted entries, metadata mismatches, and oversized extraction from surviving the core setup pipeline.
+
+## 2026-07-18
+
+### Added
+
+- Added hybrid initial rendering with backward-compatible `client`, build-time `static` (SSG), and optional runtime `server` (SSR) modes.
+- Added automatic React hydration for valid static/server HTML, with a clean client render fallback when no fragment or render service is available.
+- Added a Node render bundle, protected SSR service, static route generator, template render manifest, and per-template CSS asset manifest.
+- Added `npm run build:render`, `watch:render`, `prod:render`, `generate`, `serve:ssr`, and `test:render` commands.
+- Added targeted static-fragment invalidation and optional WP-Cron regeneration through the SSR service, with runtime fragments stored under protected WordPress uploads.
+- Added separate HTML, payload, and media cache controls, dependency tags, public/private SSR cache scopes, and per-user private cache keys.
+- Added the ACF **React Rendering** controls for route-level mode and SSR cache overrides.
+- Added `currentUser` to the integrated template props and `rwp::invalidate_render_cache()` for project-level invalidation.
+- Added regression coverage for REST allowlisting, public route visibility, nested payload relations, SVG sanitation, SSR endpoint policy, bounded invalidation state, and static-fragment removal.
+
+### Changed
+
+- Public contract version `1.2` no longer includes authenticated user data in bootstrap payloads; headless frontends now resolve identity exclusively through the no-store `/auth/me` endpoint.
+- Replaced the legacy Imagemin binary chain with Sharp and SVGO, started tracking the tooling lockfile, and pinned the reviewed Sass watcher install script for reproducible dependency resolution.
+- SVG uploads now use the maintained `enshrined/svg-sanitize` parser, remove remote references, and save only the sanitized document.
+- Reduced the default PHP theme shell to its functional minimum by removing the redundant `404.php`, the empty WordPress loop, optional utility defaults, passive filters, and commented starter examples.
+- The template registry now accepts loader configuration objects with `render`, `cache`, and `assetKey` metadata while preserving the existing loader-function signature.
+- WordPress remains the front controller for every mode and now injects pre-rendered route fragments into `#app` before React hydrates them.
+- Public payload API version `1.1` now exposes theme metadata, render strategy, cache settings, and the public runtime values needed for deterministic static rendering.
+- Production builds generate static routes automatically when `RWP_SITE_URL` is set; projects can still run generation independently without rebuilding JavaScript.
+- The global ReactWP cache action now invalidates all pre-rendered HTML, including public and private SSR entries, in addition to browser JSON, media, JavaScript, and CSS generations.
+- Clarified the cache administration and documentation terminology so the global action is no longer mislabeled as public-only.
+- Expanded the documentation with complete cache-tag and configuration references, including automatic invalidation events, custom dependencies, environment variables, defaults, limits, and precedence rules.
+- Updated the bundled ACF PRO copy to `6.8.6` and pinned its archive to a reviewed SHA-256 digest.
+- `npm run get:core` now requires HTTPS, limits redirects and archive sizes, verifies WordPress against official checksums, and rejects unverified or unexpected ACF archives.
+- ACF options pages now require `manage_options` by default; the capability remains configurable through `rwp_options_page_capability`.
+- The optional first-run scaffold is now explicit, administrator-only, idempotent, locked against concurrent runs, and never deletes existing posts or pages.
+- Remote SSR now requires HTTPS, explicit endpoint approval, and a secret of at least 32 characters. Query-bearing SSR responses are uncached unless every query key is explicitly allowed.
+- Private routes now disable persistent browser payload and media caches by default, and Cache Storage honors `private` and `no-store` response directives.
+- SVG sanitation now covers normal uploads, sideloads, and direct file validation with a configurable size limit.
+
+### Fixed
+
+- Public route resolution now rejects draft, private, trashed, scheduled, password-protected, and otherwise non-public posts; signed previews remain explicitly authorized.
+- REST allowlist checks now resolve and compare the actual REST route exactly, preventing unrelated query parameters from bypassing the global REST gate.
+- The public bootstrap endpoint now resolves the site front page by default instead of treating the REST endpoint URL as the active route.
+- Pre-rendered routes now enqueue their extracted template CSS before first paint and can skip the blocking initial loader without changing client-only routes.
+- Static generation now adds trusted operating-system CA certificates when supported by Node, allowing local HTTPS sites with an installed Laragon or development root certificate without disabling TLS verification.
+- Bounded render invalidation history now keeps a stale-before watermark so pruning old tags cannot resurrect obsolete static or SSR HTML.
+- Routes that become private, unavailable, or non-static now have their generated fragments removed from runtime and build manifests.
+- Public nested ACF values no longer expose private posts, non-public authors, or attachments owned by non-public content.
+- Render bundles, static fragments, ACF JSON definitions, Composer manifests, and package manifests are denied direct HTTP access where the server supports generated access files.
+- Public previews now use header-based tokens by default, public CORS responses reflect only exact allowed origins, and production responses receive baseline security headers.
+- Public headless routes now receive a configurable per-address rate limit without trusting proxy forwarding headers by default.
+
 ## 2026-07-17
 
 ### Added
 
 - Added an entrypoint manifest so WordPress automatically loads the JavaScript files emitted by the current build mode in dependency order.
 - Added an automatic production bundle report with raw, gzip, and Brotli sizes plus configurable bundle budgets.
-- Added a nonce-protected **ReactWP > Cache** admin action and `rwp::bust_client_cache()` API for invalidating public visitor caches on demand.
+- Added a nonce-protected **ReactWP > Cache** admin action and `rwp::bust_client_cache()` API for invalidating visitor browser caches on demand.
 
 ### Changed
 

@@ -1,6 +1,6 @@
 import { createBundleConfig, resolveFromConfig } from './webpack.shared.config.js';
 
-const themes = [
+export const themes = [
 	'reactwp'
 ];
 

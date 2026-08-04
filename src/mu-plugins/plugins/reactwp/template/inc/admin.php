@@ -1,5 +1,9 @@
 <?php
 
+if(!defined('ABSPATH')){
+    exit;
+}
+
 function rwp_admin_locale_code() {
 
     static $locale = null;
@@ -201,9 +205,16 @@ function rwp_admin_is_site_settings_context() {
 
 function rwp_admin_register_options_pages() {
 
+    $capability = (string)apply_filters('rwp_options_page_capability', 'manage_options');
+
+    if($capability === ''){
+        $capability = 'manage_options';
+    }
+
     acf_add_options_page([
         'page_title' => 'Site settings',
         'menu_slug' => 'site-settings',
+        'capability' => $capability,
         'position' => '',
         'redirect' => false,
     ]);
@@ -211,6 +222,7 @@ function rwp_admin_register_options_pages() {
     acf_add_options_page([
         'page_title' => 'Theme settings',
         'menu_slug' => 'theme-settings',
+        'capability' => $capability,
         'position' => '',
         'redirect' => false,
     ]);
@@ -639,14 +651,14 @@ function rwp_admin_render_client_cache_page() {
         <?php if($was_busted) : ?>
             <div class="notice notice-success is-dismissible">
                 <p><?php echo esc_html($is_french
-                    ? 'Le cache public ReactWP a ete invalide.'
-                    : 'The public ReactWP cache was invalidated.'); ?></p>
+                    ? 'Le cache ReactWP a ete invalide, y compris les fragments HTML publics et prives.'
+                    : 'The ReactWP cache was invalidated, including public and private HTML fragments.'); ?></p>
             </div>
         <?php endif; ?>
 
         <p><?php echo esc_html($is_french
-            ? 'Invalidez les caches JSON, medias, JavaScript et CSS des visiteurs. La nouvelle generation sera appliquee lors de leur prochain chargement de page.'
-            : 'Invalidate visitor JSON, media, JavaScript, and CSS caches. The new generation will apply on their next page load.'); ?></p>
+            ? 'Invalidez tous les fragments HTML, y compris les fragments SSR publics et prives, les caches JSON et medias, ainsi que les versions JavaScript et CSS des visiteurs. La nouvelle generation sera appliquee lors de leur prochain chargement de page.'
+            : 'Invalidate all HTML fragments, including public and private SSR fragments, visitor JSON and media caches, and JavaScript and CSS versions. The new generation will apply on their next page load.'); ?></p>
         <p>
             <strong><?php echo esc_html($is_french ? 'Generation actuelle :' : 'Current generation:'); ?></strong>
             <code><?php echo esc_html($version); ?></code>
@@ -655,7 +667,7 @@ function rwp_admin_render_client_cache_page() {
         <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
             <input type="hidden" name="action" value="rwp_bust_client_cache">
             <?php wp_nonce_field('rwp_bust_client_cache'); ?>
-            <?php submit_button($is_french ? 'Invalider le cache public' : 'Invalidate public cache', 'primary'); ?>
+            <?php submit_button($is_french ? 'Invalider le cache ReactWP' : 'Invalidate ReactWP cache', 'primary'); ?>
         </form>
     </div>
     <?php

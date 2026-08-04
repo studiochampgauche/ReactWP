@@ -1,0 +1,14 @@
+{
+    "name": "reactwp/accept-svg",
+    "description": "Secure SVG upload support for ReactWP.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "enshrined/svg-sanitize": "0.22.0"
+    },
+    "config": {
+        "allow-plugins": {},
+        "optimize-autoloader": true,
+        "sort-packages": true
+    }
+}

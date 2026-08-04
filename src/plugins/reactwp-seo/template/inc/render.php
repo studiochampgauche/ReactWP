@@ -2,6 +2,10 @@
 
 namespace ReactWP\Seo\Render;
 
+if(!defined('ABSPATH')){
+	exit;
+}
+
 class Render{
 
 	public static $wp_heads = [];
@@ -26,6 +30,7 @@ class Render{
 		add_action('wp_enqueue_scripts', function(){
 
 			$defaultSEO = \rwp::field('seo', 'option');
+			$defaultSEO = is_array($defaultSEO) ? $defaultSEO : [];
             $defaultSEO['blogName'] = \ReactWP\SEO\SEO::site_name();
 
             wp_localize_script('rwp-main', 'RWP_SEO', $defaultSEO);

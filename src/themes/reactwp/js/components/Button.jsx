@@ -1,21 +1,55 @@
 import AppLink from './AppLink';
+import { sanitizeDomProps } from '../inc/domProps';
 
 const isExternal = (url = '') => {
-    return /^https?:\/\//i.test(url) || url.startsWith('mailto:') || url.startsWith('tel:');
+    return typeof url === 'string'
+        && (/^(?:https?:)?\/\//i.test(url) || /^mailto:/i.test(url) || /^tel:/i.test(url));
+};
+
+const normalizeStringDestination = (destination) => {
+    if(typeof destination !== 'string'){
+        return null;
+    }
+
+    const value = destination.trim();
+
+    if(!value || value.length > 4096 || /[\u0000-\u001f\u007f\\]/.test(value)){
+        return null;
+    }
+
+    return !/^[a-z][a-z0-9+.-]*:/i.test(value) || isExternal(value)
+        ? value
+        : null;
+};
+
+const normalizeDestination = (destination) => {
+    if(typeof destination === 'string'){
+        return normalizeStringDestination(destination);
+    }
+
+    if(!destination || typeof destination !== 'object' || Array.isArray(destination)){
+        return null;
+    }
+
+    const pathname = normalizeStringDestination(destination.pathname || '/');
+    const search = destination.search == null ? '' : String(destination.search);
+    const hash = destination.hash == null ? '' : String(destination.hash);
+
+    if(
+        !pathname
+        || isExternal(pathname)
+        || (search && (search.length > 2048 || !search.startsWith('?') || /[\u0000-\u001f\u007f\\]/.test(search)))
+        || (hash && (hash.length > 2048 || !hash.startsWith('#') || /[\u0000-\u001f\u007f\\]/.test(hash)))
+    ){
+        return null;
+    }
+
+    return { pathname, search, hash };
 };
 
 const renderInlineSlot = (value, className) => {
     if(value == null || value === false || value === ''){
         return null;
-    }
-
-    if(typeof value === 'string'){
-        return (
-            <span
-                className={className}
-                dangerouslySetInnerHTML={{ __html: value }}
-            />
-        );
     }
 
     return <span className={className}>{value}</span>;
@@ -32,9 +66,16 @@ const Button = ({
     variant = 'primary',
     ...props
 }) => {
-    const destination = to || href;
+    const requestedDestination = to || href;
+    const destination = normalizeDestination(requestedDestination);
     const classes = ['button', `button--${variant}`, className].filter(Boolean).join(' ');
     const label = text ?? children;
+    const domProps = sanitizeDomProps(props);
+    const target = /^_(?:blank|self|parent|top)$/.test(String(domProps.target || ''))
+        ? domProps.target
+        : undefined;
+
+    delete domProps.target;
 
     const content = (
         <>
@@ -46,22 +87,26 @@ const Button = ({
 
     if(!destination){
         return (
-            <button className={classes} {...props}>
+            <button {...domProps} className={classes}>
                 {content}
             </button>
         );
     }
 
-    if(isExternal(destination)){
+    if(typeof destination === 'string' && isExternal(destination)){
+        const rel = target === '_blank'
+            ? ['noopener', 'noreferrer', domProps.rel].filter(Boolean).join(' ')
+            : domProps.rel;
+
         return (
-            <a className={classes} href={destination} {...props}>
+            <a {...domProps} className={classes} href={destination} target={target} rel={rel}>
                 {content}
             </a>
         );
     }
 
     return (
-        <AppLink className={classes} to={destination} {...props}>
+        <AppLink {...domProps} className={classes} to={destination} target={target}>
             {content}
         </AppLink>
     );

@@ -1,12 +1,20 @@
 <?php
-    
+
 namespace ReactWP\Utils;
+
+if(!defined('ABSPATH')){
+    exit;
+}
 
 class Field{
 
     public static $replacements = [];
 
     public static function get($field, $id = false, $format = true, $escape = false){
+
+        if(!function_exists('get_field')){
+            return null;
+        }
 
         $value = get_field($field, $id, $format, $escape);
 
@@ -222,8 +230,8 @@ class Source{
         );
 
         $root = self::root($configs['url'], $configs['theme']);
-        $base = trim((string)($configs['base'] ?? ''), '/');
-        $path = ltrim((string)($configs['path'] ?? ''), '/');
+        $base = self::relative_path($configs['base'] ?? '');
+        $path = self::relative_path($configs['path'] ?? '');
 
         $relative = implode('/', array_filter([$base, $path], 'strlen'));
 
@@ -246,6 +254,28 @@ class Source{
         }
 
         return $url ? get_stylesheet_directory_uri() : get_stylesheet_directory();
+
+    }
+
+    private static function relative_path($value){
+
+        if(!is_scalar($value)){
+            return '';
+        }
+
+        $value = str_replace('\\', '/', trim((string)$value, '/'));
+
+        if($value === '' || preg_match('/[\x00-\x1F\x7F]/', $value)){
+            return '';
+        }
+
+        $segments = explode('/', $value);
+
+        if(in_array('.', $segments, true) || in_array('..', $segments, true)){
+            return '';
+        }
+
+        return implode('/', array_filter($segments, 'strlen'));
 
     }
 

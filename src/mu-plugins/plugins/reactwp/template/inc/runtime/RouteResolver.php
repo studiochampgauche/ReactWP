@@ -4,14 +4,19 @@ namespace ReactWP\Runtime;
 
 class RouteResolver {
 
+    private const MAX_PATH_BYTES = 2048;
+    private const MAX_QUERY_BYTES = 8192;
+    private const MAX_QUERY_ITEMS = 100;
+    private const MAX_QUERY_DEPTH = 4;
+
     public static function current() {
 
         $request_uri = $_SERVER['REQUEST_URI'] ?? '/';
         $request_query = self::parse_query($request_uri);
         $object = get_queried_object();
 
-        if($object){
-            return self::payload_from_object($object, $request_uri, $request_query);
+        if($object && self::can_render_current_object($object)){
+            return self::payload_from_object($object, $request_uri, $request_query, true);
         }
 
         if(is_front_page()){
@@ -20,16 +25,16 @@ class RouteResolver {
             if($front_page_id){
                 $front_page = get_post($front_page_id);
 
-                if($front_page instanceof \WP_Post){
-                    return self::payload_from_object($front_page, $request_uri, $request_query);
+                if($front_page instanceof \WP_Post && self::can_render_current_object($front_page)){
+                    return self::payload_from_object($front_page, $request_uri, $request_query, true);
                 }
             }
         }
 
-        $resolved_object = self::resolve_object_from_path($request_uri);
+        $resolved_object = self::resolve_object_from_path($request_uri, true);
 
         if($resolved_object){
-            return self::payload_from_object($resolved_object, $request_uri, $request_query);
+            return self::payload_from_object($resolved_object, $request_uri, $request_query, true);
         }
 
         return self::not_found($request_uri, $request_query);
@@ -37,6 +42,10 @@ class RouteResolver {
     }
 
     public static function from_path($path) {
+
+        if(!RestAccess::is_safe_view($path)){
+            return self::not_found('/', []);
+        }
 
         $normalized_path = self::normalize_path($path);
         $query = self::parse_query($path);
@@ -50,11 +59,15 @@ class RouteResolver {
 
     }
 
-    public static function from_post_id($post_id, $request = null, $query = null) {
+    public static function from_post_id($post_id, $request = null, $query = null, $allow_non_public = false) {
 
         $post = get_post((int)$post_id);
 
-        if(!$post instanceof \WP_Post){
+        if(
+            !$post instanceof \WP_Post
+            || $post->post_status === 'trash'
+            || (!$allow_non_public && !self::is_public_object($post))
+        ){
             return self::not_found('/', []);
         }
 
@@ -67,19 +80,86 @@ class RouteResolver {
                 : '/?p=' . (int)$post->ID;
         }
 
-        return self::payload_from_object($post, $resolved_request, $query);
+        return self::payload_from_object($post, $resolved_request, $query, $allow_non_public);
 
     }
 
-    public static function from_object($object, $request = '/', $query = null) {
+    public static function from_object($object, $request = '/', $query = null, $allow_non_public = false) {
 
-        return self::payload_from_object($object, $request, $query);
+        return self::payload_from_object($object, $request, $query, $allow_non_public);
+
+    }
+
+    public static function is_public_object($object) {
+
+        if(!$object instanceof \WP_Post){
+            return true;
+        }
+
+        return $object->post_password === '' && is_post_publicly_viewable($object);
+
+    }
+
+    public static function is_public_author($user) {
+
+        if(!$user instanceof \WP_User || !$user->exists()){
+            return false;
+        }
+
+        static $cache = [];
+        $user_id = (int)$user->ID;
+
+        if(array_key_exists($user_id, $cache)){
+            return $cache[$user_id];
+        }
+
+        $post_types = array_values(array_diff(
+            get_post_types(['public' => true], 'names'),
+            ['attachment']
+        ));
+        $query = new \WP_Query([
+            'author' => $user_id,
+            'post_type' => $post_types,
+            'post_status' => 'publish',
+            'has_password' => false,
+            'posts_per_page' => 1,
+            'fields' => 'ids',
+            'no_found_rows' => true,
+        ]);
+        $is_public = !empty($query->posts);
+
+        $cache[$user_id] = (bool)apply_filters('rwp_public_author', $is_public, $user);
+
+        return $cache[$user_id];
+
+    }
+
+    public static function is_public_term($term) {
+
+        if(!$term instanceof \WP_Term){
+            return false;
+        }
+
+        $taxonomy = get_taxonomy($term->taxonomy);
+
+        return $taxonomy && !empty($taxonomy->public);
 
     }
 
     public static function normalize_path($path = '/') {
 
-        $parsed_path = wp_parse_url((string)$path, PHP_URL_PATH);
+        $path = (string)$path;
+
+        if(
+            $path === ''
+            || strlen($path) > self::MAX_PATH_BYTES
+            || strpos($path, '\\') !== false
+            || preg_match('/[\x00-\x1F\x7F]/', rawurldecode($path))
+        ){
+            return '/';
+        }
+
+        $parsed_path = wp_parse_url($path, PHP_URL_PATH);
         $normalized_path = '/' . trim((string)($parsed_path ?: $path), '/') . '/';
 
         return $normalized_path === '//' ? '/' : $normalized_path;
@@ -95,7 +175,7 @@ class RouteResolver {
     public static function parse_query($value = '/') {
 
         if(is_array($value)){
-            return $value;
+            return self::normalize_query($value);
         }
 
         $string_value = trim((string)$value);
@@ -115,10 +195,14 @@ class RouteResolver {
             return [];
         }
 
+        if(strlen($raw_query) > self::MAX_QUERY_BYTES){
+            return [];
+        }
+
         $query = [];
         wp_parse_str($raw_query, $query);
 
-        return is_array($query) ? $query : [];
+        return is_array($query) ? self::normalize_query($query) : [];
 
     }
 
@@ -148,14 +232,17 @@ class RouteResolver {
             'is404' => true
         ];
 
-        $payload = apply_filters('rwp_route_payload', $payload, null);
+        $filtered_payload = apply_filters('rwp_route_payload', $payload, null);
+        $payload = is_array($filtered_payload) ? $filtered_payload : $payload;
+        $payload['lang'] = self::current_language();
+        $payload['render'] = RenderStrategy::resolve($payload, null);
         $payload['head'] = self::resolve_head_payload($payload, null);
 
         return $payload;
 
     }
 
-    private static function resolve_object_from_path($path) {
+    private static function resolve_object_from_path($path, $allow_non_public = false) {
 
         $normalized_path = self::normalize_path($path);
         $target_url = site_url($normalized_path);
@@ -182,7 +269,13 @@ class RouteResolver {
         if($post_id){
             $post = get_post($post_id);
 
-            if($post instanceof \WP_Post){
+            if(
+                $post instanceof \WP_Post
+                && (
+                    self::is_public_object($post)
+                    || ($allow_non_public && self::can_render_current_object($post))
+                )
+            ){
                 return $post;
             }
         }
@@ -192,7 +285,7 @@ class RouteResolver {
         if(($segments[0] ?? null) === 'author' && !empty($segments[1])){
             $user = get_user_by('slug', $segments[1]);
 
-            if($user instanceof \WP_User){
+            if($user instanceof \WP_User && self::is_public_author($user)){
                 return $user;
             }
         }
@@ -227,7 +320,25 @@ class RouteResolver {
 
     }
 
-    public static function payload_from_object($object, $request = '/', $query = null) {
+    public static function payload_from_object($object, $request = '/', $query = null, $allow_non_public = false) {
+
+        if(
+            $object instanceof \WP_Post
+            && !$allow_non_public
+            && !self::is_public_object($object)
+        ){
+            return self::not_found($request, $query);
+        }
+
+        if(
+            !$allow_non_public
+            && (
+                ($object instanceof \WP_User && !self::is_public_author($object))
+                || ($object instanceof \WP_Term && !self::is_public_term($object))
+            )
+        ){
+            return self::not_found($request, $query);
+        }
 
         $id = null;
         $type = null;
@@ -240,20 +351,20 @@ class RouteResolver {
             $id = $object->ID;
             $type = $object->post_type;
             $url = get_permalink($object->ID);
-            $page_name = \rwp::field('page_title', $id) ?: get_the_title($object->ID);
+            $page_name = \rwp::field('page_title', $id, true, false) ?: get_the_title($object->ID);
             $acf_context = ['post_id' => $id];
         } elseif($object instanceof \WP_User){
             $id = 'user_' . $object->ID;
             $type = 'user';
             $url = get_author_posts_url($object->ID);
-            $page_name = \rwp::field('page_title', $id) ?: $object->display_name;
+            $page_name = \rwp::field('page_title', $id, true, false) ?: $object->display_name;
             $acf_context = ['user_id' => $object->ID, 'rest' => true];
         } elseif($object instanceof \WP_Term){
             $id = 'term_' . $object->term_id;
             $type = 'term';
             $url = get_term_link($object);
             $url = !is_wp_error($url) ? $url : home_url('/');
-            $page_name = \rwp::field('page_title', $id) ?: $object->name;
+            $page_name = \rwp::field('page_title', $id, true, false) ?: $object->name;
             $acf_context = ['term_id' => $object->term_id, 'rest' => true];
         } else {
             return self::not_found($request, $resolved_query);
@@ -290,10 +401,41 @@ class RouteResolver {
             'is404' => false
         ];
 
-        $payload = apply_filters('rwp_route_payload', $payload, $object);
+        $filtered_payload = apply_filters('rwp_route_payload', $payload, $object);
+        $payload = is_array($filtered_payload) ? $filtered_payload : $payload;
+        $payload['lang'] = self::current_language();
+        $payload['render'] = RenderStrategy::resolve($payload, $object);
         $payload['head'] = self::resolve_head_payload($payload, $object);
 
         return $payload;
+
+    }
+
+    private static function can_render_current_object($object) {
+
+        if($object instanceof \WP_User){
+            return self::is_public_author($object)
+                || current_user_can('edit_user', $object->ID);
+        }
+
+        if($object instanceof \WP_Term){
+            return self::is_public_term($object)
+                || current_user_can('manage_categories');
+        }
+
+        if(!$object instanceof \WP_Post){
+            return false;
+        }
+
+        if(self::is_public_object($object)){
+            return true;
+        }
+
+        if($object->post_status === 'trash' || !current_user_can('read_post', $object->ID)){
+            return false;
+        }
+
+        return $object->post_password === '' || current_user_can('edit_post', $object->ID);
 
     }
 
@@ -311,7 +453,7 @@ class RouteResolver {
 
         return array_values(array_filter(array_map(function($entry){
             return is_string($entry) ? trim($entry) : '';
-        }, $head)));
+        }, array_slice($head, 0, 100))));
 
     }
 
@@ -345,7 +487,7 @@ class RouteResolver {
                     continue;
                 }
 
-                $payload[$field['name']] = \rwp::field($field['name'], $id);
+                $payload[$field['name']] = \rwp::field($field['name'], $id, true, false);
             }
         }
 
@@ -359,9 +501,51 @@ class RouteResolver {
             return '';
         }
 
+        $query = self::normalize_query($query);
         $query_string = http_build_query($query);
 
         return $query_string !== '' ? '?' . $query_string : '';
+
+    }
+
+    private static function normalize_query($value, $depth = 0, &$items = 0) {
+
+        if(!is_array($value) || $depth > self::MAX_QUERY_DEPTH){
+            return [];
+        }
+
+        $normalized = [];
+
+        foreach($value as $key => $item){
+            $items++;
+
+            if($items > self::MAX_QUERY_ITEMS){
+                break;
+            }
+
+            $key = is_int($key) ? $key : preg_replace('/[^a-zA-Z0-9_.-]/', '', (string)$key);
+
+            if($key === ''){
+                continue;
+            }
+
+            if(is_array($item)){
+                $normalized[$key] = self::normalize_query($item, $depth + 1, $items);
+                continue;
+            }
+
+            if(!is_scalar($item)){
+                continue;
+            }
+
+            $item = (string)$item;
+
+            if(strlen($item) <= 2048 && !preg_match('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', $item)){
+                $normalized[$key] = $item;
+            }
+        }
+
+        return $normalized;
 
     }
 
@@ -374,6 +558,20 @@ class RouteResolver {
         }
 
         return $url;
+
+    }
+
+    private static function current_language() {
+
+        if(function_exists('pll_current_language')){
+            $language = pll_current_language('slug');
+
+            if(is_string($language) && $language !== ''){
+                return $language;
+            }
+        }
+
+        return defined('CL') ? CL : substr(get_locale(), 0, 2);
 
     }
 

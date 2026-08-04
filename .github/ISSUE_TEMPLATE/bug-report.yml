@@ -1,0 +1,64 @@
+name: Bug report
+description: Report a reproducible ReactWP problem.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: Thank you for helping improve ReactWP. Do not disclose security vulnerabilities here; email security@reactwp.com instead.
+  - type: input
+    id: version
+    attributes:
+      label: ReactWP version or commit
+      placeholder: v3.0.0 or a commit hash
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Rendering mode
+      options:
+        - Client
+        - Static
+        - Server
+        - Headless
+        - Multiple or unknown
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include WordPress, PHP, Node.js, npm, browser, operating system, and web server versions.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Provide the smallest reliable sequence that reproduces the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior and logs
+      description: Remove credentials, license keys, private URLs, user data, and access tokens.
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Submission checks
+      options:
+        - label: I searched existing issues and documentation.
+          required: true
+        - label: This report does not contain a security vulnerability or private data.
+          required: true

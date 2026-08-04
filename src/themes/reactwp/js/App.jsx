@@ -1,6 +1,6 @@
 import { Suspense, createContext, useContext, useLayoutEffect } from 'react';
-import { createRoot } from 'react-dom/client';
-import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
+import { createRoot, hydrateRoot } from 'react-dom/client';
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router';
 import AppShell from './inc/AppShell';
 import { runtime } from './inc/Runtime';
 import { initializeTemplateRegistry } from './inc/initializeTemplateRegistry';
@@ -25,6 +25,7 @@ const RouteView = ({ route }) => {
                 theme={runtime.theme}
                 system={runtime.system}
                 navigation={runtime.navigation}
+                currentUser={runtime.currentUser}
             />
             <RouteReadySignal route={route} />
         </>
@@ -88,6 +89,37 @@ const router = createBrowserRouter([
 ]);
 
 const mainNode = document.getElementById('app');
-const root = createRoot(mainNode);
+const initialTemplate = resolveTemplateEntry(runtime.route.template);
+const renderSource = mainNode?.dataset.rwpRender || 'client';
+const shouldHydrate = Boolean(
+    mainNode
+    && renderSource !== 'client'
+    && mainNode.hasChildNodes()
+);
 
-root.render(<RouterProvider router={router} />);
+const renderApplication = () => {
+    const application = <RouterProvider router={router} />;
+
+    if(shouldHydrate){
+        hydrateRoot(mainNode, application, {
+            onRecoverableError(error){
+                console.warn('ReactWP recovered from an initial hydration mismatch.', error);
+            }
+        });
+        return;
+    }
+
+    createRoot(mainNode).render(application);
+};
+
+if(shouldHydrate){
+    initialTemplate.preload()
+        .then(renderApplication)
+        .catch(() => {
+            mainNode.replaceChildren();
+            mainNode.dataset.rwpRender = 'client';
+            createRoot(mainNode).render(<RouterProvider router={router} />);
+        });
+} else {
+    renderApplication();
+}

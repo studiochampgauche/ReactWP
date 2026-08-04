@@ -1,7 +1,13 @@
 dist
 node_modules
-package-lock.json
+/package-lock.json
 wp-config.php
 .htaccess
 !src/core/.htaccess
 .npmrc
+auth.json
+.env
+.env.*
+!.env.example
+*.pem
+*.key

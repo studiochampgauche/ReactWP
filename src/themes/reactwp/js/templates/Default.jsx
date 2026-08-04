@@ -1,5 +1,6 @@
 import '../../scss/templates/reactwp.scss';
 import Button from '../components/Button';
+import RichText from '../components/RichText';
 
 const Default = ({ route, site }) => {
 	const headline = route.data.hero_title || 'Installation ready';
@@ -12,7 +13,7 @@ const Default = ({ route, site }) => {
 					<div className="status-card">
 						<span className="status-card__eyebrow">ReactWP v3</span>
 						<h1>{headline}</h1>
-						<p className="status-card__lead">{intro}</p>
+						<RichText value={intro} className="status-card__lead" />
 
 						<div className="status-card__actions">
 							<Button href={'/wp-admin'} variant="primary" data-router="false">Open WordPress Admin</Button>

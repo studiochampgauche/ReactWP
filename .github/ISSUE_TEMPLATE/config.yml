@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: ReactWP documentation
+    url: https://reactwp.com/docs/intro/
+    about: Read the guides and API references before opening an issue.
+  - name: Troubleshooting
+    url: https://reactwp.com/docs/troubleshooting/
+    about: Review common installation, rendering, cache, and deployment problems.
+  - name: Security reports
+    url: https://github.com/studiochampgauche/ReactWP/security/policy
+    about: Report vulnerabilities privately according to the security policy.

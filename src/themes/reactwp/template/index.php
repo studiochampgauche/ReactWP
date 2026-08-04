@@ -1,6 +1,8 @@
 <?php
 
-get_header();
-while(have_posts()) : the_post();
+if(!defined('ABSPATH')){
+    exit;
+}
 
-endwhile; get_footer();
+get_header();
+get_footer();

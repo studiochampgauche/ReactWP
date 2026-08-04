@@ -3,11 +3,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 import { brotliCompressSync, constants, gzipSync } from 'node:zlib';
-import imagemin from 'imagemin';
-import imageminGifsicle from 'imagemin-gifsicle';
-import imageminMozjpeg from 'imagemin-mozjpeg';
-import imageminPngquant from 'imagemin-pngquant';
-import imageminSvgo from 'imagemin-svgo';
+import sharp from 'sharp';
+import { optimize as optimizeSvg } from 'svgo';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,7 +14,7 @@ const sassCli = path.resolve(configsRoot, 'node_modules', 'sass', 'sass.js');
 
 const themes = ['reactwp'];
 const mode = process.argv[2] || 'build';
-const imageExtensions = new Set(['.gif', '.jpg', '.jpeg', '.png', '.svg']);
+const imageExtensions = new Set(['.gif', '.jpg', '.jpeg', '.png', '.svg', '.webp']);
 
 const createMappings = () => themes.map((themeName) => {
   const input = path.resolve(projectRoot, 'src', 'themes', themeName, 'scss', 'default.scss');
@@ -29,17 +26,21 @@ const createMappings = () => themes.map((themeName) => {
   return { input, output, legacyOutput, mediasRoot, assetsRoot };
 });
 
-const getImagePlugins = (extension) => {
+const optimizeImage = async (input, extension, assetPath) => {
   switch (extension) {
     case '.jpg':
     case '.jpeg':
-      return [imageminMozjpeg({ quality: 82, progressive: true })];
+      return sharp(input).autoOrient().jpeg({ quality: 82, progressive: true }).toBuffer();
     case '.png':
-      return [imageminPngquant({ quality: [0.72, 0.88], speed: 1 })];
+      return sharp(input).autoOrient().png({ quality: 88, effort: 10 }).toBuffer();
     case '.gif':
-      return [imageminGifsicle({ optimizationLevel: 3 })];
+      return sharp(input, { animated: true }).autoOrient().gif({ effort: 10 }).toBuffer();
+    case '.webp':
+      return sharp(input, { animated: true }).autoOrient().webp({ quality: 82, effort: 6 }).toBuffer();
     case '.svg':
-      return [imageminSvgo({
+      return Buffer.from(optimizeSvg(input.toString('utf8'), {
+        path: assetPath,
+        multipass: true,
         plugins: [{
           name: 'preset-default',
           params: {
@@ -48,9 +49,9 @@ const getImagePlugins = (extension) => {
             }
           }
         }]
-      })];
+      }).data);
     default:
-      return [];
+      return input;
   }
 };
 
@@ -118,14 +119,8 @@ const optimizeRasterImages = async (assetPaths) => {
       .filter((assetPath) => imageExtensions.has(path.extname(assetPath).toLowerCase()))
       .map(async (assetPath) => {
         const extension = path.extname(assetPath).toLowerCase();
-        const plugins = getImagePlugins(extension);
-
-        if (!plugins.length) {
-          return;
-        }
-
         const input = await fs.readFile(assetPath);
-        const output = await imagemin.buffer(input, { plugins });
+        const output = await optimizeImage(input, extension, assetPath);
 
         if (output.length <= input.length) {
           await fs.writeFile(assetPath, output);
