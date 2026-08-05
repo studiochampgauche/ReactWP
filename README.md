@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/studiochampgauche/ReactWP/actions/workflows/ci.yml/badge.svg)](https://github.com/studiochampgauche/ReactWP/actions/workflows/ci.yml)
 [![License: GPL v2 or later](https://img.shields.io/badge/License-GPL_v2_or_later-blue.svg)](LICENSE)
-[![GitHub release](https://img.shields.io/github/v/release/studiochampgauche/ReactWP)](https://github.com/studiochampgauche/ReactWP/releases)
+[![Latest tag](https://img.shields.io/github/v/tag/studiochampgauche/ReactWP?label=version)](https://github.com/studiochampgauche/ReactWP/tags)
 
 ReactWP is a WordPress application framework for integrated React themes and headless frontends.
 
