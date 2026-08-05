@@ -24,19 +24,28 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            node: 22.22.0
+            node: '22.22.0'
             php: '8.1'
           - os: ubuntu-latest
-            node: 22.22.0
+            node: '22.22.0'
             php: '8.3'
           - os: ubuntu-latest
-            node: 26.5.0
+            node: '22.22.0'
+            php: '8.5'
+          - os: ubuntu-latest
+            node: '26.5.0'
+            php: '8.5'
+          - os: windows-latest
+            node: '22.22.0'
+            php: '8.1'
+          - os: windows-latest
+            node: '22.22.0'
             php: '8.3'
           - os: windows-latest
-            node: 22.22.0
-            php: '8.3'
+            node: '22.22.0'
+            php: '8.5'
           - os: windows-latest
-            node: 26.5.0
+            node: '26.5.0'
             php: '8.5'
     steps:
       - name: Check out repository
