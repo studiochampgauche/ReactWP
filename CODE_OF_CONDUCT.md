@@ -32,4 +32,4 @@ Retaliation against a person who makes a good-faith report is prohibited. Delibe
 
 ## Attribution
 
-This policy is informed by the [Contributor Covenant](https://www.contributor-covenant.org/), version 2.1, available under the Creative Commons Attribution 4.0 License.
+This policy is informed by the [Contributor Covenant](https://www.contributor-covenant.org/), version 3.0, available under the Creative Commons Attribution 4.0 License.
