@@ -17,9 +17,9 @@ Own the complete outcome while specialized agents own bounded workstreams. The u
 - For every private object journey, include one actor/action/resource contract that treats IDs and other references only as locators, authorizes canonical owner/tenant/parent/state server-side, and defines list/bulk/cache/error behavior. For every mutation, include one exact writable-field map that excludes or separately authorizes privileged role/capability/owner/tenant/status fields.
 - Require measurable backend performance/capacity budgets for material query, payload, rendering, cache, integration or job work, and make preservation of security invariants an acceptance criterion rather than a later trade-off.
 - Pair frontend and backend on every submitted or persisted form field. Backend is the default custodian of one authoritative field-contract revision; frontend co-approves its visible/editing format, input behavior, transport value, accessibility, and fixtures while backend owns authoritative validation, canonicalization, storage/use, and stable errors.
-- Pair frontend and content/SEO on every user-facing editorial experience. Keep the orchestrator as the default single write custodian of one authoritative composition matrix, require both roles to approve the same revision, and synchronize before layout hardens, after real content is rendered, and before QA.
+- Pair frontend and content/SEO when editorial changes materially affect hierarchy, SEO, CMS variability, responsive measure, media, structured data, or layout. Keep the orchestrator as the default single write custodian of one authoritative composition matrix, require both roles to approve the same revision, and synchronize before layout hardens, after real content is rendered, and before QA. Isolated wording fixes that preserve meaning, metadata, and composition do not require this tandem.
 - Delegate substantial independent workstreams to specialized agents when parallel work reduces latency without creating file or contract conflicts.
-- Keep one owner for every mutable file and shared contract at a time. Agents share a workspace; concurrent edits to the same surface are forbidden unless ownership is deliberately transferred.
+- Keep one owner for every mutable file and shared contract at a time. Never assign concurrent conflicting ownership of the same surface, regardless of whether work happens in one workspace, separate branches, or worktrees. The orchestrator owns integration and conflict resolution; ownership changes must be deliberate.
 - Integrate the workstreams, resolve contract drift, run the appropriate builds/tests/runtime checks, and send the completed integration through independent QA.
 - Return one outcome, one verification summary, and one set of remaining limitations to the user.
 
@@ -49,7 +49,7 @@ Read [task-routing.md](references/task-routing.md) to size work, select agents, 
 
 - Mission brief, shared contracts, file ownership, change control, handoffs, dirty worktrees, and integration: [shared-contracts-and-handoffs.md](references/shared-contracts-and-handoffs.md)
 - Backend worker mandate and handoff: [backend-agent.md](references/backend-agent.md)
-- Frontend worker mandate, including complete inspiration reconnaissance: [frontend-agent.md](references/frontend-agent.md)
+- Frontend worker mandate, including proportional inspiration reconnaissance: [frontend-agent.md](references/frontend-agent.md)
 - Content and SEO worker mandate: [content-seo-agent.md](references/content-seo-agent.md)
 - Independent QA wave, findings, correction loop, and final verdict: [quality-assurance-agent.md](references/quality-assurance-agent.md)
 - Cross-cutting security ownership and when to launch a dedicated security worker: [security-agent.md](references/security-agent.md)
@@ -59,7 +59,7 @@ Read [task-routing.md](references/task-routing.md) to size work, select agents, 
 1. **Understand the outcome.** Identify users, jobs, business goal, content, journeys, data, trust levels, locales, delivery mode, rendering needs, references, constraints, and acceptance criteria. Ask only for missing choices that materially change the product.
 2. **Inspect the project.** Read the closest current implementation, instructions, contracts, tests, and dirty-worktree state. Separate user-owned pre-existing changes from the mission.
 3. **Create the mission brief.** Define in writing the shared route/data/content/security/render/cache/SEO contracts, backend performance/capacity budgets where material, ownership ledger, dependency graph, agent deliverables, verification plan, and explicit non-goals.
-4. **Open the first execution wave.** Delegate backend, frontend, and content/SEO work that has non-overlapping file ownership. Frontend and content/SEO work as a coordinated tandem on their shared editorial composition contract; frontend and backend coordinate every submitted/persisted field contract before either hardens its formatter or validator. Keep dependency-bound work pending until its input contract is stable.
+4. **Open the first execution wave.** Delegate backend, frontend, and content/SEO work that has non-overlapping file ownership. When the editorial threshold is met, frontend and content/SEO work as a coordinated tandem on their shared composition contract; frontend and backend coordinate every submitted/persisted field contract before either hardens its formatter or validator. Keep dependency-bound work pending until its input contract is stable.
 5. **Coordinate contract changes.** Workers must report a proposed shared-contract change before editing dependent surfaces. Approve, reject, or revise it, notify every affected worker, and update ownership before work continues.
 6. **Integrate.** Review every handoff and diff, reconcile producers with consumers, exercise cross-layer journeys, and run the smallest sufficient spanning checks. Agent self-reports are inputs, not proof.
 7. **Run independent reviews.** Launch dedicated security review when the risk router requires it and QA after the integrated result is stable. They may inspect concurrently when useful, but no final QA verdict is valid until the security handoff and resulting corrections are integrated. QA remains read-only and reports findings to the orchestrator.
@@ -70,9 +70,9 @@ Read [task-routing.md](references/task-routing.md) to size work, select agents, 
 
 - Use parallelism for independent work, not for competing architectural decisions.
 - Prefer short contract-first sequencing over letting frontend and backend invent incompatible payloads in parallel.
-- Keep content/SEO involved before fields and layouts harden; it must not be a metadata afterthought.
+- When content/SEO is applicable, involve it before fields and layouts harden; it must not be a metadata afterthought.
 - Schedule explicit frontend/backend form syncs before implementation, after shared-fixture tests, and after a real direct-request plus browser-input round trip. A changed grammar, canonical representation, limit, locale assumption, or error code invalidates both approvals.
-- Schedule explicit frontend/content sync points for the composition matrix, the real rendered draft, and final responsive/locale sign-off. Relay decisions immediately or permit direct role communication while keeping the shared contract authoritative.
+- When the editorial tandem threshold is met, schedule frontend/content sync points for the composition matrix, the real rendered draft, and final responsive/locale sign-off. Relay decisions immediately or permit direct role communication while keeping the shared contract authoritative.
 - Treat security as part of each design and data path, not a final scanner.
 - Make backend optimization evidence include representative cold/warm/maximum-cost behavior and repeat security, privacy, cache isolation, invalidation, abuse and failure-path checks after the optimization.
 - Keep QA independent from implementation. QA may recommend fixes but must not quietly edit product files during its audit.
@@ -88,7 +88,7 @@ The mission is complete only when:
 - backend producers and frontend/headless consumers share the same contract;
 - every submitted or persisted field has one backend-custodied contract revision approved by frontend, with matching visible format, transport grammar, server validation, canonical value, accessible errors, and shared bypass/edge-case evidence;
 - content, rendered semantics, metadata, social output, and structured data agree where applicable;
-- frontend and content/SEO have jointly approved hierarchy, type roles/measure, real and edge copy lengths, text-media relationships, responsive/translated behavior, and the rendered reading journey;
+- where the editorial tandem applies, frontend and content/SEO have jointly approved hierarchy, type roles/measure, real and edge copy lengths, text-media relationships, responsive/translated behavior, and the rendered reading journey;
 - trust boundaries, permissions, raw sinks, privacy/cache scope, and failure paths are verified;
 - applicable common AI-generated backend security failure rows pass, including user-A/object-B reference substitution for every private object path and protected/unknown-field mass-assignment attempts for every mutation;
 - applicable backend latency, query count/time, memory, payload, concurrency, remote/job and cache behavior meet the recorded budget under representative cold, warm, maximum-cost and failure scenarios without weakening security;

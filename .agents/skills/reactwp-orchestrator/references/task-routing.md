@@ -52,7 +52,7 @@ Wave 5: security handoff -> owner corrections -> re-integration -> final/invalid
 
 These are dependency waves, not mandatory ceremonies. Collapse them for smaller tasks. If frontend cannot proceed without an exact payload, stabilize that payload first. Frontend can still work on semantic structure, states, tokens, and verified mock fixtures only when the fixture is explicitly the agreed contract.
 
-Frontend and content/SEO are separate file owners but a paired editorial workstream. Schedule their composition-matrix sync before layout/content structures harden, their rendered-content review during implementation, and their joint responsive/locale sign-off before QA. They may communicate directly or through the orchestrator, but every shared decision must be recorded in the mission contract and relayed to backend when it changes fields or payloads.
+When editorial decisions materially affect hierarchy, SEO, CMS variability, responsive measure, media, structured data, or layout, frontend and content/SEO are separate file owners but a paired editorial workstream. Schedule their composition-matrix sync before layout/content structures harden, their rendered-content review during implementation, and their joint responsive/locale sign-off before QA. They may communicate directly or through the orchestrator, but every shared decision must be recorded in the mission contract and relayed to backend when it changes fields or payloads. Isolated wording fixes that preserve meaning, metadata, and composition do not require this workstream.
 
 Frontend and backend are separate file owners but a paired form-contract workstream for every submitted or persisted field. Stabilize the backend-custodied contract and shared fixtures before parallel implementation, synchronize after both implementations exercise those fixtures, and complete a browser-input plus direct-request canonical round trip before QA. Security reviews the trust boundary; it does not replace either role's implementation.
 
@@ -85,7 +85,7 @@ For a complete site/app/system, settle at least:
 
 When the user supplies reference sites, they are active unless the brief narrows them. When the user supplies no references and a visual direction is needed, the frontend worker may select a small relevant subset from the default pool in `frontend-expert/references/inspirations.md` based on the audience and product character.
 
-Every selected live reference must receive the complete whole-site reconnaissance defined there, including the mandatory homepage scroll/interaction pass. Do not silently average all default references or inspect only screenshots. Record which references were selected and why.
+Every selected live reference receives the proportional site-wide, page-level, or component-level reconnaissance defined there. A complete public inventory and homepage scroll/interaction pass are mandatory for site-wide work; narrower work inspects only the relevant page/component, persistent context, variants, and states. Do not silently average all default references or claim behavior from screenshots alone. Record which references were selected, the chosen scope, and why.
 
 ## Authority and External State
 

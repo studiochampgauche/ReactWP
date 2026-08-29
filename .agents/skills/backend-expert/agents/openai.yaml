@@ -1,0 +1,6 @@
+interface:
+  display_name: "ReactWP Backend Expert"
+  short_description: "WordPress, PHP, REST, ACF and data contracts"
+  default_prompt: "Use $backend-expert to implement or review this ReactWP backend change."
+policy:
+  allow_implicit_invocation: true

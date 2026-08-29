@@ -1,0 +1,6 @@
+interface:
+  display_name: "ReactWP Quality Assurance"
+  short_description: "Evidence-based audits and release-readiness checks"
+  default_prompt: "Use $quality-assurance-expert to audit this ReactWP change with objective evidence."
+policy:
+  allow_implicit_invocation: true

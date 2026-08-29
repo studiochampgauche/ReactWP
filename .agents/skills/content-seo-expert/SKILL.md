@@ -19,7 +19,7 @@ Create useful, distinctive content for real people, then make its meaning legibl
 - Treat titles and descriptions as recommendations, not fixed search-result copy. Search engines may generate or rewrite displayed titles and snippets.
 - Check current official documentation before promising rich-result eligibility, using a Schema.org type, or applying a rule that may have changed.
 - Inspect ReactWP source before describing a framework or plugin capability. The bundled `reactwp-seo` plugin has a defined scope; do not attribute canonical URLs, Twitter Cards, XML sitemaps, or JSON-LD to it unless the code has changed.
-- Treat visible content and frontend composition as one iterative system. Copy is not finished in isolation: validate its hierarchy, real/edge lengths, typography, measure, media relationship, responsive transformation, and rendered reading journey with `frontend-expert`.
+- Treat content and frontend composition as one iterative system when editorial decisions materially affect hierarchy, SEO, CMS variability, responsive measure, media, structured data, or layout. Validate those decisions against real and edge content in the rendered experience.
 - Plan media as part of the editorial argument rather than an afterthought. Identify where an image, video, product capture, artifact, diagram, or intentionally media-free passage improves evidence, explanation, emotion, identity, or pacing; distinguish supplied, pending user/CMS, optional, and unnecessary assets without inventing media or claims.
 
 ## Complementary Skill Boundaries
@@ -27,7 +27,7 @@ Create useful, distinctive content for real people, then make its meaning legibl
 This skill owns editorial strategy, content quality, on-page recommendations, metadata proposals, entity/schema mapping, internal-link planning, and content QA. It does not silently take over implementation owned elsewhere.
 
 - Load `backend-expert` for WordPress/ACF field design, plugin or PHP changes, route/public payload contracts, headless delivery, caching, and content migrations.
-- Load `frontend-expert` for every user-facing editorial composition and follow the shared tandem protocol. Content/SEO owns meaning, proof, hierarchy, variability, and media intent; frontend owns semantic implementation, typography, measure, composition, responsive behavior, media treatment, and accessibility; both own rendered sign-off.
+- Load `frontend-expert` and follow the shared tandem protocol when editorial work materially affects hierarchy, SEO, CMS variability, responsive measure, media, structured data, or layout. Content/SEO owns meaning, proof, hierarchy, variability, and media intent; frontend owns semantic implementation, typography, measure, composition, responsive behavior, media treatment, and accessibility; both own rendered sign-off. A typo, isolated label, or wording correction that preserves meaning, metadata, and composition can be handled directly with focused verification.
 - Load `security-expert` for raw HTML, user/editor input, URLs, head output, JSON-LD serialization, public data, permissions, remote-content ingestion implemented by the project, or any other trust boundary.
 - Load `quality-assurance-expert` when the user requests final QA, release readiness, or proof that all expert requirements were respected; content/SEO remains the source of editorial and SEO requirements while QA owns the evidence matrix and verdict.
 - Load `reactwp-orchestrator` for a substantial mission spanning multiple expert domains; provide the editorial/SEO contract early, respect exclusive file ownership, and report implementation needs to the backend/frontend owners instead of editing their shared surfaces concurrently.
@@ -52,8 +52,8 @@ Read only what the current task needs:
 2. Inspect the current content model, rendered page, route data, relevant ACF fields, internal-link context, and `reactwp-seo` behavior before proposing fields or code.
 3. Research only what the task requires. Prefer first-party and primary sources; record the source and freshness of claims that may change.
 4. Create a brief with a page promise, intent, unique value, proof, entities, outline, enrichment opportunities, internal links, media opportunities/status, and acceptance criteria.
-5. Draft real visible content and edge variants, then build the editorial composition matrix with frontend before structure and typography harden.
-6. Review the real rendered page with frontend and iterate copy, hierarchy, measure, layout, media, and responsive behavior without sacrificing meaning or accessibility.
+5. Draft real visible content and edge variants. When the editorial tandem threshold applies, build the composition matrix with frontend before structure and typography harden.
+6. When the tandem applies, review the real rendered page with frontend and iterate copy, hierarchy, measure, layout, media, and responsive behavior without sacrificing meaning or accessibility; otherwise run the focused content/metadata verification appropriate to the edit.
 7. Propose the title, meta description, social copy/image direction, indexing policy, canonical/hreflang needs, and structured-data graph supported by the visible page.
 8. Produce an implementation handoff: existing ReactWP fields to populate, missing contracts to implement, the joint composition state, and which complementary skill owns each change.
 9. Verify the rendered result on direct load and client navigation, across relevant locales and rendering modes. Validate metadata, links, robots behavior, and structured data without claiming that validation guarantees visibility or ranking.
@@ -65,7 +65,7 @@ Scale the output to the request, but make implementation-ready work distinguish 
 - **Brief:** audience, intent, page job, unique angle, proof, target action, and outline.
 - **Final content:** ready-to-use copy or explicit field/component content, not vague writing advice.
 - **Enrichment:** only the examples, media, tables, comparisons, FAQs, tools, or supporting modules that improve the page; for media, state its purpose, expected subject/source, supplied/pending/optional status, caption/alt/credit intent, and textual relationship.
-- **Editorial composition:** joint matrix covering semantic levels, real/edge content length, typography/measure, media relationship, desktop/mobile/locale behavior, and rendered sign-off.
+- **Editorial composition:** when the tandem applies, a joint matrix covering semantic levels, real/edge content length, typography/measure, media relationship, desktop/mobile/locale behavior, and rendered sign-off.
 - **SEO specification:** title, description, headings, URL/canonical, robots, social preview, image direction, internal links, and locale notes.
 - **Entity/schema map:** supported types, stable identifiers, required evidence, properties, and implementation caveats.
 - **Handoff:** what is already supported by ReactWP, what needs frontend/backend/security work, and how it will be verified.

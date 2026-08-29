@@ -1,0 +1,6 @@
+interface:
+  display_name: "ReactWP Content and SEO Expert"
+  short_description: "Content strategy, metadata, SEO and structured data"
+  default_prompt: "Use $content-seo-expert to plan or review this ReactWP content and SEO work."
+policy:
+  allow_implicit_invocation: true

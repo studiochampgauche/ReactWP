@@ -13,13 +13,13 @@ References communicate ambition and design principles. They are not implementati
 
 ## Reference Authority and Human Specificity
 
-When references are active, they are primary design evidence alongside the user's goal, real content, brand assets, and accessibility/performance requirements. They are not a moodboard that can be acknowledged and then replaced by a generic landing-page recipe.
+When references are active, they are design evidence alongside the user's goal, the project's established visual language, real content, supplied brand assets, accessibility/performance requirements, and explicit rationale. These sources outrank generic anti-pattern checklists. The guidance below diagnoses unsupported defaults; it does not ban a familiar device that the project or a matching reference genuinely needs.
 
-- Every major page section must be traceable to a directly observed reference principle, a product/content requirement, or a deliberate original decision recorded in the influence map. The header and footer are always first-class sections with separate rows; a shared application shell does not exempt them.
+- Every major area in the selected scope must be traceable to a directly observed reference principle, a product/content requirement, the established project language, or a deliberate original decision recorded in the influence map. Header and footer require separate rows when the scope includes persistent shell design; a component-only study does not need unrelated shell analysis.
 - Extract section architecture, spatial relationships, surface/container strategy, typography, media behavior, density, pacing, responsive transformation and interaction—not only palette, border radius, shadows, or animation flavor.
 - Preserve the references' level of confidence. Direct observations can drive decisions; inferences must remain labelled and must not become invented implementation facts.
 - Start from the supplied content, images, people, places, proof and actions. Human-feeling design comes from specificity, editorial judgment, meaningful variation and a visible relationship between form and content—not simulated randomness, fake imperfections, decorative handwriting, or arbitrary asymmetry.
-- If the selected references use open editorial planes, full-bleed media, lists, rows, bands, split compositions, overlaps, typographic navigation, tables, timelines or other structures, do not flatten them into a grid of interchangeable cards.
+- If the selected references use open editorial planes, full-bleed media, lists, rows, bands, split compositions, overlaps, typographic navigation, tables, timelines or other structures, preserve those meaningful relationships instead of flattening them into interchangeable cards. Cards remain valid where their content boundary, interaction, project system, or matching evidence earns them.
 - Do not assume that replacing cards with indexed rows, label rails, pseudo-code, divider grids, boxed flows, capsule CTAs, or technical page chrome makes a result authored. Extract how the reference handles annotation, sequence, actions, navigation, transitions, process, technical information, and the final page gesture, including where it deliberately leaves content unlabelled or unenclosed.
 - Record negative evidence. If the active references consistently avoid pretitles/uptitles/kickers, visible labels, item numbers, badges, standalone trailing emphasis/fact lines, code-like identifiers, equal panels, divider systems, or stylized button families, that absence is part of their design grammar and must influence this project. Do not import those devices from a remembered SaaS/agency template merely because the references leave space open.
 - Treat every prominent custom graphic or illustration as first-class art direction. Record what it contributes, which real project/content/brand fact and inspected reference principle drive it, how it relates to adjacent copy/media, and why its medium is appropriate. Do not invent an abstract visual merely because a layout has empty space.
@@ -105,26 +105,33 @@ The current user request takes precedence over this persistent board. If the use
 
 When browsing or image inspection is available, evaluate the live site at desktop and mobile rather than relying on an Awwwards thumbnail, screenshot, description, or earlier notes. A live site can change at any time.
 
-## Mandatory Whole-Site Reconnaissance
+## Proportional Reconnaissance
 
-Complete this reconnaissance every time a site is selected as an active reference, both on first discovery and on later reuse. Previous observations accelerate comparison but never replace a fresh pass.
+Choose the smallest scope that can support the design decision before browsing. Existing notes may accelerate a later pass; refresh the evidence when the live reference, affected scope, or required state may have changed.
 
-### 1. Build a coverage manifest
+| Scope | Required coverage |
+| --- | --- |
+| **Site-wide** | Inventory the complete public experience, distinct templates, persistent shell, full homepage journey, representative responsive states, and relevant transitions/interactions. |
+| **Page-level** | Inspect the relevant page from top to bottom, its persistent header/footer context, representative responsive states, and only adjacent templates or transitions that materially affect that page. |
+| **Component-level** | Inspect the component, immediate layout context, meaningful variants, input states, and responsive/interaction behavior. Do not inventory unrelated routes or shell states. |
 
-Before extracting design principles:
+Record the chosen scope, inspection date, final URL, viewports/input modes, consent/region/language state, and every relevant blocked or untestable state as `UNVERIFIED`. A supplied screenshot may be sufficient evidence for a static visual detail, but not for interaction, responsive, route, or lifecycle claims it cannot show.
 
-1. enter through the supplied URL and record the date, final URL, viewport, and any consent/region/language state;
-2. enumerate the primary navigation, hamburger/overlay navigation, dropdowns, footer links, prominent in-page directories, and public sitemap when available;
-3. identify every first-party public route, unique page template, content type, special landing page, and state exposed by those paths;
-4. visit every finite editorial/marketing page and every distinct template;
-5. for a very large or generated catalog, archive, blog, or search space, inspect the listing, pagination/filter behavior, every unique template, and representative entries for meaningful variants; record the bounded sampling instead of claiming every generated URL was visited;
-6. record blocked, authenticated, broken, geo-restricted, consent-blocked, or otherwise untestable routes as `UNVERIFIED`.
+### 1. Build coverage appropriate to the scope
 
-Secondary pages may receive a faster top-to-bottom pass when they repeat an already tested system. Still inspect their full length, unique hierarchy, typography, media, navigation state, footer transition, and any interaction or template variation not present on the homepage. Test a repeated component deeply once, then verify that its meaningful variants behave consistently.
+For site-wide work:
 
-### 2. Perform the mandatory homepage deep pass
+1. enumerate primary and overlay navigation, dropdowns, footer links, prominent in-page directories, and the public sitemap when available;
+2. identify first-party public routes, unique templates, content types, special landing pages, and exposed states;
+3. visit every finite editorial/marketing page and every distinct template;
+4. for a large generated catalog, archive, blog, or search space, inspect the listing, pagination/filter behavior, every unique template, and representative entries for meaningful variants; record the bounded sampling;
+5. record authenticated, broken, geo-restricted, consent-blocked, or otherwise untestable routes as `UNVERIFIED`.
 
-The homepage must always be inspected as a complete experience, never as a hero screenshot:
+For page-level work, inspect the complete target page and the shell/adjacent states needed to understand it. For component-level work, test the component deeply once and verify its meaningful variants in immediate context. Do not claim broader coverage than was performed.
+
+### 2. For site-wide scope, perform the homepage deep pass
+
+For site-wide work, inspect the homepage as a complete experience, never only as a hero screenshot:
 
 1. load or reload from a clean entry and observe the preloader, initial reveal, cursor, header, cookie layer, and first interactive state;
 2. scroll deliberately from the very top to the bottom, section by section, then revisit the top when reverse-scroll or sticky behavior may differ;
@@ -133,11 +140,11 @@ The homepage must always be inspected as a complete experience, never as a hero 
 5. reach and inspect the complete footer, end-of-page transition, back-to-top behavior, and any route-transition affordance;
 6. repeat the meaningful pass at desktop and mobile/narrow width, plus an intermediate width when the composition changes substantially.
 
-Do not declare the homepage inspected if the page was not scrolled through its complete length or if major interactions remain untested.
+Do not declare the homepage inspected for site-wide work if the page was not scrolled through its complete length or if major relevant interactions remain untested. Page- and component-level work need not add an unrelated homepage pass.
 
-### 2a. Extract the header and footer as first-class references
+### 2a. Inspect header and footer when the scope includes persistent shell
 
-Do not finish reconnaissance with only “header seen” and “footer reached.” For every active reference that may influence the shell, record separate evidence.
+Do not finish shell reconnaissance with only “header seen” and “footer reached.” For every active reference that may influence the shell, record separate evidence. Skip this subsection for a component-only study whose decision cannot affect or depend on the shell.
 
 For the header, inspect and record:
 
@@ -160,11 +167,11 @@ Select a header-driving reference and a footer-driving reference from the active
 
 Capture desktop and mobile observations for both areas. If a header/footer is shared across many routes, test it deeply once, then verify route/theme/content variants rather than assuming the homepage state covers them all.
 
-### 2b. Analyze the preloader, first reveal, and page transitions
+### 2b. Analyze affected preloaders, first reveal, and page transitions
 
-Treat loading and navigation continuity as first-class composition, not incidental polish. For every active reference, record whether each mechanism exists, is deliberately absent, or could not be verified.
+Treat loading and navigation continuity as first-class composition when they are part of the selected scope or materially affect the studied page/component. Record whether each relevant mechanism exists, is deliberately absent, or could not be verified; do not manufacture a transition audit for a static component decision.
 
-Test the preloader and first reveal through:
+For site-wide or lifecycle-focused work, test the preloader and first reveal through:
 
 - a cold or newly isolated first entry when tooling permits, then warm-cache reload and repeat visit;
 - direct entry to the homepage and at least one representative secondary template;
@@ -196,7 +203,7 @@ Separate a real loading dependency from an intentionally paced animation when ev
 
 ### 3. Exercise interaction triggers
 
-Test every distinct safe, reversible interaction exposed by the active reference:
+Test every distinct safe, reversible interaction that can affect the selected scope. Site-wide work covers the public interaction system; page- and component-level work cover relevant local interactions and their immediate dependencies:
 
 - **Hover/pointer:** primary and secondary navigation, logo, text links, buttons, cards, images, galleries, project tiles, icon controls, cursor states, underlines, masks, overlays, captions, color shifts, zoom/crop, displacement, video preview, and pointer-following media.
 - **Click/tap:** hamburger open/close, dropdowns, submenus, accordions, tabs, modals, drawers, lightboxes, media controls, carousels, filters, pagination, language selectors, dismissible notices, and route transitions.
@@ -218,7 +225,7 @@ Distinguish what was directly observed from what is inferred. Do not claim a lib
 
 ### 4. Measure the visual system
 
-Record relationships, responsive behavior, and computed values when browser inspection makes them available:
+Record decision-relevant relationships, responsive behavior, and computed values within the selected scope when browser inspection makes them available:
 
 - font families, fallbacks, sources, variable axes, weights, styles, casing, display/body roles, and licensing constraints;
 - font sizes across viewport ranges, fluid `clamp()` behavior, line height, letter spacing, line length, wrapping, indentation, and scale ratios;
@@ -290,7 +297,7 @@ Before implementing a reference-led page, translate inspiration into an explicit
 | Motion | e.g. continuous vertical rhythm | Reuse one reveal language across sections | Immediate reduced-motion state; no scroll blocking |
 | Footer | Name the inspected reference and its observed end-of-page/navigation/brand principle | Transform that principle around the project's real destinations, contact/legal content and final gesture | Preserve semantic grouping, focus, mobile order and honest content |
 
-The `Preloader / first reveal`, `Page transition`, `Header`, `Footer`, editorial `Media rhythm`, and `Interface devices / intentional absence` rows are mandatory even when a mechanism is intentionally absent, the implementation uses shared shell components, or final media files are pending. An omission must document how immediate styled rendering, navigation continuity, orientation, the end of the journey, or the text/media/whitespace composition remains complete. Add one `Graphic / illustration` row for every prominent custom graphic family. When no such graphic is appropriate, record the intentional use of content, real media, typography, or whitespace instead of inventing filler. This map separates influence from imitation and makes conflicts visible before code is written.
+Use influence-map rows proportionally. Site-wide work includes `Preloader / first reveal`, `Page transition`, `Header`, `Footer`, `Media rhythm`, and `Interface devices / intentional absence`; page-level work includes the rows that affect that page plus its persistent shell context; component-level work includes only the component's local content, surface/device, media, state, and interaction decisions. An intentional absence is recorded when it matters to the selected scope. Add a `Graphic / illustration` row for each prominent custom graphic family in scope, or record the decision to rely on content, real media, typography, or whitespace when that is the stronger choice.
 
 For an existing implementation, the influence map and delta ledger reference each other. The influence map explains the target principle; the delta ledger proves what must visibly change from the current rendered state. Do not duplicate them into drifting private versions.
 
@@ -387,7 +394,7 @@ Observe the reference's action and page-shell grammar with the same care as its 
 
 Do not default to a filled capsule beside an outline/text control, append an arrow to every label, add magnetic motion everywhere, place ornamental “system ready” status in the header, or end with a shallow three-column metadata strip. None is forbidden; each needs semantic purpose and directly observed or project-specific support. Header and footer must participate in the same authored narrative as the body, not surround it with a generic starter shell.
 
-Negative constraints are not enough. Before implementation, write the two mandatory influence-map rows and identify which observed structural and interactive decisions will be visible in the result. After implementation, compare each area against those rows at desktop and mobile. A color, font, radius, logo swap or generic menu animation alone does not count as reference influence.
+Negative constraints are not enough. When header or footer is in scope, write its influence-map row before implementation and identify which observed structural and interactive decisions will be visible in the result. After implementation, compare each affected shell area against that row at representative desktop and mobile states. A color, font, radius, logo swap or generic menu animation alone does not count as reference influence.
 
 Run a final genericity test:
 
@@ -465,12 +472,11 @@ When a user explicitly requests a close reproduction, clarify which assets and r
 
 ## Deliverable Standard
 
-For reference-led implementation, be able to summarize:
+For reference-led implementation, summarize only the evidence required by the selected scope and do not imply broader coverage. Include:
 
-- the coverage manifest, inspection date, tested viewports, and anything left unverified;
-- the homepage's complete scroll narrative and interaction inventory;
-- the preloader/first-reveal analysis for cold/warm homepage and representative secondary entry, including font/content/media appearance, exit sequence, mobile/reduced/failure behavior, explicit absence, and every `UNVERIFIED` state;
-- the page-transition route-pair matrix covering leave/wait/swap/enter, persistent shell/media continuity, scroll/focus/input, back/forward, interruption, mobile, reduced motion, failure, direct-load equivalence, and observed-versus-inferred evidence;
+- the selected site/page/component scope, coverage record, inspection date, tested viewports/input modes, and anything left `UNVERIFIED`;
+- for site-wide work, the homepage's complete scroll narrative, representative template coverage, persistent shell, and public interaction inventory;
+- preloader/first-reveal and page-transition evidence only when those mechanisms are in scope or materially affect the studied experience, including observed-versus-inferred status and relevant mobile/reduced/failure behavior;
 - the dominant design idea;
 - for an existing implementation, the current rendered baseline, primary-carrier map, authoritative delta ledger, and visible before/after evidence for every affected major region;
 - which reference informed which local decision;

@@ -1,6 +1,12 @@
 # Editorial Composition and Frontend Tandem
 
-Use this reference whenever visible text and interface composition affect each other. Content/SEO and frontend work as a tandem from the brief through the rendered review; neither hands a supposedly finished artifact to the other at the end.
+Use this reference when editorial decisions materially affect hierarchy, SEO, CMS variability, responsive measure, media, structured data, or layout. Content/SEO and frontend then work as a tandem from the brief through the rendered review; neither hands a supposedly finished artifact to the other at the end.
+
+## Applicability Threshold
+
+The tandem is required when a content or interface decision can change the reading order, semantic hierarchy, searchable/shareable meaning, component or CMS contract, realistic length/locale resilience, text-media relationship, responsive composition, or structured-data truth.
+
+It is not required for an isolated typo, punctuation fix, unchanged link label, or small wording correction that preserves meaning, metadata, component structure, and layout behavior. The primary agent may make that change directly and run focused verification. If a seemingly small edit changes wrapping, prominence, locale variance, action meaning, or another listed condition, apply the tandem.
 
 ## Shared Outcome
 

@@ -1,0 +1,6 @@
+interface:
+  display_name: "ReactWP Frontend Expert"
+  short_description: "React, SCSS, accessibility, performance and motion"
+  default_prompt: "Use $frontend-expert to implement or review this ReactWP frontend change."
+policy:
+  allow_implicit_invocation: true

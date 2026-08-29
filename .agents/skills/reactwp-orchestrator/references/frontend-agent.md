@@ -6,7 +6,7 @@ Use this profile when delegating React, SCSS, rendering, accessibility, responsi
 
 Read `frontend-expert/SKILL.md` completely, then only its references routed by the assigned behavior. Also load:
 
-- `content-seo-expert` when the rendered hierarchy, copy, internal links, metadata, schema, or content enrichment is involved;
+- `content-seo-expert` when editorial decisions materially affect hierarchy, SEO, CMS variability, responsive measure, media, structured data, or layout; isolated wording fixes that preserve meaning, metadata, and composition do not require the tandem;
 - `security-expert` for raw HTML, URLs, head/JSON-LD, input, auth/private state, public payloads, or another trust boundary;
 - the agreed backend route/API contract and closest current ReactWP template/runtime implementation.
 - `backend-expert/references/form-field-contracts.md` and the backend-custodied revision whenever a field is formatted, constrained, submitted, or persisted.
@@ -25,17 +25,18 @@ Read `frontend-expert/SKILL.md` completely, then only its references routed by t
 - Avoid both generic card grammar and its common replacement: repeated pretitles/uptitles/kickers, decorative labels or indices, badges, standalone trailing bold/colored fact lines, pseudo-code, metadata rails, equal panels, divider grids, boxed process steps, capsule-arrow CTA recipes, and technical-looking page chrome. Require unique semantic value and reference/content support regardless of class names or HTML tags.
 - For reference-led work, require an `Interface devices / intentional absence` row and one presence/absence ledger before visual components harden. If every active reference omits a device family and real content/state/order/interaction does not require it, frontend must omit it; document any minimal project-specific divergence. Preserve necessary form labels, accessible names, application controls, real status/order, and literal code.
 - Implement form formatters, native attributes, instructions, errors, and transport values from the backend-approved field contract across typing, editing, paste, autofill, mobile, IME, and programmatic submission paths.
-- Work continuously with the content/SEO worker on the shared editorial composition matrix; do not wait for a final copy handoff before testing typography, hierarchy, measure, media, or layout.
+- When the editorial tandem threshold applies, work continuously with content/SEO on the shared composition matrix; do not wait for a final copy handoff before testing typography, hierarchy, measure, media, or layout.
 - Preserve client/static/server compatibility where the mission supports those modes.
 - Own only assigned components/styles/runtime configuration. Report payload/head/schema contract changes instead of silently compensating in the UI.
 - Verify direct load, internal navigation, hydration, responsive/input states, focus, reduced motion, media loading, and animation cleanup as applicable.
 
 ## Inspiration Requirement
 
-If visual references are active, read `frontend-expert/references/inspirations.md` and complete its whole-site reconnaissance before deriving the design:
+If visual references are active, read `frontend-expert/references/inspirations.md`, select the smallest defensible site-wide, page-level, or component-level reconnaissance scope, and complete that scope before deriving the design:
 
-- inventory the public site and distinct templates;
-- scroll the homepage fully from top to bottom;
+- for site-wide work, inventory the public experience and distinct templates, then scroll the homepage fully from top to bottom;
+- for page-level work, inspect the complete target page, its persistent shell context, relevant adjacent states, and representative responsive behavior;
+- for component-level work, inspect the component, immediate layout context, meaningful variants, input states, and responsive/interaction behavior without inventorying unrelated routes;
 - exercise hover, click/tap, hamburger/menu, image/card, scroll, drag/swipe, keyboard/focus, mobile, and motion behavior;
 - inspect typography, font scales/weights, block/grid x/y/z relationships, media dimensions/crops, spacing, and responsive transformations;
 - classify the surface/container grammar and record which content remains open, row/list based, media-attached, or genuinely card-enclosed and why;
@@ -54,7 +55,7 @@ When no user reference exists and design direction is needed, select a small rel
 
 - Backend owns the route/API/ACF producer. Frontend may use an approved fixture but must not redefine the contract privately.
 - For submitted/persisted fields, frontend co-approves the backend-custodied contract, runs the shared fixtures, preserves usable/accessibly explained editing, maps stable server errors, and treats its formatter or mask only as UX rather than authoritative validation.
-- Content/SEO owns content meaning, evidence, hierarchy, variability, metadata/entity requirements, internal-link intent, and media purpose. Frontend owns semantic implementation, typography, line measure, composition, responsive behavior, media treatment, accessibility, and route-aware synchronization. Both must approve the rendered composition using `content-seo-expert/references/editorial-composition-and-frontend-tandem.md`.
+- When the editorial tandem applies, content/SEO owns content meaning, evidence, hierarchy, variability, metadata/entity requirements, internal-link intent, and media purpose. Frontend owns semantic implementation, typography, line measure, composition, responsive behavior, media treatment, accessibility, and route-aware synchronization. Both approve the rendered composition using `content-seo-expert/references/editorial-composition-and-frontend-tandem.md`.
 - For pending media, content/SEO records the expected subject/source, editorial role, status, caption/alt/credit intent, and textual relationship; frontend owns placeholder geometry/treatment, crop/focal behavior, responsive/full-bleed composition, semantic replacement, and loading. Both approve the same media-plan revision and no-media fallbacks.
 - Render real short, long, translated, missing, and editor-modified cases early. Do not resolve necessary-copy fit by indiscriminate font shrinking, clipping, hiding, fixed-height overflow, or unapproved `line-clamp`.
 - Fixed/pinned/sticky ownership includes a viewport-fit contract: usable height calculation, active-state content bounds, sequential reveal order, eligibility/fallback conditions, refresh/rebuild triggers, and reduced-motion path. Do not accept a nested scroll region as an accidental overflow patch.
@@ -64,4 +65,4 @@ When no user reference exists and design direction is needed, select a small rel
 
 ## Required Handoff
 
-Include components/styles/configuration changed, route fields consumed, implemented states, responsive/input/accessibility behavior, every authoritative form-field contract revision and frontend sign-off plus shared-fixture/browser-input results, the authoritative editorial composition matrix/media-plan revision/custodian and frontend sign-off, inspiration influence map with its mandatory `Header`, `Footer`, `Media rhythm`, `Interface devices / intentional absence`, and applicable `Graphic / illustration` rows, the contextual evidence match for each adopted device, the current rendered baseline plus authoritative delta ledger and primary-carrier map for existing interfaces, visible before/after evidence, the device presence/absence ledger and approved divergences, asset status/source inventory, pending placeholder and replacement/no-media decisions, every fixed/pinned/sticky viewport-fit contract and start/mid/end evidence, desktop/mobile shell/media/graphic observations, container/annotation/action/shell grammar, card/surface, component-grammar and graphic-specificity audits, genericity-test result, lifecycle/render-mode considerations, performance/media decisions, security-sensitive sinks, tests/builds/runtime checks, screenshots or observations when available, and remaining unverified cases. Do not create a private contract or matrix copy.
+Include changed components/styles/configuration, route fields consumed, implemented states, responsive/input/accessibility behavior, lifecycle/render-mode considerations, security-sensitive sinks, tests/builds/runtime checks, observations, and remaining unverified cases. Add the shared form contract, editorial composition matrix/media plan, viewport-fit contract, or reference evidence only when that behavior is applicable. Reference-led handoffs name the selected reconnaissance scope and include only its applicable influence-map rows, device/media/graphic evidence, baseline/delta records, and genericity checks. Do not create a private contract or matrix copy.

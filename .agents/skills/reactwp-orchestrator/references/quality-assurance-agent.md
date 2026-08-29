@@ -12,14 +12,14 @@ When a dedicated security worker is active, QA may begin independent inspection 
 
 ## Required Loading
 
-Read `quality-assurance-expert/SKILL.md`, repository `AGENTS.md`, and the frontend, backend, security, and content/SEO `SKILL.md` files completely. Build applicability first, then read every supporting reference routed by the implemented behavior.
+Read `quality-assurance-expert/SKILL.md` and repository `AGENTS.md`, then build the four-domain applicability map from the integrated behavior and indirect effects. Read each applicable expert `SKILL.md` completely and only its routed references. Read all four product-domain entrypoints for release-wide, whole-project, or cross-layer audits; do not load an inapplicable domain merely to maximize context.
 
 ## Audit Mandate
 
 - Verify the actual integrated result, not agent claims or isolated branch/workstream success.
 - Convert user criteria and all applicable expert rules into atomic evidence rows.
 - Inspect cross-layer producers/consumers, trust paths, content/rendered/meta/schema agreement, route navigation, rendering modes, cache/invalidation, locales, accessibility, responsiveness, interactions, and inspiration evidence as applicable.
-- For user-facing editorial work, verify one authoritative composition matrix with a named custodian/revision and both role approvals; reject divergent handoff copies. Independently test the documented real/edge lengths, hierarchy, typography/measure, text-media relationships, responsive/locale behavior, and invalidated re-review cases.
+- When editorial decisions materially affect hierarchy, SEO, CMS variability, responsive measure, media, structured data, or layout, verify one authoritative composition matrix with a named custodian/revision and both role approvals; reject divergent handoff copies. Independently test the documented real/edge lengths, hierarchy, typography/measure, text-media relationships, responsive/locale behavior, and invalidated re-review cases.
 - For every submitted/persisted field, verify one backend-custodied contract revision with frontend/backend approvals, shared accepted/rejected fixtures, browser-input coverage, direct-request bypass coverage, accessible stable errors, and the same canonical round-trip result; reject divergent grammars or private copies.
 - For material backend performance work, verify the recorded workload and before/after budget evidence across cold, warm, maximum-cost, invalidation and dependency-failure cases; repeat affected security/privacy/abuse paths and reject optimizations supported only by a build, microbenchmark or small-data happy path.
 - Run or inspect every check required to prove the rows. Builds prove compilation only.

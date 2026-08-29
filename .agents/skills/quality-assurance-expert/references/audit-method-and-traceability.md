@@ -17,7 +17,7 @@ Do not audit only the diff when the change relies on surrounding contracts. Insp
 
 ## 2. Build the Applicability Map
 
-Evaluate all four domains before routing references:
+Evaluate all four domains from the requested scope, changed files, affected behavior, data flows, trust boundaries, and searchable/shareable output before routing references. This applicability pass does not require loading every expert entrypoint for a focused audit:
 
 | Domain | Typical trigger | Applicability evidence |
 | --- | --- | --- |
@@ -27,6 +27,8 @@ Evaluate all four domains before routing references:
 | Content/SEO | Visible copy/structure, metadata, robots, social preview, canonical/hreflang, entities/schema, locale | Content/page promise and final searchable/shareable output |
 
 A domain can be `NOT APPLICABLE`, but only with a concrete boundary argument. For example, a SCSS-only spacing change may make backend and content/SEO non-applicable while frontend remains applicable; raw CMS HTML rendered by that component makes security applicable even if PHP did not change.
+
+After the map, read every applicable expert `SKILL.md` completely and only the references routed by the affected behavior. Read all four product-domain entrypoints for release-wide, whole-project, or cross-layer audits. If later inspection exposes a new domain, update the map, load that skill, and add its requirements before issuing a verdict.
 
 ## 3. Create Atomic Requirements
 

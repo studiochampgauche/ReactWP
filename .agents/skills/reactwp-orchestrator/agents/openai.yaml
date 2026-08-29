@@ -1,0 +1,6 @@
+interface:
+  display_name: "ReactWP Orchestrator"
+  short_description: "Coordinate substantial cross-layer ReactWP delivery"
+  default_prompt: "Use $reactwp-orchestrator to coordinate this substantial cross-layer ReactWP mission."
+policy:
+  allow_implicit_invocation: true

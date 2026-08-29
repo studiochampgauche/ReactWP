@@ -1,0 +1,6 @@
+interface:
+  display_name: "ReactWP Security Expert"
+  short_description: "Secure trust boundaries, data flows and dependencies"
+  default_prompt: "Use $security-expert to secure or review this ReactWP trust boundary."
+policy:
+  allow_implicit_invocation: true

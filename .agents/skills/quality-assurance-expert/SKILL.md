@@ -16,7 +16,7 @@ The claim is always scope-bound. Passing QA for one change never certifies untou
 The verdict `100% compliant with applicable verified requirements` is allowed only when:
 
 - the user request, acceptance criteria, changed surface, and affected runtime paths are all covered;
-- all four expert skills were evaluated for applicability;
+- all four product domains were evaluated for applicability from the changed behavior and indirect effects;
 - every applicable rule from their main files and routed references is in the compliance matrix;
 - every applicable row is `PASS`;
 - there is no `FAIL`, `UNVERIFIED`, unexplained `NOT APPLICABLE`, failed command, unresolved finding, or required environment that was not exercised;
@@ -31,12 +31,9 @@ At the start of every QA audit, read completely and use the current versions of:
 
 - repository `AGENTS.md` and any narrower applicable instruction files;
 - `.agents/skills/reactwp-orchestrator/SKILL.md`, its mission brief, ownership ledger, and worker handoffs when the audited work was orchestrated;
-- `.agents/skills/frontend-expert/SKILL.md`;
-- `.agents/skills/backend-expert/SKILL.md`;
-- `.agents/skills/security-expert/SKILL.md`;
-- `.agents/skills/content-seo-expert/SKILL.md`.
+- each product-domain `SKILL.md` classified as applicable by the initial behavior/data-flow/trust/content map.
 
-Then build an applicability map and read every supporting reference routed by those skills for the changed behavior. Do not load unrelated GSAP, backend, security, or SEO references merely to make the audit look exhaustive. Completeness means complete coverage of the scope, not indiscriminate reading.
+For a release-wide, whole-project, or cross-layer audit, read all four product-domain entrypoints before routing references. For a focused audit, evaluate all four domains without indiscriminately loading them, record concrete `NOT APPLICABLE` boundaries, then read every supporting reference routed by the applicable skills. Completeness means complete coverage of the scope, not maximum context.
 
 Repository code is authoritative for what ReactWP currently does. The skills are authoritative for expected working practice and quality gates. If code and a skill/document disagree, record a documentation-drift finding; do not silently reinterpret one to fit the other.
 
@@ -61,7 +58,7 @@ Read the shared audit method for every QA task, then only the gates applicable t
 
 1. Freeze the audit scope from the latest user request, acceptance criteria, known baseline/range, repository instructions, and actual changed/untracked files. Separate unrelated pre-existing changes.
 2. Inventory affected user journeys, data flows, trust boundaries, locales, delivery modes, rendering modes, cache identities, routes, metadata, and deployment artifacts.
-3. Read the four expert entrypoints, classify each domain as applicable or not applicable with a reason, and load all references routed by the applicable behavior.
+3. Classify all four domains from changed behavior and indirect effects, read each applicable expert entrypoint, and load its routed references. Read all four entrypoints for release-wide, whole-project, or cross-layer audits.
 4. Convert requirements into atomic matrix rows. Include positive rules, `Do Not` rules, contract invariants, required states, verification instructions, and user-specific acceptance criteria.
 5. Inspect the implementation and its closest tests. Trace cross-layer values from source to public payload/rendered output and from user action to state/result.
 6. Select the smallest sufficient checks that prove every row. Combine source inspection, lint/static checks, builds, focused automated tests, runtime/browser checks, visual/responsive checks, accessibility checks, and content/SEO validation as applicable.
