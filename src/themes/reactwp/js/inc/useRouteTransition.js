@@ -223,9 +223,6 @@ export const useRouteTransition = () => {
                 firstLoadRef.current = false;
                 scroller.refresh();
                 const initialLoadPromise = Loader.finishInitialLoad(currentRoute);
-                const loaderState = Loader.state();
-
-                loaderState.init = initialLoadPromise;
 
                 await initialLoadPromise;
 
@@ -233,8 +230,9 @@ export const useRouteTransition = () => {
                     return;
                 }
 
-                scroller.unlock();
                 await scrollToRouteTarget(location.hash, false);
+                scroller.setLockScrollTop(scroller.getScrollTop());
+                scroller.unlock();
 
                 if(cancelled){
                     return;
@@ -252,8 +250,9 @@ export const useRouteTransition = () => {
 
             requestAnimationFrame(() => {
                 const prepare = async () => {
-                    scroller.unlock();
                     await scrollToRouteTarget(location.hash, false);
+                    scroller.setLockScrollTop(scroller.getScrollTop());
+                    scroller.unlock();
 
                     if(cancelled){
                         return;

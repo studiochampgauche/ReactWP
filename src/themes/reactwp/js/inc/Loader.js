@@ -864,9 +864,18 @@ export const Loader = {
     initialCriticalRequest: null,
     initialDeferredRequest: null,
     initialAnimationPromise: null,
+    initialLoadPromise: null,
+    initialLoadResolve: null,
+    initialLoadReject: null,
+    initialLoadLifecyclePromise: null,
     configure(){
         this.reset();
-        ensureLoaderState(true);
+        const state = ensureLoaderState(true);
+        this.initialLoadPromise = new Promise((resolve, reject) => {
+            this.initialLoadResolve = resolve;
+            this.initialLoadReject = reject;
+        });
+        state.init = this.initialLoadPromise;
         syncLoaderState(null);
         return this;
     },
@@ -882,6 +891,10 @@ export const Loader = {
         this.initialCriticalRequest = null;
         this.initialDeferredRequest = null;
         this.initialAnimationPromise = null;
+        this.initialLoadPromise = null;
+        this.initialLoadResolve = null;
+        this.initialLoadReject = null;
+        this.initialLoadLifecyclePromise = null;
 
         return this;
     },
@@ -995,6 +1008,9 @@ export const Loader = {
     init(){
         return this.play();
     },
+    whenInitialLoadDone(){
+        return this.initialLoadPromise || this.state().init;
+    },
     async download(routeOrPath = this.route()){
         const route = typeof routeOrPath === 'string'
             ? await fetchRoute(routeOrPath)
@@ -1052,23 +1068,42 @@ export const Loader = {
 
         return this;
     },
-    async finishInitialLoad(route = runtime.route){
+    finishInitialLoad(route = runtime.route){
         const resolvedRoute = route || runtime.route;
 
-        if(!this.initialCriticalRequest || this.initialRouteKey !== getRouteKey(resolvedRoute)){
-            this.prepareInitialLoad(resolvedRoute);
+        if(!this.initialLoadPromise){
+            this.initialLoadPromise = new Promise((resolve, reject) => {
+                this.initialLoadResolve = resolve;
+                this.initialLoadReject = reject;
+            });
+            this.state().init = this.initialLoadPromise;
         }
 
-        if(!this.initialAnimationPromise){
-            this.initialAnimationPromise = this.init();
+        if(!this.initialLoadLifecyclePromise){
+            this.initialLoadLifecyclePromise = (async () => {
+                if(!this.initialCriticalRequest || this.initialRouteKey !== getRouteKey(resolvedRoute)){
+                    this.prepareInitialLoad(resolvedRoute);
+                }
+
+                if(!this.initialAnimationPromise){
+                    this.initialAnimationPromise = this.init();
+                }
+
+                await this.display(resolvedRoute);
+                await this.initialAnimationPromise;
+
+                this.initialDeferredRequest?.catch(() => null);
+
+                return resolvedRoute;
+            })();
+
+            this.initialLoadLifecyclePromise.then(
+                (loadedRoute) => this.initialLoadResolve?.(loadedRoute),
+                (error) => this.initialLoadReject?.(error)
+            );
         }
 
-        await this.display(resolvedRoute);
-        await this.initialAnimationPromise;
-
-        this.initialDeferredRequest?.catch(() => null);
-
-        return resolvedRoute;
+        return this.initialLoadPromise;
     },
     display(route = this.route()){
         const resolvedRoute = route || this.route();

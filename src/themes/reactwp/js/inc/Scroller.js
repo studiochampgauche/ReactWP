@@ -210,6 +210,10 @@ export const scroller = {
         this.restoreScrollTop();
         window.gscroll?.paused?.(false);
 
+        if(!force){
+            this.refresh();
+        }
+
         return this;
     }
 };
