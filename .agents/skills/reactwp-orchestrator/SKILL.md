@@ -29,11 +29,11 @@ Delegation never expands authorization. Every worker inherits the exact scope an
 
 Always read repository `AGENTS.md`. Load only the specialists that apply to the mission, but evaluate all four product domains during routing:
 
-- `.agents/backend-expert/SKILL.md` for WordPress, ACF, PHP, plugins, REST, routes, queries, rendering, cache, performance/scalability, migrations, and integrated/headless data contracts;
-- `.agents/frontend-expert/SKILL.md` for React, SCSS, rendering, accessibility, responsiveness, performance, media, interactions, motion, and visual references;
-- `.agents/content-seo-expert/SKILL.md` for audience, content, information architecture, metadata, internal links, entities, schema, and `reactwp-seo`;
-- `.agents/security-expert/SKILL.md` for every applicable trust boundary and as a dedicated specialist when risk warrants it;
-- `.agents/quality-assurance-expert/SKILL.md` for the independent final evidence gate.
+- `.agents/skills/backend-expert/SKILL.md` for WordPress, ACF, PHP, plugins, REST, routes, queries, rendering, cache, performance/scalability, migrations, and integrated/headless data contracts;
+- `.agents/skills/frontend-expert/SKILL.md` for React, SCSS, rendering, accessibility, responsiveness, performance, media, interactions, motion, and visual references;
+- `.agents/skills/content-seo-expert/SKILL.md` for audience, content, information architecture, metadata, internal links, entities, schema, and `reactwp-seo`;
+- `.agents/skills/security-expert/SKILL.md` for every applicable trust boundary and as a dedicated specialist when risk warrants it;
+- `.agents/skills/quality-assurance-expert/SKILL.md` for the independent final evidence gate.
 
 Each delegated agent must read its role profile, its primary expert `SKILL.md`, and only the supporting references routed by its assigned behavior. The orchestrator must itself understand every shared contract; do not delegate away architectural accountability.
 

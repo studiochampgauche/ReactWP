@@ -30,11 +30,11 @@ If any proof is missing, the verdict is not 100%. Use `UNVERIFIED`, explain the 
 At the start of every QA audit, read completely and use the current versions of:
 
 - repository `AGENTS.md` and any narrower applicable instruction files;
-- `.agents/reactwp-orchestrator/SKILL.md`, its mission brief, ownership ledger, and worker handoffs when the audited work was orchestrated;
-- `.agents/frontend-expert/SKILL.md`;
-- `.agents/backend-expert/SKILL.md`;
-- `.agents/security-expert/SKILL.md`;
-- `.agents/content-seo-expert/SKILL.md`.
+- `.agents/skills/reactwp-orchestrator/SKILL.md`, its mission brief, ownership ledger, and worker handoffs when the audited work was orchestrated;
+- `.agents/skills/frontend-expert/SKILL.md`;
+- `.agents/skills/backend-expert/SKILL.md`;
+- `.agents/skills/security-expert/SKILL.md`;
+- `.agents/skills/content-seo-expert/SKILL.md`.
 
 Then build an applicability map and read every supporting reference routed by those skills for the changed behavior. Do not load unrelated GSAP, backend, security, or SEO references merely to make the audit look exhaustive. Completeness means complete coverage of the scope, not indiscriminate reading.
 

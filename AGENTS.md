@@ -4,7 +4,7 @@
 
 For a complete site, application, dashboard, portal, management system, or substantial change spanning two or more expert domains, load and follow:
 
-- `.agents/reactwp-orchestrator/SKILL.md`
+- `.agents/skills/reactwp-orchestrator/SKILL.md`
 
 The user may describe only the desired outcome; they do not need to name roles or skills. The primary agent owns discovery, shared contracts, task decomposition, coordination, integration, verification, and the final unified result.
 
@@ -18,13 +18,13 @@ Do not use multi-agent ceremony for a small single-domain task. Delegation does 
 
 For any task that designs, implements, refactors, reviews, or optimizes the ReactWP frontend, load and follow:
 
-- `.agents/frontend-expert/SKILL.md`
+- `.agents/skills/frontend-expert/SKILL.md`
 
 This includes React components and templates, SCSS, responsive behavior, accessibility, frontend performance, GSAP, loaders, page transitions, smooth scrolling, media loading, and work based on visual references or Awwwards sites.
 
-When visible editorial content is involved, work in tandem with `content-seo-expert` using `.agents/content-seo-expert/references/editorial-composition-and-frontend-tandem.md`. Validate typography, line measure, hierarchy, content length/variance, text-media composition, responsive/translated cases, and the final rendered reading journey together.
+When visible editorial content is involved, work in tandem with `content-seo-expert` using `.agents/skills/content-seo-expert/references/editorial-composition-and-frontend-tandem.md`. Validate typography, line measure, hierarchy, content length/variance, text-media composition, responsive/translated cases, and the final rendered reading journey together.
 
-Read only the supporting references routed by the skill for the task at hand. The GSAP files under `.agents/frontend-expert/references/gsap/` are specialized references; do not load all of them when the task only needs one GSAP feature.
+Read only the supporting references routed by the skill for the task at hand. The GSAP files under `.agents/skills/frontend-expert/references/gsap/` are specialized references; do not load all of them when the task only needs one GSAP feature.
 
 When a live website is used as inspiration, follow the complete reconnaissance protocol in `references/inspirations.md` before deriving a design direction. On every first or later use of that reference, inventory the whole public site, perform the mandatory top-to-bottom homepage and interaction pass, inspect distinct secondary-page templates, and record any route or interaction that could not be verified.
 
@@ -44,19 +44,19 @@ For React HTML strings, use JSX text for plain content. When already trusted and
 
 For any task that designs, implements, refactors, reviews, or debugs the ReactWP backend or its data contracts, load and follow:
 
-- `.agents/backend-expert/SKILL.md`
+- `.agents/skills/backend-expert/SKILL.md`
 
 This includes WordPress hooks and lifecycle, plugins and mu-plugins, custom post types and taxonomies, queries and menus, ACF field groups and Local JSON, ReactWP route/bootstrap payloads, REST endpoints, headless consumers, integrated React theme data, rendering strategy, caches, invalidation, migrations, performance, scalability, abuse resistance, and backend verification.
 
 Choose the delivery mode explicitly: the integrated ReactWP theme and an external headless frontend share content concepts but do not have the same bootstrap, routing, authentication, or deployment ownership. Read only the backend references routed by the skill.
 
-When backend work changes a trust boundary, also use `security-expert`. For latency, database/query cost, payload size, concurrency, cache efficiency, background jobs, integrations, capacity, or resource-exhaustion concerns, follow `.agents/backend-expert/references/performance-and-scalability.md` and preserve every security invariant while optimizing. When backend work includes React component, styling, accessibility, frontend performance, or motion work, also use `frontend-expert`.
+When backend work changes a trust boundary, also use `security-expert`. For latency, database/query cost, payload size, concurrency, cache efficiency, background jobs, integrations, capacity, or resource-exhaustion concerns, follow `.agents/skills/backend-expert/references/performance-and-scalability.md` and preserve every security invariant while optimizing. When backend work includes React component, styling, accessibility, frontend performance, or motion work, also use `frontend-expert`.
 
-For any project-owned endpoint, account/authentication flow, private object/user/tenant access, mutation, upload, integration, or dependency change, both backend and security must read `.agents/security-expert/references/common-ai-backend-security-failures.md`. Every private object contract must prove that changing an ID, slug, UUID, filename, parent reference, or other locator from user A's resource to user B's does not grant access through detail, list, nested, bulk, cache, download, update, or delete paths. Every mutation must use an explicit writable-field map and prove that protected/unknown fields cannot cause role escalation or mass assignment.
+For any project-owned endpoint, account/authentication flow, private object/user/tenant access, mutation, upload, integration, or dependency change, both backend and security must read `.agents/skills/security-expert/references/common-ai-backend-security-failures.md`. Every private object contract must prove that changing an ID, slug, UUID, filename, parent reference, or other locator from user A's resource to user B's does not grant access through detail, list, nested, bulk, cache, download, update, or delete paths. Every mutation must use an explicit writable-field map and prove that protected/unknown fields cannot cause role escalation or mass assignment.
 
 ## Form fields and submissions
 
-For any user-editable field that is submitted or persisted, load both `frontend-expert` and `backend-expert`, plus `security-expert` for the trust boundary, and follow `.agents/backend-expert/references/form-field-contracts.md`. Maintain one authoritative versioned field contract covering visible/editing format, allowed characters and positions, required/empty behavior, limits, locale assumptions, transport grammar, canonical value, backend validation/normalization, accessible errors, sensitivity, and shared fixtures. Backend is the default custodian; frontend and backend approve the same revision.
+For any user-editable field that is submitted or persisted, load both `frontend-expert` and `backend-expert`, plus `security-expert` for the trust boundary, and follow `.agents/skills/backend-expert/references/form-field-contracts.md`. Maintain one authoritative versioned field contract covering visible/editing format, allowed characters and positions, required/empty behavior, limits, locale assumptions, transport grammar, canonical value, backend validation/normalization, accessible errors, sensitivity, and shared fixtures. Backend is the default custodian; frontend and backend approve the same revision.
 
 Frontend must apply the approved field behavior to every input path, including typing, paste, autofill, mobile and assistive input, while preserving accessible editing and leaving values such as passwords untouched when their contract requires it. Backend must independently reject invalid direct requests and produce the documented canonical value. Client filtering, masks, native input types, patterns, and React validation are usability controls, never substitutes for server validation, authorization, CSRF protection, normalization, or output escaping.
 
@@ -64,11 +64,11 @@ Frontend must apply the approved field behavior to every input path, including t
 
 For any task that plans, creates, enriches, optimizes, audits, or implements website content and SEO, load and follow:
 
-- `.agents/content-seo-expert/SKILL.md`
+- `.agents/skills/content-seo-expert/SKILL.md`
 
 This includes audience and search intent, content strategy and briefs, page copy, enriched editorial modules, information architecture, internal links, titles and descriptions, Open Graph/social previews, canonical/hreflang/robots recommendations, entities, Schema.org/JSON-LD, content measurement, and work with the bundled `reactwp-seo` plugin.
 
-Visible content must be designed in tandem with `frontend-expert` using `.agents/content-seo-expert/references/editorial-composition-and-frontend-tandem.md`. Content is not complete until its hierarchy, real length and edge variants, typography, text-media relationship, responsive behavior, and rendered reading journey have been reviewed jointly.
+Visible content must be designed in tandem with `frontend-expert` using `.agents/skills/content-seo-expert/references/editorial-composition-and-frontend-tandem.md`. Content is not complete until its hierarchy, real length and edge variants, typography, text-media relationship, responsive behavior, and rendered reading journey have been reviewed jointly.
 
 Use `content-seo-expert` to define the editorial and SEO contract. Also use `backend-expert` for WordPress/ACF fields, plugin/PHP hooks, route or headless payloads, sitemaps, and migrations; use `frontend-expert` for rendered semantics, editorial components, responsive layouts, accessible media, and route-aware metadata/schema behavior; use `security-expert` for raw HTML, head/URL/JSON-LD output, public data, permissions, or other trust boundaries. Read only the references routed by each skill.
 
@@ -76,7 +76,7 @@ Use `content-seo-expert` to define the editorial and SEO contract. Also use `bac
 
 For any task that creates, changes, reviews, or debugs a trust boundary, load and follow:
 
-- `.agents/security-expert/SKILL.md`
+- `.agents/skills/security-expert/SKILL.md`
 
 This includes input handling, PHP or React output, raw/rich HTML, URLs, REST routes, permissions, nonces, authentication, previews, CORS, database queries, uploads, filesystem access, external requests, SSR/static rendering, public/private caches, security headers, secrets, dependencies, and deployment configuration.
 
@@ -90,7 +90,7 @@ Do not accept AI-generated security-sensitive backend code from appearance, a bu
 
 For any final QA, release-readiness check, compliance review, regression audit, or request to verify that the expert skills were fully respected, load and follow:
 
-- `.agents/quality-assurance-expert/SKILL.md`
+- `.agents/skills/quality-assurance-expert/SKILL.md`
 
 The QA skill must evaluate `frontend-expert`, `backend-expert`, `security-expert`, and `content-seo-expert` for every audit, then read all supporting references routed by the affected behavior. It may declare `100% compliant with applicable verified requirements` only when every applicable documented requirement has direct passing evidence and no applicable area remains failed or unverified. A successful build, test suite, visual impression, or agent assertion alone is insufficient.
 
