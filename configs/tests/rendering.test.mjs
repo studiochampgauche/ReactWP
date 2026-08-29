@@ -67,24 +67,46 @@ const freePort = async () => {
 
 test('server bundle renders a registered React template', async () => {
     const renderer = require(rendererPath);
+    const templateManifest = renderer.getTemplateManifest();
     const result = await renderer.render(bootstrap(createRoute('/', 1)));
 
+    assert.equal(templateManifest.HomeTemplate.assetKey, 'Default');
     assert.equal(result.template, 'Default');
     assert.match(result.html, /Static home/);
     assert.match(result.html, /app-shell__body/);
+    assert.equal((result.html.match(/<h1\b/g) || []).length, 1);
+    assert.doesNotMatch(result.html, /<main\b/);
     assert.ok(result.tags.includes('post:1'));
 });
 
 test('rich text rendering removes executable markup and unsafe URLs', async () => {
     const renderer = require(rendererPath);
     const route = createRoute('/', 1);
-    route.data.hero_intro = '<strong>Safe</strong><script>alert(1)</script><a href="javascript:alert(2)" onclick="alert(3)">Link</a>';
+    route.data.hero_intro = '<h1>Extra title</h1><strong>Safe</strong><script>alert(1)</script><a href="javascript:alert(2)" onclick="alert(3)">Link</a>';
     const result = await renderer.render(bootstrap(route));
 
     assert.match(result.html, /<strong>Safe<\/strong>/);
+    assert.equal((result.html.match(/<h1\b/g) || []).length, 1);
+    assert.doesNotMatch(result.html, /Extra title/);
     assert.doesNotMatch(result.html, /<script/i);
     assert.doesNotMatch(result.html, /javascript:/i);
     assert.doesNotMatch(result.html, /onclick/i);
+});
+
+test('server bundle renders the 404 recovery template and escapes the requested path', async () => {
+    const renderer = require(rendererPath);
+    const route = createRoute('/missing/<script>/', 404);
+    route.template = 'NotFound';
+    route.is404 = true;
+    const result = await renderer.render(bootstrap(route));
+
+    assert.equal(result.template, 'NotFound');
+    assert.match(result.html, /No page/);
+    assert.match(result.html, /Back home/);
+    assert.equal((result.html.match(/<h1\b/g) || []).length, 1);
+    assert.doesNotMatch(result.html, /<main\b/);
+    assert.match(result.html, /\/missing\/&lt;script&gt;\//);
+    assert.doesNotMatch(result.html, /<script>/i);
 });
 
 test('static generator writes route fragments and a keyed manifest', async (context) => {

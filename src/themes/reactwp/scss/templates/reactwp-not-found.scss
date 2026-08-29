@@ -1,0 +1,92 @@
+.reactwp-not-found{
+    --rwp-white:#fff;
+    --rwp-black:#050505;
+    --rwp-muted:#686868;
+    --rwp-gutter:clamp(1rem,3.5vw,3.75rem);
+    --rwp-width:86rem;
+    --rwp-body:Arial,"Helvetica Neue",Helvetica,sans-serif;
+    --rwp-mono:ui-monospace,"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+    min-height:100vh;
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    overflow-x:clip;
+    color:var(--rwp-black);
+    font-family:var(--rwp-body);
+    font-size:1rem;
+    font-weight:400;
+    line-height:1.55;
+    background:var(--rwp-white);
+}
+
+.reactwp-not-found *,
+.reactwp-not-found *::before,
+.reactwp-not-found *::after{box-sizing:border-box}
+.reactwp-not-found :where(h1,p){margin:0}
+.reactwp-not-found :where(a){color:inherit}
+.reactwp-not-found :where(a,button):focus-visible{outline:.2rem solid var(--rwp-white);outline-offset:.2rem;box-shadow:0 0 0 .42rem var(--rwp-black)}
+.reactwp-not-found .reactwp-shell{width:min(calc(100% - (2 * var(--rwp-gutter))),var(--rwp-width));margin-inline:auto}
+
+.reactwp-not-found .reactwp-wordmark{width:clamp(8.75rem,13vw,11.75rem);min-height:2.75rem;display:inline-flex;align-items:center}
+.reactwp-not-found .reactwp-wordmark img{width:100%;height:auto;display:block}
+.reactwp-not-found__header{flex:0 0 auto;border-bottom:2px solid var(--rwp-black)}
+.reactwp-not-found__header-inner{min-height:5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem 2rem}
+.reactwp-not-found__header-inner > a:last-child,.reactwp-not-found__documentation{min-height:2.75rem;display:inline-flex;align-items:center;font-size:.88rem;font-weight:600;text-underline-offset:.28em}
+
+.reactwp-not-found__main{flex:1 0 auto;display:flex}
+.reactwp-not-found__layout{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(18rem,.72fr);align-items:center;gap:clamp(3rem,9vw,9rem);padding-block:clamp(4rem,9vw,8rem)}
+.reactwp-not-found__content{min-width:0}
+.reactwp-not-found__error{font-size:.76rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.reactwp-not-found__content h1{max-width:13ch;margin-block-start:1.2rem;font-size:clamp(2.75rem,4.8vw,4rem);font-weight:600;letter-spacing:-.052em;line-height:1;overflow-wrap:anywhere;text-wrap:balance}
+.reactwp-not-found__content h1 span{display:inline;padding:.01em .13em .055em;border-radius:.16em;color:var(--rwp-white);background:var(--rwp-black);box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.reactwp-not-found__lead{max-width:42rem;margin-block-start:clamp(1.45rem,3vw,2.1rem);color:var(--rwp-muted);font-size:clamp(1.05rem,1.5vw,1.2rem);line-height:1.58}
+
+.reactwp-not-found__path{min-width:0;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:baseline;gap:.65rem 1.25rem;max-width:44rem;margin-block-start:clamp(2rem,4vw,3rem);padding-block:1rem;border-block:2px solid var(--rwp-black)}
+.reactwp-not-found__path > span{color:var(--rwp-muted);font-size:.72rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+.reactwp-not-found__path code{min-width:0;font-family:var(--rwp-mono);font-size:.82rem;line-height:1.55;overflow-wrap:anywhere;word-break:break-word}
+.reactwp-not-found__actions{display:flex;flex-wrap:wrap;align-items:center;gap:.65rem 1.4rem;margin-block-start:clamp(2rem,4vw,3rem)}
+
+.reactwp-not-found .button{min-height:2.75rem;display:inline-flex;align-items:center;justify-content:center;padding:.72rem 1.05rem;color:var(--rwp-black);font-family:var(--rwp-body);font-size:.9rem;font-weight:600;line-height:1.15;text-align:center;text-decoration:none;border:2px solid currentColor;border-radius:.75rem;background:transparent;cursor:pointer;transition:opacity .16s ease,transform .16s ease}
+.reactwp-not-found .button__before,.reactwp-not-found .button__text,.reactwp-not-found .button__after{display:inline-flex;align-items:center}
+.reactwp-not-found .button--primary{color:var(--rwp-white);border-color:var(--rwp-black);background:var(--rwp-black)}
+.reactwp-not-found .button--text{min-height:2.75rem;padding-inline:.15rem;border:0;border-radius:0;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.28em}
+
+.reactwp-not-found__signal{position:relative;width:min(100%,30rem);aspect-ratio:1;justify-self:end;display:grid;place-items:center;pointer-events:none}
+.reactwp-not-found__signal img{position:absolute;width:112%;height:auto;opacity:.055;transform:rotate(-7deg)}
+.reactwp-not-found__signal strong{position:relative;padding:.18em .28em;border-radius:.16em;color:var(--rwp-white);font-size:clamp(2.5rem,7vw,4rem);font-weight:600;letter-spacing:-.065em;line-height:1;background:var(--rwp-black)}
+.reactwp-not-found__signal span{position:absolute;inset:auto 0 0;font-size:.68rem;font-weight:600;letter-spacing:.08em;text-align:center;text-transform:uppercase}
+
+@media (hover:hover) and (pointer:fine){
+    .reactwp-not-found :where(.button,.reactwp-not-found__documentation,.reactwp-not-found__header-inner > a:last-child):hover{opacity:.42}
+    .reactwp-not-found .button:hover{transform:translateY(-1px)}
+}
+
+@media (max-width:52rem){
+    .reactwp-not-found__layout{grid-template-columns:1fr;align-items:start}
+    .reactwp-not-found__signal{width:min(100%,34rem);justify-self:start}
+}
+
+@media (max-width:36rem){
+    .reactwp-not-found__header-inner{min-height:4.5rem}
+    .reactwp-not-found .reactwp-wordmark{width:7.75rem}
+    .reactwp-not-found__header-inner > a:last-child{font-size:.8rem}
+    .reactwp-not-found__content h1{font-size:clamp(2.5rem,13vw,3.45rem)}
+    .reactwp-not-found__path{grid-template-columns:1fr;gap:.45rem}
+    .reactwp-not-found__actions{align-items:stretch;flex-direction:column}
+    .reactwp-not-found__actions .button,.reactwp-not-found__actions .reactwp-not-found__documentation{width:100%;justify-content:center}
+}
+
+@media (max-height:42rem) and (min-width:52.01rem){
+    .reactwp-not-found__layout{align-items:start;padding-block:3rem}
+    .reactwp-not-found__signal{width:min(100%,21rem)}
+}
+
+@media (prefers-reduced-motion:reduce){
+    .reactwp-not-found *,.reactwp-not-found *::before,.reactwp-not-found *::after{transition-duration:.01ms!important}
+}
+
+@media (forced-colors:active){
+    .reactwp-not-found :where(a,button):focus-visible{outline-color:Highlight;box-shadow:none}
+    .reactwp-not-found__header,.reactwp-not-found__path{border-color:CanvasText}
+    .reactwp-not-found__signal img{display:none}
+}

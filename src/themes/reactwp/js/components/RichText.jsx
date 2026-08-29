@@ -107,27 +107,43 @@ const safeAttributes = (tag, attributes = {}) => {
     return props;
 };
 
-const options = {
-    replace(domNode){
-        if(!(domNode instanceof Element)){
-            return undefined;
-        }
-
-        const tag = String(domNode.name || '').toLowerCase();
-
-        if(!ALLOWED_TAGS.has(tag)){
-            return <></>;
-        }
-
-        return createElement(
-            tag,
-            safeAttributes(tag, domNode.attribs),
-            VOID_TAGS.has(tag) ? undefined : domToReact(domNode.children, options)
-        );
+const normalizeAllowedTags = (allowedTags) => {
+    if(!Array.isArray(allowedTags)){
+        return ALLOWED_TAGS;
     }
+
+    return new Set(allowedTags.slice(0, ALLOWED_TAGS.size).map((value) => {
+        return String(value || '').toLowerCase();
+    }).filter((tag) => ALLOWED_TAGS.has(tag)));
 };
 
-const RichText = ({ value, className = '' }) => {
+const createOptions = (allowedTags) => {
+    const options = {
+        replace(domNode){
+            if(!(domNode instanceof Element)){
+                return undefined;
+            }
+
+            const tag = String(domNode.name || '').toLowerCase();
+
+            if(!allowedTags.has(tag)){
+                return <></>;
+            }
+
+            return createElement(
+                tag,
+                safeAttributes(tag, domNode.attribs),
+                VOID_TAGS.has(tag) ? undefined : domToReact(domNode.children, options)
+            );
+        }
+    };
+
+    return options;
+};
+
+const defaultOptions = createOptions(ALLOWED_TAGS);
+
+const RichText = ({ value, className = '', allowedTags = null }) => {
     if(!value){
         return null;
     }
@@ -139,6 +155,10 @@ const RichText = ({ value, className = '' }) => {
     if(value.length > MAX_HTML_BYTES){
         return null;
     }
+
+    const options = allowedTags === null
+        ? defaultOptions
+        : createOptions(normalizeAllowedTags(allowedTags));
 
     return <div className={className}>{parse(value, options)}</div>;
 };
