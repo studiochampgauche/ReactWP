@@ -50,6 +50,7 @@
     "test:server-security": "node ./scripts/run-php-tests.mjs ./tests/server-renderer-security.test.php",
     "test:static-regenerator": "node ./scripts/run-php-tests.mjs ./tests/static-regenerator.test.php",
     "test:firstload": "node ./scripts/run-php-tests.mjs ./tests/firstload.test.php",
+    "test:seo-route-language": "node ./scripts/run-php-tests.mjs ./tests/seo-route-language.test.php",
     "test:security": "node ./scripts/run-php-tests.mjs && node --test ./tests/get-core-security.test.mjs",
     "report:themes": "node ./scripts/report-bundle-sizes.mjs",
     "prod:plugins": "webpack --mode production --config webpack.plugins.config.js",

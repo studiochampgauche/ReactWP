@@ -17,7 +17,8 @@ const tests = requestedTests.length ? requestedTests : [
   './tests/render-cache.test.php',
   './tests/server-renderer-security.test.php',
   './tests/static-regenerator.test.php',
-  './tests/firstload.test.php'
+  './tests/firstload.test.php',
+  './tests/seo-route-language.test.php'
 ];
 const candidates = [process.env.PHP_BINARY, 'php'].filter(Boolean);
 

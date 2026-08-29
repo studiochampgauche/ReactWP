@@ -399,6 +399,10 @@ class Seo{
 
         $route = self::route($context);
 
+        if(self::has_value($route['lang'] ?? null)){
+            return $route['lang'];
+        }
+
         if(self::has_value($route['language'] ?? null)){
             return $route['language'];
         }
