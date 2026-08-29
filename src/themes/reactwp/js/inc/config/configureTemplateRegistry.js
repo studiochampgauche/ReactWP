@@ -24,6 +24,7 @@ export const configureTemplateRegistry = () => {
 
     registerTemplate('HomeTemplate', {
         loader: () => import('../../templates/Default'),
-        render: 'static'
+        render: 'static',
+        assetKey: 'Default'
     });
 };

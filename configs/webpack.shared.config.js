@@ -118,6 +118,36 @@ class EntrypointManifestPlugin {
   }
 }
 
+export const collectModuleResources = (module) => {
+  const resources = new Set();
+  const visited = new Set();
+  const visit = (candidate) => {
+    if(!candidate || visited.has(candidate)){
+      return;
+    }
+
+    visited.add(candidate);
+
+    if(candidate.resource){
+      resources.add(String(candidate.resource).replace(/\\/g, '/'));
+    }
+
+    if(candidate.rootModule){
+      visit(candidate.rootModule);
+    }
+
+    if(candidate.modules && typeof candidate.modules[Symbol.iterator] === 'function'){
+      for(const nestedModule of candidate.modules){
+        visit(nestedModule);
+      }
+    }
+  };
+
+  visit(module);
+
+  return [...resources];
+};
+
 class TemplateAssetsManifestPlugin {
   constructor(items){
     this.items = items;
@@ -144,32 +174,34 @@ class TemplateAssetsManifestPlugin {
               }
 
               for(const module of compilation.chunkGraph.getChunkModulesIterable(chunk)){
-                const resource = String(module.resource || '').replace(/\\/g, '/');
                 const marker = `/themes/${itemName}/js/templates/`;
-                const markerIndex = resource.indexOf(marker);
 
-                if(markerIndex < 0 || !/\.jsx?$/.test(resource)){
-                  continue;
+                for(const resource of collectModuleResources(module)){
+                  const markerIndex = resource.indexOf(marker);
+
+                  if(markerIndex < 0 || !/\.jsx?$/.test(resource)){
+                    continue;
+                  }
+
+                  const relativeTemplate = resource.slice(markerIndex + marker.length).replace(/\.jsx?$/, '');
+                  const assetKey = path.posix.basename(relativeTemplate);
+                  const prefix = `${itemName}/`;
+                  const normalizedFiles = files.map((filename) => {
+                    return filename.startsWith(prefix) ? filename.slice(prefix.length) : filename;
+                  });
+                  const current = templates[assetKey] || { scripts: [], styles: [] };
+
+                  templates[assetKey] = {
+                    scripts: [...new Set([
+                      ...current.scripts,
+                      ...normalizedFiles.filter((filename) => filename.endsWith('.js'))
+                    ])],
+                    styles: [...new Set([
+                      ...current.styles,
+                      ...normalizedFiles.filter((filename) => filename.endsWith('.css'))
+                    ])]
+                  };
                 }
-
-                const relativeTemplate = resource.slice(markerIndex + marker.length).replace(/\.jsx?$/, '');
-                const assetKey = path.posix.basename(relativeTemplate);
-                const prefix = `${itemName}/`;
-                const normalizedFiles = files.map((filename) => {
-                  return filename.startsWith(prefix) ? filename.slice(prefix.length) : filename;
-                });
-                const current = templates[assetKey] || { scripts: [], styles: [] };
-
-                templates[assetKey] = {
-                  scripts: [...new Set([
-                    ...current.scripts,
-                    ...normalizedFiles.filter((filename) => filename.endsWith('.js'))
-                  ])],
-                  styles: [...new Set([
-                    ...current.styles,
-                    ...normalizedFiles.filter((filename) => filename.endsWith('.css'))
-                  ])]
-                };
               }
             }
 
