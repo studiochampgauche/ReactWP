@@ -2,6 +2,57 @@
 
 This file tracks notable project-level changes for `reactwp`.
 
+## 2026-08-29
+
+### Added
+
+- `AppLink` and link-rendering `Button` instances can now set `updateHash={false}` to scroll to a same-page anchor without adding its hash to the URL.
+
+### Changed
+
+- Redesigned the shipped `Default` and `NotFound` screens as a compact black-and-white editorial experience with lighter typography, direct setup guidance, responsive accessible styling, and the supplied official ReactWP mark and wordmark instead of reconstructed brand graphics.
+- Added repository-local expert workflows and tightened the frontend guidance so display titles stay proportionate to the available viewport instead of defaulting to extra-bold typography.
+- Refreshed the pinned frontend and build toolchain after a full `npm-check-updates` review: CSS Loader 7.1.5, html-react-parser 6.1.7, React Router 8.3.1, Sass 1.103.1, Sharp 0.35.4, SVGO 4.1.0, Webpack 5.110.1, and Webpack CLI 7.2.3.
+
+### Fixed
+
+- Removed obsolete SVGO `removeViewBox` preset overrides after the SVGO 4 update; the default preset now preserves responsive SVG view boxes without warnings.
+- Template asset discovery now traverses concatenated Webpack modules so registry aliases keep the correct scripts and styles.
+
+## 2026-08-19
+
+### Added
+
+- Added exact documentation for all six bundled WordPress plugins, the callable PHP runtime surface, headless endpoint inputs/statuses/limits, current ACF settings fields, response headers, generated core hardening, and raw-HTML rendering boundaries.
+- Added a focused regression proving that the SEO plugin resolves the canonical `route.lang` value while retaining its legacy `route.language` fallback.
+
+### Changed
+
+- Re-audited the authored PHP, React, SCSS, build scripts, configuration, tests, package manifests, documentation, and repository skills against the current source contracts.
+- Clarified that `html-react-parser` is reserved for node transformation, while unchanged trusted and backend-sanitized HTML may use an explicit `dangerouslySetInnerHTML` boundary; neither rendering path sanitizes input.
+- Corrected SSR development-exception wording: the explicit dual opt-in permits a missing or shorter loopback secret, not only an empty secret.
+
+### Fixed
+
+- The bundled SEO plugin now reads `route.lang`, the canonical normalized route language field, before the older `route.language` compatibility field.
+
+## 2026-08-13
+
+### Changed
+
+- `AppLink` now forwards refs to its rendered anchor for internal routes, local anchors, and external links.
+
+## 2026-08-12
+
+### Changed
+
+- `window.loader.init` now keeps one stable Promise for the complete initial loader lifecycle, and `Loader.whenInitialLoadDone()` exposes the same lifecycle without starting or replaying an animation.
+- Loader animations that explicitly access `done` now control their own completion; returned GSAP timelines and Promises retain automatic completion only when `done` is not requested.
+
+### Fixed
+
+- Prevented template effects from observing the loader state's initial already-resolved placeholder before the real first-load Promise was assigned.
+
 ## 2026-08-04
 
 ### Added
