@@ -205,7 +205,7 @@ The production pipeline builds WordPress targets, minifies and splits theme asse
 
 Deploy `dist/` as the WordPress document root. A normal PHP WordPress server is enough for `client` and `static` templates. Start the optional render service only for templates configured with `render: 'server'` or runtime static regeneration.
 
-The SSR service and WordPress must share an `RWP_SSR_SECRET` of at least 32 characters, including on loopback. Secretless loopback is available only in local/development environments when both `RWP_SSR_ALLOW_INSECURE_LOOPBACK=1` and `rwp_ssr_allow_insecure_loopback` are explicitly enabled. Remote SSR additionally requires HTTPS and `rwp_ssr_allow_remote_endpoint`. SSR responses with query parameters are cached only when every key is explicitly listed through `rwp_ssr_cache_query_keys`; the default list is empty.
+The SSR service and WordPress must share an `RWP_SSR_SECRET` of at least 32 characters, including on loopback. A missing or shorter loopback secret is accepted only in local/development environments when both `RWP_SSR_ALLOW_INSECURE_LOOPBACK=1` and `rwp_ssr_allow_insecure_loopback` are explicitly enabled. Remote SSR additionally requires HTTPS and `rwp_ssr_allow_remote_endpoint`. SSR responses with query parameters are cached only when every key is explicitly listed through `rwp_ssr_cache_query_keys`; the default list is empty.
 
 Static generation keeps its output inside the ReactWP project by default. `RWP_SSG_ALLOW_EXTERNAL_OUTPUT=1` is an explicit escape hatch for a reviewed deployment path, not a normal requirement.
 
