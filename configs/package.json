@@ -39,7 +39,7 @@
     "prod:render": "webpack --mode production --config webpack.render.config.js",
     "generate": "node ./scripts/generate-static.mjs",
     "serve:ssr": "node ../dist/wp-content/themes/reactwp/assets/render/serve.mjs",
-    "test:render": "npm run build:render && node --test ./tests/rendering.test.mjs",
+    "test:render": "npm run build:render && node --test ./tests/rendering.test.mjs ./tests/animation-lifecycle.test.mjs ./tests/template-assets-manifest.test.mjs",
     "test:rest-access": "node ./scripts/run-php-tests.mjs ./tests/rest-access.test.php",
     "test:headless-api-security": "node ./scripts/run-php-tests.mjs ./tests/headless-api-security.test.php",
     "test:route-visibility": "node ./scripts/run-php-tests.mjs ./tests/route-visibility.test.php",
