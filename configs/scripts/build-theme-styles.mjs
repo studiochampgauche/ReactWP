@@ -41,14 +41,7 @@ const optimizeImage = async (input, extension, assetPath) => {
       return Buffer.from(optimizeSvg(input.toString('utf8'), {
         path: assetPath,
         multipass: true,
-        plugins: [{
-          name: 'preset-default',
-          params: {
-            overrides: {
-              removeViewBox: false
-            }
-          }
-        }]
+        plugins: ['preset-default']
       }).data);
     default:
       return input;
