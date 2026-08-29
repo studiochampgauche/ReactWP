@@ -52,11 +52,15 @@ const waitForHashTarget = async (hash, attempts = 8) => {
         await waitForFrame();
     }
 
-    return 0;
+    return null;
 };
 
 const scrollToRouteTarget = async (hash, smooth = false, attempts = 8) => {
     const target = await waitForHashTarget(hash, attempts);
+
+    if(target === null){
+        return;
+    }
 
     window.gscroll?.paused?.(false);
     scroller.refresh();

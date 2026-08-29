@@ -13,6 +13,11 @@ export const useInternalNavigation = (navigate) => {
                 return;
             }
 
+            if(anchor?.getAttribute('href')?.trim() === '#'){
+                event.preventDefault();
+                return;
+            }
+
             if(
                 !anchor
                 || anchor.dataset.router === 'false'

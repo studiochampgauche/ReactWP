@@ -64,6 +64,7 @@ const Button = ({
     children,
     className = '',
     variant = 'primary',
+    updateHash = true,
     ...props
 }) => {
     const requestedDestination = to || href;
@@ -106,7 +107,13 @@ const Button = ({
     }
 
     return (
-        <AppLink {...domProps} className={classes} to={destination} target={target}>
+        <AppLink
+            {...domProps}
+            className={classes}
+            to={destination}
+            target={target}
+            updateHash={updateHash}
+        >
             {content}
         </AppLink>
     );

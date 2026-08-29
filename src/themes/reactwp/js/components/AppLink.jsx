@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { Link } from 'react-router';
 import { normalizePath, normalizeSearch } from '../inc/Runtime';
 import { sanitizeDomProps } from '../inc/domProps';
@@ -87,24 +88,53 @@ const getLocalHash = (href = '') => {
 };
 
 const resolveHashTarget = (hash) => {
-    if(hash === '#'){
-        return 0;
-    }
-
-    return getHashElement(hash) ? hash : 0;
+    return getHashElement(hash) ? hash : null;
 };
 
-const scrollToHash = (hash, target = resolveHashTarget(hash)) => {
+const waitForFrame = () => new Promise((resolve) => requestAnimationFrame(resolve));
+
+const waitForHashTarget = async (hash, attempts = 8) => {
+    for(let attempt = 0; attempt <= attempts; attempt += 1){
+        const target = resolveHashTarget(hash);
+
+        if(target !== null){
+            return target;
+        }
+
+        if(attempt < attempts){
+            await waitForFrame();
+        }
+    }
+
+    return null;
+};
+
+const scrollToHash = (hash) => {
     requestAnimationFrame(() => {
-        import('../inc/Scroller').then(({ scroller }) => {
+        import('../inc/Scroller').then(async ({ scroller }) => {
+            const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches === true;
+            const target = await waitForHashTarget(hash);
+
+            if(target === null){
+                return;
+            }
+
             window.gscroll?.paused?.(false);
             scroller.refresh();
-            scroller.scrollTo(target, true);
+            scroller.scrollTo(target, !reduceMotion);
         });
     });
 };
 
-const AppLink = ({ to = '/', onMouseEnter, onFocus, onClick, children, ...props }) => {
+const AppLink = forwardRef(function AppLink({
+    to = '/',
+    updateHash = true,
+    onMouseEnter,
+    onFocus,
+    onClick,
+    children,
+    ...props
+}, ref){
     const requestedHref = resolveHref(to);
     const href = isSafeHref(requestedHref) ? requestedHref : '/';
     const destination = href === requestedHref ? to : '/';
@@ -131,10 +161,16 @@ const AppLink = ({ to = '/', onMouseEnter, onFocus, onClick, children, ...props 
 
         return (
             <a
+                ref={ref}
                 {...domProps}
                 href={href}
                 onClick={(event) => {
                     onClick?.(event);
+
+                    if(localHash === '#'){
+                        event.preventDefault();
+                        return;
+                    }
 
                     if(
                         !localHash
@@ -146,13 +182,11 @@ const AppLink = ({ to = '/', onMouseEnter, onFocus, onClick, children, ...props 
 
                     event.preventDefault();
 
-                    const target = resolveHashTarget(localHash);
-
-                    if(window.location.hash !== localHash){
+                    if(updateHash && window.location.hash !== localHash){
                         window.history.pushState(null, '', localHash);
                     }
 
-                    scrollToHash(localHash, target);
+                    scrollToHash(localHash);
                 }}
                 onMouseEnter={onMouseEnter}
                 onFocus={onFocus}
@@ -166,6 +200,7 @@ const AppLink = ({ to = '/', onMouseEnter, onFocus, onClick, children, ...props 
 
     return (
         <Link
+            ref={ref}
             {...domProps}
             to={destination}
             onMouseEnter={(event) => {
@@ -181,6 +216,6 @@ const AppLink = ({ to = '/', onMouseEnter, onFocus, onClick, children, ...props 
             {children}
         </Link>
     );
-};
+});
 
 export default AppLink;

@@ -13,14 +13,14 @@ const prefersReducedMotion = () => {
 
 const resolveTarget = (target) => {
     if(target == null){
-        return 0;
+        return null;
     }
 
     if(typeof target === 'string' || typeof target === 'number'){
         return target;
     }
 
-    return 0;
+    return null;
 };
 
 const SCROLL_KEYS = new Set([
@@ -145,6 +145,10 @@ export const scroller = {
     },
     scrollTo(target, smooth = true){
         const nextTarget = resolveTarget(target);
+
+        if(nextTarget === null){
+            return;
+        }
 
         if(window.gscroll){
             window.gscroll.scrollTo(nextTarget, smooth);
