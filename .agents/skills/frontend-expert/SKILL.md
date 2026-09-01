@@ -16,6 +16,7 @@ Create distinctive, maintainable interfaces that fit ReactWP's runtime and the p
 - Make responsive behavior intentional across content, layout, type, media, input, and motion. Test width and usable height, including zoom, text enlargement, mobile browser chrome, long CMS copy, and translated content.
 - Keep semantic structure, keyboard access, visible focus, touch targets, readable contrast, reduced motion, and accessible states in the implementation from the start.
 - Treat display size and weight as hierarchy tools, not automatic spectacle. Do not default to viewport-filling, ultra-heavy titles when measure, spacing, color, or composition can create clearer emphasis.
+- Pass a static 2D composition gate before adding elaborate motion, canvas, WebGL, or 3D. The unanimated desktop and mobile frames must already have a clear hierarchy, useful first viewport, intentional whitespace, credible media rhythm, and a complete path to the primary action. Effects may deepen a strong composition; they must not rescue a weak one or fill unexplained empty space. Use canvas, WebGL, or 3D only when the brief, real subject matter, supplied asset, or inspected reference clearly earns that medium.
 - Treat fixed, sticky, and pinned behavior as a viewport-fit contract. If essential content cannot fit or become fully reachable, recompose or disable the behavior; do not conceal it with clipping, inaccessible nested scrolling, or indiscriminate type shrinking.
 - Use CSS for simple state transitions and GSAP when sequencing, interruption, scroll linkage, or lifecycle control warrants it. Follow the routed GSAP reference rather than guessing cleanup or pin behavior.
 - Treat first paint, critical fonts/media, loader completion, route readiness, failure, interruption, and reduced motion as one lifecycle. Never add a theatrical delay or a page-local loader to hide an incorrect asset graph.
@@ -39,6 +40,10 @@ When a user supplies a live site, screenshot, moodboard, or art direction, read 
 - **Component-level:** inspect the component, its immediate layout context, meaningful variants, input states, and responsive/interaction behavior; do not inventory an unrelated site.
 
 Record relevant `UNVERIFIED` states and refresh evidence when the reference or affected scope changed. Derive principles, not protected assets or a copied composition. For reference-led work, use only the influence-map rows, device ledger, baseline/delta evidence, media planning, and genericity checks applicable to the selected scope.
+
+Lock a small reference set before design hardens. Designate one primary reference whose system resolves conflicts, and give every secondary reference one or two bounded roles. Do not keep browsing for more visual permission after the active set is sufficient or user-locked. A reference's information architecture is not automatically transferable: a one-page portfolio can inform type, media, spacing, hover, and scroll behavior without turning a multi-page product, editorial site, or application into a one-pager.
+
+For redesigns, keep a user-feedback ledger next to the visual delta ledger. Translate every explicit `keep`, `remove`, `rebuild`, and `add` statement into a rendered acceptance condition. When the user says only named areas succeeded, preserve those areas as constraints and structurally rebuild the rest; a new palette, radius, copy pass, or animation timing is not a rebuild.
 
 ## Reference Router
 
@@ -86,10 +91,11 @@ Read only what the current task needs.
 1. Define the page/component job, audience, content hierarchy, success state, delivery/rendering modes, and constraints.
 2. Inspect the closest producer, payload, template, style, lifecycle, and tests; settle any shared field or editorial contract before implementation hardens.
 3. When references are active, select and document the proportional reconnaissance scope, then convert relevant evidence into an influence map. For an existing interface, capture matching baseline and delta evidence.
-4. Define a compact content, container, type, media, action, state, and motion grammar. Prefer structures justified by real content and project/reference evidence; use cards, labels, indices, panels, and graphics only where they earn their role.
-5. Build semantic React first, responsive composition second, then interaction and motion. Integrate through existing ReactWP lifecycle contracts.
-6. Exercise real, short, long, empty, translated, loading, error, focus, touch, reduced-motion, and constrained-height states proportional to the changed behavior.
-7. Run the smallest sufficient build, tests, and runtime/visual checks. Revisit any evidence invalidated by the implementation.
+4. Before layout hardens, define a primary-carrier map for every major section and verify the page-level rhythm includes the intended mix of text-led, media-supported, media-led or full-width, and deliberately quiet moments. If assets are missing, reserve honest project-specific media slots rather than silently collapsing the experience into text or inventing substitute art.
+5. Define a compact content, container, type, media, action, state, and motion grammar. Prefer structures justified by real content and project/reference evidence; use cards, labels, indices, panels, and graphics only where they earn their role.
+6. Build semantic React and the responsive static composition first. Capture the representative desktop and mobile frames and redesign any weak hierarchy, cramped hero, forgotten media, or incomplete first viewport before adding interaction and motion. Then integrate motion through existing ReactWP lifecycle contracts.
+7. Exercise real, short, long, empty, translated, loading, error, focus, touch, reduced-motion, and constrained-height states proportional to the changed behavior.
+8. Run the smallest sufficient build, tests, and runtime/visual checks. Revisit any evidence invalidated by the implementation.
 
 ## Verification
 

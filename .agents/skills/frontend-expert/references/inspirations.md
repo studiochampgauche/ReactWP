@@ -41,7 +41,9 @@ Treat reference evidence as scoped, not transferable by mere resemblance. Seeing
 | Responsive transformation | The local mobile/touch behavior follows an observed principle or a documented accessible adaptation | Desktop behavior is simply compressed or its evidence is assumed to cover mobile |
 | Whole-page proportion | The decision preserves the reference's balance among open space, text, media, surfaces, and controls | A rare reference device becomes the dominant page grammar |
 
-Choose a small set of driving references by area instead of treating all inspected sites as one bag of motifs. Contradictory evidence is resolved by the project's content and primary job, not by selecting whichever screenshot permits a preferred component. Record inference separately from observation. If the only support is that a device exists on an unrelated page, role, or state, mark it unsupported.
+Choose a small set of driving references by area instead of treating all inspected sites as one bag of motifs. Name one primary reference whose system resolves contradictions and restrict each secondary reference to one or two explicit roles. Stop expanding the pool when the active set is sufficient or the user has locked it. Contradictory evidence is resolved by the project's content, primary job, and primary reference—not by selecting whichever screenshot permits a preferred component. Record inference separately from observation. If the only support is that a device exists on an unrelated page, role, or state, mark it unsupported.
+
+Do not inherit information architecture by visual association. A one-page reference, case-study route, editorial index, or horizontally scrolling portfolio may teach typography, composition, media behavior, hover, transition, or scroll choreography without authorizing the same route model or page sequence. Record architecture separately in the influence map and preserve the target project's real routes, content jobs, and CMS needs unless the user explicitly changes them.
 
 ## Comparing an Existing Implementation
 
@@ -68,23 +70,14 @@ Also create a primary-carrier map for the page. Each major section names the thi
 
 ## Project Inspiration Board
 
-The following sites form the default inspiration pool. Select only the references relevant to the current brief, inspect them before drawing conclusions, and replace the generic notes with project-specific observations. One site may inspire only one aspect of the result; recording that aspect prevents accidental imitation and contradictory direction.
+The following four sites form the intentionally limited default inspiration pool. Champ Gauche is the primary system reference; the other sites are secondary and remain bounded to the roles below. Select only what the current brief needs, inspect it before drawing conclusions, and replace the starter notes with project-specific observations. Do not add sites merely to increase variety.
 
 | Priority | Site / project | Awwwards URL | Live URL | Learn from | Avoid / do not copy |
 | --- | --- | --- | --- | --- | --- |
-| 1 | BASIC/DEPT® | — | [basicagency.com](https://www.basicagency.com/) | Analyze per project | See originality boundaries below |
-| 2 | Mirego | — | [mirego.com/en](https://www.mirego.com/en) | Analyze per project | See originality boundaries below |
-| 3 | Akaru | — | [akaru.fr](https://www.akaru.fr/) | Analyze per project | See originality boundaries below |
-| 4 | Mind Market | — | [mindmarket.com](https://mindmarket.com/) | Analyze per project | See originality boundaries below |
-| 5 | PrimeAsia Leather | — | [primeasialeather.com](https://www.primeasialeather.com/) | Prioritize the desktop hamburger: opening/closing choreography, easing character, overlay/panel states, submenu hierarchy and submenu transitions | See originality boundaries below |
-| 6 | Mana Yerba Mate | — | [manayerbamate.com](https://manayerbamate.com/) | Analyze per project | See originality boundaries below |
-| 7 | Fondation des Canadiens | — | [fondation.canadiens.com/en](https://fondation.canadiens.com/en) | Analyze per project | See originality boundaries below |
-| 8 | Cerebrium | — | [cerebrium.ai](https://cerebrium.ai/) | Analyze per project | See originality boundaries below |
-| 9 | Maxima Therapy | — | [maximatherapy.com](https://maximatherapy.com/) | Analyze per project | See originality boundaries below |
-| 10 | Sandy Shore | — | [sandyshore.ca](https://sandyshore.ca/) | Analyze per project | See originality boundaries below |
-| 11 | Viens-là | — | [viens-la.com](https://viens-la.com/) | Analyze per project | See originality boundaries below |
-| 12 | Dennis Snellenberg | — | [dennissnellenberg.com](https://dennissnellenberg.com/) | Analyze per project | See originality boundaries below |
-| 13 | Dash Digital | — | [dashdigital.studio](https://dashdigital.studio/) | Analyze per project | See originality boundaries below |
+| 1 · Primary | Studio Champ Gauche | — | [champgauche.studio](https://champgauche.studio/) | Arbitrate the macro system: type hierarchy, text/media proportion, section rhythm, hover clarity, scroll-linked reveals, and scrub/trigger balance | Do not infer that every target should be a one-pager; do not copy its identity, project media, copy, or exact compositions |
+| 2 · Secondary | Mirego | — | [mirego.com/fr](https://www.mirego.com/fr) | Inform only calm passages, whitespace, and macro pauses between media | Do not let it override the primary type, motion, surface, navigation, or project architecture |
+| 3 · Secondary | BASIC/DEPT® | — | [basicagency.com](https://www.basicagency.com/) | Inform only fine rules, open editorial lists, and text/media splits | Do not reproduce projects, brand treatment, cursor behavior, portfolio structure, or global pacing |
+| 4 · Secondary | Akaru | — | [akaru.fr](https://akaru.fr/) | Inform only proof/project sequencing, restrained media captions, and the test that technical display is used only when content justifies it | Do not copy its logo, condensed display face, project imagery, split-screen route model, awards language, WebGL, or spectacular interaction |
 
 Optional project direction:
 
