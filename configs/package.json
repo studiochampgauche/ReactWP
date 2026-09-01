@@ -51,6 +51,7 @@
     "test:static-regenerator": "node ./scripts/run-php-tests.mjs ./tests/static-regenerator.test.php",
     "test:firstload": "node ./scripts/run-php-tests.mjs ./tests/firstload.test.php",
     "test:seo-route-language": "node ./scripts/run-php-tests.mjs ./tests/seo-route-language.test.php",
+    "test:legal-pages": "npm run prod:plugins && node ./scripts/run-php-tests.mjs ./tests/legal-pages.test.php ./tests/legal-consent.test.php && node --test ./tests/legal-pages-build.test.mjs ./tests/legal-consent-assets.test.mjs",
     "test:security": "node ./scripts/run-php-tests.mjs && node --test ./tests/get-core-security.test.mjs",
     "report:themes": "node ./scripts/report-bundle-sizes.mjs",
     "prod:plugins": "webpack --mode production --config webpack.plugins.config.js",
@@ -72,12 +73,12 @@
     "react-dom": "19.2.8",
     "react-router": "8.3.1",
     "sass": "1.103.1",
-    "sass-loader": "17.0.0",
+    "sass-loader": "17.0.1",
     "sharp": "0.35.4",
     "style-loader": "4.0.0",
     "svgo": "4.1.0",
     "terser-webpack-plugin": "5.6.1",
-    "webpack": "5.110.1",
+    "webpack": "5.110.3",
     "webpack-cli": "7.2.3"
   },
   "allowScripts": {
