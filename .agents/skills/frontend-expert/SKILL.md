@@ -22,6 +22,7 @@ Create distinctive, maintainable interfaces that fit ReactWP's runtime and the p
 - Treat first paint, critical fonts/media, loader completion, route readiness, failure, interruption, and reduced motion as one lifecycle. Never add a theatrical delay or a page-local loader to hide an incorrect asset graph.
 - Render plain content as JSX text. Render unchanged, already trusted and sanitized HTML through the narrowest explicit boundary; reserve `html-react-parser` for required DOM-to-React transformation. Neither API sanitizes input.
 - The project's real brand language, supplied assets, inspected references, content needs, accessibility, and explicit user rationale have the highest visual authority. Anti-generic guidance is a diagnostic default, not a ban on cards, labels, large type, surfaces, or familiar controls when evidence supports them.
+- Treat the website subject as content and product context, never as implicit art direction. A domain such as food, construction, health, automotive, finance, culture, or technology may determine vocabulary, workflows, proof, media subjects, and trust constraints; it does not by itself justify a palette, type style, texture, motif, surface grammar, or motion language. Unless the user, an established brand, supplied assets, or inspected references explicitly support thematic styling, design as though the topic supplied no visual brief and derive the system from the page job, audience, content hierarchy, media, and deliberate original decisions.
 
 ## Collaboration Thresholds
 
@@ -40,6 +41,8 @@ When a user supplies a live site, screenshot, moodboard, or art direction, read 
 - **Component-level:** inspect the component, its immediate layout context, meaningful variants, input states, and responsive/interaction behavior; do not inventory an unrelated site.
 
 Record relevant `UNVERIFIED` states and refresh evidence when the reference or affected scope changed. Derive principles, not protected assets or a copied composition. For reference-led work, use only the influence-map rows, device ledger, baseline/delta evidence, media planning, and genericity checks applicable to the selected scope.
+
+References and explicit art direction outrank associations suggested by the subject. Do not dilute an inspected editorial, restrained, playful, brutalist, cinematic, or minimal system by automatically making the result look “like” its industry. Topic-derived visual motifs require the same evidence and influence-map justification as any other prominent design decision.
 
 Lock a small reference set before design hardens. Designate one primary reference whose system resolves conflicts, and give every secondary reference one or two bounded roles. Do not keep browsing for more visual permission after the active set is sufficient or user-locked. A reference's information architecture is not automatically transferable: a one-page portfolio can inform type, media, spacing, hover, and scroll behavior without turning a multi-page product, editorial site, or application into a one-pager.
 
@@ -90,7 +93,7 @@ Read only what the current task needs.
 
 1. Define the page/component job, audience, content hierarchy, success state, delivery/rendering modes, and constraints.
 2. Inspect the closest producer, payload, template, style, lifecycle, and tests; settle any shared field or editorial contract before implementation hardens.
-3. When references are active, select and document the proportional reconnaissance scope, then convert relevant evidence into an influence map. For an existing interface, capture matching baseline and delta evidence.
+3. Separate content facts from visual evidence. When references are active, select and document the proportional reconnaissance scope, then convert relevant evidence into an influence map; when they are absent, establish a restrained original direction from the product job and hierarchy without translating the subject into an industry-themed aesthetic. For an existing interface, capture matching baseline and delta evidence.
 4. Before layout hardens, define a primary-carrier map for every major section and verify the page-level rhythm includes the intended mix of text-led, media-supported, media-led or full-width, and deliberately quiet moments. If assets are missing, reserve honest project-specific media slots rather than silently collapsing the experience into text or inventing substitute art.
 5. Define a compact content, container, type, media, action, state, and motion grammar. Prefer structures justified by real content and project/reference evidence; use cards, labels, indices, panels, and graphics only where they earn their role.
 6. Build semantic React and the responsive static composition first. Capture the representative desktop and mobile frames and redesign any weak hierarchy, cramped hero, forgotten media, or incomplete first viewport before adding interaction and motion. Then integrate motion through existing ReactWP lifecycle contracts.

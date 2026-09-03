@@ -28,6 +28,24 @@ When references are active, they are design evidence alongside the user's goal, 
 
 The implementation must remain original, but originality is achieved by transforming observed principles around this project's real identity—not by discarding the references and falling back to generic components.
 
+## Subject Is Content, Not Art Direction
+
+Keep the product's subject and the visual brief as two separate inputs. The subject supplies real nouns, tasks, audiences, evidence, risks, media subjects, and content constraints. It is not visual evidence for a color palette, typeface, texture, iconography, shape language, container grammar, illustration motif, or motion system.
+
+- Do not turn an industry noun into a theme. Topic associations such as earthy, clinical, industrial, corporate, futuristic, rustic, luxurious, or playful remain unsupported until the user, an established brand, supplied assets, or an inspected reference provides evidence for them.
+- When references are active, let their observed hierarchy, composition, type relationships, media rhythm, surface strategy, interaction, and motion drive the visual system. Adapt the project's real content to that system without replacing it with a literal industry aesthetic.
+- When no visual reference or brand system exists, proceed as if the user had described the page job without naming the industry. Build a restrained, tunable direction from audience needs, content hierarchy, actions, media availability, accessibility, performance, and one deliberate original concept.
+- The subject may justify a visual device only when the device explains real content, represents a supplied or planned asset, satisfies a product constraint, or follows an explicitly approved art direction. Record that reason; “it matches the industry” is not sufficient.
+- Run a noun-swap check before layout hardens: temporarily imagine the industry nouns and hero image replaced by unrelated content. If the remaining palette, type, graphics, surfaces, and motion depend mainly on a stereotype, return to the influence map and choose a design decision with actual evidence.
+
+Add a `Subject boundary` row to the influence map for site- and page-level work:
+
+| Local area | Subject facts that affect content/function | Visual evidence allowed to drive design | Topic clichés explicitly rejected |
+| --- | --- | --- | --- |
+| Whole page | Record real audience, jobs, proof, trust, media, and domain constraints | User art direction, established brand, supplied assets, inspected references, or deliberate original decisions | List any palette, type, motif, texture, icon, surface, or motion shortcut suggested only by the industry |
+
+The noun-swap check is diagnostic, not a request to make every site generic. The finished product should still be specific through its real content, imagery, artifacts, interactions, and brand evidence; it should not owe its authorship to a stereotyped costume.
+
 ## Evidence Weighting and Context Matching
 
 Treat reference evidence as scoped, not transferable by mere resemblance. Seeing a device once does not authorize it everywhere. Before a reference principle drives a local decision, compare:
@@ -390,6 +408,9 @@ Do not default to a filled capsule beside an outline/text control, append an arr
 Negative constraints are not enough. When header or footer is in scope, write its influence-map row before implementation and identify which observed structural and interactive decisions will be visible in the result. After implementation, compare each affected shell area against that row at representative desktop and mobile states. A color, font, radius, logo swap or generic menu animation alone does not count as reference influence.
 
 Run a final genericity test:
+
+- Did any palette, typeface, texture, motif, surface system, illustration, or motion language come from the website subject alone rather than explicit art direction, brand evidence, supplied assets, inspected references, or a deliberate product-specific decision?
+- If the industry nouns and hero image were swapped, would the remaining design reveal a literal stereotype instead of a coherent independent visual system?
 
 - If the logo, brand color and images were removed, would the page be indistinguishable from a generic AI/SaaS template?
 - Could the same component arrangement accept an unrelated company with only the nouns replaced?
