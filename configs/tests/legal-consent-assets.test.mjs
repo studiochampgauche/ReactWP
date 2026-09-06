@@ -842,10 +842,14 @@ test('consent interface is isolated and includes responsive accessibility states
   assert.equal((pluginSource.match(/data-ulp-section-select(?=[\s>])/gu) || []).length, 1, 'The consent settings screen needs one compact native section selector.');
   assert.equal((pluginSource.match(/<option value="ulp-settings-panel-/gu) || []).length, 6, 'Every consent settings section needs one selector option.');
   assert.equal((pluginSource.match(/data-ulp-section-panel(?=[\s>])/gu) || []).length, 6, 'Every section option needs one persistent form panel.');
+  assert.equal((pluginSource.match(/ulp-admin-section--initially-hidden/gu) || []).length, 5, 'Every server-rendered section after the first must start outside the JavaScript first paint.');
+  assert.doesNotMatch(pluginSource, /data-ulp-section-navigation\s+hidden/u, 'The section selector must not wait for plugin JavaScript to remove a hidden attribute.');
   assert.doesNotMatch(pluginSource, /data-ulp-section-tab(?=[\s>])/u, 'The crowded top-level section tabs must not remain.');
   assert.match(pluginSource, /<\/div>\s*<footer class="ulp-admin__actions">/u, 'The save action must remain outside the switched panels and submit the complete form.');
-  assert.match(adminStylesheet, /\.ulp-admin__section-navigation\s*\{[\s\S]*grid-template-columns: minmax\(180px, 0\.3fr\) minmax\(0, 1fr\)/u, 'The section selector needs a calm labelled navigation row on wide screens.');
-  assert.match(adminStylesheet, /\.ulp-admin__section-navigation\[hidden\],[\s\S]*\.ulp-admin-section\[hidden\]\s*\{[\s\S]*display: none;/u, 'Inactive settings panels must leave the layout and keyboard order.');
+  assert.match(adminStylesheet, /\.ulp-admin__section-navigation\s*\{[\s\S]*display: none;[\s\S]*grid-template-columns: minmax\(180px, 0\.3fr\) minmax\(0, 1fr\)/u, 'The section selector needs a calm labelled navigation row and a no-JavaScript fallback on wide screens.');
+  assert.match(adminStylesheet, /\.js \.ulp-admin__section-navigation\s*\{[\s\S]*display: grid;/u, 'WordPress JavaScript state must expose the section selector before the plugin script initializes.');
+  assert.match(adminStylesheet, /\.js \.ulp-admin-section--initially-hidden,[\s\S]*\.ulp-admin-section\[hidden\]\s*\{[\s\S]*display: none;/u, 'Server-initialized and interactively inactive panels must leave the layout and keyboard order.');
+  assert.match(adminScript, /panel\.classList\.remove\('ulp-admin-section--initially-hidden'\);[\s\S]*panel\.hidden = panelIndex !== activeIndex;/u, 'The section switcher must hand initial CSS state over to native hidden state.');
   assert.match(adminStylesheet, /\.ulp-admin \.ulp-admin__section-navigation select\s*\{[\s\S]*min-height: 48px/u, 'The native section selector needs a comfortable pointer target.');
   assert.match(adminStylesheet, /@media \(max-width: 782px\)[\s\S]*\.ulp-admin__section-navigation\s*\{[\s\S]*grid-template-columns: minmax\(0, 1fr\)/u, 'The section selector must stack without horizontal scrolling on narrow screens.');
   assert.match(adminStylesheet, /\.ulp-admin__hero-copy\s*\{[\s\S]*?max-width: 690px;/u, 'The simplified hero copy must retain its requested reading width.');
@@ -1056,9 +1060,17 @@ test('consent settings sections use one persistent native selector with global v
   const fields = [{value: 'draft value'}, {value: ''}, {value: ''}];
   const panels = fields.map((field) => ({
     hidden: false,
+    initialClassRemoved: false,
+    classList: {
+      remove(value){
+        if(value === 'ulp-admin-section--initially-hidden') this.owner.initialClassRemoved = true;
+      },
+      owner: null
+    },
     contains(target){ return target === field; }
   }));
-  const navigation = {hidden: true};
+  panels.forEach((panel) => { panel.classList.owner = panel; });
+  const navigation = {};
   const formListeners = {};
   const form = {
     addEventListener(type, listener, options){
@@ -1095,7 +1107,7 @@ test('consent settings sections use one persistent native selector with global v
   });
 
   assert.equal(classes.has('is-enhanced'), true);
-  assert.equal(navigation.hidden, false, 'The selector should appear only after successful enhancement.');
+  assert.deepEqual(panels.map((panel) => panel.initialClassRemoved), [true, true, true], 'Interactive hidden state must replace the first-paint CSS class.');
   assert.deepEqual(panels.map((panel) => panel.hidden), [false, true, true]);
 
   select.selectedIndex = 1;

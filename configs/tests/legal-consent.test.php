@@ -1762,8 +1762,10 @@ consent_assert(strpos($settings_page, 'class="wrap ulp-admin"') !== false, 'The 
 consent_assert(substr_count($settings_page, 'data-ulp-section-panel') === 6, 'The consent settings screen must expose six focused configuration sections.');
 consent_assert(substr_count($settings_page, '<option value="ulp-settings-panel-') === 6, 'Every consent configuration section must appear in the native section selector.');
 consent_assert(substr_count($settings_page, 'data-ulp-section-select') === 1, 'The consent settings screen must use one compact section selector.');
+consent_assert(substr_count($settings_page, 'ulp-admin-section--initially-hidden') === 5, 'Every section after the first must be hidden during the JavaScript first paint.');
+consent_assert(!preg_match('/data-ulp-section-navigation\s+hidden/u', $settings_page), 'The section selector must be available before plugin JavaScript initializes.');
 consent_assert(strpos($settings_page, 'data-ulp-section-tab') === false, 'The crowded top-level settings tabs must not remain.');
-consent_assert(strpos($settings_page, '<section id="ulp-settings-panel-copy" class="ulp-admin-section" aria-labelledby="ulp-section-copy-title" data-ulp-section-panel>') !== false, 'The copy editor must use the same two-column section structure as the other settings.');
+consent_assert(strpos($settings_page, '<section id="ulp-settings-panel-copy" class="ulp-admin-section ulp-admin-section--initially-hidden" aria-labelledby="ulp-section-copy-title" data-ulp-section-panel>') !== false, 'The copy editor must use the same two-column section structure as the other settings.');
 consent_assert((bool)preg_match('/<\/div>\s*<footer class="ulp-admin__actions">/u', $settings_page), 'The one save action must remain global and outside the tab panels.');
 consent_assert(substr_count($settings_page, 'class="ulp-admin-section__body"') === 6, 'Every consent configuration section must use the same shared body layout.');
 consent_assert(strpos($settings_page, 'ulp-admin-section__body--') === false, 'Consent configuration sections must not retain body-specific spacing exceptions.');

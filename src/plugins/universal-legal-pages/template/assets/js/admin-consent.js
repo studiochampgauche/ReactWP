@@ -18,6 +18,7 @@
             var activeIndex = index >= 0 && index < panels.length ? index : 0;
 
             panels.forEach(function(panel, panelIndex){
+                panel.classList.remove('ulp-admin-section--initially-hidden');
                 panel.hidden = panelIndex !== activeIndex;
             });
 
@@ -58,7 +59,6 @@
 
         container.classList.add('is-enhanced');
         container.__ulpSectionSwitcherReady = true;
-        navigation.hidden = false;
         activatePanel(select.selectedIndex);
     }
 

@@ -4756,7 +4756,6 @@ final class Universal_Legal_Pages{
                     <div
                         class="ulp-admin__section-navigation"
                         data-ulp-section-navigation
-                        hidden
                     >
                         <label for="ulp-settings-section"><?php esc_html_e('Settings section', 'universal-legal-pages'); ?></label>
                         <select id="ulp-settings-section" data-ulp-section-select>
@@ -4810,7 +4809,7 @@ final class Universal_Legal_Pages{
                     </div>
                 </section>
 
-                <section id="ulp-settings-panel-copy" class="ulp-admin-section" aria-labelledby="ulp-section-copy-title" data-ulp-section-panel>
+                <section id="ulp-settings-panel-copy" class="ulp-admin-section ulp-admin-section--initially-hidden" aria-labelledby="ulp-section-copy-title" data-ulp-section-panel>
                     <header class="ulp-admin-section__header">
                         <h2 id="ulp-section-copy-title"><?php esc_html_e('Consent interface copy', 'universal-legal-pages'); ?></h2>
                         <p><?php esc_html_e('Edit the banner, buttons, preferences dialog, terms, and status messages.', 'universal-legal-pages'); ?></p>
@@ -4835,7 +4834,7 @@ final class Universal_Legal_Pages{
                     </div>
                 </section>
 
-                <section id="ulp-settings-panel-categories" class="ulp-admin-section" aria-labelledby="ulp-section-categories-title" data-ulp-section-panel>
+                <section id="ulp-settings-panel-categories" class="ulp-admin-section ulp-admin-section--initially-hidden" aria-labelledby="ulp-section-categories-title" data-ulp-section-panel>
                     <header class="ulp-admin-section__header">
                         <h2 id="ulp-section-categories-title"><?php esc_html_e('Consent categories', 'universal-legal-pages'); ?></h2>
                         <p><?php esc_html_e('Create and order the consent choices shown to visitors. Their names and descriptions define their meaning.', 'universal-legal-pages'); ?></p>
@@ -4848,7 +4847,7 @@ final class Universal_Legal_Pages{
                     </div>
                 </section>
 
-                <section id="ulp-settings-panel-services" class="ulp-admin-section" aria-labelledby="ulp-section-services-title" data-ulp-section-panel>
+                <section id="ulp-settings-panel-services" class="ulp-admin-section ulp-admin-section--initially-hidden" aria-labelledby="ulp-section-services-title" data-ulp-section-panel>
                     <header class="ulp-admin-section__header">
                         <h2 id="ulp-section-services-title"><?php esc_html_e('Detected services', 'universal-legal-pages'); ?></h2>
                         <p><?php esc_html_e('Name and classify detected domains before visitors may allow them individually.', 'universal-legal-pages'); ?></p>
@@ -4861,7 +4860,7 @@ final class Universal_Legal_Pages{
                     </div>
                 </section>
 
-                <section id="ulp-settings-panel-pages" class="ulp-admin-section" aria-labelledby="ulp-section-pages-title" data-ulp-section-panel>
+                <section id="ulp-settings-panel-pages" class="ulp-admin-section ulp-admin-section--initially-hidden" aria-labelledby="ulp-section-pages-title" data-ulp-section-panel>
                     <header class="ulp-admin-section__header">
                         <h2 id="ulp-section-pages-title"><?php esc_html_e('Consent module links', 'universal-legal-pages'); ?></h2>
                         <p><?php esc_html_e('Choose any documents that should be accessible from the banner and preferences dialog.', 'universal-legal-pages'); ?></p>
@@ -4904,7 +4903,7 @@ final class Universal_Legal_Pages{
                     </div>
                 </section>
 
-                <section id="ulp-settings-panel-integrations" class="ulp-admin-section" aria-labelledby="ulp-section-integrations-title" data-ulp-section-panel>
+                <section id="ulp-settings-panel-integrations" class="ulp-admin-section ulp-admin-section--initially-hidden" aria-labelledby="ulp-section-integrations-title" data-ulp-section-panel>
                     <header class="ulp-admin-section__header">
                         <h2 id="ulp-section-integrations-title"><?php esc_html_e('Integrations', 'universal-legal-pages'); ?></h2>
                         <p><?php esc_html_e('Use only the public identifiers for the services in use. No password or private API key is required.', 'universal-legal-pages'); ?></p>

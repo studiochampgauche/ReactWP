@@ -169,7 +169,7 @@
 }
 
 .ulp-admin__section-navigation {
-    display: grid;
+    display: none;
     grid-template-columns: minmax(180px, 0.3fr) minmax(0, 1fr);
     gap: 24px;
     align-items: center;
@@ -180,7 +180,11 @@
     color: var(--ulp-admin-surface);
 }
 
-.ulp-admin__section-navigation[hidden],
+.js .ulp-admin__section-navigation {
+    display: grid;
+}
+
+.js .ulp-admin-section--initially-hidden,
 .ulp-admin-section[hidden] {
     display: none;
 }
