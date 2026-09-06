@@ -347,10 +347,6 @@ input:focus-visible {
     border-block-end: 1px solid #d2d2d2;
 }
 
-.ulc-category--unclassified .ulc-category__content {
-    grid-column: 1 / -1;
-}
-
 .ulc-category input,
 .ulc-terms input {
     width: 1.5rem;
@@ -373,7 +369,6 @@ input:focus-visible {
 .ulc-terms__label {
     display: inline-flex;
     align-items: center;
-    min-height: 2.75rem;
     color: #181818;
     font-size: 1rem;
     font-weight: 700;
@@ -382,7 +377,12 @@ input:focus-visible {
 }
 
 .ulc-category__label {
+    min-height: 1.5rem;
     cursor: pointer;
+}
+
+.ulc-terms__label {
+    min-height: 2.75rem;
 }
 
 input:disabled + .ulc-category__content .ulc-category__label {
@@ -444,11 +444,6 @@ input:disabled + .ulc-category__content .ulc-category__label {
 
 .ulc-service input:disabled + .ulc-service__label {
     cursor: not-allowed;
-}
-
-.ulc-service--blocked {
-    grid-template-columns: minmax(0, 1fr);
-    padding-inline-start: 0.25rem;
 }
 
 .ulc-embed {

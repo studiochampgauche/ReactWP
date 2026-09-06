@@ -392,6 +392,7 @@
                 servicesById: serviceRegistry.byId,
                 serviceIdsByCategory: serviceRegistry.idsByCategory,
                 activatableServiceIds: serviceRegistry.activatableIds,
+                visitorServiceIds: serviceRegistry.visitorIds,
                 strings: strings,
                 currentLanguage: currentLanguage,
                 bannerTranslations: bannerTranslations,
@@ -518,6 +519,7 @@
         var byId = Object.create(null);
         var idsByCategory = Object.create(null);
         var activatableIds = [];
+        var visitorIds = [];
 
         categoryRegistry.ids.concat(['unclassified']).forEach(function(category){
             idsByCategory[category] = [];
@@ -536,8 +538,12 @@
             if(service.managed){
                 idsByCategory[service.category].push(service.id);
 
-                if(service.category !== 'unclassified' && service.category !== 'necessary'){
-                    activatableIds.push(service.id);
+                if(service.category !== 'unclassified'){
+                    visitorIds.push(service.id);
+
+                    if(service.category !== 'necessary'){
+                        activatableIds.push(service.id);
+                    }
                 }
             }
         }
@@ -546,7 +552,8 @@
             services: services,
             byId: byId,
             idsByCategory: idsByCategory,
-            activatableIds: activatableIds
+            activatableIds: activatableIds,
+            visitorIds: visitorIds
         };
 
     }
@@ -1890,7 +1897,9 @@
         elements.dialogTitle.textContent = config.strings.dialog.title;
         elements.dialogDescription.textContent = config.strings.dialog.description;
         elements.dialogClose.setAttribute('aria-label', config.strings.actions.close);
-        elements.dialogReject.textContent = config.strings.actions.rejectAll;
+        if(elements.dialogReject){
+            elements.dialogReject.textContent = config.strings.actions.rejectAll;
+        }
         elements.dialogSave.textContent = config.strings.actions.save;
 
         if(elements.servicesTitle){
@@ -1903,10 +1912,6 @@
         CATEGORY_NAMES.forEach(function(category){
             elements.categoryLabels[category].textContent = config.categoriesById[category].label;
             elements.categoryDescriptions[category].textContent = config.categoriesById[category].description;
-        });
-
-        elements.unclassifiedNotices.forEach(function(notice){
-            notice.textContent = config.strings.services.unclassified;
         });
 
         if(elements.termsLabel){
@@ -2691,7 +2696,6 @@
         elements.dialogClose = close;
         elements.form = form;
         elements.categoryInputs = {};
-        elements.unclassifiedNotices = [];
 
         header.appendChild(title);
         header.appendChild(close);
@@ -2704,7 +2708,7 @@
             form.appendChild(legalLinks);
         }
 
-        if(config.services.length){
+        if(config.visitorServiceIds.length){
             var servicesIntro = createElement('div', 'ulc-services__intro');
             elements.servicesTitle = createElement('h3', 'ulc-services__title', config.strings.services.title);
             elements.servicesDescription = createElement('p', 'ulc-services__description', config.strings.services.description);
@@ -2716,10 +2720,6 @@
         CATEGORY_NAMES.forEach(function(category){
             categories.appendChild(createCategoryControl(category));
         });
-
-        if(config.serviceIdsByCategory.unclassified.length){
-            categories.appendChild(createUnclassifiedServiceGroup());
-        }
 
         form.appendChild(categories);
 
@@ -2739,12 +2739,16 @@
         form.appendChild(elements.dialogError);
 
         var footer = createElement('div', 'ulc-dialog__footer');
-        var reject = createActionButton('reject-all', config.strings.actions.rejectAll, 'ulc-button ulc-button--secondary');
         var save = createElement('button', 'ulc-button ulc-button--primary', config.strings.actions.save);
         save.type = 'submit';
-        elements.dialogReject = reject;
+        elements.dialogReject = null;
         elements.dialogSave = save;
-        footer.appendChild(reject);
+
+        if(OPTIONAL_CATEGORIES.length){
+            elements.dialogReject = createActionButton('reject-all', config.strings.actions.rejectAll, 'ulc-button ulc-button--secondary');
+            footer.appendChild(elements.dialogReject);
+        }
+
         footer.appendChild(save);
         form.appendChild(footer);
 
@@ -2832,28 +2836,6 @@
         item.appendChild(label);
 
         return item;
-
-    }
-
-    function createUnclassifiedServiceGroup(){
-
-        var group = createElement('section', 'ulc-category ulc-category--unclassified');
-        var content = createElement('div', 'ulc-category__content');
-        var title = createElement('h3', 'ulc-category__label', config.strings.services.unclassified);
-        var list = createElement('ul', 'ulc-service-list ulc-service-list--unclassified');
-
-        elements.unclassifiedNotices.push(title);
-        content.appendChild(title);
-        group.appendChild(content);
-
-        config.serviceIdsByCategory.unclassified.forEach(function(serviceId){
-            var item = createElement('li', 'ulc-service ulc-service--blocked');
-            item.appendChild(createElement('span', 'ulc-service__label', config.servicesById[serviceId].label));
-            list.appendChild(item);
-        });
-
-        group.appendChild(list);
-        return group;
 
     }
 

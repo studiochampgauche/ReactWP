@@ -9,16 +9,16 @@ msgstr ""
 "Language:\n"
 
 #, php-format
-#: init.php:2856
+#: init.php:2848
 msgid " for “%s”"
 msgstr ""
 
-#: init.php:3813
+#: init.php:3805
 msgid "— None —"
 msgstr ""
 
 #, php-format
-#: init.php:3083
+#: init.php:3075
 msgid "%s contains an invalid value; the previous choice was preserved."
 msgstr ""
 
@@ -26,23 +26,23 @@ msgstr ""
 msgid "Accept all"
 msgstr ""
 
-#: init.php:3501
+#: init.php:3493
 msgid "Accept terms"
 msgstr ""
 
-#: init.php:4349
+#: init.php:4341
 msgid "Accessible name"
 msgstr ""
 
-#: init.php:4780
+#: init.php:4772
 msgid "Activation"
 msgstr ""
 
-#: init.php:4090
+#: init.php:4082
 msgid "Add a consent category"
 msgstr ""
 
-#: init.php:4290
+#: init.php:4282
 msgid "Add a custom integration"
 msgstr ""
 
@@ -54,7 +54,7 @@ msgstr ""
 msgid "Add new legal page"
 msgstr ""
 
-#: init.php:3909
+#: init.php:3901
 msgid "added to displayed pages"
 msgstr ""
 
@@ -62,7 +62,7 @@ msgstr ""
 msgid "All legal pages"
 msgstr ""
 
-#: init.php:3929
+#: init.php:3921
 msgid "All published pages are already displayed."
 msgstr ""
 
@@ -74,7 +74,7 @@ msgstr ""
 msgid "Allow-service button"
 msgstr ""
 
-#: init.php:3989
+#: init.php:3981
 msgid "Always required"
 msgstr ""
 
@@ -90,7 +90,7 @@ msgstr ""
 msgid "Analytics — label"
 msgstr ""
 
-#: init.php:4954
+#: init.php:4946
 msgid "Apply the changes by saving the settings."
 msgstr ""
 
@@ -98,15 +98,15 @@ msgstr ""
 msgid "Archive of legal pages"
 msgstr ""
 
-#: init.php:4301
+#: init.php:4293
 msgid "Banner"
 msgstr ""
 
-#: init.php:3500
+#: init.php:3492
 msgid "Banner activation"
 msgstr ""
 
-#: init.php:4326
+#: init.php:4318
 msgid "Banner content"
 msgstr ""
 
@@ -118,7 +118,7 @@ msgstr ""
 msgid "Banner title"
 msgstr ""
 
-#: init.php:4357
+#: init.php:4349
 msgid "Blocked content"
 msgstr ""
 
@@ -126,27 +126,27 @@ msgstr ""
 msgid "Blocked content message"
 msgstr ""
 
-#: init.php:4359
+#: init.php:4351
 msgid "Button label"
 msgstr ""
 
-#: init.php:4302
+#: init.php:4294
 msgid "Buttons and actions"
 msgstr ""
 
-#: init.php:4011
+#: init.php:4003
 msgid "Category language"
 msgstr ""
 
-#: init.php:4367
+#: init.php:4359
 msgid "Checkbox label"
 msgstr ""
 
-#: init.php:4791
+#: init.php:4783
 msgid "Choice duration"
 msgstr ""
 
-#: init.php:4866
+#: init.php:4858
 msgid "Choose any documents that should be accessible from the banner and preferences dialog."
 msgstr ""
 
@@ -158,7 +158,7 @@ msgstr ""
 msgid "Choose which individual external services may load."
 msgstr ""
 
-#: init.php:152 init.php:4733
+#: init.php:152 init.php:4725
 msgid "Close"
 msgstr ""
 
@@ -166,63 +166,63 @@ msgstr ""
 msgid "Close dialog"
 msgstr ""
 
-#: init.php:4774
+#: init.php:4766
 msgid "Configure consent activation, policy version, choice duration, and general privacy controls."
 msgstr ""
 
-#: init.php:4630
+#: init.php:4622
 msgid "Confirmation page language"
 msgstr ""
 
-#: init.php:2235
+#: init.php:2227
 msgid "Consent"
 msgstr ""
 
-#: init.php:2234 init.php:4716
+#: init.php:2226 init.php:4708
 msgid "Consent and integrations"
 msgstr ""
 
-#: init.php:4762 init.php:4773
+#: init.php:4754 init.php:4765
 msgid "Consent banner"
 msgstr ""
 
-#: init.php:4078 init.php:4764 init.php:4839
+#: init.php:4070 init.php:4756 init.php:4831
 msgid "Consent categories"
 msgstr ""
 
-#: init.php:2632
+#: init.php:2624
 msgid "Consent categories are invalid or incomplete; the complete previous category registry was preserved."
 msgstr ""
 
-#: init.php:4141 init.php:4195 init.php:4242
+#: init.php:4133 init.php:4187 init.php:4234
 msgid "Consent category"
 msgstr ""
 
-#: init.php:4075
+#: init.php:4067
 msgid "Consent category added."
 msgstr ""
 
-#: init.php:4076
+#: init.php:4068
 msgid "Consent category removed. Reassign any service that used it before saving."
 msgstr ""
 
-#: init.php:4481
+#: init.php:4473
 msgid "Consent copy language"
 msgstr ""
 
-#: init.php:3666
+#: init.php:3658
 msgid "Consent duration must be between 30 and 365 days."
 msgstr ""
 
-#: init.php:4763 init.php:4814
+#: init.php:4755 init.php:4806
 msgid "Consent interface copy"
 msgstr ""
 
-#: init.php:4550
+#: init.php:4542
 msgid "Consent links language"
 msgstr ""
 
-#: init.php:4766 init.php:4865
+#: init.php:4758 init.php:4857
 msgid "Consent module links"
 msgstr ""
 
@@ -230,27 +230,27 @@ msgstr ""
 msgid "Consent preferences"
 msgstr ""
 
-#: init.php:4717
+#: init.php:4709
 msgid "Control what may load on the site and give each visitor a clear choice before any optional tracking begins."
 msgstr ""
 
-#: init.php:4840
+#: init.php:4832
 msgid "Create and order the consent choices shown to visitors. Their names and descriptions define their meaning."
 msgstr ""
 
-#: init.php:4277
+#: init.php:4269
 msgid "Custom code is public and must never contain passwords, tokens, or other secrets. Necessary runs without asking; every other category waits until this individual service is accepted."
 msgstr ""
 
-#: init.php:4266
+#: init.php:4258
 msgid "Custom integration added."
 msgstr ""
 
-#: init.php:4267
+#: init.php:4259
 msgid "Custom integration removed."
 msgstr ""
 
-#: init.php:4269
+#: init.php:4261
 msgid "Custom integrations"
 msgstr ""
 
@@ -258,27 +258,27 @@ msgstr ""
 msgid "Customize"
 msgstr ""
 
-#: init.php:4792
+#: init.php:4784
 msgid "days"
 msgstr ""
 
-#: init.php:4346 init.php:4355 init.php:4368
+#: init.php:4338 init.php:4347 init.php:4360
 msgid "Description"
 msgstr ""
 
-#: init.php:4125
+#: init.php:4117
 msgid "Detected embedded content. Its original address is withheld until this individual service is allowed."
 msgstr ""
 
-#: init.php:4123
+#: init.php:4115
 msgid "Detected script, reporting only. It remains unmanaged until trusted project code supplies an adapter."
 msgstr ""
 
-#: init.php:4765 init.php:4852
+#: init.php:4757 init.php:4844
 msgid "Detected services"
 msgstr ""
 
-#: init.php:4344
+#: init.php:4336
 msgid "Dialog content"
 msgstr ""
 
@@ -290,23 +290,23 @@ msgstr ""
 msgid "Dialog title"
 msgstr ""
 
-#: init.php:4781
+#: init.php:4773
 msgid "Display the banner on the site"
 msgstr ""
 
-#: init.php:4799
+#: init.php:4791
 msgid "Display the permanent floating button"
 msgstr ""
 
-#: init.php:3914
+#: init.php:3906
 msgid "Displayed pages"
 msgstr ""
 
-#: init.php:3180
+#: init.php:3172
 msgid "Displayed pages selection is invalid; the previous choice was preserved."
 msgstr ""
 
-#: init.php:3901
+#: init.php:3893
 msgid "Documents displayed in the consent module"
 msgstr ""
 
@@ -314,15 +314,15 @@ msgstr ""
 msgid "Edit legal page"
 msgstr ""
 
-#: init.php:4815
+#: init.php:4807
 msgid "Edit the banner, buttons, preferences dialog, terms, and status messages."
 msgstr ""
 
-#: init.php:4374
+#: init.php:4366
 msgid "Error messages"
 msgstr ""
 
-#: init.php:4617 init.php:4890
+#: init.php:4609 init.php:4882
 msgid "Explicit acceptance"
 msgstr ""
 
@@ -350,7 +350,7 @@ msgstr ""
 msgid "Generic error"
 msgstr ""
 
-#: init.php:3502
+#: init.php:3494
 msgid "Global Privacy Control"
 msgstr ""
 
@@ -358,23 +358,23 @@ msgstr ""
 msgid "Global Privacy Control notice"
 msgstr ""
 
-#: init.php:1067 init.php:4931
+#: init.php:1050 init.php:4923
 msgid "Google Ads"
 msgstr ""
 
-#: init.php:1058 init.php:4915
+#: init.php:1041 init.php:4907
 msgid "Google Analytics 4"
 msgstr ""
 
-#: init.php:4923
+#: init.php:4915
 msgid "Google Tag Manager"
 msgstr ""
 
-#: init.php:4738
+#: init.php:4730
 msgid "Google Tag Manager and at least one direct Google tag are configured. Make sure the container does not trigger the same Google Analytics or Google Ads destinations a second time."
 msgstr ""
 
-#: init.php:4204
+#: init.php:4196
 msgid "HTTPS script URL"
 msgstr ""
 
@@ -382,7 +382,7 @@ msgstr ""
 msgid "I confirm that I have read and accepted"
 msgstr ""
 
-#: init.php:4219
+#: init.php:4211
 msgid "Initialization code (optional)"
 msgstr ""
 
@@ -390,15 +390,15 @@ msgstr ""
 msgid "Insert into legal page"
 msgstr ""
 
-#: init.php:4767 init.php:4908
+#: init.php:4759 init.php:4900
 msgid "Integrations"
 msgstr ""
 
-#: init.php:4314
+#: init.php:4306
 msgid "Labels used to accept, reject, customize, save, close, or reopen."
 msgstr ""
 
-#: init.php:3828 init.php:5019 templates/single-legal-page.php:60
+#: init.php:3820 init.php:5011 templates/single-legal-page.php:60
 msgid "Legal document"
 msgstr ""
 
@@ -410,7 +410,7 @@ msgstr ""
 msgid "Legal links accessible name"
 msgstr ""
 
-#: init.php:4348
+#: init.php:4340
 msgid "Legal navigation"
 msgstr ""
 
@@ -434,7 +434,7 @@ msgstr ""
 msgid "Legal pages list navigation"
 msgstr ""
 
-#: init.php:4671 init.php:4894
+#: init.php:4663 init.php:4886
 msgid "Link to this confirmation"
 msgstr ""
 
@@ -446,7 +446,7 @@ msgstr ""
 msgid "Manage my cookies"
 msgstr ""
 
-#: init.php:3503
+#: init.php:3495
 msgid "Management button"
 msgstr ""
 
@@ -470,41 +470,41 @@ msgstr ""
 msgid "Measures how the site is used to help improve it."
 msgstr ""
 
-#: init.php:3568 init.php:4328 init.php:4358 init.php:4362 init.php:4375
+#: init.php:3560 init.php:4320 init.php:4350 init.php:4354 init.php:4367
 msgid "Message"
 msgstr ""
 
-#: init.php:1076 init.php:4939
+#: init.php:1059 init.php:4931
 msgid "Meta Pixel"
 msgstr ""
 
 #, php-format
-#: init.php:3863
+#: init.php:3855
 msgid "Move “%s” down"
 msgstr ""
 
 #, php-format
-#: init.php:3856
+#: init.php:3848
 msgid "Move “%s” up"
 msgstr ""
 
-#: init.php:3911
+#: init.php:3903
 msgid "moved in the display order"
 msgstr ""
 
-#: init.php:3268
+#: init.php:3260
 msgid "Multilingual consent links are invalid or incomplete; all previous values were preserved."
 msgstr ""
 
-#: init.php:2896
+#: init.php:2888
 msgid "Multilingual copy is invalid or incomplete; all previous values were preserved."
 msgstr ""
 
-#: init.php:2975
+#: init.php:2967
 msgid "Multilingual copy is invalid or incomplete; the previous values were preserved."
 msgstr ""
 
-#: init.php:4853
+#: init.php:4845
 msgid "Name and classify detected domains before visitors may allow them individually."
 msgstr ""
 
@@ -520,27 +520,27 @@ msgstr ""
 msgid "Necessary — label"
 msgstr ""
 
-#: init.php:4927
+#: init.php:4919
 msgid "Necessary loads the container immediately; every other category waits for acceptance. Google Consent Mode v2 still applies, and each container tag must declare its consent requirements."
 msgstr ""
 
-#: init.php:4935
+#: init.php:4927
 msgid "Necessary loads the Google tag immediately; every other category waits until this service is accepted. The adapter keeps its internal marketing mapping for standard remarketing."
 msgstr ""
 
-#: init.php:4943
+#: init.php:4935
 msgid "Necessary loads the pixel immediately; every other category waits until this service is accepted. The adapter keeps its internal marketing signal mapping."
 msgstr ""
 
-#: init.php:4919
+#: init.php:4911
 msgid "Necessary loads the tag immediately; every other category waits until this service is accepted. The adapter keeps its internal analytics signal mapping."
 msgstr ""
 
-#: init.php:3987
+#: init.php:3979
 msgid "New consent category"
 msgstr ""
 
-#: init.php:4177
+#: init.php:4169
 msgid "New custom integration"
 msgstr ""
 
@@ -548,7 +548,7 @@ msgstr ""
 msgid "New legal page"
 msgstr ""
 
-#: init.php:4106
+#: init.php:4098
 msgid "No external service has been detected yet. Visit the public site while signed in as an administrator to inventory queued external scripts."
 msgstr ""
 
@@ -560,41 +560,41 @@ msgstr ""
 msgid "No legal pages found."
 msgstr ""
 
-#: init.php:3920
+#: init.php:3912
 msgid "No page will be displayed in the module."
 msgstr ""
 
-#: init.php:4073 init.php:4197 init.php:4248
+#: init.php:4065 init.php:4189 init.php:4240
 msgid "Not selected"
 msgstr ""
 
-#: init.php:4372
+#: init.php:4364
 msgid "Notice"
 msgstr ""
 
-#: init.php:4627 init.php:4896
+#: init.php:4619 init.php:4888
 msgid "Only used when explicit acceptance is enabled. This document will be linked directly in the confirmation checkbox."
 msgstr ""
 
-#: init.php:4795
+#: init.php:4787
 msgid "Options"
 msgstr ""
 
-#: init.php:4338
+#: init.php:4330
 msgid "Other controls"
 msgstr ""
 
 #, php-format
-#: init.php:3131
+#: init.php:3123
 msgid "Page selection “%s” contains an invalid ID; the previous value was preserved."
 msgstr ""
 
 #, php-format
-#: init.php:3147
+#: init.php:3139
 msgid "Page selection “%s” must be a published legal page."
 msgstr ""
 
-#: init.php:4593 init.php:4886
+#: init.php:4585 init.php:4878
 msgid "Pages to display"
 msgstr ""
 
@@ -602,11 +602,11 @@ msgstr ""
 msgid "Please accept the terms to save this choice."
 msgstr ""
 
-#: init.php:4784
+#: init.php:4776
 msgid "Policy version"
 msgstr ""
 
-#: init.php:3652
+#: init.php:3644
 msgid "Policy version must contain 1 to 32 letters, numbers, periods, hyphens, or underscores."
 msgstr ""
 
@@ -622,43 +622,43 @@ msgstr ""
 msgid "Preferences — label"
 msgstr ""
 
-#: init.php:4303
+#: init.php:4295
 msgid "Preferences dialog"
 msgstr ""
 
-#: init.php:4332
+#: init.php:4324
 msgid "Primary choices"
 msgstr ""
 
-#: init.php:4715
+#: init.php:4707
 msgid "Privacy centre"
 msgstr ""
 
-#: init.php:4371
+#: init.php:4363
 msgid "Privacy signal"
 msgstr ""
 
-#: init.php:4004 init.php:4049
+#: init.php:3996 init.php:4041
 msgid "Public description"
 msgstr ""
 
-#: init.php:4000 init.php:4045
+#: init.php:3992 init.php:4037
 msgid "Public name"
 msgstr ""
 
-#: init.php:4129 init.php:4182
+#: init.php:4121 init.php:4174
 msgid "Public service name"
 msgstr ""
 
-#: init.php:3904
+#: init.php:3896
 msgid "Publish a legal page before adding it."
 msgstr ""
 
-#: init.php:3923
+#: init.php:3915
 msgid "Published pages"
 msgstr ""
 
-#: init.php:3738
+#: init.php:3730
 msgid "Reassign or remove every service and custom integration before deleting its consent category. The previous categories were preserved."
 msgstr ""
 
@@ -670,11 +670,11 @@ msgstr ""
 msgid "Remembers your display and functionality preferences."
 msgstr ""
 
-#: init.php:3993 init.php:4178
+#: init.php:3985 init.php:4170
 msgid "Remove"
 msgstr ""
 
-#: init.php:3910
+#: init.php:3902
 msgid "removed from displayed pages"
 msgstr ""
 
@@ -682,7 +682,7 @@ msgstr ""
 msgid "Reopen preferences"
 msgstr ""
 
-#: init.php:4622 init.php:4892
+#: init.php:4614 init.php:4884
 msgid "Request explicit acceptance in preferences"
 msgstr ""
 
@@ -694,7 +694,7 @@ msgstr ""
 msgid "Required terms error"
 msgstr ""
 
-#: init.php:4797
+#: init.php:4789
 msgid "Respect the Global Privacy Control signal"
 msgstr ""
 
@@ -706,11 +706,11 @@ msgstr ""
 msgid "Save my choices"
 msgstr ""
 
-#: init.php:4955
+#: init.php:4947
 msgid "Save settings"
 msgstr ""
 
-#: init.php:4749
+#: init.php:4741
 msgid "Saving settings…"
 msgstr ""
 
@@ -718,28 +718,28 @@ msgstr ""
 msgid "Search legal pages"
 msgstr ""
 
-#: init.php:3777
+#: init.php:3769
 msgid "Select a published terms page before requiring acceptance."
 msgstr ""
 
-#: init.php:3776
+#: init.php:3768
 msgid "Select a published terms page for every configured language before requiring acceptance."
 msgstr ""
 
 #, php-format
-#: init.php:3326
+#: init.php:3318
 msgid "Select an existing consent category for %s."
 msgstr ""
 
-#: init.php:3902
+#: init.php:3894
 msgid "Select the pages to display, then arrange them in the desired order by dragging and dropping or with the move up and move down buttons. This selection does not modify any theme menu."
 msgstr ""
 
-#: init.php:4353
+#: init.php:4345
 msgid "Service list"
 msgstr ""
 
-#: init.php:926 init.php:3339
+#: init.php:943 init.php:3331
 msgid "Service settings are invalid; the complete previous service registry was preserved."
 msgstr ""
 
@@ -751,27 +751,27 @@ msgstr ""
 msgid "Services — title"
 msgstr ""
 
-#: init.php:4304
+#: init.php:4296
 msgid "Services and blocked content"
 msgstr ""
 
-#: init.php:2225
+#: init.php:2217
 msgid "Settings saved."
 msgstr ""
 
-#: init.php:4760
+#: init.php:4752
 msgid "Settings section"
 msgstr ""
 
-#: init.php:3493
+#: init.php:3485
 msgid "Settings submitted are invalid."
 msgstr ""
 
-#: init.php:4844
+#: init.php:4836
 msgid "Strictly necessary remains enabled and cannot be removed. Every other category can be renamed, added, or removed."
 msgstr ""
 
-#: init.php:3592 init.php:3624 init.php:4366 init.php:5124 init.php:5183
+#: init.php:3584 init.php:3616 init.php:4358 init.php:5116 init.php:5175
 msgid "Terms"
 msgstr ""
 
@@ -783,70 +783,70 @@ msgstr ""
 msgid "Terms — label"
 msgstr ""
 
-#: init.php:4305
+#: init.php:4297
 msgid "Terms and status messages"
 msgstr ""
 
-#: init.php:4317
+#: init.php:4309
 msgid "Terms confirmation, privacy signals, and error messages."
 msgstr ""
 
-#: init.php:4316
+#: init.php:4308
 msgid "Text shown around individual services and blocked content."
 msgstr ""
 
-#: init.php:2840
+#: init.php:2832
 msgid "Text structure"
 msgstr ""
 
 #, php-format
-#: init.php:3096
+#: init.php:3088
 msgid "The “%1$s” field must contain non-empty plain text with no more than %2$d characters."
 msgstr ""
 
 #, php-format
-#: init.php:2861
+#: init.php:2853
 msgid "The “%1$s” field%2$s is invalid or incomplete; all previous text was preserved."
 msgstr ""
 
 #, php-format
-#: init.php:2999
+#: init.php:2991
 msgid "The fields submitted for “%s” are invalid; the previous values were preserved."
 msgstr ""
 
-#: init.php:4315
+#: init.php:4307
 msgid "The heading, explanation, and legal navigation in the preferences window."
 msgstr ""
 
 #, php-format
-#: init.php:3283 init.php:3298
+#: init.php:3275 init.php:3290
 msgid "The identifier for %s is invalid."
 msgstr ""
 
 #, php-format
-#: init.php:3017
+#: init.php:3009
 msgid "The message for “%s” must contain plain text with no more than 600 characters; the previous values were preserved."
 msgstr ""
 
 #, php-format
-#: init.php:2987
+#: init.php:2979
 msgid "The multilingual text for “%s” is invalid; the previous values were preserved."
 msgstr ""
 
-#: init.php:2220
+#: init.php:2212
 msgid "The settings were saved with validation errors. Review the messages and try again."
 msgstr ""
 
-#: init.php:4313
+#: init.php:4305
 msgid "The title and message first shown to visitors."
 msgstr ""
 
 #, php-format
-#: init.php:3008
+#: init.php:3000
 msgid "The title for “%s” must contain plain text with no more than 120 characters; the previous values were preserved."
 msgstr ""
 
-#: init.php:4623 init.php:4892
+#: init.php:4615 init.php:4884
 msgid "This browser-only choice does not by itself constitute a contractual record or proof of identity."
 msgstr ""
 
@@ -862,11 +862,11 @@ msgstr ""
 msgid "This service has not been classified and remains blocked."
 msgstr ""
 
-#: init.php:3561 init.php:4327 init.php:4345 init.php:4354
+#: init.php:3553 init.php:4319 init.php:4337 init.php:4346
 msgid "Title"
 msgstr ""
 
-#: init.php:4750
+#: init.php:4742
 msgid "Unable to save settings. Please try again."
 msgstr ""
 
@@ -874,15 +874,15 @@ msgstr ""
 msgid "Unable to save this choice. Please try again."
 msgstr ""
 
-#: init.php:3954 init.php:4072
+#: init.php:3946 init.php:4064
 msgid "Unclassified"
 msgstr ""
 
-#: init.php:4361
+#: init.php:4353
 msgid "Unclassified service"
 msgstr ""
 
-#: init.php:4857
+#: init.php:4849
 msgid "Unclassified services remain blocked. A detected script is reported without being stopped or replayed; controlling it requires a trusted adapter."
 msgstr ""
 
@@ -890,7 +890,7 @@ msgstr ""
 msgid "Unclassified-service message"
 msgstr ""
 
-#: init.php:4787
+#: init.php:4779
 msgid "Update this value when your uses change to request a new choice."
 msgstr ""
 
@@ -898,23 +898,23 @@ msgstr ""
 msgid "Uploaded to this legal page"
 msgstr ""
 
-#: init.php:4909
+#: init.php:4901
 msgid "Use only the public identifiers for the services in use. No password or private API key is required."
 msgstr ""
 
-#: init.php:4823
+#: init.php:4815
 msgid "Used copy is invalid or incomplete; verify the previous values."
 msgstr ""
 
-#: init.php:4369
+#: init.php:4361
 msgid "Validation error"
 msgstr ""
 
-#: init.php:4476
+#: init.php:4468
 msgid "Verify all text for the language identified in the error above."
 msgstr ""
 
-#: init.php:4545
+#: init.php:4537
 msgid "Verify the legal-page selection for every configured language."
 msgstr ""
 
@@ -930,29 +930,29 @@ msgstr ""
 msgid "We use cookies required for the site to work and, with your consent, analytics and marketing tools."
 msgstr ""
 
-#: init.php:4797
+#: init.php:4789
 msgid "When this signal is active, every service and integration with advertising and marketing behavior remains refused."
 msgstr ""
 
 #, php-format
-#: init.php:4074
+#: init.php:4066
 msgid "You can add up to %d consent categories."
 msgstr ""
 
 #, php-format
-#: init.php:4265
+#: init.php:4257
 msgid "You can add up to %d custom integrations."
 msgstr ""
 
-#: init.php:4801
+#: init.php:4793
 msgid "You can disable it and open the same dialog from your own button by adding the attribute"
 msgstr ""
 
-#: init.php:2175 init.php:3338 init.php:4692
+#: init.php:2167 init.php:3330 init.php:4684
 msgid "You do not have permission to manage these settings."
 msgstr ""
 
-#: init.php:4271
+#: init.php:4263
 msgid "You need permission to publish unfiltered code before you can manage custom integrations. Existing integrations are preserved."
 msgstr ""
 
@@ -964,6 +964,6 @@ msgstr ""
 msgid "Your privacy choices"
 msgstr ""
 
-#: init.php:2183
+#: init.php:2175
 msgid "Your session has expired. Reload the page and try again."
 msgstr ""

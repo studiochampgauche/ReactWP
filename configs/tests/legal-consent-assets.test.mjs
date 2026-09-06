@@ -834,7 +834,8 @@ test('consent interface is isolated and includes responsive accessibility states
   assert.match(stylesheet, /min-height: 2\.75rem/u, 'Primary controls must provide a roughly 44px target.');
   assert.match(stylesheet, /\.ulc-dialog__close\s*\{[\s\S]*?width: 2\.75rem;[\s\S]*?height: 2\.75rem;[\s\S]*?font-size: 0;/u, 'The close control must keep a fixed square target without relying on font metrics for its icon.');
   assert.match(stylesheet, /\.ulc-dialog__close::before,[\s\S]*?\.ulc-dialog__close::after\s*\{[\s\S]*?inset-block-start: 50%;[\s\S]*?inset-inline-start: 50%;[\s\S]*?transform: translate\(-50%, -50%\) rotate\(45deg\);/u, 'The close icon must remain geometrically centered in its control.');
-  assert.match(stylesheet, /\.ulc-category__label,[\s\S]*\.ulc-terms__label\s*\{[\s\S]*min-height: 2\.75rem/u, 'Category and required-terms labels need comfortable pointer targets.');
+  assert.match(stylesheet, /\.ulc-category__label\s*\{[\s\S]*min-height: 1\.5rem;/u, 'Category labels must align with their 24px native checkbox without adding an empty text row.');
+  assert.match(stylesheet, /\.ulc-terms__label\s*\{[\s\S]*min-height: 2\.75rem;/u, 'The required-terms label needs a comfortable pointer target.');
   assert.match(stylesheet, /\.ulc-service label\.ulc-service__label\s*\{[\s\S]*min-height: 2\.75rem/u, 'Individual service choices need comfortable native checkbox targets.');
   assert.match(stylesheet, /\.ulc-embed__iframe\s*\{[\s\S]*aspect-ratio: 16 \/ 9/u, 'Blocked embeds must reserve their media geometry.');
 
@@ -1660,6 +1661,68 @@ test('reporting-only services never become visitor consent controls', () => {
     serviceId: 'script-report',
     load(){}
   }), false, 'An unmanaged inventory relation must not become controllable through the browser API alone.');
+});
+
+test('detected services stay out of visitor preferences until an administrator classifies them', () => {
+  const unapprovedRuntime = runConsentManager({
+    config: createConsentConfig({
+      services: [
+        serviceFixture({
+          id: 'detected-video',
+          category: 'unclassified',
+          domain: 'video.example.test',
+          managed: true
+        })
+      ]
+    })
+  });
+  const unapprovedManager = unapprovedRuntime.document.querySelector('[data-universal-legal-consent-root]');
+  const unapprovedShadow = unapprovedManager.shadowRoot;
+
+  unapprovedRuntime.window.UniversalLegalConsent.openPreferences();
+  assert.equal(unapprovedShadow.querySelector('.ulc-services__intro'), null, 'An unapproved detected service exposed the services heading and description.');
+  assert.equal(unapprovedShadow.querySelector('.ulc-category--unclassified'), null, 'An unclassified service group was offered to the visitor.');
+  assert.equal(unapprovedShadow.querySelector('#ulc-service-detected-video'), null, 'An unapproved detected service received a visitor control.');
+  assert.equal(unapprovedShadow.textContent.includes('detected-video'), false, 'An unapproved detected service leaked into visitor-facing copy.');
+
+  const approvedRuntime = runConsentManager({
+    config: createConsentConfig({
+      services: [serviceFixture({id: 'youtube', category: 'external', domain: 'www.youtube.com'})]
+    })
+  });
+  const approvedManager = approvedRuntime.document.querySelector('[data-universal-legal-consent-root]');
+
+  approvedRuntime.window.UniversalLegalConsent.openPreferences();
+  assert.ok(approvedManager.shadowRoot.querySelector('.ulc-services__intro'), 'An approved individual service did not expose the service-choice introduction.');
+  assert.ok(approvedManager.shadowRoot.querySelector('#ulc-service-youtube'), 'An approved individual service did not receive a visitor control.');
+});
+
+test('preferences omit reject all when the required category is the only choice', () => {
+  const necessaryOnlyRuntime = runConsentManager({
+    config: createConsentConfig({
+      categories: [
+        {id: 'necessary', label: 'Necessary', description: 'Necessary description'}
+      ],
+      integrationCategories: {
+        googleAnalytics: '',
+        googleTagManager: '',
+        googleAds: '',
+        metaPixel: ''
+      }
+    })
+  });
+  const necessaryOnlyManager = necessaryOnlyRuntime.document.querySelector('[data-universal-legal-consent-root]');
+
+  necessaryOnlyRuntime.window.UniversalLegalConsent.openPreferences();
+  const necessaryOnlyDialog = necessaryOnlyManager.shadowRoot.querySelector('#ulc-preferences-dialog');
+  assert.equal(necessaryOnlyDialog.querySelector('[data-action="reject-all"]'), null, 'The dialog offered Reject all when no optional category existed.');
+  assert.ok(necessaryOnlyDialog.querySelector('.ulc-button--primary'), 'The dialog lost its global save action when Reject all was omitted.');
+
+  const optionalRuntime = runConsentManager({config: createConsentConfig()});
+  const optionalManager = optionalRuntime.document.querySelector('[data-universal-legal-consent-root]');
+
+  optionalRuntime.window.UniversalLegalConsent.openPreferences();
+  assert.ok(optionalManager.shadowRoot.querySelector('#ulc-preferences-dialog').querySelector('[data-action="reject-all"]'), 'The dialog omitted Reject all while optional categories were available.');
 });
 
 test('individual services gate adapters and embeds without granting their whole category', () => {

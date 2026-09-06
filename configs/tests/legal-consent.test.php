@@ -489,7 +489,7 @@ $options[Universal_Legal_Pages::OPTION_NAME] = array_merge($defaults, ['consent_
 consent_assert(!isset($options[Universal_Legal_Pages::DETECTED_SERVICES_OPTION]), 'The fresh-install service test did not start with an empty detected registry.');
 $fresh_config_before_content = Universal_Legal_Pages::get_public_consent_config();
 consent_assert(array_column($fresh_config_before_content['categories'], 'id') === ['necessary'], 'The fresh public registry exposed optional categories that were never created.');
-consent_assert(array_column($fresh_config_before_content['services'], 'id') === ['vimeo', 'youtube'], 'A fresh public config must expose known managed embed services before content renders.');
+consent_assert($fresh_config_before_content['services'] === [], 'A fresh public config exposed services that were neither detected nor approved.');
 consent_assert(strpos($fresh_config_before_content['stylesheetUrl'], 'https://example.test/wp-content/plugins/universal-legal-pages/assets/css/consent-manager.css?ver=') === 0, 'The public manager must use the cache-busted plugin stylesheet when the theme has no override.');
 consent_assert($theme_file_requests[0] === ['path', Universal_Legal_Pages::CONSENT_THEME_STYLESHEET], 'Consent styling must inspect the documented theme-relative override path.');
 
@@ -524,7 +524,10 @@ $theme_file_path = '';
 $theme_file_uri = '';
 $theme_file_requests = [];
 $fresh_youtube_placeholder = Universal_Legal_Pages::filter_external_iframes('<iframe src="https://www.youtube.com/embed/AbCdEf12345"></iframe>');
-consent_assert(strpos($fresh_youtube_placeholder, 'data-ulc-service="youtube"') !== false && strpos($fresh_youtube_placeholder, 'data-ulc-allow-service="youtube"') !== false, 'A first-render YouTube iframe was not immediately activable with the already emitted fresh config.');
+consent_assert(strpos($fresh_youtube_placeholder, 'data-ulc-service="youtube"') !== false, 'A first-render YouTube iframe was not replaced by a detected-service placeholder.');
+consent_assert(strpos($fresh_youtube_placeholder, 'data-ulc-allow-service="youtube"') === false, 'A detected but unapproved YouTube iframe exposed a visitor allow action.');
+consent_assert(isset($options[Universal_Legal_Pages::DETECTED_SERVICES_OPTION]['youtube']), 'An administrator visit did not add YouTube to the detected-service inventory.');
+consent_assert(Universal_Legal_Pages::get_public_consent_config()['services'] === [], 'Detection alone published an unapproved YouTube service to visitors.');
 unset($options[Universal_Legal_Pages::OPTION_NAME], $options[Universal_Legal_Pages::DETECTED_SERVICES_OPTION]);
 
 $options[Universal_Legal_Pages::OPTION_NAME] = [
@@ -625,7 +628,7 @@ consent_assert($unassigned_config['integrations'] === [
     'metaPixel' => '',
 ], 'An unassigned predefined integration reached the active public adapter configuration.');
 consent_assert($unassigned_config['customIntegrations'] === [], 'An unassigned custom integration reached the executable public configuration.');
-consent_assert(array_column($unassigned_config['services'], 'id') === ['vimeo', 'youtube'], 'An unassigned integration was published as an activatable service.');
+consent_assert($unassigned_config['services'] === [], 'An unassigned integration or dormant built-in adapter was published as an activatable service.');
 
 $standard_category_registry = [];
 foreach(['necessary', 'preferences', 'analytics', 'marketing', 'external'] as $category_id){
@@ -1443,8 +1446,8 @@ consent_assert($config['customIntegrations'] === [], 'The public custom-integrat
 consent_assert(isset($config['strings']['categories']['analytics']['description']), 'The nested frontend copy contract is incomplete.');
 consent_assert(isset($config['strings']['categories']['external']['description'], $config['strings']['services']['unclassified']), 'The external-service frontend copy contract is incomplete.');
 consent_assert(preg_match('/\A[a-f0-9]{24}\z/', $config['serviceRegistryVersion']) === 1, 'The service registry version must be exactly 24 lowercase hexadecimal characters.');
-consent_assert(count($config['services']) === 5, 'Known embed services and the three configured direct Google/Meta integrations must be active immediately.');
-consent_assert(array_column($config['services'], 'id') === ['google-ads-remarketing', 'google-analytics-4', 'meta-pixel', 'vimeo', 'youtube'], 'The configured integration and known embed service identifiers are unstable or GTM leaked into individual services.');
+consent_assert(count($config['services']) === 3, 'Only the three explicitly configured direct Google/Meta integrations must be public before service discovery and approval.');
+consent_assert(array_column($config['services'], 'id') === ['google-ads-remarketing', 'google-analytics-4', 'meta-pixel'], 'An unapproved embed service or GTM leaked into the individual visitor services.');
 foreach($config['services'] as $service){
     consent_assert(array_keys($service) === ['id', 'label', 'category', 'purpose', 'domains', 'kind', 'managed'], 'A public service has the wrong exact shape.');
 }
@@ -1456,18 +1459,21 @@ consent_assert(strpos($youtube_placeholder, '<iframe') === false, 'A YouTube ifr
 consent_assert(strpos($youtube_placeholder, ' src=') === false, 'A blocked YouTube placeholder retained an executable src attribute.');
 consent_assert(strpos($youtube_placeholder, 'data-ulc-service="youtube"') !== false, 'The YouTube placeholder uses the wrong service ID.');
 consent_assert(strpos($youtube_placeholder, 'data-ulc-src="https://www.youtube-nocookie.com/embed/AbCdEf12345?autoplay=1&amp;cc_lang_pref=fr&amp;controls=1&amp;rel=0"') !== false, 'YouTube was not canonicalized to the privacy-enhanced host with the shared query allowlist and stable order.');
+consent_assert(strpos($youtube_placeholder, 'data-ulc-allow-service="youtube"') === false, 'A detected but unapproved YouTube iframe exposed an allow action.');
 consent_assert(isset($options[Universal_Legal_Pages::DETECTED_SERVICES_OPTION]['youtube']), 'Detected YouTube content was not persisted in the bounded internal registry.');
 consent_assert($options[Universal_Legal_Pages::DETECTED_SERVICES_OPTION]['youtube']['kind'] === 'iframe', 'Detected YouTube content has the wrong internal kind.');
+consent_assert($options[Universal_Legal_Pages::DETECTED_SERVICES_OPTION]['youtube']['domains'] === ['www.youtube-nocookie.com', 'www.youtube.com'], 'The detected YouTube adapter did not retain both reviewed embed hosts.');
 $config_after_youtube_detection = Universal_Legal_Pages::get_public_consent_config();
 $service_ids_after_youtube_detection = array_column($config_after_youtube_detection['services'], 'id');
-consent_assert(count($service_ids_after_youtube_detection) === count(array_unique($service_ids_after_youtube_detection)), 'Detecting a known built-in embed service created a duplicate public definition.');
+consent_assert($service_ids_after_youtube_detection === ['google-ads-remarketing', 'google-analytics-4', 'meta-pixel'], 'Detecting YouTube published it before administrator approval or changed the configured integration registry.');
 
 add_filter('the_content', function($content){
     return $content . '<iframe src="https://player.vimeo.com/video/123456789"></iframe>';
 }, 100);
 $late_pipeline_content = apply_filters('the_content', '<p>Late shortcode output:</p>');
 consent_assert(strpos($late_pipeline_content, '<iframe') === false, 'An iframe added by a priority-100 content filter escaped the final consent transformation.');
-consent_assert(strpos($late_pipeline_content, 'data-ulc-service="vimeo"') !== false && strpos($late_pipeline_content, 'data-ulc-allow-service="vimeo"') !== false, 'A route-time Vimeo iframe added before the final filter was not immediately activable.');
+consent_assert(strpos($late_pipeline_content, 'data-ulc-service="vimeo"') !== false, 'A route-time Vimeo iframe added before the final filter was not detected and blocked.');
+consent_assert(strpos($late_pipeline_content, 'data-ulc-allow-service="vimeo"') === false, 'A detected but unapproved route-time Vimeo iframe exposed an allow action.');
 
 $quoted_title_placeholder = Universal_Legal_Pages::filter_external_iframes(
     '<iframe title="Video > introduction" src="https://www.youtube.com/embed/AbCdEf12345"></iframe>'
@@ -1528,6 +1534,12 @@ foreach($classified_config['services'] as $service){
 }
 consent_assert($classified_by_id[$unknown_id]['label'] === 'Widget partenaire' && $classified_by_id[$unknown_id]['category'] === 'external', 'Detected-service classification did not reach the public contract.');
 consent_assert($classified_by_id[$unknown_id]['domains'] === [$unknown_domain] && $classified_by_id[$unknown_id]['kind'] === 'iframe' && $classified_by_id[$unknown_id]['managed'] === true, 'Detected domain/type relationships were not derived from the internal registry.');
+consent_assert(isset($classified_by_id['youtube']) && $classified_by_id['youtube']['label'] === 'YouTube vidéo', 'An explicitly approved YouTube service did not reach the public contract.');
+consent_assert($classified_by_id['youtube']['domains'] === ['www.youtube-nocookie.com', 'www.youtube.com'], 'The approved YouTube service did not expose both reviewed embed hosts.');
+consent_assert(!isset($classified_by_id['vimeo']), 'A detected but unapproved Vimeo service reached the public visitor registry.');
+foreach($classified_config['services'] as $service){
+    consent_assert($service['category'] !== 'unclassified', 'An unclassified service reached the public visitor registry.');
+}
 
 $invalid_service_cases = [
     'unknown service' => ['not-detected' => ['label' => 'Unknown', 'category' => 'external']],
@@ -1679,6 +1691,21 @@ consent_assert(count($custom_service_config['services']) <= Universal_Legal_Page
 
 add_filter('universal_legal_pages_services', function($services){
     $services[] = [
+        'id' => 'project-unclassified',
+        'label' => 'Unclassified project service',
+        'category' => 'unclassified',
+        'purpose' => 'external',
+        'domains' => ['pending.example.test'],
+        'kind' => 'iframe',
+        'managed' => true,
+    ];
+    return $services;
+}, 15);
+$unclassified_filtered_config = Universal_Legal_Pages::get_public_consent_config();
+consent_assert(!in_array('project-unclassified', array_column($unclassified_filtered_config['services'], 'id'), true), 'A trusted but unclassified service filter definition reached visitor preferences.');
+
+add_filter('universal_legal_pages_services', function($services){
+    $services[] = [
         'id' => 'invalid-project-service',
         'label' => 'Invalid project service',
         'category' => 'external',
@@ -1702,7 +1729,15 @@ for($service_index = 0; $service_index < 40; $service_index++){
         'managed' => true,
     ];
 }
-$bounded_public_services = Universal_Legal_Pages::get_public_services($reclassified_services, $oversized_detected_registry);
+$bounded_service_options = $reclassified_services;
+$bounded_service_options['services'] = [];
+foreach(array_slice($oversized_detected_registry, 0, Universal_Legal_Pages::MAX_SERVICES, true) as $service_id => $relation){
+    $bounded_service_options['services'][$service_id] = [
+        'label' => $service_id,
+        'category' => 'external',
+    ];
+}
+$bounded_public_services = Universal_Legal_Pages::get_public_services($bounded_service_options, $oversized_detected_registry);
 consent_assert(count($bounded_public_services) === Universal_Legal_Pages::MAX_SERVICES, 'The public service contract did not enforce its exact maximum of 32 services.');
 
 $post_statuses[11] = 'draft';

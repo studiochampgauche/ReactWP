@@ -652,8 +652,8 @@ final class Universal_Legal_Pages{
             return [
                 'id' => 'youtube',
                 'label' => 'YouTube',
-                'category' => 'external',
-                'domains' => [$domain],
+                'category' => 'unclassified',
+                'domains' => ['www.youtube.com', 'www.youtube-nocookie.com'],
                 'kind' => 'iframe',
                 'managed' => true,
                 'handles' => [],
@@ -664,7 +664,7 @@ final class Universal_Legal_Pages{
             return [
                 'id' => 'vimeo',
                 'label' => 'Vimeo',
-                'category' => 'external',
+                'category' => 'unclassified',
                 'domains' => [$domain],
                 'kind' => 'iframe',
                 'managed' => true,
@@ -803,11 +803,21 @@ final class Universal_Legal_Pages{
         }
 
         $id = $definition['id'];
-        $domain = isset($definition['domains'][0])
-            ? self::normalize_service_domain($definition['domains'][0])
-            : '';
+        $domains = [];
 
-        if($domain === '' || !in_array($definition['kind'], self::service_kinds(), true)){
+        foreach(array_slice($definition['domains'], 0, self::MAX_SERVICE_DOMAINS) as $raw_domain){
+            $domain = self::normalize_service_domain($raw_domain);
+
+            if($domain === '' || in_array($domain, $domains, true)){
+                continue;
+            }
+
+            $domains[] = $domain;
+        }
+
+        sort($domains, SORT_STRING);
+
+        if(empty($domains) || !in_array($definition['kind'], self::service_kinds(), true)){
             return false;
         }
 
@@ -817,7 +827,7 @@ final class Universal_Legal_Pages{
             }
 
             $registry[$id] = [
-                'domains' => [$domain],
+                'domains' => $domains,
                 'handles' => $definition['kind'] === 'script' && isset($definition['handles'][0]) && self::script_handle_is_valid($definition['handles'][0])
                     ? [$definition['handles'][0]]
                     : [],
@@ -834,11 +844,18 @@ final class Universal_Legal_Pages{
 
         $changed = false;
 
-        if(!in_array($domain, $registry[$id]['domains'], true)
-            && count($registry[$id]['domains']) < self::MAX_SERVICE_DOMAINS){
+        foreach($domains as $domain){
+            if(in_array($domain, $registry[$id]['domains'], true)
+                || count($registry[$id]['domains']) >= self::MAX_SERVICE_DOMAINS){
+                continue;
+            }
+
             $registry[$id]['domains'][] = $domain;
-            sort($registry[$id]['domains'], SORT_STRING);
             $changed = true;
+        }
+
+        if($changed){
+            sort($registry[$id]['domains'], SORT_STRING);
         }
 
         $handle = isset($definition['handles'][0]) ? $definition['handles'][0] : '';
@@ -1016,41 +1033,7 @@ final class Universal_Legal_Pages{
         $categories = isset($options['consent_categories']) && is_array($options['consent_categories'])
             ? $options['consent_categories']
             : self::default_consent_categories();
-        $services = [
-            [
-                'id' => 'youtube',
-                'label' => 'YouTube',
-                'category' => isset($categories['external']) ? 'external' : 'unclassified',
-                'purpose' => 'external',
-                'domains' => ['www.youtube.com', 'www.youtube-nocookie.com'],
-                'kind' => 'iframe',
-                'managed' => true,
-            ],
-            [
-                'id' => 'vimeo',
-                'label' => 'Vimeo',
-                'category' => isset($categories['external']) ? 'external' : 'unclassified',
-                'purpose' => 'external',
-                'domains' => ['player.vimeo.com'],
-                'kind' => 'iframe',
-                'managed' => true,
-            ],
-        ];
-
-        foreach($services as &$service){
-            $settings = isset($options['services'][$service['id']]) && is_array($options['services'][$service['id']])
-                ? $options['services'][$service['id']]
-                : [];
-
-            if(isset($settings['label'])){
-                $service['label'] = $settings['label'];
-            }
-
-            if(isset($settings['category']) && in_array($settings['category'], self::service_categories($categories), true)){
-                $service['category'] = $settings['category'];
-            }
-        }
-        unset($service);
+        $services = [];
 
         $definitions = [
             'ga4_measurement_id' => [
@@ -1131,10 +1114,15 @@ final class Universal_Legal_Pages{
         $detected_registry = is_array($detected_registry)
             ? self::normalize_detected_service_registry($detected_registry)
             : self::get_detected_service_registry();
+        $categories = isset($options['consent_categories']) && is_array($options['consent_categories'])
+            ? $options['consent_categories']
+            : self::default_consent_categories();
         $services = self::integration_services($options);
-        $configured = isset($options['services']) && is_array($options['services'])
-            ? $options['services']
-            : [];
+        $configured = self::normalize_stored_service_settings(
+            $options['services'] ?? [],
+            $detected_registry,
+            $categories
+        );
 
         foreach($detected_registry as $id => $relation){
             if(count($services) >= self::MAX_SERVICES){
@@ -1149,15 +1137,22 @@ final class Universal_Legal_Pages{
                 continue;
             }
 
-            $default = self::default_detected_service($relation['domains'][0], $relation['kind']);
             $settings = isset($configured[$id]) && is_array($configured[$id])
                 ? $configured[$id]
                 : [];
+
+            if(empty($settings)
+                || !isset($settings['category'])
+                || $settings['category'] === 'unclassified'){
+                continue;
+            }
+
+            $default = self::default_detected_service($relation['domains'][0], $relation['kind']);
             $services[] = [
                 'id' => $id,
                 'label' => isset($settings['label']) ? $settings['label'] : $default['label'],
-                'category' => isset($settings['category']) ? $settings['category'] : $default['category'],
-                'purpose' => 'external',
+                'category' => $settings['category'],
+                'purpose' => self::category_service_purpose($settings['category']),
                 'domains' => $relation['domains'],
                 'kind' => $relation['kind'],
                 'managed' => (bool)$relation['managed'],
@@ -1167,16 +1162,13 @@ final class Universal_Legal_Pages{
         $services = self::canonicalize_public_services($services);
         $filtered = apply_filters('universal_legal_pages_services', $services, $options);
 
-        $categories = isset($options['consent_categories']) && is_array($options['consent_categories'])
-            ? $options['consent_categories']
-            : self::default_consent_categories();
-
         if(!self::public_service_definitions_are_valid($filtered, $categories)){
             return $services;
         }
 
         $filtered = array_values(array_filter($filtered, function($definition){
-            return !empty($definition['managed']);
+            return !empty($definition['managed'])
+                && $definition['category'] !== 'unclassified';
         }));
 
         return self::canonicalize_public_services($filtered);
