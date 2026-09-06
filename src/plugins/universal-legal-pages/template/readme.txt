@@ -14,7 +14,7 @@ Manage legal documents, cookie consent, and consent-aware analytics or marketing
 
 Universal Legal Pages adds a dedicated "Legal pages" area to the WordPress administration. Each document uses the native WordPress title, editor, revisions, publication workflow, and page permissions.
 
-Published documents receive an address under `/legal/document-slug/` and use the plugin's own full-page PHP template. The active theme header, footer, React application, ACF, and ReactWP runtime are not required. Queued theme/plugin styles and scripts are removed from this route, except WordPress's logged-in admin-bar assets, so the result stays visually and functionally isolated when the plugin is moved between sites.
+Published documents receive an address under `/legal/document-slug/` and use the plugin's own full-page PHP template. The document header displays its localized WordPress last-modified date in semantic `<time>` markup. The active theme header, footer, React application, ACF, and ReactWP runtime are not required. Queued theme/plugin styles and scripts are removed from this route, except WordPress's logged-in admin-bar assets, so the result stays visually and functionally isolated when the plugin is moved between sites.
 
 The "Consent" submenu adds a portable cookie banner and preferences dialog. Administrators freely choose which published legal documents appear as links in both interfaces; this selection never changes a theme menu. They can also create, rename, reorder, or remove consent categories in one ordered registry. A fresh registry contains only the strictly necessary category, which remains first and cannot be removed; every optional category exists only after an administrator creates it. When that required category is the only available choice, the preferences dialog omits its Reject all action because nothing optional can be refused. A category is a visitor-facing group with a stable ID, name, and description, and its assignment alone controls whether an integration is always active or requires a visitor choice. The administration never asks for a second privacy-behavior value. Built-in adapters still retain their reviewed internal Google or vendor signal mapping. When ReactWP supplies its Site settings languages, each language has its own category copy, ordered document selection, and ordered explicit-confirmation documents. With JavaScript available, the form saves through an authenticated, nonce-protected WordPress AJAX action without reloading the screen. A fixed, dismissible live notice reports the pending, successful, or validation-error state from anywhere in the long form. The native Settings API submission and complete WordPress notice stream remain as the no-JavaScript fallback. The interface runs in an isolated Shadow DOM, stores a versioned first-party consent cookie, respects Global Privacy Control when enabled, and exposes individual services separately, so accepting YouTube does not authorize Google Analytics.
 
@@ -77,6 +77,7 @@ The editable legal-page values are WordPress core fields:
 * Title: stored as `post_title` and rendered as escaped text. WordPress permits an empty title, in which case the public H1 falls back to the translatable label "Legal document".
 * Content: optional rich text stored as `post_content`, passed through the standard `the_content` pipeline and constrained with `wp_kses_post()` at the standalone PHP template output boundary. This template rule does not redefine WordPress core REST response rendering for headless consumers.
 * Publication and revisions: owned by WordPress core using page capabilities. The plugin registers no custom mutation endpoint.
+* Last modified date: read from WordPress's `post_modified` value, formatted with the site's localized date format, and exposed through an escaped machine-readable `<time datetime>` value.
 
 Only published documents are publicly available through the normal WordPress singular query. Draft, preview, edit, revision, and deletion permissions remain governed by WordPress.
 
@@ -131,6 +132,7 @@ The value is normalized as a WordPress slug. An empty or non-string value falls 
 == Changelog ==
 
 = 1.5.0 =
+* Displayed each standalone legal document's localized WordPress last-modified date beneath its title.
 * Added an ordered explicit-acceptance editor with up to 50 separate required confirmations and per-language documents.
 * Removed Reject all from the preferences dialog when the required category is the only available choice.
 * Kept detected services administrator-only until explicit classification and removed unclassified services from visitor preferences.

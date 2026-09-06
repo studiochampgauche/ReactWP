@@ -114,6 +114,7 @@ test('legal pages French catalogues are complete, readable, and synchronized', (
     assert.equal(sourceCatalogue.get('Respect the Global Privacy Control signal'), 'Respecter le signal Global Privacy Control');
     assert.equal(sourceCatalogue.get('Consent links language'), 'Langue des liens de consentement');
     assert.equal(sourceCatalogue.get('Custom integrations'), 'Intégrations personnalisées');
+    assert.equal(sourceCatalogue.get('Last updated:'), 'Dernière mise à jour :');
     assert.match(sourceCatalogue.get(''), new RegExp(`Language: ${locale}`), `${locale} is missing from its catalogue metadata.`);
   }
 });

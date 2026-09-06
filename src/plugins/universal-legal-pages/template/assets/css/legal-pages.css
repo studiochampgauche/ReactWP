@@ -41,13 +41,28 @@ body.universal-legal-page {
 
 .universal-legal-page__title {
 	max-width: 24ch;
-	margin: 0 0 clamp(2rem, 5vw, 4rem);
+	margin: 0 0 0.75rem;
 	color: #111111;
 	font-size: clamp(2rem, 1.55rem + 2.25vw, 3.5rem);
 	font-weight: 700;
 	letter-spacing: -0.03em;
 	line-height: 1.12;
 	overflow-wrap: anywhere;
+}
+
+.universal-legal-page__modified {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35em;
+	margin: 0 0 clamp(2rem, 5vw, 4rem);
+	color: #4a4a4a;
+	font-size: 0.875em;
+	line-height: 1.5;
+}
+
+.universal-legal-page__modified time {
+	color: #181818;
+	font-variant-numeric: tabular-nums;
 }
 
 .universal-legal-page__content {
@@ -270,6 +285,11 @@ body.universal-legal-page {
 		max-width: none;
 		color: #000000;
 		font-size: 24pt;
+	}
+
+	.universal-legal-page__modified {
+		margin-block-end: 1.5rem;
+		color: #000000;
 	}
 
 	.universal-legal-page__content :where(h2, h3, h4, h5, h6) {

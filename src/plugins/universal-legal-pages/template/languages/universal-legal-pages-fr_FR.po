@@ -442,7 +442,11 @@ msgstr "Les libellés utilisés pour accepter, refuser, personnaliser, enregistr
 msgid "Language for %s"
 msgstr "Langue de %s"
 
-#: init.php:3915 init.php:5195 templates/single-legal-page.php:60
+#: templates/single-legal-page.php:96
+msgid "Last updated:"
+msgstr "Dernière mise à jour :"
+
+#: init.php:3915 init.php:5195 templates/single-legal-page.php:72
 msgid "Legal document"
 msgstr "Document légal"
 

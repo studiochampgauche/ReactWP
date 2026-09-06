@@ -10,6 +10,7 @@ This file tracks notable project-level changes for `reactwp`.
 
 ### Changed
 
+- Added the localized WordPress last-modified date beneath the title of every standalone Universal Legal Pages document, using semantic and context-escaped `<time>` markup.
 - Reworked the Universal Legal Pages consent administration into six focused sections selected from one compact navigation control while keeping one global asynchronous save action and a no-JavaScript Settings API fallback.
 - Made consent categories administrator-owned and multilingual. Fresh installations now contain only the immutable Necessary category; optional categories can be created, renamed, reordered or removed, and their assignment is the complete loading rule for detected, predefined and custom integrations.
 - Expanded the consent interface and legal-link editors to cover all visitor-facing text, ordered per-language legal pages, custom theme styling, custom consent triggers, predefined Google and Meta adapters, and bounded custom integrations.

@@ -9,12 +9,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$legal_page         = get_queried_object();
-$legal_page_title   = '';
-$legal_page_content = '';
+$legal_page                   = get_queried_object();
+$legal_page_title             = '';
+$legal_page_content           = '';
+$legal_page_modified_date     = '';
+$legal_page_modified_datetime = '';
 
 if ( $legal_page instanceof WP_Post ) {
-	$legal_page_title = get_the_title( $legal_page );
+	$legal_page_title  = get_the_title( $legal_page );
+	$modified_date     = get_the_modified_date( '', $legal_page );
+	$modified_datetime = get_post_modified_time( DATE_W3C, false, $legal_page );
+
+	if ( is_string( $modified_date ) && trim( $modified_date ) !== '' ) {
+		$legal_page_modified_date = $modified_date;
+	}
+
+	if ( is_string( $modified_datetime ) && trim( $modified_datetime ) !== '' ) {
+		$legal_page_modified_datetime = $modified_datetime;
+	}
 
 	if ( post_password_required( $legal_page ) ) {
 		$legal_page_content = wp_kses(
@@ -79,6 +91,12 @@ if ( trim( $legal_page_title ) === '' ) {
 	<main class="universal-legal-page__main">
 		<article class="universal-legal-page__document">
 			<h1 class="universal-legal-page__title"><?php echo esc_html( $legal_page_title ); ?></h1>
+			<?php if ( $legal_page_modified_date !== '' && $legal_page_modified_datetime !== '' ) : ?>
+				<p class="universal-legal-page__modified">
+					<span><?php esc_html_e( 'Last updated:', 'universal-legal-pages' ); ?></span>
+					<time datetime="<?php echo esc_attr( $legal_page_modified_datetime ); ?>"><?php echo esc_html( $legal_page_modified_date ); ?></time>
+				</p>
+			<?php endif; ?>
 			<div class="universal-legal-page__content">
 				<?php echo $legal_page_content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Sanitized through the branch-specific allowlist above. ?>
 			</div>

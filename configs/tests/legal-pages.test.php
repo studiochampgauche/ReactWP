@@ -85,6 +85,10 @@ function __($value){
     return $value;
 }
 
+function esc_html_e($value){
+    echo esc_html(__($value));
+}
+
 function register_post_type($post_type, $args){
     global $registered_post_types;
     $registered_post_types[$post_type] = $args;
@@ -154,6 +158,14 @@ function get_queried_object(){
 
 function get_the_title($post){
     return $post->post_title;
+}
+
+function get_the_modified_date($format = '', $post = null){
+    return '6 septembre 2026 <script>alert(3)</script>';
+}
+
+function get_post_modified_time($format = 'U', $gmt = false, $post = null, $translate = false){
+    return '2026-09-06T14:30:00-04:00" onmouseover="alert(4)';
 }
 
 function post_password_required($post){
@@ -330,6 +342,14 @@ legal_pages_assert(substr_count($rendered_template, '<h1 ') === 1, 'The public t
 legal_pages_assert(
     strpos($rendered_template, 'Conditions &lt;script&gt;alert(1)&lt;/script&gt;') !== false,
     'The legal page title was not escaped as HTML text.'
+);
+legal_pages_assert(
+    strpos($rendered_template, '<span>Last updated:</span>') !== false,
+    'The standalone legal page must identify its last-modified date.'
+);
+legal_pages_assert(
+    strpos($rendered_template, '<time datetime="2026-09-06T14:30:00-04:00&quot; onmouseover=&quot;alert(4)">6 septembre 2026 &lt;script&gt;alert(3)&lt;/script&gt;</time>') !== false,
+    'The localized modified date and its machine-readable value must be escaped for their HTML contexts.'
 );
 legal_pages_assert(strpos($rendered_template, '<p>Texte autorisé.</p>') !== false, 'Allowed rich text was removed.');
 legal_pages_assert(strpos($rendered_template, '<script>') === false, 'Scriptable editor content reached the public HTML sink.');

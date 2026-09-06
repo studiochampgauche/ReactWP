@@ -441,7 +441,11 @@ msgstr ""
 msgid "Language for %s"
 msgstr ""
 
-#: init.php:3915 init.php:5195 templates/single-legal-page.php:60
+#: templates/single-legal-page.php:96
+msgid "Last updated:"
+msgstr ""
+
+#: init.php:3915 init.php:5195 templates/single-legal-page.php:72
 msgid "Legal document"
 msgstr ""
 
