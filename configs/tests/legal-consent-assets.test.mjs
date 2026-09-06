@@ -426,6 +426,56 @@ const readStoredConsent = (document) => {
   return encoded ? JSON.parse(decodeURIComponent(encoded)) : null;
 };
 
+test('browser defaults fall back to English when localized consent copy is unavailable', () => {
+  const runtime = runConsentManager({
+    config: createConsentConfig({strings: {}})
+  });
+  const shadow = runtime.document.querySelector('[data-universal-legal-consent-root]').shadowRoot;
+
+  assert.equal(shadow.querySelector('.ulc-banner__title').textContent, 'Your privacy choices');
+  assert.equal(
+    shadow.querySelector('.ulc-banner__message').textContent,
+    'We use cookies required for the site to work and, with your consent, analytics and marketing tools.'
+  );
+  assert.equal(shadow.querySelector('[data-action="accept-all"]').textContent, 'Accept all');
+  assert.equal(shadow.querySelector('[data-action="reject-all"]').textContent, 'Reject all');
+  assert.equal(shadow.querySelector('[data-action="open-preferences"]').textContent, 'Customize');
+
+  runtime.window.UniversalLegalConsent.openPreferences();
+  assert.equal(shadow.querySelector('.ulc-dialog__title').textContent, 'Consent preferences');
+  assert.equal(shadow.querySelector('.ulc-dialog__footer').querySelector('.ulc-button--primary').textContent, 'Save my choices');
+
+  for(const formerFrenchFallback of [
+    'Vos choix de confidentialité',
+    'Tout accepter',
+    'Tout refuser',
+    'Préférences de confidentialité',
+    'Impossible d’enregistrer ce choix. Veuillez réessayer.'
+  ]){
+    assert.equal(script.includes(formerFrenchFallback), false, `French browser fallback remains: ${formerFrenchFallback}`);
+  }
+});
+
+test('legal documents open in isolated tabs without replacing the consent page', () => {
+  const runtime = runConsentManager({
+    config: createConsentConfig({
+      legalLinks: [{label: 'Privacy policy', url: 'https://example.test/legal/privacy/'}],
+      termsRequired: true,
+      termsLink: {label: 'Terms', url: 'https://example.test/legal/terms/'}
+    })
+  });
+  const shadow = runtime.document.querySelector('[data-universal-legal-consent-root]').shadowRoot;
+  const legalLinks = shadow.querySelectorAll('.ulc-link');
+
+  assert.ok(legalLinks.length >= 3, 'Banner, dialog, and explicit-acceptance links were not all rendered.');
+  assert.ok(shadow.querySelector('#ulc-terms-confirmation-link'), 'The explicit-acceptance legal link is missing.');
+
+  for(const legalLink of legalLinks){
+    assert.equal(legalLink.getAttribute('target'), '_blank');
+    assert.equal(legalLink.getAttribute('rel'), 'noopener noreferrer');
+  }
+});
+
 test('consent manager keeps untrusted configuration out of executable HTML sinks', () => {
   const forbiddenSinks = [
     '.innerHTML',
@@ -452,6 +502,8 @@ test('consent manager keeps untrusted configuration out of executable HTML sinks
   assert.match(script, /seen\[link\.url\]/u, 'Duplicate public legal links must invalidate the configuration.');
   assert.match(script, /createElement\('nav', className\)/u, 'Selected legal pages must render as a labelled navigation region.');
   assert.match(script, /config\.strings\.legalLinksLabel/u, 'The legal-link navigation must expose an accessible name.');
+  assert.match(script, /anchor\.setAttribute\('target', '_blank'\);/u, 'Legal documents must open without replacing the consent page.');
+  assert.match(script, /anchor\.setAttribute\('rel', 'noopener noreferrer'\);/u, 'New legal-document tabs must not retain an opener or referrer relationship.');
   assert.match(script, /OPEN_TRIGGER_ATTRIBUTE = 'data-ulc-open'/u, 'Theme-owned consent triggers need a stable declarative attribute.');
   assert.match(script, /document\.addEventListener\('click', handleDocumentClick\)/u, 'Custom triggers must work through one delegated document listener.');
   assert.match(script, /openPreferences\(trigger\)/u, 'The custom trigger must use the same public preferences API.');
@@ -835,14 +887,27 @@ test('consent interface is isolated and includes responsive accessibility states
   assert.match(stylesheet, /\.ulc-dialog__close\s*\{[\s\S]*?width: 2\.75rem;[\s\S]*?height: 2\.75rem;[\s\S]*?font-size: 0;/u, 'The close control must keep a fixed square target without relying on font metrics for its icon.');
   assert.match(stylesheet, /\.ulc-dialog__close::before,[\s\S]*?\.ulc-dialog__close::after\s*\{[\s\S]*?inset-block-start: 50%;[\s\S]*?inset-inline-start: 50%;[\s\S]*?transform: translate\(-50%, -50%\) rotate\(45deg\);/u, 'The close icon must remain geometrically centered in its control.');
   assert.match(stylesheet, /\.ulc-category__label\s*\{[\s\S]*min-height: 1\.5rem;/u, 'Category labels must align with their 24px native checkbox without adding an empty text row.');
-  assert.match(stylesheet, /\.ulc-terms__label\s*\{[\s\S]*min-height: 2\.75rem;/u, 'The required-terms label needs a comfortable pointer target.');
+  assert.match(stylesheet, /\.ulc-terms__label\s*\{[\s\S]*display: inline;[\s\S]*line-height: inherit;/u, 'The required-terms label must share the surrounding sentence baseline instead of creating a tall inline box.');
+  assert.match(stylesheet, /\.ulc-terms__label-line\s*\{[\s\S]*line-height: 1\.5;/u, 'The required-terms sentence must align with its 24px checkbox.');
+  assert.match(stylesheet, /\.ulc-terms__label-line \.ulc-link\s*\{[\s\S]*display: inline;[\s\S]*min-height: 0;[\s\S]*line-height: inherit;[\s\S]*vertical-align: baseline;/u, 'The terms link must not expand the confirmation line or shift its baseline.');
   assert.match(stylesheet, /\.ulc-service label\.ulc-service__label\s*\{[\s\S]*min-height: 2\.75rem/u, 'Individual service choices need comfortable native checkbox targets.');
   assert.match(stylesheet, /\.ulc-embed__iframe\s*\{[\s\S]*aspect-ratio: 16 \/ 9/u, 'Blocked embeds must reserve their media geometry.');
 
-  assert.match(adminStylesheet, /\.ulp-admin__page-order\s*\{[\s\S]*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/u);
+  assert.match(adminStylesheet, /\.ulp-admin__page-order\s*\{[\s\S]*grid-template-columns: minmax\(0, 1fr\);[\s\S]*width: 100%;/u, 'Displayed and published legal pages must remain stacked at every viewport width.');
+  assert.match(adminStylesheet, /\.ulp-admin__page-bucket \+ \.ulp-admin__page-bucket\s*\{[\s\S]*padding-top: 24px;[\s\S]*border-top:/u, 'Published pages need a clear visual separation below displayed pages.');
   assert.equal((pluginSource.match(/data-ulp-section-select(?=[\s>])/gu) || []).length, 1, 'The consent settings screen needs one compact native section selector.');
   assert.equal((pluginSource.match(/<option value="ulp-settings-panel-/gu) || []).length, 6, 'Every consent settings section needs one selector option.');
   assert.equal((pluginSource.match(/data-ulp-section-panel(?=[\s>])/gu) || []).length, 6, 'Every section option needs one persistent form panel.');
+  for(const description of [
+    'Enable the consent interface, define when choices expire or must be renewed, respect Global Privacy Control, and choose how visitors reopen their preferences.',
+    'Edit every visitor-facing label and message used by the banner, preferences dialog, service controls, confirmation, and errors.',
+    'Manage the categories shown to visitors: add, remove, order, name, and describe them for each available language. Necessary always remains.',
+    'Review external scripts and embeds found during administrator visits. Name and categorize entries; detected scripts still need a trusted adapter before the plugin can control them.',
+    'Choose and order the legal pages shown in the consent interface, then optionally require visitors to confirm a selected document.',
+    'Configure built-in services or custom scripts, assign the category that controls when each one loads, and never enter secrets or private API keys.'
+  ]){
+    assert.ok(pluginSource.includes(`esc_html_e('${description}', 'universal-legal-pages')`), `Section header does not describe its controls: ${description}`);
+  }
   assert.equal((pluginSource.match(/ulp-admin-section--initially-hidden/gu) || []).length, 5, 'Every server-rendered section after the first must start outside the JavaScript first paint.');
   assert.doesNotMatch(pluginSource, /data-ulp-section-navigation\s+hidden/u, 'The section selector must not wait for plugin JavaScript to remove a hidden attribute.');
   assert.doesNotMatch(pluginSource, /data-ulp-section-tab(?=[\s>])/u, 'The crowded top-level section tabs must not remain.');
@@ -869,6 +934,8 @@ test('consent interface is isolated and includes responsive accessibility states
   assert.doesNotMatch(pluginSource, /<details class="ulp-admin__copy-group"[^>]*\sopen(?:\s|>)/u, 'No copy group should be opened by default.');
   assert.match(pluginSource, /class="ulp-admin__copy-summary-description"/u, 'Each accordion summary should explain the fields it contains.');
   assert.match(pluginSource, /<fieldset class="ulp-admin__copy-unit/u, 'Related copy fields should be grouped into labelled editing units.');
+  assert.match(adminStylesheet, /\.ulp-admin__copy-sections\s*\{[\s\S]*grid-template-columns: minmax\(0, 1fr\)/u, 'Copy editing units must remain stacked in one column at every viewport width.');
+  assert.match(adminStylesheet, /\.ulp-admin__copy-unit\s*\{[\s\S]*box-sizing: border-box;[\s\S]*width: 100%;/u, 'Every copy editing unit must occupy the complete available width.');
   assert.match(adminStylesheet, /\.ulp-admin__copy-group > summary\s*\{[\s\S]*min-height: 72px/u, 'Accordion summaries need a clear, comfortable activation target.');
   assert.match(adminStylesheet, /\.ulp-admin__services input\[type='text'\],[\s\S]*min-height: 44px/u, 'Service classification fields need usable targets.');
   assert.doesNotMatch(adminStylesheet, /\.ulp-admin-section--copy/u, 'The copy editor must not override the shared two-column section layout.');

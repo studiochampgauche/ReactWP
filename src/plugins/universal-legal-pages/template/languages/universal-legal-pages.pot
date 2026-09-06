@@ -147,7 +147,7 @@ msgid "Choice duration"
 msgstr ""
 
 #: init.php:4858
-msgid "Choose any documents that should be accessible from the banner and preferences dialog."
+msgid "Choose and order the legal pages shown in the consent interface, then optionally require visitors to confirm a selected document."
 msgstr ""
 
 #: init.php:157
@@ -166,8 +166,8 @@ msgstr ""
 msgid "Close dialog"
 msgstr ""
 
-#: init.php:4766
-msgid "Configure consent activation, policy version, choice duration, and general privacy controls."
+#: init.php:4901
+msgid "Configure built-in services or custom scripts, assign the category that controls when each one loads, and never enter secrets or private API keys."
 msgstr ""
 
 #: init.php:4622
@@ -215,7 +215,7 @@ msgid "Consent duration must be between 30 and 365 days."
 msgstr ""
 
 #: init.php:4755 init.php:4806
-msgid "Consent interface copy"
+msgid "Consent interface"
 msgstr ""
 
 #: init.php:4542
@@ -232,10 +232,6 @@ msgstr ""
 
 #: init.php:4709
 msgid "Control what may load on the site and give each visitor a clear choice before any optional tracking begins."
-msgstr ""
-
-#: init.php:4832
-msgid "Create and order the consent choices shown to visitors. Their names and descriptions define their meaning."
 msgstr ""
 
 #: init.php:4269
@@ -310,12 +306,16 @@ msgstr ""
 msgid "Documents displayed in the consent module"
 msgstr ""
 
+#: init.php:4807
+msgid "Edit every visitor-facing label and message used by the banner, preferences dialog, service controls, confirmation, and errors."
+msgstr ""
+
 #: init.php:96
 msgid "Edit legal page"
 msgstr ""
 
-#: init.php:4807
-msgid "Edit the banner, buttons, preferences dialog, terms, and status messages."
+#: init.php:4766
+msgid "Enable the consent interface, define when choices expire or must be renewed, respect Global Privacy Control, and choose how visitors reopen their preferences."
 msgstr ""
 
 #: init.php:4366
@@ -446,6 +446,10 @@ msgstr ""
 msgid "Manage my cookies"
 msgstr ""
 
+#: init.php:4832
+msgid "Manage the categories shown to visitors: add, remove, order, name, and describe them for each available language. Necessary always remains."
+msgstr ""
+
 #: init.php:3495
 msgid "Management button"
 msgstr ""
@@ -502,10 +506,6 @@ msgstr ""
 
 #: init.php:2967
 msgid "Multilingual copy is invalid or incomplete; the previous values were preserved."
-msgstr ""
-
-#: init.php:4845
-msgid "Name and classify detected domains before visitors may allow them individually."
 msgstr ""
 
 #: init.php:161
@@ -696,6 +696,10 @@ msgstr ""
 
 #: init.php:4789
 msgid "Respect the Global Privacy Control signal"
+msgstr ""
+
+#: init.php:4845
+msgid "Review external scripts and embeds found during administrator visits. Name and categorize entries; detected scripts still need a trusted adapter before the plugin can control them."
 msgstr ""
 
 #: init.php:235
@@ -896,10 +900,6 @@ msgstr ""
 
 #: init.php:107
 msgid "Uploaded to this legal page"
-msgstr ""
-
-#: init.php:4901
-msgid "Use only the public identifiers for the services in use. No password or private API key is required."
 msgstr ""
 
 #: init.php:4815

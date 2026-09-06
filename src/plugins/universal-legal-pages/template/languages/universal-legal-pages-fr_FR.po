@@ -148,8 +148,8 @@ msgid "Choice duration"
 msgstr "Durée du choix"
 
 #: init.php:4858
-msgid "Choose any documents that should be accessible from the banner and preferences dialog."
-msgstr "Choisissez librement les documents accessibles depuis le bandeau et la fenêtre de préférences."
+msgid "Choose and order the legal pages shown in the consent interface, then optionally require visitors to confirm a selected document."
+msgstr "Choisissez et ordonnez les pages légales affichées dans l’interface de consentement, puis exigez facultativement la confirmation d’un document sélectionné."
 
 #: init.php:157
 msgid "Choose the optional categories you authorize. You can change this choice later."
@@ -167,9 +167,9 @@ msgstr "Fermer"
 msgid "Close dialog"
 msgstr "Fermer la fenêtre"
 
-#: init.php:4766
-msgid "Configure consent activation, policy version, choice duration, and general privacy controls."
-msgstr "Configurez l’activation du consentement, la version de la politique, la durée des choix et les contrôles généraux de confidentialité."
+#: init.php:4901
+msgid "Configure built-in services or custom scripts, assign the category that controls when each one loads, and never enter secrets or private API keys."
+msgstr "Configurez des services intégrés ou des scripts personnalisés, attribuez la catégorie qui contrôle le chargement de chacun et ne saisissez jamais de secret ni de clé API privée."
 
 #: init.php:4622
 msgid "Confirmation page language"
@@ -216,8 +216,8 @@ msgid "Consent duration must be between 30 and 365 days."
 msgstr "La durée du consentement doit être comprise entre 30 et 365 jours."
 
 #: init.php:4755 init.php:4806
-msgid "Consent interface copy"
-msgstr "Textes de l’interface de consentement"
+msgid "Consent interface"
+msgstr "Interface de consentement"
 
 #: init.php:4542
 msgid "Consent links language"
@@ -234,10 +234,6 @@ msgstr "Préférences de confidentialité"
 #: init.php:4709
 msgid "Control what may load on the site and give each visitor a clear choice before any optional tracking begins."
 msgstr "Contrôlez ce qui peut être chargé sur le site et donnez à chaque personne un choix clair avant toute mesure facultative."
-
-#: init.php:4832
-msgid "Create and order the consent choices shown to visitors. Their names and descriptions define their meaning."
-msgstr "Créez et ordonnez les choix de consentement présentés aux visiteurs. Leur nom et leur description en définissent le sens."
 
 #: init.php:4269
 msgid "Custom code is public and must never contain passwords, tokens, or other secrets. Necessary runs without asking; every other category waits until this individual service is accepted."
@@ -311,13 +307,17 @@ msgstr "La sélection des pages à afficher est invalide; le choix précédent a
 msgid "Documents displayed in the consent module"
 msgstr "Pages affichées dans le module de consentement"
 
+#: init.php:4807
+msgid "Edit every visitor-facing label and message used by the banner, preferences dialog, service controls, confirmation, and errors."
+msgstr "Modifiez tous les libellés et messages destinés aux visiteurs dans le bandeau, la fenêtre de préférences, les contrôles de services, la confirmation et les erreurs."
+
 #: init.php:96
 msgid "Edit legal page"
 msgstr "Modifier la page légale"
 
-#: init.php:4807
-msgid "Edit the banner, buttons, preferences dialog, terms, and status messages."
-msgstr "Modifiez le bandeau, les boutons, la fenêtre de préférences, les conditions et les messages d’état."
+#: init.php:4766
+msgid "Enable the consent interface, define when choices expire or must be renewed, respect Global Privacy Control, and choose how visitors reopen their preferences."
+msgstr "Activez l’interface de consentement, définissez quand les choix expirent ou doivent être renouvelés, respectez le signal Global Privacy Control et choisissez comment les visiteurs peuvent rouvrir leurs préférences."
 
 #: init.php:4366
 msgid "Error messages"
@@ -447,6 +447,10 @@ msgstr "Charge les vidéos intégrées et les autres contenus fournis par des se
 msgid "Manage my cookies"
 msgstr "Gérer mes cookies"
 
+#: init.php:4832
+msgid "Manage the categories shown to visitors: add, remove, order, name, and describe them for each available language. Necessary always remains."
+msgstr "Gérez les catégories présentées aux visiteurs : ajoutez-les, supprimez-les, ordonnez-les, nommez-les et décrivez-les dans chaque langue disponible. La catégorie Nécessaire demeure toujours présente."
+
 #: init.php:3495
 msgid "Management button"
 msgstr "Bouton de gestion"
@@ -504,10 +508,6 @@ msgstr "Les textes multilingues sont invalides ou incomplets; toutes les valeurs
 #: init.php:2967
 msgid "Multilingual copy is invalid or incomplete; the previous values were preserved."
 msgstr "Les textes multilingues sont invalides ou incomplets; les valeurs précédentes ont été conservées."
-
-#: init.php:4845
-msgid "Name and classify detected domains before visitors may allow them individually."
-msgstr "Nommez et classez les domaines détectés avant que les visiteurs puissent les autoriser individuellement."
 
 #: init.php:161
 msgid "Necessary"
@@ -698,6 +698,10 @@ msgstr "Erreur des conditions obligatoires"
 #: init.php:4789
 msgid "Respect the Global Privacy Control signal"
 msgstr "Respecter le signal Global Privacy Control"
+
+#: init.php:4845
+msgid "Review external scripts and embeds found during administrator visits. Name and categorize entries; detected scripts still need a trusted adapter before the plugin can control them."
+msgstr "Examinez les scripts et contenus intégrés externes trouvés lorsqu’un administrateur consulte le site. Nommez et classez les entrées; les scripts détectés nécessitent toujours un adaptateur de confiance pour être contrôlés par le plugin."
 
 #: init.php:235
 msgid "Save choices"
@@ -898,10 +902,6 @@ msgstr "Modifiez cette valeur lorsque vos usages changent afin de demander un no
 #: init.php:107
 msgid "Uploaded to this legal page"
 msgstr "Téléversé pour cette page légale"
-
-#: init.php:4901
-msgid "Use only the public identifiers for the services in use. No password or private API key is required."
-msgstr "Ajoutez uniquement les identifiants publics des services utilisés. Aucun mot de passe ni aucune clé API privée ne sont requis."
 
 #: init.php:4815
 msgid "Used copy is invalid or incomplete; verify the previous values."

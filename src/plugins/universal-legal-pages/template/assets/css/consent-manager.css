@@ -367,8 +367,6 @@ input:focus-visible {
 
 .ulc-category__label,
 .ulc-terms__label {
-    display: inline-flex;
-    align-items: center;
     color: #181818;
     font-size: 1rem;
     font-weight: 700;
@@ -377,12 +375,15 @@ input:focus-visible {
 }
 
 .ulc-category__label {
+    display: inline-flex;
+    align-items: center;
     min-height: 1.5rem;
     cursor: pointer;
 }
 
 .ulc-terms__label {
-    min-height: 2.75rem;
+    display: inline;
+    line-height: inherit;
 }
 
 input:disabled + .ulc-category__content .ulc-category__label {
@@ -507,12 +508,16 @@ input:disabled + .ulc-category__content .ulc-category__label {
 
 .ulc-terms__label-line {
     min-width: 0;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
 }
 
 .ulc-terms__label-line .ulc-link {
-    min-height: 0;
     display: inline;
+    min-height: 0;
     font-size: 1rem;
+    line-height: inherit;
+    vertical-align: baseline;
 }
 
 .ulc-dialog__footer {

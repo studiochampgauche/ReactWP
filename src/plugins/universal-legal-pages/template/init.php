@@ -4752,7 +4752,7 @@ final class Universal_Legal_Pages{
                         <label for="ulp-settings-section"><?php esc_html_e('Settings section', 'universal-legal-pages'); ?></label>
                         <select id="ulp-settings-section" data-ulp-section-select>
                             <option value="ulp-settings-panel-banner"><?php esc_html_e('Consent banner', 'universal-legal-pages'); ?></option>
-                            <option value="ulp-settings-panel-copy"><?php esc_html_e('Consent interface copy', 'universal-legal-pages'); ?></option>
+                            <option value="ulp-settings-panel-copy"><?php esc_html_e('Consent interface', 'universal-legal-pages'); ?></option>
                             <option value="ulp-settings-panel-categories"><?php esc_html_e('Consent categories', 'universal-legal-pages'); ?></option>
                             <option value="ulp-settings-panel-services"><?php esc_html_e('Detected services', 'universal-legal-pages'); ?></option>
                             <option value="ulp-settings-panel-pages"><?php esc_html_e('Consent module links', 'universal-legal-pages'); ?></option>
@@ -4763,7 +4763,7 @@ final class Universal_Legal_Pages{
                 <section id="ulp-settings-panel-banner" class="ulp-admin-section" aria-labelledby="ulp-section-banner-title" data-ulp-section-panel>
                     <header class="ulp-admin-section__header">
                         <h2 id="ulp-section-banner-title"><?php esc_html_e('Consent banner', 'universal-legal-pages'); ?></h2>
-                        <p><?php esc_html_e('Configure consent activation, policy version, choice duration, and general privacy controls.', 'universal-legal-pages'); ?></p>
+                        <p><?php esc_html_e('Enable the consent interface, define when choices expire or must be renewed, respect Global Privacy Control, and choose how visitors reopen their preferences.', 'universal-legal-pages'); ?></p>
                     </header>
                     <div class="ulp-admin-section__body">
                         <table class="form-table" role="presentation">
@@ -4803,8 +4803,8 @@ final class Universal_Legal_Pages{
 
                 <section id="ulp-settings-panel-copy" class="ulp-admin-section ulp-admin-section--initially-hidden" aria-labelledby="ulp-section-copy-title" data-ulp-section-panel>
                     <header class="ulp-admin-section__header">
-                        <h2 id="ulp-section-copy-title"><?php esc_html_e('Consent interface copy', 'universal-legal-pages'); ?></h2>
-                        <p><?php esc_html_e('Edit the banner, buttons, preferences dialog, terms, and status messages.', 'universal-legal-pages'); ?></p>
+                        <h2 id="ulp-section-copy-title"><?php esc_html_e('Consent interface', 'universal-legal-pages'); ?></h2>
+                        <p><?php esc_html_e('Edit every visitor-facing label and message used by the banner, preferences dialog, service controls, confirmation, and errors.', 'universal-legal-pages'); ?></p>
                     </header>
                     <div class="ulp-admin-section__body">
                         <?php if(!empty($languages)) : ?>
@@ -4829,7 +4829,7 @@ final class Universal_Legal_Pages{
                 <section id="ulp-settings-panel-categories" class="ulp-admin-section ulp-admin-section--initially-hidden" aria-labelledby="ulp-section-categories-title" data-ulp-section-panel>
                     <header class="ulp-admin-section__header">
                         <h2 id="ulp-section-categories-title"><?php esc_html_e('Consent categories', 'universal-legal-pages'); ?></h2>
-                        <p><?php esc_html_e('Create and order the consent choices shown to visitors. Their names and descriptions define their meaning.', 'universal-legal-pages'); ?></p>
+                        <p><?php esc_html_e('Manage the categories shown to visitors: add, remove, order, name, and describe them for each available language. Necessary always remains.', 'universal-legal-pages'); ?></p>
                     </header>
                     <div class="ulp-admin-section__body">
                         <div class="notice notice-info inline ulp-admin__notice"><p>
@@ -4842,7 +4842,7 @@ final class Universal_Legal_Pages{
                 <section id="ulp-settings-panel-services" class="ulp-admin-section ulp-admin-section--initially-hidden" aria-labelledby="ulp-section-services-title" data-ulp-section-panel>
                     <header class="ulp-admin-section__header">
                         <h2 id="ulp-section-services-title"><?php esc_html_e('Detected services', 'universal-legal-pages'); ?></h2>
-                        <p><?php esc_html_e('Name and classify detected domains before visitors may allow them individually.', 'universal-legal-pages'); ?></p>
+                        <p><?php esc_html_e('Review external scripts and embeds found during administrator visits. Name and categorize entries; detected scripts still need a trusted adapter before the plugin can control them.', 'universal-legal-pages'); ?></p>
                     </header>
                     <div class="ulp-admin-section__body">
                         <div class="notice notice-info inline ulp-admin__notice"><p>
@@ -4855,7 +4855,7 @@ final class Universal_Legal_Pages{
                 <section id="ulp-settings-panel-pages" class="ulp-admin-section ulp-admin-section--initially-hidden" aria-labelledby="ulp-section-pages-title" data-ulp-section-panel>
                     <header class="ulp-admin-section__header">
                         <h2 id="ulp-section-pages-title"><?php esc_html_e('Consent module links', 'universal-legal-pages'); ?></h2>
-                        <p><?php esc_html_e('Choose any documents that should be accessible from the banner and preferences dialog.', 'universal-legal-pages'); ?></p>
+                        <p><?php esc_html_e('Choose and order the legal pages shown in the consent interface, then optionally require visitors to confirm a selected document.', 'universal-legal-pages'); ?></p>
                     </header>
                     <div class="ulp-admin-section__body">
                         <?php if(!empty($languages)) : ?>
@@ -4898,7 +4898,7 @@ final class Universal_Legal_Pages{
                 <section id="ulp-settings-panel-integrations" class="ulp-admin-section ulp-admin-section--initially-hidden" aria-labelledby="ulp-section-integrations-title" data-ulp-section-panel>
                     <header class="ulp-admin-section__header">
                         <h2 id="ulp-section-integrations-title"><?php esc_html_e('Integrations', 'universal-legal-pages'); ?></h2>
-                        <p><?php esc_html_e('Use only the public identifiers for the services in use. No password or private API key is required.', 'universal-legal-pages'); ?></p>
+                        <p><?php esc_html_e('Configure built-in services or custom scripts, assign the category that controls when each one loads, and never enter secrets or private API keys.', 'universal-legal-pages'); ?></p>
                     </header>
                     <div class="ulp-admin-section__body">
                         <table class="form-table ulp-admin__integrations" role="presentation">

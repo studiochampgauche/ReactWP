@@ -1149,91 +1149,91 @@
         var error = isPlainObject(raw.error) ? raw.error : {};
 
         return {
-            title: normalizedString(raw.title, 'Vos choix de confidentialité'),
+            title: normalizedString(raw.title, 'Your privacy choices'),
             message: normalizedString(
                 raw.message,
-                'Nous utilisons des cookies nécessaires au fonctionnement du site et, avec votre accord, des outils de mesure et de marketing.'
+                'We use cookies required for the site to work and, with your consent, analytics and marketing tools.'
             ),
-            legalLinksLabel: normalizedString(raw.legalLinksLabel, 'Documents légaux'),
+            legalLinksLabel: normalizedString(raw.legalLinksLabel, 'Legal documents'),
             actions: {
-                acceptAll: normalizedString(actions.acceptAll, 'Tout accepter'),
-                rejectAll: normalizedString(actions.rejectAll, 'Tout refuser'),
-                customize: normalizedString(actions.customize, 'Personnaliser'),
-                save: normalizedString(actions.save, 'Enregistrer mes choix'),
-                close: normalizedString(actions.close, 'Fermer'),
-                revisit: normalizedString(actions.revisit, 'Gérer mes cookies')
+                acceptAll: normalizedString(actions.acceptAll, 'Accept all'),
+                rejectAll: normalizedString(actions.rejectAll, 'Reject all'),
+                customize: normalizedString(actions.customize, 'Customize'),
+                save: normalizedString(actions.save, 'Save my choices'),
+                close: normalizedString(actions.close, 'Close'),
+                revisit: normalizedString(actions.revisit, 'Manage my cookies')
             },
             dialog: {
-                title: normalizedString(dialog.title, 'Préférences de confidentialité'),
+                title: normalizedString(dialog.title, 'Consent preferences'),
                 description: normalizedString(
                     dialog.description,
-                    'Choisissez les catégories facultatives que vous autorisez. Vous pourrez modifier ce choix plus tard.'
+                    'Choose the optional categories you authorize. You can change this choice later.'
                 )
             },
             categories: {
                 necessary: normalizeCategoryStrings(
                     categories.necessary,
-                    'Nécessaires',
-                    'Requis pour le fonctionnement et la sécurité du site. Toujours actif.'
+                    'Necessary',
+                    'Required for site operation and security. Always active.'
                 ),
                 preferences: normalizeCategoryStrings(
                     categories.preferences,
-                    'Préférences',
-                    'Mémorise vos préférences d’affichage et de fonctionnement.'
+                    'Preferences',
+                    'Remembers your display and functionality preferences.'
                 ),
                 analytics: normalizeCategoryStrings(
                     categories.analytics,
-                    'Analyse',
-                    'Mesure l’utilisation du site afin de l’améliorer.'
+                    'Analytics',
+                    'Measures how the site is used to help improve it.'
                 ),
                 marketing: normalizeCategoryStrings(
                     categories.marketing,
                     'Marketing',
-                    'Mesure les campagnes et permet la personnalisation publicitaire.'
+                    'Measures campaign performance and enables advertising personalization.'
                 ),
                 external: normalizeCategoryStrings(
                     categories.external,
-                    'Contenu externe',
-                    'Autorise les contenus intégrés provenant de services externes.'
+                    'External content',
+                    'Loads embedded video and other content supplied by external services.'
                 )
             },
             services: {
-                title: normalizedString(services.title, 'Services'),
+                title: normalizedString(services.title, 'External services'),
                 description: normalizedString(
                     services.description,
-                    'Choisissez précisément les services que vous autorisez dans chaque catégorie.'
+                    'Choose which individual external services may load.'
                 ),
                 blocked: normalizedString(
                     services.blocked,
-                    'Ce contenu est bloqué jusqu’à ce que vous autorisiez ce service.'
+                    'This content is blocked until you allow its service.'
                 ),
-                allow: normalizedString(services.allow, 'Autoriser ce service'),
+                allow: normalizedString(services.allow, 'Allow this service'),
                 unclassified: normalizedString(
                     services.unclassified,
-                    'Ce service n’est pas encore classé et ne peut pas être autorisé.'
+                    'This service has not been classified and remains blocked.'
                 )
             },
             terms: {
-                label: normalizedString(terms.label, 'Je confirme avoir lu et accepté'),
+                label: normalizedString(terms.label, 'I confirm that I have read and accepted'),
                 description: normalizedString(
                     terms.description,
-                    'Cette acceptation est conservée dans ce navigateur avec vos choix de confidentialité.'
+                    'This confirmation is stored in this browser with your privacy choices.'
                 ),
                 requiredError: normalizedString(
                     terms.requiredError,
-                    'Veuillez accepter les conditions pour enregistrer ce choix.'
+                    'Please accept the terms to save this choice.'
                 )
             },
             gpc: {
                 notice: normalizedString(
                     gpc.notice,
-                    'Votre navigateur indique une préférence globale de confidentialité. Le marketing demeure désactivé.'
+                    'Your browser indicates a global privacy preference. Marketing remains disabled.'
                 )
             },
             error: {
                 generic: normalizedString(
                     error.generic,
-                    'Impossible d’enregistrer ce choix. Veuillez réessayer.'
+                    'Unable to save this choice. Please try again.'
                 )
             }
         };
@@ -2920,6 +2920,8 @@
 
         var anchor = createElement('a', 'ulc-link', link.label);
         anchor.href = link.url;
+        anchor.setAttribute('target', '_blank');
+        anchor.setAttribute('rel', 'noopener noreferrer');
 
         return anchor;
 
