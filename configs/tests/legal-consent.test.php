@@ -467,6 +467,7 @@ $defaults = Universal_Legal_Pages::default_options();
 consent_assert($defaults['consent_enabled'] === false, 'Consent must remain opt-in for the site administrator.');
 consent_assert($defaults['respect_gpc'] === true, 'Global Privacy Control should be respected by default.');
 consent_assert($defaults['consent_page_ids'] === [], 'Consent links must be freely selected rather than assigned fixed page roles.');
+consent_assert($defaults['terms_page_ids'] === [], 'Explicit confirmations must start as an empty ordered list.');
 consent_assert($defaults['consent_link_translations'] === [], 'Portable defaults must not assume multilingual legal-page links.');
 consent_assert($defaults['banner_translations'] === [], 'Portable defaults must not assume a multilingual host.');
 consent_assert(count($defaults['consent_strings']['actions']) === 6, 'The editable consent copy is missing action labels.');
@@ -538,6 +539,7 @@ $options[Universal_Legal_Pages::OPTION_NAME] = [
 ];
 $migrated_options = Universal_Legal_Pages::get_options();
 consent_assert($migrated_options['consent_page_ids'] === [10, 11], 'Legacy fixed page selections were not migrated into the flexible consent-link list.');
+consent_assert($migrated_options['terms_page_ids'] === [11] && $migrated_options['terms_page_id'] === 11, 'The legacy single terms page was not migrated into the ordered confirmation list.');
 consent_assert(!array_key_exists('privacy_page_id', $migrated_options) && !array_key_exists('secret_api_key', $migrated_options), 'Legacy or unknown stored keys escaped the current option allowlist.');
 
 $legacy_analytics_category_id = 'category-1111111111111111';
@@ -647,7 +649,7 @@ $valid_input = [
     'banner_title' => 'Choix de confidentialité',
     'banner_message' => "Mesure facultative.\nAucun suivi avant votre choix.",
     'consent_page_ids' => ['10', '11'],
-    'terms_page_id' => '11',
+    'terms_page_ids' => ['_present' => '1', '0' => '10', '1' => '11'],
     'terms_required' => '1',
     'policy_version' => '2026.08-1',
     'duration_days' => '365',
@@ -671,7 +673,7 @@ consent_assert($sanitized['consent_enabled'] === true, 'Consent activation did n
 consent_assert(strpos($sanitized['banner_title'], '<') === false, 'Banner title markup was not removed.');
 consent_assert(strpos($sanitized['banner_message'], '<') === false, 'Banner message markup was not removed.');
 consent_assert($sanitized['banner_title'] === 'Choix de confidentialité', 'A valid plain-text title was not retained.');
-consent_assert($sanitized['consent_page_ids'] === [10, 11] && $sanitized['terms_page_id'] === 11, 'Published legal page references were rejected.');
+consent_assert($sanitized['consent_page_ids'] === [10, 11] && $sanitized['terms_page_ids'] === [10, 11] && $sanitized['terms_page_id'] === 10, 'Published legal page references or their confirmation order were rejected.');
 consent_assert($sanitized['terms_required'] === true, 'Terms acknowledgement was not retained with a valid page.');
 consent_assert($sanitized['policy_version'] === '2026.08-1', 'Policy version canonicalization failed.');
 consent_assert($sanitized['duration_days'] === 365, 'Consent duration canonicalization failed.');
@@ -1359,10 +1361,10 @@ $options[Universal_Legal_Pages::OPTION_NAME] = $sanitized;
 $settings_errors = [];
 $invalid_page_shapes = Universal_Legal_Pages::sanitize_options(array_merge($valid_input, [
     'consent_page_ids' => ['10', ['11']],
-    'terms_page_id' => '-11',
+    'terms_page_ids' => ['_present' => '1', '0' => '-11'],
 ]));
 consent_assert($invalid_page_shapes['consent_page_ids'] === [10, 11], 'A malformed page list silently replaced valid consent links.');
-consent_assert($invalid_page_shapes['terms_page_id'] === 11, 'A negative identifier was converted into a valid terms-page reference.');
+consent_assert($invalid_page_shapes['terms_page_ids'] === [10, 11] && $invalid_page_shapes['terms_page_id'] === 10, 'A malformed explicit-confirmation list replaced the previous ordered values.');
 consent_assert(count($settings_errors) === 2, 'Malformed legal-page identifiers did not produce one error per field.');
 
 $settings_errors = [];
@@ -1378,6 +1380,24 @@ $too_many_page_ids = Universal_Legal_Pages::sanitize_options(array_merge($valid_
 ]));
 consent_assert($too_many_page_ids['consent_page_ids'] === [10, 11], 'An oversized page list replaced the previous consent links.');
 consent_assert($settings_errors[0]['code'] === 'invalid_consent_page_ids', 'An oversized page list did not emit the stable list error code.');
+
+$settings_errors = [];
+$duplicate_terms_page_ids = Universal_Legal_Pages::sanitize_options(array_merge($valid_input, [
+    'terms_page_ids' => ['_present' => '1', '0' => '10', '1' => '10'],
+]));
+consent_assert($duplicate_terms_page_ids['terms_page_ids'] === [10, 11], 'Duplicate confirmation pages replaced the previous ordered list.');
+consent_assert($settings_errors[0]['code'] === 'invalid_terms_page_ids', 'Duplicate confirmation pages did not emit the stable list error code.');
+
+$settings_errors = [];
+$oversized_terms_input = ['_present' => '1'];
+for($terms_index = 0; $terms_index <= Universal_Legal_Pages::MAX_TERMS_CONFIRMATIONS; $terms_index++){
+    $oversized_terms_input[(string)$terms_index] = '10';
+}
+$too_many_terms_page_ids = Universal_Legal_Pages::sanitize_options(array_merge($valid_input, [
+    'terms_page_ids' => $oversized_terms_input,
+]));
+consent_assert($too_many_terms_page_ids['terms_page_ids'] === [10, 11], 'An oversized confirmation list replaced the previous ordered values.');
+consent_assert($settings_errors[0]['code'] === 'invalid_terms_page_ids', 'An oversized confirmation list did not emit the stable list error code.');
 
 $no_page_links_input = $valid_input;
 unset($no_page_links_input['consent_page_ids']);
@@ -1400,7 +1420,7 @@ $invalid = Universal_Legal_Pages::sanitize_options([
     'banner_title' => '<script>alert(1)</script>',
     'banner_message' => '<img src=x onerror=alert(2)>',
     'consent_page_ids' => ['99', '12'],
-    'terms_page_id' => '0',
+    'terms_page_ids' => ['_present' => '1'],
     'terms_required' => '1',
     'policy_version' => '../bad version',
     'duration_days' => '999',
@@ -1432,7 +1452,8 @@ consent_assert($config['termsRequired'] === true, 'The public contract lost the 
 consent_assert(count($config['legalLinks']) === 2, 'The selected consent links are missing from the public contract.');
 consent_assert($config['legalLinks'][0]['url'] === 'https://example.test/legal/10/', 'The first selected legal link is missing from the public contract.');
 consent_assert($config['legalLinks'][1]['label'] === 'Conditions', 'The selected legal-link order or label changed unexpectedly.');
-consent_assert($config['termsLink']['url'] === 'https://example.test/legal/11/', 'The terms confirmation link is missing from the public contract.');
+consent_assert(array_column($config['termsLinks'], 'url') === ['https://example.test/legal/10/', 'https://example.test/legal/11/'], 'The ordered confirmation links are missing from the public contract.');
+consent_assert($config['termsLink'] === $config['termsLinks'][0], 'The legacy single confirmation link must remain a projection of the first ordered link.');
 consent_assert($config['integrations']['googleAnalytics'] === 'G-ABCD1234', 'The GA4 adapter configuration is missing.');
 consent_assert($config['integrations']['googleTagManager'] === 'GTM-ABCD1234', 'The GTM adapter configuration is missing.');
 consent_assert($config['integrations']['googleAds'] === 'AW-1234567890', 'The standalone Google Ads adapter configuration is missing.');
@@ -1446,6 +1467,24 @@ consent_assert($config['customIntegrations'] === [], 'The public custom-integrat
 consent_assert(isset($config['strings']['categories']['analytics']['description']), 'The nested frontend copy contract is incomplete.');
 consent_assert(isset($config['strings']['categories']['external']['description'], $config['strings']['services']['unclassified']), 'The external-service frontend copy contract is incomplete.');
 consent_assert(preg_match('/\A[a-f0-9]{24}\z/', $config['serviceRegistryVersion']) === 1, 'The service registry version must be exactly 24 lowercase hexadecimal characters.');
+$active_confirmation_registry_version = $config['serviceRegistryVersion'];
+$options[Universal_Legal_Pages::OPTION_NAME] = array_merge($sanitized, [
+    'terms_page_ids' => [11, 10],
+    'terms_page_id' => 11,
+]);
+$reordered_confirmation_config = Universal_Legal_Pages::get_public_consent_config();
+consent_assert($reordered_confirmation_config['serviceRegistryVersion'] !== $active_confirmation_registry_version, 'Changing active confirmation documents did not invalidate the previous consent registry.');
+$options[Universal_Legal_Pages::OPTION_NAME] = array_merge($sanitized, [
+    'terms_required' => false,
+    'terms_page_ids' => [10, 11],
+]);
+$inactive_confirmation_version = Universal_Legal_Pages::get_public_consent_config()['serviceRegistryVersion'];
+$options[Universal_Legal_Pages::OPTION_NAME] = array_merge($sanitized, [
+    'terms_required' => false,
+    'terms_page_ids' => [11, 10],
+]);
+consent_assert(Universal_Legal_Pages::get_public_consent_config()['serviceRegistryVersion'] === $inactive_confirmation_version, 'Draft confirmation ordering invalidated consent while explicit acceptance was disabled.');
+$options[Universal_Legal_Pages::OPTION_NAME] = $sanitized;
 consent_assert(count($config['services']) === 3, 'Only the three explicitly configured direct Google/Meta integrations must be public before service discovery and approval.');
 consent_assert(array_column($config['services'], 'id') === ['google-ads-remarketing', 'google-analytics-4', 'meta-pixel'], 'An unapproved embed service or GTM leaked into the individual visitor services.');
 foreach($config['services'] as $service){
@@ -1743,8 +1782,13 @@ consent_assert(count($bounded_public_services) === Universal_Legal_Pages::MAX_SE
 $post_statuses[11] = 'draft';
 $missing_terms_config = Universal_Legal_Pages::get_public_consent_config();
 consent_assert($missing_terms_config['termsRequired'] === true, 'A missing terms page silently disabled the configured legal requirement.');
-consent_assert($missing_terms_config['termsLink'] === null, 'An unpublished terms page remained public.');
+consent_assert(array_column($missing_terms_config['termsLinks'], 'url') === ['https://example.test/legal/10/'], 'An unpublished confirmation page remained public or removed a still-published confirmation.');
+consent_assert($missing_terms_config['termsLink'] === $missing_terms_config['termsLinks'][0], 'The compatibility link stopped following the first available confirmation.');
 consent_assert(count($missing_terms_config['legalLinks']) === 1, 'An unpublished selected legal page remained in the public link list.');
+$post_statuses[10] = 'draft';
+$all_terms_missing_config = Universal_Legal_Pages::get_public_consent_config();
+consent_assert($all_terms_missing_config['termsLinks'] === [] && $all_terms_missing_config['termsLink'] === null, 'Unavailable confirmation documents did not fail closed in the public contract.');
+$post_statuses[10] = 'publish';
 $post_statuses[11] = 'publish';
 
 $options[Universal_Legal_Pages::OPTION_NAME] = array_merge($sanitized, ['consent_enabled' => false]);
@@ -1814,7 +1858,11 @@ consent_assert(strpos($settings_page, 'rel="noopener noreferrer"') !== false, 'T
 consent_assert(strpos($settings_page, 'data-ulc-open') !== false, 'The custom consent-trigger attribute is not explained in the settings screen.');
 consent_assert(strpos($settings_page, 'does not trigger the same Google Analytics or Google Ads destinations a second time') !== false, 'Concurrent GTM and direct Google tags must display a duplicate-destination warning.');
 consent_assert(strpos($settings_page, 'Confidentialité') !== false, 'Published legal pages are missing from the settings selectors.');
-consent_assert(strpos($settings_page, 'for="ulp-terms-page-id"') !== false && strpos($settings_page, 'id="ulp-terms-page-id"') !== false, 'The terms-page selector is missing its accessible label association.');
+consent_assert(strpos($settings_page, 'for="ulp-terms-confirmation-0-page"') !== false && strpos($settings_page, 'id="ulp-terms-confirmation-0-page"') !== false, 'The first confirmation selector is missing its accessible label association.');
+consent_assert(strpos($settings_page, 'universal_legal_pages_options[terms_page_ids][_present]') !== false, 'The standalone confirmation list is missing its explicit presence marker.');
+consent_assert(strpos($settings_page, 'universal_legal_pages_options[terms_page_ids][0]') !== false && strpos($settings_page, 'universal_legal_pages_options[terms_page_ids][1]') !== false, 'Multiple ordered standalone confirmations are not rendered.');
+consent_assert(strpos($settings_page, 'data-ulp-terms-template') !== false && strpos($settings_page, 'data-ulp-add-terms') !== false, 'The explicit-confirmation editor cannot create additional entries.');
+consent_assert(strpos($settings_page, 'data-ulp-terms-up') !== false && strpos($settings_page, 'data-ulp-terms-down') !== false, 'Explicit confirmations are missing keyboard-accessible ordering controls.');
 consent_assert(strpos($settings_page, '[consent_page_ids][]') !== false, 'The flexible consent-page checklist is missing from the settings screen.');
 consent_assert(strpos($settings_page, 'Linked pages and terms') === false, 'The obsolete fixed-page section label is still rendered.');
 consent_assert(strpos($settings_page, 'This selection does not modify any theme menu.') !== false, 'The consent-link purpose is not explained in the settings screen.');
@@ -1890,8 +1938,8 @@ $options[Universal_Legal_Pages::OPTION_NAME] = array_merge($sanitized, [
 $reactwp_options = Universal_Legal_Pages::get_options();
 consent_assert($reactwp_options['banner_translations'] === $stored_translations, 'ReactWP translations were not hydrated from the stored allowlisted map.');
 consent_assert($reactwp_options['consent_link_translations'] === [
-    'fr' => ['consent_page_ids' => [10, 11], 'terms_page_id' => 11],
-    'en' => ['consent_page_ids' => [10, 11], 'terms_page_id' => 11],
+    'fr' => ['consent_page_ids' => [10, 11], 'terms_page_ids' => [10, 11]],
+    'en' => ['consent_page_ids' => [10, 11], 'terms_page_ids' => [10, 11]],
 ], 'Legacy global consent links were not migrated in memory to every ReactWP language.');
 
 $reactwp_config = Universal_Legal_Pages::get_public_consent_config();
@@ -1962,8 +2010,8 @@ consent_assert(strpos($multilingual_settings_page, 'universal_legal_pages_option
 consent_assert(strpos($multilingual_settings_page, 'universal_legal_pages_options[consent_string_translations][en][message]') !== false, 'The English message field uses the wrong nested contract.');
 consent_assert(strpos($multilingual_settings_page, 'universal_legal_pages_options[consent_string_translations][fr][actions][revisit]') !== false, 'The localized cookie-button label is missing.');
 consent_assert(strpos($multilingual_settings_page, 'universal_legal_pages_options[banner_title]') === false, 'The flat title input must not compete with ReactWP translations.');
-consent_assert(substr_count($multilingual_settings_page, 'data-ulp-language-tab') === 18, 'Copy, consent links, confirmation pages, category cards, and the category template must expose one accessible tab per ReactWP language.');
-consent_assert(substr_count($multilingual_settings_page, 'role="tabpanel"') === 18, 'Copy, consent links, confirmation pages, category cards, and the category template must expose accessible panels for every ReactWP language.');
+consent_assert(substr_count($multilingual_settings_page, 'data-ulp-language-tab') === 22, 'Copy, consent links, every confirmation, confirmation template, category cards, and the category template must expose one accessible tab per ReactWP language.');
+consent_assert(substr_count($multilingual_settings_page, 'role="tabpanel"') === 22, 'Copy, consent links, every confirmation, confirmation template, category cards, and the category template must expose accessible panels for every ReactWP language.');
 consent_assert(strpos($multilingual_settings_page, '<code aria-hidden="true">') === false, 'Language tabs must not repeat the language as a short code badge.');
 consent_assert(strpos($multilingual_settings_page, '<code>fr</code>') === false && strpos($multilingual_settings_page, '<code>en</code>') === false, 'Language panel headings must not repeat the language code.');
 consent_assert(strpos($multilingual_settings_page, '>Français</span>') !== false && strpos($multilingual_settings_page, '>English</span>') !== false, 'Removing language-code badges must preserve the full language names.');
@@ -1972,15 +2020,16 @@ consent_assert(substr_count($multilingual_settings_page, 'name="ulp-consent-copy
 consent_assert(substr_count($multilingual_settings_page, 'name="ulp-consent-copy-en-groups"') === 5, 'English copy groups must use one mutually exclusive accordion.');
 consent_assert(substr_count($multilingual_settings_page, 'dir="auto"') === 66, 'All public fields and category templates for every ReactWP language must adapt their writing direction.');
 consent_assert(strpos($multilingual_settings_page, 'universal_legal_pages_options[consent_link_translations][fr][consent_page_ids][]') !== false, 'The French ordered consent-link field uses the wrong nested contract.');
-consent_assert(strpos($multilingual_settings_page, 'universal_legal_pages_options[consent_link_translations][en][terms_page_id]') !== false, 'The English terms-page field uses the wrong nested contract.');
+consent_assert(strpos($multilingual_settings_page, 'universal_legal_pages_options[consent_link_translations][en][terms_page_ids][_present]') !== false, 'The English confirmation list is missing its presence marker.');
+consent_assert(strpos($multilingual_settings_page, 'universal_legal_pages_options[consent_link_translations][en][terms_page_ids][1]') !== false, 'The second English confirmation uses the wrong nested contract.');
 consent_assert(strpos($multilingual_settings_page, 'id="ulp-consent-links-fr-pages-page-10"') !== false, 'Localized legal-page controls do not have language-scoped IDs.');
 consent_assert(strpos($multilingual_settings_page, 'class="ulp-admin__terms-setting ulp-admin__terms-setting--localized"') !== false, 'The localized explicit-acceptance controls are missing their dedicated fieldset.');
-consent_assert(strpos($multilingual_settings_page, 'id="ulp-terms-language-tab-fr"') !== false, 'Localized confirmation pages are missing their language tabs.');
-consent_assert(strpos($multilingual_settings_page, 'aria-controls="ulp-terms-language-panel-fr"') !== false, 'A confirmation-page language tab is not associated with its panel.');
-consent_assert(strpos($multilingual_settings_page, 'id="ulp-terms-language-panel-en"') !== false, 'Localized confirmation pages are missing their language panels.');
+consent_assert(strpos($multilingual_settings_page, 'id="ulp-terms-confirmation-0-language-tab-fr"') !== false, 'Localized confirmation pages are missing their language tabs.');
+consent_assert(strpos($multilingual_settings_page, 'aria-controls="ulp-terms-confirmation-0-language-panel-fr"') !== false, 'A confirmation-page language tab is not associated with its panel.');
+consent_assert(strpos($multilingual_settings_page, 'id="ulp-terms-confirmation-1-language-panel-en"') !== false, 'Every localized confirmation is missing its language panels.');
 $localized_links_editor_position = strpos($multilingual_settings_page, 'class="ulp-admin__language-editor ulp-admin__language-editor--links"');
 $localized_terms_toggle_position = strpos($multilingual_settings_page, 'Request explicit acceptance in preferences');
-$localized_terms_link_position = strpos($multilingual_settings_page, 'id="ulp-consent-links-fr-terms-page-id"');
+$localized_terms_link_position = strpos($multilingual_settings_page, 'id="ulp-terms-confirmation-0-fr-page"');
 consent_assert(
     $localized_links_editor_position !== false
     && $localized_terms_toggle_position > $localized_links_editor_position
@@ -2024,27 +2073,28 @@ $localized_link_input = $multilingual_input;
 $localized_link_input['consent_link_translations'] = [
     'fr' => [
         'consent_page_ids' => ['10'],
-        'terms_page_id' => '10',
+        'terms_page_ids' => ['_present' => '1', '0' => '10', '1' => '11'],
     ],
     'en' => [
         'consent_page_ids' => ['11', '10'],
-        'terms_page_id' => '11',
+        'terms_page_ids' => ['_present' => '1', '0' => '11', '1' => '10'],
     ],
 ];
 $localized_link_saved = Universal_Legal_Pages::sanitize_options($localized_link_input);
 consent_assert($localized_link_saved['consent_link_translations'] === [
-    'fr' => ['consent_page_ids' => [10], 'terms_page_id' => 10],
-    'en' => ['consent_page_ids' => [11, 10], 'terms_page_id' => 11],
+    'fr' => ['consent_page_ids' => [10], 'terms_page_ids' => [10, 11]],
+    'en' => ['consent_page_ids' => [11, 10], 'terms_page_ids' => [11, 10]],
 ], 'Valid ordered legal-page selections were not stored independently by language.');
-consent_assert($localized_link_saved['consent_page_ids'] === [11, 10] && $localized_link_saved['terms_page_id'] === 11, 'Portable link mirrors did not follow the active ReactWP language.');
+consent_assert($localized_link_saved['consent_page_ids'] === [11, 10] && $localized_link_saved['terms_page_ids'] === [11, 10] && $localized_link_saved['terms_page_id'] === 11, 'Portable link mirrors did not follow the active ReactWP language.');
 
 $options[Universal_Legal_Pages::OPTION_NAME] = $localized_link_saved;
 $reactwp_test_current_language = 'fr';
 $localized_french_config = Universal_Legal_Pages::get_public_consent_config();
 consent_assert(array_column($localized_french_config['legalLinks'], 'label') === ['Confidentialité'], 'The active French public links did not use their language selection.');
-consent_assert($localized_french_config['termsLink']['label'] === 'Confidentialité', 'The active French terms link did not use its language selection.');
+consent_assert(array_column($localized_french_config['termsLinks'], 'label') === ['Confidentialité', 'Conditions'], 'The active French confirmation links did not preserve their language order.');
+consent_assert($localized_french_config['termsLink'] === $localized_french_config['termsLinks'][0], 'The active French compatibility link is not the first confirmation.');
 consent_assert(array_column($localized_french_config['linkTranslations']['en']['legalLinks'], 'label') === ['Conditions', 'Confidentialité'], 'The English route-switching links lost their configured order.');
-consent_assert($localized_french_config['linkTranslations']['en']['termsLink']['label'] === 'Conditions', 'The English terms link is missing from the route-switching contract.');
+consent_assert(array_column($localized_french_config['linkTranslations']['en']['termsLinks'], 'label') === ['Conditions', 'Confidentialité'], 'The English confirmation links are missing from the route-switching contract.');
 
 $reactwp_test_current_language = 'en';
 $settings_errors = [];
@@ -2056,17 +2106,25 @@ consent_assert($settings_errors[0]['code'] === 'invalid_consent_link_translation
 
 $settings_errors = [];
 $unknown_link_language_input = $localized_link_input;
-$unknown_link_language_input['consent_link_translations']['es'] = ['consent_page_ids' => [], 'terms_page_id' => '0'];
+$unknown_link_language_input['consent_link_translations']['es'] = ['consent_page_ids' => [], 'terms_page_ids' => ['_present' => '1']];
 $unknown_link_language_saved = Universal_Legal_Pages::sanitize_options($unknown_link_language_input);
 consent_assert($unknown_link_language_saved['consent_link_translations'] === $localized_link_saved['consent_link_translations'], 'An unknown link language replaced the complete previous map.');
 consent_assert($settings_errors[0]['code'] === 'invalid_consent_link_translations', 'An unknown link language did not emit the stable error code.');
 
 $settings_errors = [];
 $missing_localized_terms_input = $localized_link_input;
-$missing_localized_terms_input['consent_link_translations']['fr']['terms_page_id'] = '0';
+$missing_localized_terms_input['consent_link_translations']['fr']['terms_page_ids'] = ['_present' => '1'];
+$missing_localized_terms_input['consent_link_translations']['en']['terms_page_ids'] = ['_present' => '1'];
 $missing_localized_terms_saved = Universal_Legal_Pages::sanitize_options($missing_localized_terms_input);
 consent_assert($missing_localized_terms_saved['terms_required'] === false, 'Explicit acceptance remained enabled without a terms document in every language.');
 consent_assert(end($settings_errors)['code'] === 'missing_terms_page', 'A missing localized terms page did not emit the stable dependency error.');
+
+$settings_errors = [];
+$mismatched_localized_terms_input = $localized_link_input;
+unset($mismatched_localized_terms_input['consent_link_translations']['en']['terms_page_ids']['1']);
+$mismatched_localized_terms_saved = Universal_Legal_Pages::sanitize_options($mismatched_localized_terms_input);
+consent_assert($mismatched_localized_terms_saved['consent_link_translations'] === $localized_link_saved['consent_link_translations'], 'Different confirmation counts across languages partially replaced the previous map.');
+consent_assert($settings_errors[0]['code'] === 'invalid_consent_link_translations', 'Different confirmation counts across languages did not emit the stable map error.');
 
 $options[Universal_Legal_Pages::OPTION_NAME] = $localized_link_saved;
 $complete_translations = $multilingual_saved['consent_string_translations'];

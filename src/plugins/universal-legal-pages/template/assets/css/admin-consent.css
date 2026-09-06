@@ -873,6 +873,74 @@
     max-width: none;
 }
 
+.ulp-admin__terms-editor,
+.ulp-admin__terms-list {
+    display: grid;
+    gap: 14px;
+    min-width: 0;
+}
+
+.ulp-admin__terms-item {
+    min-width: 0;
+    padding: 18px;
+    border: 1px solid var(--ulp-admin-soft-border);
+    border-radius: 8px;
+    background: #fff;
+}
+
+.ulp-admin__terms-item-header {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.ulp-admin__terms-item-header h4 {
+    margin: 0;
+    color: var(--ulp-admin-ink);
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.ulp-admin__terms-item-actions,
+.ulp-admin__terms-editor-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.ulp-admin__terms-item-actions .button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 10px;
+}
+
+.ulp-admin__terms-item-field {
+    display: grid;
+    gap: 8px;
+}
+
+.ulp-admin__terms-item-field > label,
+.ulp-admin__language-panel--terms > label {
+    color: var(--ulp-admin-ink);
+    font-weight: 600;
+}
+
+.ulp-admin__terms-item-field > select {
+    width: 100%;
+    max-width: none;
+}
+
+.ulp-admin__terms-empty {
+    margin: 0;
+    padding: 14px 16px;
+    border: 1px dashed var(--ulp-admin-border);
+    border-radius: 8px;
+    color: var(--ulp-admin-muted);
+}
+
 .ulp-admin__terms-language-editor {
     min-width: 0;
 }
@@ -1405,6 +1473,11 @@
         width: 100%;
     }
 
+    .ulp-admin__terms-item-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
     .ulp-admin__terms-language-editor.is-enhanced .ulp-admin__language-tabs {
         display: flex;
         grid-template-columns: none;
@@ -1464,6 +1537,7 @@
     .ulp-admin__copy-summary-icon,
     .ulp-admin__copy-unit,
     .ulp-admin__terms-setting--localized,
+    .ulp-admin__terms-item,
     .ulp-admin__category-card,
     .ulp-admin__custom-integration {
         border-color: CanvasText;

@@ -340,6 +340,7 @@ const createConsentConfig = (overrides = {}) => ({
   stylesheetUrl: 'https://example.test/consent-manager.css',
   legalLinks: [],
   termsLink: null,
+  termsLinks: [],
   integrations: {},
   integrationCategories: {
     googleAnalytics: 'analytics',
@@ -461,19 +462,59 @@ test('legal documents open in isolated tabs without replacing the consent page',
     config: createConsentConfig({
       legalLinks: [{label: 'Privacy policy', url: 'https://example.test/legal/privacy/'}],
       termsRequired: true,
-      termsLink: {label: 'Terms', url: 'https://example.test/legal/terms/'}
+      termsLink: {label: 'Terms', url: 'https://example.test/legal/terms/'},
+      termsLinks: [{label: 'Terms', url: 'https://example.test/legal/terms/'}]
     })
   });
   const shadow = runtime.document.querySelector('[data-universal-legal-consent-root]').shadowRoot;
   const legalLinks = shadow.querySelectorAll('.ulc-link');
 
   assert.ok(legalLinks.length >= 3, 'Banner, dialog, and explicit-acceptance links were not all rendered.');
-  assert.ok(shadow.querySelector('#ulc-terms-confirmation-link'), 'The explicit-acceptance legal link is missing.');
+  assert.ok(shadow.querySelector('#ulc-terms-confirmation-0-link'), 'The explicit-acceptance legal link is missing.');
 
   for(const legalLink of legalLinks){
     assert.equal(legalLink.getAttribute('target'), '_blank');
     assert.equal(legalLink.getAttribute('rel'), 'noopener noreferrer');
   }
+});
+
+test('every explicit confirmation must be accepted before optional choices are saved', () => {
+  const firstTerms = {label: 'Service terms', url: 'https://example.test/legal/service-terms/'};
+  const secondTerms = {label: 'Membership rules', url: 'https://example.test/legal/membership-rules/'};
+  const runtime = runConsentManager({
+    config: createConsentConfig({
+      termsRequired: true,
+      termsLink: firstTerms,
+      termsLinks: [firstTerms, secondTerms]
+    })
+  });
+  const shadow = runtime.document.querySelector('[data-universal-legal-consent-root]').shadowRoot;
+
+  runtime.window.UniversalLegalConsent.openPreferences();
+
+  const termItems = shadow.querySelectorAll('.ulc-terms');
+  const inputs = termItems.map((item) => item.querySelector('input'));
+  const links = termItems.map((item) => item.querySelector('.ulc-link'));
+  const form = shadow.querySelector('.ulc-dialog__form');
+
+  assert.equal(inputs.length, 2, 'Each configured document must create its own confirmation checkbox.');
+  assert.deepEqual(links.map((link) => link.textContent), ['Service terms', 'Membership rules']);
+  assert.deepEqual(inputs.map((input) => input.name), ['terms[0]', 'terms[1]']);
+
+  inputs[0].checked = true;
+  shadow.dispatch('submit', {target: form, preventDefault(){}});
+
+  assert.equal(readStoredConsent(runtime.document), null, 'A partial confirmation must not persist consent.');
+  assert.equal(inputs[0].getAttribute('aria-invalid'), null, 'An accepted confirmation must not be marked invalid.');
+  assert.equal(inputs[1].getAttribute('aria-invalid'), 'true', 'The missing confirmation must identify its own invalid checkbox.');
+  assert.equal(shadow.activeElement, inputs[1], 'Validation must focus the first missing confirmation.');
+
+  inputs[1].checked = true;
+  shadow.dispatch('change', {target: inputs[1]});
+  shadow.dispatch('submit', {target: form, preventDefault(){}});
+
+  const stored = readStoredConsent(runtime.document);
+  assert.equal(stored.terms, true, 'Completing every explicit confirmation must persist the aggregate acceptance state.');
 });
 
 test('consent manager keeps untrusted configuration out of executable HTML sinks', () => {
@@ -496,7 +537,9 @@ test('consent manager keeps untrusted configuration out of executable HTML sinks
   assert.match(script, /url\.protocol === 'http:' \|\| url\.protocol === 'https:'/u, 'Legal links must allow only HTTP(S).');
   assert.doesNotMatch(script, /url\.origin !== window\.location\.origin/u, 'WordPress asset-CDN stylesheet URLs must remain portable.');
   assert.match(script, /&& !url\.username[\s\S]*&& !url\.password/u, 'HTTP(S) URLs containing credentials must be rejected.');
-  assert.match(script, /raw\.termsRequired[\s\S]*!termsLink/u, 'Required terms must fail closed without a valid terms link.');
+  assert.match(script, /raw\.termsRequired[\s\S]*termsLinks\.length === 0/u, 'Required terms must fail closed without a valid confirmation list.');
+  assert.match(script, /MAX_TERMS_LINKS = 50/u, 'The public confirmation list must retain the backend abuse bound.');
+  assert.match(script, /raw\.length > MAX_TERMS_LINKS/u, 'The public confirmation list must enforce its maximum.');
   assert.match(script, /MAX_LEGAL_LINKS = 1000/u, 'The public legal-link list must remove the former 20-page cap while retaining a technical abuse bound.');
   assert.match(script, /raw\.length > MAX_LEGAL_LINKS/u, 'The public legal-link list must remain technically bounded.');
   assert.match(script, /seen\[link\.url\]/u, 'Duplicate public legal links must invalidate the configuration.');
@@ -517,12 +560,12 @@ test('consent manager keeps untrusted configuration out of executable HTML sinks
   assert.match(script, /elements\.dialogTitle\.textContent = config\.strings\.dialog\.title;/u, 'The preferences popup title must update with the route language.');
   assert.match(script, /elements\.dialogClose\.setAttribute\('aria-label', config\.strings\.actions\.close\)/u, 'The close button accessible label must update with the route language.');
   assert.match(script, /elements\.categoryLabels\[category\]\.textContent/u, 'All category labels must update without rebuilding the dialog.');
-  assert.match(script, /elements\.termsError\.textContent = config\.strings\.terms\.requiredError/u, 'The terms error must update with the route language.');
+  assert.match(script, /renderTermsControls\(elements\.termsList, checkedTerms\)/u, 'Language changes must rebuild every confirmation with localized copy and links.');
   assert.match(script, /region\.setAttribute\('aria-label', config\.strings\.legalLinksLabel\)/u, 'Legal navigation accessible names must update with the route language.');
   assert.match(script, /normalizeLinkTranslations\(raw\.linkTranslations\)/u, 'Localized consent links must cross the same browser trust boundary as the global links.');
   assert.match(script, /config\.linkTranslations\[code\]\.legalLinks/u, 'Route-language switches must select the matching legal-link bundle.');
   assert.match(script, /while\(region\.firstChild\)/u, 'Visible legal links must be rebuilt when the route language changes.');
-  assert.match(script, /elements\.termsLink\.href = config\.termsLink\.url/u, 'The explicit-acceptance link must update with the route language.');
+  assert.match(script, /config\.termsLinks = config\.linkTranslations\[code\]\.termsLinks/u, 'The complete confirmation list must update with the route language.');
   assert.match(script, /MAX_LANGUAGES = 32/u, 'The browser translation map must support large ReactWP language sets while retaining a technical bound.');
   assert.match(script, /codes\.length > MAX_LANGUAGES/u, 'Every browser translation map must remain bounded to ReactWP’s language limit.');
   assert.match(script, /unicodeLength\(value\) > CONSENT_STRING_LIMITS\[path\]/u, 'Every localized string must retain its server-side Unicode length bound in the browser.');
@@ -797,6 +840,10 @@ test('ReactWP route language switches update ordered legal links and terms in pl
       currentLanguage: 'en',
       legalLinks: [{url: 'https://example.test/en/privacy', label: 'Privacy'}],
       termsLink: {url: 'https://example.test/en/terms', label: 'Terms'},
+      termsLinks: [
+        {url: 'https://example.test/en/terms', label: 'Terms'},
+        {url: 'https://example.test/en/rules', label: 'Rules'}
+      ],
       stringTranslations: {
         fr: consentStrings('Choix français', 'Gérer les témoins'),
         en: consentStrings('English choices', 'Cookie settings')
@@ -807,26 +854,36 @@ test('ReactWP route language switches update ordered legal links and terms in pl
             {url: 'https://example.test/fr/conditions', label: 'Conditions'},
             {url: 'https://example.test/fr/confidentialite', label: 'Confidentialité'}
           ],
-          termsLink: {url: 'https://example.test/fr/conditions', label: 'Conditions'}
+          termsLink: {url: 'https://example.test/fr/conditions', label: 'Conditions'},
+          termsLinks: [
+            {url: 'https://example.test/fr/conditions', label: 'Conditions'},
+            {url: 'https://example.test/fr/regles', label: 'Règles'}
+          ]
         },
         en: {
           legalLinks: [{url: 'https://example.test/en/privacy', label: 'Privacy'}],
-          termsLink: {url: 'https://example.test/en/terms', label: 'Terms'}
+          termsLink: {url: 'https://example.test/en/terms', label: 'Terms'},
+          termsLinks: [
+            {url: 'https://example.test/en/terms', label: 'Terms'},
+            {url: 'https://example.test/en/rules', label: 'Rules'}
+          ]
         }
       }
     })
   });
   const shadow = runtime.document.querySelector('[data-universal-legal-consent-root]').shadowRoot;
   const legalNavigation = shadow.querySelector('.ulc-legal-links');
-  const termsLink = shadow.querySelector('#ulc-terms-confirmation-link');
+  const initialTermsLinks = shadow.querySelectorAll('.ulc-terms').map((item) => item.querySelector('.ulc-link'));
 
   assert.deepEqual(legalNavigation.children.map((link) => link.textContent), ['Privacy'], 'Initial links must follow the active English language.');
-  assert.equal(termsLink.href, 'https://example.test/en/terms');
+  assert.deepEqual(initialTermsLinks.map((link) => link.href), ['https://example.test/en/terms', 'https://example.test/en/rules']);
+  shadow.querySelector('#ulc-terms-confirmation-1').checked = true;
   assert.equal(runtime.window.UniversalLegalConsent.setLanguage('fr-CA'), true);
   assert.deepEqual(legalNavigation.children.map((link) => link.textContent), ['Conditions', 'Confidentialité'], 'French links did not update in their configured order.');
   assert.deepEqual(legalNavigation.children.map((link) => link.href), ['https://example.test/fr/conditions', 'https://example.test/fr/confidentialite']);
-  assert.equal(termsLink.textContent, 'Conditions');
-  assert.equal(termsLink.href, 'https://example.test/fr/conditions');
+  assert.deepEqual(shadow.querySelectorAll('.ulc-terms').map((item) => item.querySelector('.ulc-link').textContent), ['Conditions', 'Règles']);
+  assert.deepEqual(shadow.querySelectorAll('.ulc-terms').map((item) => item.querySelector('.ulc-link').href), ['https://example.test/fr/conditions', 'https://example.test/fr/regles']);
+  assert.equal(shadow.querySelector('#ulc-terms-confirmation-1').checked, true, 'A route-language switch must preserve the state of each matching confirmation.');
 });
 
 test('consent persistence is exact, bounded, and privacy-aware', () => {
@@ -890,6 +947,7 @@ test('consent interface is isolated and includes responsive accessibility states
   assert.match(stylesheet, /\.ulc-terms__label\s*\{[\s\S]*display: inline;[\s\S]*line-height: inherit;/u, 'The required-terms label must share the surrounding sentence baseline instead of creating a tall inline box.');
   assert.match(stylesheet, /\.ulc-terms__label-line\s*\{[\s\S]*line-height: 1\.5;/u, 'The required-terms sentence must align with its 24px checkbox.');
   assert.match(stylesheet, /\.ulc-terms__label-line \.ulc-link\s*\{[\s\S]*display: inline;[\s\S]*min-height: 0;[\s\S]*line-height: inherit;[\s\S]*vertical-align: baseline;/u, 'The terms link must not expand the confirmation line or shift its baseline.');
+  assert.match(stylesheet, /\.ulc-terms-list\s*\{[\s\S]*display: grid;[\s\S]*gap: 1rem;/u, 'Multiple explicit confirmations must remain visually separated in one vertical list.');
   assert.match(stylesheet, /\.ulc-service label\.ulc-service__label\s*\{[\s\S]*min-height: 2\.75rem/u, 'Individual service choices need comfortable native checkbox targets.');
   assert.match(stylesheet, /\.ulc-embed__iframe\s*\{[\s\S]*aspect-ratio: 16 \/ 9/u, 'Blocked embeds must reserve their media geometry.');
 
@@ -903,7 +961,7 @@ test('consent interface is isolated and includes responsive accessibility states
     'Edit every visitor-facing label and message used by the banner, preferences dialog, service controls, confirmation, and errors.',
     'Manage the categories shown to visitors: add, remove, order, name, and describe them for each available language. Necessary always remains.',
     'Review external scripts and embeds found during administrator visits. Name and categorize entries; detected scripts still need a trusted adapter before the plugin can control them.',
-    'Choose and order the legal pages shown in the consent interface, then optionally require visitors to confirm a selected document.',
+    'Choose and order the legal pages shown in the consent interface, then optionally require visitors to confirm one or more documents.',
     'Configure built-in services or custom scripts, assign the category that controls when each one loads, and never enter secrets or private API keys.'
   ]){
     assert.ok(pluginSource.includes(`esc_html_e('${description}', 'universal-legal-pages')`), `Section header does not describe its controls: ${description}`);
@@ -936,6 +994,8 @@ test('consent interface is isolated and includes responsive accessibility states
   assert.match(pluginSource, /<fieldset class="ulp-admin__copy-unit/u, 'Related copy fields should be grouped into labelled editing units.');
   assert.match(adminStylesheet, /\.ulp-admin__copy-sections\s*\{[\s\S]*grid-template-columns: minmax\(0, 1fr\)/u, 'Copy editing units must remain stacked in one column at every viewport width.');
   assert.match(adminStylesheet, /\.ulp-admin__copy-unit\s*\{[\s\S]*box-sizing: border-box;[\s\S]*width: 100%;/u, 'Every copy editing unit must occupy the complete available width.');
+  assert.match(adminStylesheet, /\.ulp-admin__terms-editor,[\s\S]*\.ulp-admin__terms-list\s*\{[\s\S]*display: grid;/u, 'Explicit confirmations must remain in one readable vertical editor.');
+  assert.match(adminStylesheet, /\.ulp-admin__terms-item-actions \.button\s*\{[\s\S]*min-width: 44px;[\s\S]*min-height: 44px;/u, 'Confirmation ordering controls need usable pointer targets.');
   assert.match(adminStylesheet, /\.ulp-admin__copy-group > summary\s*\{[\s\S]*min-height: 72px/u, 'Accordion summaries need a clear, comfortable activation target.');
   assert.match(adminStylesheet, /\.ulp-admin__services input\[type='text'\],[\s\S]*min-height: 44px/u, 'Service classification fields need usable targets.');
   assert.doesNotMatch(adminStylesheet, /\.ulp-admin-section--copy/u, 'The copy editor must not override the shared two-column section layout.');
@@ -1011,7 +1071,7 @@ test('consent interface is isolated and includes responsive accessibility states
 
 test('ReactWP consent language controls are progressive, accessible, and route-aware', () => {
   assert.doesNotMatch(pluginSource, /ulp-(?:link-)?language-editor-description|The languages come from ReactWP > Site settings\./u, 'Multilingual editors must not repeat the removed ReactWP language notices.');
-  assert.match(pluginSource, /Confirmation page language/u, 'The confirmation-page tablist needs its own accessible label.');
+  assert.match(pluginSource, /Language for %s/u, 'Each confirmation tablist needs its own contextual accessible label.');
   assert.match(adminScript, /document\.querySelectorAll\('\[data-ulp-language-editor\]'\)/u, 'The admin behavior must remain scoped to language editors.');
   assert.match(adminScript, /editor\.classList\.add\('is-enhanced'\)/u, 'Language panels may collapse only after JavaScript enhancement succeeds.');
   assert.match(adminScript, /tab\.setAttribute\('aria-selected'/u, 'Tab selection state must be exposed to assistive technology.');
@@ -1038,6 +1098,12 @@ test('ReactWP consent language controls are progressive, accessible, and route-a
   assert.match(adminScript, /function reindexCards\(\)/u, 'The complete custom-integration list must be reindexed after an item is removed.');
   assert.match(adminScript, /name\.replace\(\/\\\[custom_integrations\\\]\\\[\[0-9\]\+\\\]\//u, 'Submitted custom integration names must remain contiguous for exact backend validation.');
   assert.match(adminScript, /form\.addEventListener\('submit', reindexCards\)/u, 'The custom list must be normalized immediately before Settings API submission.');
+  assert.match(adminScript, /document\.querySelectorAll\('\[data-ulp-terms-editor\]'\)/u, 'Every explicit-confirmation editor must initialize independently.');
+  assert.match(adminScript, /value\.replace\(\/\\\[terms_page_ids\\\]\\\[\[0-9\]\+\\\]\//u, 'Confirmation field names must be reindexed contiguously after ordering changes.');
+  assert.match(adminScript, /list\.insertBefore\(item, item\.previousElementSibling\)/u, 'Confirmation ordering needs a keyboard-accessible move-up operation.');
+  assert.match(adminScript, /list\.insertBefore\(item\.nextElementSibling, item\)/u, 'Confirmation ordering needs a keyboard-accessible move-down operation.');
+  assert.match(adminScript, /items\(\)\.length >= maximum/u, 'The browser confirmation editor must enforce the backend maximum.');
+  assert.match(adminScript, /item\.querySelectorAll\('\[data-ulp-language-editor\]'\)\.forEach\(initializeLanguageEditor\)/u, 'Dynamically added multilingual confirmations must initialize their own language tabs.');
 
   assert.match(adminStylesheet, /\.ulp-admin__language-editor\.is-enhanced \.ulp-admin__language-tabs/u, 'Tabs must be visible only after progressive enhancement.');
   assert.match(adminStylesheet, /\.ulp-admin__language-tab\s*\{[\s\S]*min-height: 44px/u, 'Language tabs need usable pointer targets.');
@@ -2211,7 +2277,8 @@ test('required terms open preferences for only the requested service and restore
     config: createConsentConfig({
       services,
       termsRequired: true,
-      termsLink: {url: 'https://example.test/terms', label: 'Terms'}
+      termsLink: {url: 'https://example.test/terms', label: 'Terms'},
+      termsLinks: [{url: 'https://example.test/terms', label: 'Terms'}]
     }),
     placeholders: (document) => [
       createPlaceholder(document, 'youtube', 'https://www.youtube.com/embed/abc12345')
@@ -2224,7 +2291,7 @@ test('required terms open preferences for only the requested service and restore
 
   const youtube = shadow.querySelector('#ulc-service-youtube');
   const vimeo = shadow.querySelector('#ulc-service-vimeo');
-  const terms = shadow.querySelector('#ulc-terms-confirmation');
+  const terms = shadow.querySelector('#ulc-terms-confirmation-0');
   assert.equal(youtube.checked, true);
   assert.equal(vimeo.checked, false, 'The embed action must not preselect sibling services.');
   assert.equal(shadow.activeElement, terms, 'Required terms must receive focus before the service can be saved.');

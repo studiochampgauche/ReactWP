@@ -22,6 +22,7 @@
     var MAX_SERVICE_PLACEHOLDERS = 256;
     var SERVICE_PLACEHOLDER_SELECTOR = '[data-ulc-service][data-ulc-src]';
     var MAX_LEGAL_LINKS = 1000;
+    var MAX_TERMS_LINKS = 50;
     var MAX_LANGUAGES = 32;
     var CONSENT_STRING_LIMITS = {
         title: 120,
@@ -292,10 +293,15 @@
             var termsLink = typeof raw.termsLink === 'undefined'
                 ? legacyLinks.terms
                 : normalizeLink(raw.termsLink);
+            var termsLinks = typeof raw.termsLinks === 'undefined'
+                ? (termsLink ? [termsLink] : [])
+                : normalizeTermsLinks(raw.termsLinks);
 
-            if(legalLinks === null){
+            if(legalLinks === null || termsLinks === null){
                 return null;
             }
+
+            termsLink = termsLinks.length ? termsLinks[0] : null;
 
             var strings = normalizeStrings(raw.strings);
             var categoryRegistry = normalizeCategories(raw.categories);
@@ -336,7 +342,8 @@
 
             if(resolvedLinkLanguage){
                 legalLinks = linkTranslations[resolvedLinkLanguage].legalLinks;
-                termsLink = linkTranslations[resolvedLinkLanguage].termsLink;
+                termsLinks = linkTranslations[resolvedLinkLanguage].termsLinks;
+                termsLink = termsLinks.length ? termsLinks[0] : null;
             }
 
             var resolvedCategoryLanguage = resolveBannerLanguage(currentLanguage, categoryTranslations);
@@ -346,9 +353,9 @@
             }
 
             if(raw.termsRequired && (
-                !termsLink
+                termsLinks.length === 0
                 || Object.keys(linkTranslations).some(function(code){
-                    return !linkTranslations[code].termsLink;
+                    return linkTranslations[code].termsLinks.length !== termsLinks.length;
                 })
             )){
                 return null;
@@ -381,6 +388,7 @@
                 stylesheetUrl: stylesheetUrl,
                 legalLinks: legalLinks,
                 termsLink: termsLink,
+                termsLinks: termsLinks,
                 integrations: integrations,
                 integrationCategories: integrationCategories,
                 customIntegrations: customIntegrations,
@@ -703,6 +711,30 @@
 
     }
 
+    function normalizeTermsLinks(raw){
+
+        if(!Array.isArray(raw) || raw.length > MAX_TERMS_LINKS){
+            return null;
+        }
+
+        var links = [];
+        var seen = Object.create(null);
+
+        for(var index = 0; index < raw.length; index++){
+            var link = normalizeLink(raw[index]);
+
+            if(!link || seen[link.url]){
+                return null;
+            }
+
+            seen[link.url] = true;
+            links.push(link);
+        }
+
+        return links;
+
+    }
+
     function normalizeLinkTranslations(raw){
 
         var translations = Object.create(null);
@@ -725,20 +757,38 @@
             var code = codes[index];
             var bundle = raw[code];
 
-            if(normalizeLanguageCode(code) !== code || !hasExactKeys(bundle, ['legalLinks', 'termsLink'])){
+            var legacyShape = hasExactKeys(bundle, ['legalLinks', 'termsLink']);
+            var currentShape = hasExactKeys(bundle, ['legalLinks', 'termsLink', 'termsLinks']);
+
+            if(normalizeLanguageCode(code) !== code || (!legacyShape && !currentShape)){
                 return null;
             }
 
             var legalLinks = normalizeLegalLinks(bundle.legalLinks);
             var termsLink = normalizeLink(bundle.termsLink);
+            var termsLinks = currentShape
+                ? normalizeTermsLinks(bundle.termsLinks)
+                : (termsLink ? [termsLink] : []);
 
-            if(legalLinks === null || (bundle.termsLink !== null && !termsLink)){
+            if(
+                legalLinks === null
+                || termsLinks === null
+                || (bundle.termsLink !== null && !termsLink)
+                || (currentShape && (
+                    Boolean(termsLink) !== Boolean(termsLinks.length)
+                    || (termsLink && (
+                        termsLink.url !== termsLinks[0].url
+                        || termsLink.label !== termsLinks[0].label
+                    ))
+                ))
+            ){
                 return null;
             }
 
             translations[code] = {
                 legalLinks: legalLinks,
-                termsLink: termsLink
+                termsLink: termsLinks.length ? termsLinks[0] : null,
+                termsLinks: termsLinks
             };
         }
 
@@ -1861,7 +1911,8 @@
         }
 
         config.legalLinks = config.linkTranslations[code].legalLinks;
-        config.termsLink = config.linkTranslations[code].termsLink;
+        config.termsLinks = config.linkTranslations[code].termsLinks;
+        config.termsLink = config.termsLinks.length ? config.termsLinks[0] : null;
         return true;
 
     }
@@ -1914,12 +1965,11 @@
             elements.categoryDescriptions[category].textContent = config.categoriesById[category].description;
         });
 
-        if(elements.termsLabel){
-            elements.termsLabel.textContent = config.strings.terms.label;
-            elements.termsDescription.textContent = config.strings.terms.description;
-            elements.termsError.textContent = config.strings.terms.requiredError;
-            elements.termsLink.textContent = config.termsLink.label;
-            elements.termsLink.href = config.termsLink.url;
+        if(elements.termsList){
+            var checkedTerms = elements.termsInputs.map(function(input){
+                return input.checked;
+            });
+            renderTermsControls(elements.termsList, checkedTerms);
         }
 
         [elements.bannerGpc, elements.dialogGpc].forEach(function(notice){
@@ -2583,6 +2633,8 @@
         elements.categoryDescriptions = {};
         elements.serviceInputs = {};
         elements.serviceInputsByCategory = Object.create(null);
+        elements.termsInputs = [];
+        elements.termsErrors = [];
 
         var stylesheet = document.createElement('link');
         stylesheet.rel = 'stylesheet';
@@ -2729,7 +2781,7 @@
         }
 
         if(config.termsRequired){
-            form.appendChild(createTermsControl());
+            form.appendChild(createTermsControls());
         }
 
         elements.dialogError = createElement('p', 'ulc-error');
@@ -2839,7 +2891,28 @@
 
     }
 
-    function createTermsControl(){
+    function createTermsControls(){
+
+        var list = createElement('div', 'ulc-terms-list');
+        elements.termsList = list;
+        renderTermsControls(list, []);
+        return list;
+
+    }
+
+    function renderTermsControls(list, checkedTerms){
+
+        clearElement(list);
+        elements.termsInputs = [];
+        elements.termsErrors = [];
+
+        config.termsLinks.forEach(function(termsLink, index){
+            list.appendChild(createTermsControl(termsLink, index, checkedTerms[index] === true));
+        });
+
+    }
+
+    function createTermsControl(termsLink, index, checked){
 
         var item = createElement('div', 'ulc-terms');
         var line = createElement('div', 'ulc-terms__line');
@@ -2851,10 +2924,11 @@
         var error = createElement('p', 'ulc-error', config.strings.terms.requiredError);
 
         input.type = 'checkbox';
-        input.id = 'ulc-terms-confirmation';
-        input.name = 'terms';
+        input.id = 'ulc-terms-confirmation-' + index;
+        input.name = 'terms[' + index + ']';
         input.value = '1';
         input.required = true;
+        input.checked = checked;
         label.htmlFor = input.id;
         description.id = input.id + '-description';
         error.id = input.id + '-error';
@@ -2865,13 +2939,12 @@
 
         labelLine.appendChild(label);
 
-        if(config.termsLink){
-            var termsLink = createLegalLink(config.termsLink);
-            termsLink.id = input.id + '-link';
+        if(termsLink){
+            var link = createLegalLink(termsLink);
+            link.id = input.id + '-link';
             labelLine.appendChild(document.createTextNode(' '));
-            labelLine.appendChild(termsLink);
-            input.setAttribute('aria-labelledby', label.id + ' ' + termsLink.id);
-            elements.termsLink = termsLink;
+            labelLine.appendChild(link);
+            input.setAttribute('aria-labelledby', label.id + ' ' + link.id);
         }
 
         content.appendChild(labelLine);
@@ -2881,10 +2954,8 @@
         item.appendChild(line);
         item.appendChild(error);
 
-        elements.termsInput = input;
-        elements.termsLabel = label;
-        elements.termsDescription = description;
-        elements.termsError = error;
+        elements.termsInputs.push(input);
+        elements.termsErrors.push(error);
 
         return item;
 
@@ -3472,8 +3543,8 @@
 
     function handleShadowChange(event){
 
-        if(event.target === elements.termsInput && elements.termsInput.checked){
-            clearTermsError();
+        if(elements.termsInputs.indexOf(event.target) !== -1 && event.target.checked){
+            clearTermsError(event.target);
         }
 
         var category = categoryForInput(event.target);
@@ -3502,7 +3573,7 @@
 
         event.preventDefault();
 
-        if(config.termsRequired && !elements.termsInput.checked){
+        if(!termsAreAccepted()){
             showTermsError();
             return;
         }
@@ -3510,7 +3581,7 @@
         saveConsent(createConsent({
             categories: categorySelectionsFromInputs(),
             services: serviceSelectionsFromInputs(),
-            terms: config.termsRequired && elements.termsInput.checked
+            terms: termsAreAccepted()
         }), 'preferences');
 
     }
@@ -3591,8 +3662,10 @@
 
         OPTIONAL_CATEGORIES.forEach(syncCategoryControl);
 
-        if(elements.termsInput){
-            elements.termsInput.checked = consent.terms === true;
+        if(elements.termsInputs.length){
+            elements.termsInputs.forEach(function(input){
+                input.checked = consent.terms === true;
+            });
             clearTermsError();
         }
 
@@ -3602,8 +3675,8 @@
         elements.overlay.hidden = false;
         renderInterfaceState();
 
-        var focusTarget = options.focusTerms && elements.termsInput
-            ? elements.termsInput
+        var focusTarget = options.focusTerms && elements.termsInputs.length
+            ? elements.termsInputs[0]
             : elements.dialogTitle;
 
         focusElement(focusTarget);
@@ -3843,20 +3916,50 @@
 
     function showTermsError(){
 
-        elements.termsError.hidden = false;
-        elements.termsInput.setAttribute('aria-invalid', 'true');
-        focusElement(elements.termsInput);
+        var firstInvalidInput = null;
+
+        elements.termsInputs.forEach(function(input, index){
+            if(input.checked){
+                clearTermsError(input);
+                return;
+            }
+
+            elements.termsErrors[index].hidden = false;
+            input.setAttribute('aria-invalid', 'true');
+            firstInvalidInput = firstInvalidInput || input;
+        });
+
+        if(firstInvalidInput){
+            focusElement(firstInvalidInput);
+        }
 
     }
 
-    function clearTermsError(){
+    function clearTermsError(input){
 
-        if(!elements.termsError || !elements.termsInput){
+        if(!elements.termsInputs || !elements.termsInputs.length){
             return;
         }
 
-        elements.termsError.hidden = true;
-        elements.termsInput.removeAttribute('aria-invalid');
+        elements.termsInputs.forEach(function(candidate, index){
+            if(input && candidate !== input){
+                return;
+            }
+
+            elements.termsErrors[index].hidden = true;
+            candidate.removeAttribute('aria-invalid');
+        });
+
+    }
+
+    function termsAreAccepted(){
+
+        return !config.termsRequired || (
+            elements.termsInputs.length === config.termsLinks.length
+            && elements.termsInputs.every(function(input){
+                return input.checked;
+            })
+        );
 
     }
 

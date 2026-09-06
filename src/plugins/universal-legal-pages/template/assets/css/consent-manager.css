@@ -492,8 +492,13 @@ input:disabled + .ulc-category__content .ulc-category__label {
     background: #000000;
 }
 
-.ulc-terms {
+.ulc-terms-list {
+    display: grid;
+    gap: 1rem;
     margin-block-start: 1.5rem;
+}
+
+.ulc-terms {
     padding: 1rem;
     border: 2px solid #505050;
     border-radius: 0.25rem;

@@ -31,6 +31,7 @@ final class Universal_Legal_Pages{
     const VERSION = '1.5.0';
     const MAX_REACTWP_LANGUAGES = 32;
     const MAX_CONSENT_PAGES = 1000;
+    const MAX_TERMS_CONFIRMATIONS = 50;
     const MAX_CONSENT_CATEGORIES = 16;
     const MAX_SERVICES = 32;
     const MAX_SERVICE_DOMAINS = 8;
@@ -275,6 +276,7 @@ final class Universal_Legal_Pages{
             'consent_string_translations' => [],
             'consent_categories' => self::default_consent_categories($consent_strings),
             'consent_page_ids' => [],
+            'terms_page_ids' => [],
             'terms_page_id' => 0,
             'consent_link_translations' => [],
             'terms_required' => false,
@@ -1175,7 +1177,7 @@ final class Universal_Legal_Pages{
 
     }
 
-    private static function service_registry_version($services, $custom_integrations = [], $categories = null){
+    private static function service_registry_version($services, $custom_integrations = [], $categories = null, $terms_registry = []){
 
         $categories = is_array($categories) ? $categories : self::default_consent_categories();
         $custom_integrations = self::normalize_stored_custom_integrations($custom_integrations, $categories);
@@ -1220,7 +1222,10 @@ final class Universal_Legal_Pages{
             return strcmp($first_key, $second_key);
         });
 
-        $json = wp_json_encode($records, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $json = wp_json_encode([
+            'records' => $records,
+            'terms' => is_array($terms_registry) ? $terms_registry : [],
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
         return substr(hash('sha256', is_string($json) ? $json : '[]'), 0, 24);
 
@@ -1808,6 +1813,7 @@ final class Universal_Legal_Pages{
         $raw_stored = $stored;
 
         $has_consent_page_ids = array_key_exists('consent_page_ids', $stored);
+        $has_terms_page_ids = array_key_exists('terms_page_ids', $stored);
         $legacy_page_ids = [];
 
         if(!$has_consent_page_ids){
@@ -1825,7 +1831,13 @@ final class Universal_Legal_Pages{
             $options[$boolean_key] = (bool)$options[$boolean_key];
         }
 
-        $options['terms_page_id'] = is_scalar($options['terms_page_id']) ? absint($options['terms_page_id']) : 0;
+        $legacy_terms_page_id = is_scalar($options['terms_page_id']) ? absint($options['terms_page_id']) : 0;
+        $options['terms_page_ids'] = self::normalize_stored_terms_page_ids(
+            $has_terms_page_ids
+                ? $options['terms_page_ids']
+                : ($legacy_terms_page_id > 0 ? [$legacy_terms_page_id] : [])
+        );
+        $options['terms_page_id'] = $options['terms_page_ids'][0] ?? 0;
         $options['consent_page_ids'] = self::normalize_stored_legal_page_ids(
             $has_consent_page_ids ? $options['consent_page_ids'] : $legacy_page_ids
         );
@@ -1894,7 +1906,7 @@ final class Universal_Legal_Pages{
                     ? $options['consent_link_translations'][$code]
                     : [
                         'consent_page_ids' => $options['consent_page_ids'],
-                        'terms_page_id' => $options['terms_page_id'],
+                        'terms_page_ids' => $options['terms_page_ids'],
                     ];
             }
 
@@ -1909,7 +1921,8 @@ final class Universal_Legal_Pages{
 
             if(is_array($fallback_links)){
                 $options['consent_page_ids'] = $fallback_links['consent_page_ids'];
-                $options['terms_page_id'] = $fallback_links['terms_page_id'];
+                $options['terms_page_ids'] = $fallback_links['terms_page_ids'];
+                $options['terms_page_id'] = $options['terms_page_ids'][0] ?? 0;
             }
         }
 
@@ -2039,6 +2052,26 @@ final class Universal_Legal_Pages{
 
     }
 
+    private static function normalize_stored_terms_page_ids($value){
+
+        if(!is_array($value)){
+            return [];
+        }
+
+        $normalized = [];
+
+        foreach(array_slice($value, 0, self::MAX_TERMS_CONFIRMATIONS) as $raw_id){
+            $id = self::parse_positive_integer_id($raw_id);
+
+            if($id > 0 && !in_array($id, $normalized, true) && self::is_published_legal_page($id)){
+                $normalized[] = $id;
+            }
+        }
+
+        return $normalized;
+
+    }
+
     private static function normalize_stored_consent_link_translations($value){
 
         if(!is_array($value) || count($value) > self::MAX_REACTWP_LANGUAGES){
@@ -2054,17 +2087,16 @@ final class Universal_Legal_Pages{
                 continue;
             }
 
-            $terms_page_id = isset($bundle['terms_page_id']) && is_scalar($bundle['terms_page_id'])
+            $legacy_terms_page_id = isset($bundle['terms_page_id']) && is_scalar($bundle['terms_page_id'])
                 ? absint($bundle['terms_page_id'])
                 : 0;
-
-            if($terms_page_id > 0 && !self::is_published_legal_page($terms_page_id)){
-                $terms_page_id = 0;
-            }
+            $terms_page_ids = array_key_exists('terms_page_ids', $bundle)
+                ? $bundle['terms_page_ids']
+                : ($legacy_terms_page_id > 0 ? [$legacy_terms_page_id] : []);
 
             $translations[$code] = [
                 'consent_page_ids' => self::normalize_stored_legal_page_ids($bundle['consent_page_ids'] ?? []),
-                'terms_page_id' => $terms_page_id,
+                'terms_page_ids' => self::normalize_stored_terms_page_ids($terms_page_ids),
             ];
         }
 
@@ -3179,6 +3211,59 @@ final class Universal_Legal_Pages{
 
     }
 
+    private static function parse_submitted_terms_page_ids($value){
+
+        if(!is_array($value)
+            || !array_key_exists('_present', $value)
+            || !in_array($value['_present'], ['1', 1, true], true)){
+            return null;
+        }
+
+        unset($value['_present']);
+
+        if(count($value) > self::MAX_TERMS_CONFIRMATIONS){
+            return null;
+        }
+
+        $expected_keys = count($value) > 0 ? range(0, count($value) - 1) : [];
+
+        if(array_keys($value) !== $expected_keys){
+            return null;
+        }
+
+        $normalized = [];
+
+        foreach($value as $raw_id){
+            $id = self::parse_positive_integer_id($raw_id);
+
+            if($id === 0 || in_array($id, $normalized, true) || !self::is_published_legal_page($id)){
+                return null;
+            }
+
+            $normalized[] = $id;
+        }
+
+        return $normalized;
+
+    }
+
+    private static function sanitize_terms_page_ids($value, $previous){
+
+        $normalized = self::parse_submitted_terms_page_ids($value);
+
+        if($normalized === null){
+            self::add_field_error(
+                'invalid_terms_page_ids',
+                __('Explicit confirmations are invalid or incomplete; the previous confirmations were preserved.', 'universal-legal-pages')
+            );
+
+            return is_array($previous) ? $previous : [];
+        }
+
+        return $normalized;
+
+    }
+
     private static function sanitize_consent_link_translations($value, $previous, $languages){
 
         $expected_codes = array_column($languages, 'code');
@@ -3189,6 +3274,7 @@ final class Universal_Legal_Pages{
         sort($sorted_submitted_codes);
         $invalid = !is_array($value) || $sorted_submitted_codes !== $sorted_expected_codes;
         $translations = [];
+        $terms_count = null;
 
         if(!$invalid){
             foreach($languages as $language){
@@ -3200,8 +3286,8 @@ final class Universal_Legal_Pages{
                 if(
                     !is_array($bundle)
                     || !in_array($bundle_keys, [
-                        ['consent_page_ids', 'terms_page_id'],
-                        ['terms_page_id'],
+                        ['consent_page_ids', 'terms_page_ids'],
+                        ['terms_page_ids'],
                     ], true)
                 ){
                     $invalid = true;
@@ -3228,28 +3314,23 @@ final class Universal_Legal_Pages{
                     $normalized_page_ids[] = $id;
                 }
 
-                $raw_terms_page_id = $bundle['terms_page_id'];
-                $terms_page_id = null;
+                $terms_page_ids = self::parse_submitted_terms_page_ids($bundle['terms_page_ids']);
 
-                if(is_int($raw_terms_page_id) && $raw_terms_page_id >= 0){
-                    $terms_page_id = $raw_terms_page_id;
-                }elseif(is_string($raw_terms_page_id) && preg_match('/\A(?:0|[1-9][0-9]*)\z/', $raw_terms_page_id)){
-                    $maximum = (string)PHP_INT_MAX;
-
-                    if(strlen($raw_terms_page_id) < strlen($maximum)
-                        || (strlen($raw_terms_page_id) === strlen($maximum) && strcmp($raw_terms_page_id, $maximum) <= 0)){
-                        $terms_page_id = (int)$raw_terms_page_id;
-                    }
+                if($terms_page_ids === null){
+                    $invalid = true;
+                    break;
                 }
 
-                if($terms_page_id === null || ($terms_page_id > 0 && !self::is_published_legal_page($terms_page_id))){
+                if($terms_count === null){
+                    $terms_count = count($terms_page_ids);
+                }elseif(count($terms_page_ids) !== $terms_count){
                     $invalid = true;
                     break;
                 }
 
                 $translations[$code] = [
                     'consent_page_ids' => $normalized_page_ids,
-                    'terms_page_id' => $terms_page_id,
+                    'terms_page_ids' => $terms_page_ids,
                 ];
             }
         }
@@ -3578,17 +3659,24 @@ final class Universal_Legal_Pages{
                     isset($input['consent_page_ids']) ? $input['consent_page_ids'] : [],
                     $previous['consent_page_ids']
                 );
-                $legacy_terms_page_id = self::sanitize_legal_page_id(
-                    isset($input['terms_page_id']) ? $input['terms_page_id'] : 0,
-                    $previous['terms_page_id'],
-                    __('Terms', 'universal-legal-pages')
-                );
+                $legacy_terms_page_ids = array_key_exists('terms_page_ids', $input)
+                    ? self::sanitize_terms_page_ids(
+                        $input['terms_page_ids'],
+                        $previous['terms_page_ids']
+                    )
+                    : array_values(array_filter([
+                        self::sanitize_legal_page_id(
+                            isset($input['terms_page_id']) ? $input['terms_page_id'] : 0,
+                            $previous['terms_page_id'],
+                            __('Terms', 'universal-legal-pages')
+                        ),
+                    ]));
                 $options['consent_link_translations'] = [];
 
                 foreach($languages as $language){
                     $options['consent_link_translations'][$language['code']] = [
                         'consent_page_ids' => $legacy_page_ids,
-                        'terms_page_id' => $legacy_terms_page_id,
+                        'terms_page_ids' => $legacy_terms_page_ids,
                     ];
                 }
             }
@@ -3601,20 +3689,26 @@ final class Universal_Legal_Pages{
             $options['consent_page_ids'] = is_array($fallback_links)
                 ? $fallback_links['consent_page_ids']
                 : $previous['consent_page_ids'];
-            $options['terms_page_id'] = is_array($fallback_links)
-                ? $fallback_links['terms_page_id']
-                : $previous['terms_page_id'];
+            $options['terms_page_ids'] = is_array($fallback_links)
+                ? $fallback_links['terms_page_ids']
+                : $previous['terms_page_ids'];
+            $options['terms_page_id'] = $options['terms_page_ids'][0] ?? 0;
         }else{
             $options['consent_link_translations'] = $previous['consent_link_translations'];
             $options['consent_page_ids'] = self::sanitize_consent_page_ids(
                 isset($input['consent_page_ids']) ? $input['consent_page_ids'] : [],
                 $previous['consent_page_ids']
             );
-            $options['terms_page_id'] = self::sanitize_legal_page_id(
-                isset($input['terms_page_id']) ? $input['terms_page_id'] : 0,
-                $previous['terms_page_id'],
-                __('Terms', 'universal-legal-pages')
-            );
+            $options['terms_page_ids'] = array_key_exists('terms_page_ids', $input)
+                ? self::sanitize_terms_page_ids($input['terms_page_ids'], $previous['terms_page_ids'])
+                : array_values(array_filter([
+                    self::sanitize_legal_page_id(
+                        isset($input['terms_page_id']) ? $input['terms_page_id'] : 0,
+                        $previous['terms_page_id'],
+                        __('Terms', 'universal-legal-pages')
+                    ),
+                ]));
+            $options['terms_page_id'] = $options['terms_page_ids'][0] ?? 0;
         }
 
         if(array_key_exists('consent_categories_present', $input)){
@@ -3746,7 +3840,7 @@ final class Universal_Legal_Pages{
                 : $previous['services'];
         }
 
-        $missing_terms_page = $options['terms_page_id'] === 0;
+        $missing_terms_page = empty($options['terms_page_ids']);
 
         if(!empty($languages)){
             $missing_terms_page = false;
@@ -3754,7 +3848,7 @@ final class Universal_Legal_Pages{
             foreach($languages as $language){
                 $code = $language['code'];
 
-                if(empty($options['consent_link_translations'][$code]['terms_page_id'])){
+                if(empty($options['consent_link_translations'][$code]['terms_page_ids'])){
                     $missing_terms_page = true;
                     break;
                 }
@@ -3765,8 +3859,8 @@ final class Universal_Legal_Pages{
             self::add_field_error(
                 'missing_terms_page',
                 !empty($languages)
-                    ? __('Select a published terms page for every configured language before requiring acceptance.', 'universal-legal-pages')
-                    : __('Select a published terms page before requiring acceptance.', 'universal-legal-pages')
+                    ? __('Add at least one published legal document for every configured language before requiring explicit acceptance.', 'universal-legal-pages')
+                    : __('Add at least one published legal document before requiring explicit acceptance.', 'universal-legal-pages')
             );
             $options['terms_required'] = false;
         }
@@ -3796,13 +3890,14 @@ final class Universal_Legal_Pages{
 
     }
 
-    private static function render_legal_page_select($name, $selected, $pages, $describedby = '', $id = ''){
+    private static function render_legal_page_select($name, $selected, $pages, $describedby = '', $id = '', $empty_label = ''){
 
         $id = $id !== '' ? $id : 'ulp-' . str_replace('_', '-', $name);
+        $empty_label = $empty_label !== '' ? $empty_label : __('— None —', 'universal-legal-pages');
 
         ?>
         <select id="<?php echo esc_attr($id); ?>" name="<?php echo esc_attr(self::OPTION_NAME . '[' . $name . ']'); ?>"<?php echo $describedby !== '' ? ' aria-describedby="' . esc_attr($describedby) . '"' : ''; ?>>
-            <option value="0"><?php esc_html_e('— None —', 'universal-legal-pages'); ?></option>
+            <option value="0"><?php echo esc_html($empty_label); ?></option>
             <?php foreach($pages as $page) : ?>
                 <option value="<?php echo esc_attr((string)$page->ID); ?>" <?php selected($selected, $page->ID); ?>>
                     <?php echo esc_html(get_the_title($page)); ?>
@@ -4565,7 +4660,7 @@ final class Universal_Legal_Pages{
                     $code = $language['code'];
                     $translation = isset($translations[$code]) && is_array($translations[$code])
                         ? $translations[$code]
-                        : ['consent_page_ids' => [], 'terms_page_id' => 0];
+                        : ['consent_page_ids' => [], 'terms_page_ids' => []];
                     $field_root = 'consent_link_translations][' . $code;
                     $id_prefix = 'ulp-consent-links-' . $code;
                     ?>
@@ -4599,10 +4694,130 @@ final class Universal_Legal_Pages{
 
     }
 
-    private static function render_localized_terms_setting($terms_required, $translations, $languages, $pages){
+    private static function render_terms_confirmation_item($index, $terms_by_language, $languages, $pages){
 
+        $index_label = $index === '__INDEX__' ? 0 : ((int)$index + 1);
+        $title = $index_label > 0
+            ? sprintf(__('Confirmation %d', 'universal-legal-pages'), $index_label)
+            : __('New confirmation', 'universal-legal-pages');
+        $id_prefix = 'ulp-terms-confirmation-' . $index;
         $has_tabs = count($languages) > 1;
         $active_code = self::reactwp_language_code($languages);
+
+        if($active_code === '' && !empty($languages)){
+            $active_code = $languages[0]['code'];
+        }
+
+        ?>
+        <article class="ulp-admin__terms-item" data-ulp-terms-item>
+            <header class="ulp-admin__terms-item-header">
+                <h4 id="<?php echo esc_attr($id_prefix . '-title'); ?>" data-ulp-terms-title><?php echo esc_html($title); ?></h4>
+                <div class="ulp-admin__terms-item-actions">
+                    <button type="button" class="button" data-ulp-terms-up aria-label="<?php echo esc_attr(sprintf(__('Move “%s” up', 'universal-legal-pages'), $title)); ?>">↑</button>
+                    <button type="button" class="button" data-ulp-terms-down aria-label="<?php echo esc_attr(sprintf(__('Move “%s” down', 'universal-legal-pages'), $title)); ?>">↓</button>
+                    <button type="button" class="button-link-delete" data-ulp-remove-terms><?php esc_html_e('Remove', 'universal-legal-pages'); ?></button>
+                </div>
+            </header>
+
+            <?php if(empty($languages)) :
+                $selected = isset($terms_by_language[''][$index]) ? $terms_by_language[''][$index] : 0;
+                $field_id = $id_prefix . '-page';
+                ?>
+                <div class="ulp-admin__terms-item-field">
+                    <label for="<?php echo esc_attr($field_id); ?>"><?php esc_html_e('Legal document to confirm', 'universal-legal-pages'); ?></label>
+                    <?php self::render_legal_page_select(
+                        'terms_page_ids][' . $index,
+                        $selected,
+                        $pages,
+                        'ulp-terms-confirmations-description',
+                        $field_id,
+                        __('Select a legal document', 'universal-legal-pages')
+                    ); ?>
+                </div>
+            <?php else : ?>
+                <div class="ulp-admin__language-editor ulp-admin__terms-language-editor" data-ulp-language-editor>
+                    <?php if($has_tabs) : ?>
+                        <div class="ulp-admin__language-tabs" role="tablist" aria-label="<?php echo esc_attr(sprintf(__('Language for %s', 'universal-legal-pages'), $title)); ?>">
+                            <?php foreach($languages as $language) :
+                                $code = $language['code'];
+                                $is_active = $code === $active_code;
+                                ?>
+                                <button
+                                    id="<?php echo esc_attr($id_prefix . '-language-tab-' . $code); ?>"
+                                    class="ulp-admin__language-tab"
+                                    type="button"
+                                    role="tab"
+                                    aria-selected="<?php echo $is_active ? 'true' : 'false'; ?>"
+                                    aria-controls="<?php echo esc_attr($id_prefix . '-language-panel-' . $code); ?>"
+                                    tabindex="<?php echo $is_active ? '0' : '-1'; ?>"
+                                    data-ulp-language-tab
+                                >
+                                    <span><?php echo esc_html($language['name']); ?></span>
+                                </button>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="ulp-admin__language-panels">
+                        <?php foreach($languages as $language) :
+                            $code = $language['code'];
+                            $is_active = $code === $active_code;
+                            $selected = isset($terms_by_language[$code][$index])
+                                ? $terms_by_language[$code][$index]
+                                : 0;
+                            $field_id = $id_prefix . '-' . $code . '-page';
+                            ?>
+                            <section
+                                id="<?php echo esc_attr($id_prefix . '-language-panel-' . $code); ?>"
+                                class="ulp-admin__language-panel ulp-admin__language-panel--terms"
+                                <?php if($has_tabs) : ?>
+                                    role="tabpanel"
+                                    aria-labelledby="<?php echo esc_attr($id_prefix . '-language-tab-' . $code); ?>"
+                                    tabindex="0"
+                                    data-ulp-language-panel
+                                    <?php if(!$is_active) : ?>hidden<?php endif; ?>
+                                <?php endif; ?>
+                            >
+                                <h3><span><?php echo esc_html($language['name']); ?></span></h3>
+                                <label for="<?php echo esc_attr($field_id); ?>"><?php esc_html_e('Legal document to confirm', 'universal-legal-pages'); ?></label>
+                                <?php self::render_legal_page_select(
+                                    'consent_link_translations][' . $code . '][terms_page_ids][' . $index,
+                                    $selected,
+                                    $pages,
+                                    'ulp-terms-confirmations-description',
+                                    $field_id,
+                                    __('Select a legal document', 'universal-legal-pages')
+                                ); ?>
+                            </section>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </article>
+        <?php
+
+    }
+
+    private static function render_terms_setting($terms_required, $terms_page_ids, $translations, $languages, $pages){
+
+        $terms_by_language = [];
+        $confirmation_count = 0;
+
+        if(empty($languages)){
+            $terms_by_language[''] = is_array($terms_page_ids) ? array_values($terms_page_ids) : [];
+            $confirmation_count = count($terms_by_language['']);
+        }else{
+            foreach($languages as $language){
+                $code = $language['code'];
+                $bundle = isset($translations[$code]) && is_array($translations[$code])
+                    ? $translations[$code]
+                    : [];
+                $terms_by_language[$code] = isset($bundle['terms_page_ids']) && is_array($bundle['terms_page_ids'])
+                    ? array_values($bundle['terms_page_ids'])
+                    : [];
+                $confirmation_count = max($confirmation_count, count($terms_by_language[$code]));
+            }
+        }
 
         ?>
         <fieldset class="ulp-admin__terms-setting ulp-admin__terms-setting--localized">
@@ -4616,61 +4831,40 @@ final class Universal_Legal_Pages{
                 ); ?>
             </div>
             <div class="ulp-admin__dependent-field ulp-admin__localized-terms-fields">
-                <p id="ulp-localized-terms-description" class="description"><?php esc_html_e('Only used when explicit acceptance is enabled. This document will be linked directly in the confirmation checkbox.', 'universal-legal-pages'); ?></p>
-                <div class="ulp-admin__language-editor ulp-admin__terms-language-editor" data-ulp-language-editor>
-                    <?php if($has_tabs) : ?>
-                        <div class="ulp-admin__language-tabs" role="tablist" aria-label="<?php echo esc_attr(__('Confirmation page language', 'universal-legal-pages')); ?>">
-                            <?php foreach($languages as $language) :
-                                $code = $language['code'];
-                                $is_active = $code === $active_code;
-                                ?>
-                                <button
-                                    id="ulp-terms-language-tab-<?php echo esc_attr($code); ?>"
-                                    class="ulp-admin__language-tab"
-                                    type="button"
-                                    role="tab"
-                                    aria-selected="<?php echo $is_active ? 'true' : 'false'; ?>"
-                                    aria-controls="ulp-terms-language-panel-<?php echo esc_attr($code); ?>"
-                                    tabindex="<?php echo $is_active ? '0' : '-1'; ?>"
-                                    data-ulp-language-tab
-                                >
-                                    <span><?php echo esc_html($language['name']); ?></span>
-                                </button>
-                            <?php endforeach; ?>
-                        </div>
+                <p id="ulp-terms-confirmations-description" class="description"><?php esc_html_e('Add every legal document visitors must confirm. Each document is displayed as a separate required checkbox, in this order.', 'universal-legal-pages'); ?></p>
+                <div
+                    class="ulp-admin__terms-editor"
+                    data-ulp-terms-editor
+                    data-max="<?php echo esc_attr((string)self::MAX_TERMS_CONFIRMATIONS); ?>"
+                    data-added-message="<?php echo esc_attr(__('Confirmation added.', 'universal-legal-pages')); ?>"
+                    data-removed-message="<?php echo esc_attr(__('Confirmation removed.', 'universal-legal-pages')); ?>"
+                    data-moved-message="<?php echo esc_attr(__('Confirmation order updated.', 'universal-legal-pages')); ?>"
+                    data-limit-message="<?php echo esc_attr(sprintf(__('A maximum of %d explicit confirmations is allowed.', 'universal-legal-pages'), self::MAX_TERMS_CONFIRMATIONS)); ?>"
+                    data-title-template="<?php echo esc_attr(__('Confirmation %d', 'universal-legal-pages')); ?>"
+                    data-move-up-label="<?php echo esc_attr(__('Move confirmation %d up', 'universal-legal-pages')); ?>"
+                    data-move-down-label="<?php echo esc_attr(__('Move confirmation %d down', 'universal-legal-pages')); ?>"
+                >
+                    <?php if(empty($languages)) : ?>
+                        <input type="hidden" name="<?php echo esc_attr(self::OPTION_NAME . '[terms_page_ids][_present]'); ?>" value="1">
+                    <?php else : ?>
+                        <?php foreach($languages as $language) : ?>
+                            <input type="hidden" name="<?php echo esc_attr(self::OPTION_NAME . '[consent_link_translations][' . $language['code'] . '][terms_page_ids][_present]'); ?>" value="1">
+                        <?php endforeach; ?>
                     <?php endif; ?>
 
-                    <div class="ulp-admin__language-panels">
-                        <?php foreach($languages as $language) :
-                            $code = $language['code'];
-                            $translation = isset($translations[$code]) && is_array($translations[$code])
-                                ? $translations[$code]
-                                : ['terms_page_id' => 0];
-                            $field_root = 'consent_link_translations][' . $code;
-                            $field_id = 'ulp-consent-links-' . $code . '-terms-page-id';
-                            ?>
-                            <section
-                                id="ulp-terms-language-panel-<?php echo esc_attr($code); ?>"
-                                class="ulp-admin__language-panel ulp-admin__language-panel--terms"
-                                <?php if($has_tabs) : ?>
-                                    role="tabpanel"
-                                    aria-labelledby="ulp-terms-language-tab-<?php echo esc_attr($code); ?>"
-                                    tabindex="0"
-                                    data-ulp-language-panel
-                                <?php endif; ?>
-                            >
-                                <h3><span><?php echo esc_html($language['name']); ?></span></h3>
-                                <label for="<?php echo esc_attr($field_id); ?>"><?php esc_html_e('Link to this confirmation', 'universal-legal-pages'); ?></label>
-                                <?php self::render_legal_page_select(
-                                    $field_root . '][terms_page_id',
-                                    isset($translation['terms_page_id']) ? $translation['terms_page_id'] : 0,
-                                    $pages,
-                                    'ulp-localized-terms-description',
-                                    $field_id
-                                ); ?>
-                            </section>
-                        <?php endforeach; ?>
+                    <div class="ulp-admin__terms-list" data-ulp-terms-list>
+                        <?php for($index = 0; $index < $confirmation_count; $index++) : ?>
+                            <?php self::render_terms_confirmation_item($index, $terms_by_language, $languages, $pages); ?>
+                        <?php endfor; ?>
                     </div>
+                    <p class="ulp-admin__terms-empty" data-ulp-terms-empty <?php if($confirmation_count > 0) : ?>hidden<?php endif; ?>><?php esc_html_e('No explicit confirmation has been added.', 'universal-legal-pages'); ?></p>
+                    <div class="ulp-admin__terms-editor-actions">
+                        <button type="button" class="button button-secondary" data-ulp-add-terms><?php esc_html_e('Add a confirmation', 'universal-legal-pages'); ?></button>
+                    </div>
+                    <p class="screen-reader-text" data-ulp-terms-status aria-live="polite"></p>
+                    <template data-ulp-terms-template>
+                        <?php self::render_terms_confirmation_item('__INDEX__', [], $languages, $pages); ?>
+                    </template>
                 </div>
             </div>
         </fieldset>
@@ -4855,7 +5049,7 @@ final class Universal_Legal_Pages{
                 <section id="ulp-settings-panel-pages" class="ulp-admin-section ulp-admin-section--initially-hidden" aria-labelledby="ulp-section-pages-title" data-ulp-section-panel>
                     <header class="ulp-admin-section__header">
                         <h2 id="ulp-section-pages-title"><?php esc_html_e('Consent module links', 'universal-legal-pages'); ?></h2>
-                        <p><?php esc_html_e('Choose and order the legal pages shown in the consent interface, then optionally require visitors to confirm a selected document.', 'universal-legal-pages'); ?></p>
+                        <p><?php esc_html_e('Choose and order the legal pages shown in the consent interface, then optionally require visitors to confirm one or more documents.', 'universal-legal-pages'); ?></p>
                     </header>
                     <div class="ulp-admin-section__body">
                         <?php if(!empty($languages)) : ?>
@@ -4865,12 +5059,6 @@ final class Universal_Legal_Pages{
                                 $pages,
                                 $has_link_translation_error
                             ); ?>
-                            <?php self::render_localized_terms_setting(
-                                $options['terms_required'],
-                                $options['consent_link_translations'],
-                                $languages,
-                                $pages
-                            ); ?>
                         <?php else : ?>
                             <table class="form-table" role="presentation">
                                 <tbody>
@@ -4878,20 +5066,16 @@ final class Universal_Legal_Pages{
                                         <th scope="row"><?php esc_html_e('Pages to display', 'universal-legal-pages'); ?></th>
                                         <td><?php self::render_consent_page_choices($options['consent_page_ids'], $pages); ?></td>
                                     </tr>
-                                    <tr>
-                                        <th scope="row"><?php esc_html_e('Explicit acceptance', 'universal-legal-pages'); ?></th>
-                                        <td class="ulp-admin__terms-setting">
-                                            <div><?php self::render_checkbox('terms_required', $options['terms_required'], __('Request explicit acceptance in preferences', 'universal-legal-pages'), __('This browser-only choice does not by itself constitute a contractual record or proof of identity.', 'universal-legal-pages')); ?></div>
-                                            <div class="ulp-admin__dependent-field">
-                                                <label for="ulp-terms-page-id"><?php esc_html_e('Link to this confirmation', 'universal-legal-pages'); ?></label>
-                                                <?php self::render_legal_page_select('terms_page_id', $options['terms_page_id'], $pages, 'ulp-terms-page-description'); ?>
-                                                <p id="ulp-terms-page-description" class="description"><?php esc_html_e('Only used when explicit acceptance is enabled. This document will be linked directly in the confirmation checkbox.', 'universal-legal-pages'); ?></p>
-                                            </div>
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
                         <?php endif; ?>
+                        <?php self::render_terms_setting(
+                            $options['terms_required'],
+                            $options['terms_page_ids'],
+                            $options['consent_link_translations'],
+                            $languages,
+                            $pages
+                        ); ?>
                     </div>
                 </section>
 
@@ -5111,12 +5295,21 @@ final class Universal_Legal_Pages{
 
         $legal_links = self::get_public_legal_links($options['consent_page_ids']);
 
-        $terms_link = self::get_public_legal_link(
-            $options['terms_page_id'],
-            __('Terms', 'universal-legal-pages')
-        );
+        $terms_links = self::get_public_legal_links($options['terms_page_ids']);
+        $terms_link = $terms_links[0] ?? null;
         $languages = self::reactwp_languages();
         $current_language = self::reactwp_language_code($languages);
+        $terms_registry = [];
+
+        if(empty($languages)){
+            $terms_registry['default'] = $options['terms_page_ids'];
+        }else{
+            foreach($languages as $language){
+                $code = $language['code'];
+                $terms_registry[$code] = $options['consent_link_translations'][$code]['terms_page_ids'];
+            }
+        }
+
         $resolved_strings = self::resolve_consent_strings($options);
         $categories = self::public_consent_categories($options, $current_language);
         $services = self::get_public_services($options);
@@ -5137,6 +5330,7 @@ final class Universal_Legal_Pages{
             'stylesheetUrl' => self::get_consent_stylesheet_url(),
             'legalLinks' => $legal_links,
             'termsLink' => $terms_link,
+            'termsLinks' => $terms_links,
             'integrations' => [
                 'googleAnalytics' => $options['ga4_category'] !== '' ? (string)$options['ga4_measurement_id'] : '',
                 'googleTagManager' => $options['gtm_category'] !== '' ? (string)$options['gtm_container_id'] : '',
@@ -5155,7 +5349,8 @@ final class Universal_Legal_Pages{
             'serviceRegistryVersion' => self::service_registry_version(
                 $services,
                 $options['custom_integrations'],
-                $options['consent_categories']
+                $options['consent_categories'],
+                $options['terms_required'] ? $terms_registry : []
             ),
             'strings' => $resolved_strings,
         ];
@@ -5168,12 +5363,11 @@ final class Universal_Legal_Pages{
                 $code = $language['code'];
                 $bundle = $options['consent_link_translations'][$code];
                 $category_translations[$code] = self::public_consent_categories($options, $code);
+                $translated_terms_links = self::get_public_legal_links($bundle['terms_page_ids']);
                 $link_translations[$code] = [
                     'legalLinks' => self::get_public_legal_links($bundle['consent_page_ids']),
-                    'termsLink' => self::get_public_legal_link(
-                        $bundle['terms_page_id'],
-                        __('Terms', 'universal-legal-pages')
-                    ),
+                    'termsLink' => $translated_terms_links[0] ?? null,
+                    'termsLinks' => $translated_terms_links,
                 ];
             }
 

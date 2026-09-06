@@ -338,6 +338,176 @@
         updateState();
     });
 
+    var termsEditors = document.querySelectorAll('[data-ulp-terms-editor]');
+
+    Array.prototype.forEach.call(termsEditors, function(editor){
+        var list = editor.querySelector('[data-ulp-terms-list]');
+        var template = editor.querySelector('[data-ulp-terms-template]');
+        var addButton = editor.querySelector('[data-ulp-add-terms]');
+        var empty = editor.querySelector('[data-ulp-terms-empty]');
+        var status = editor.querySelector('[data-ulp-terms-status]');
+        var maximum = Number.parseInt(editor.getAttribute('data-max') || '50', 10);
+        var titleTemplate = editor.getAttribute('data-title-template') || 'Confirmation %d';
+        var moveUpTemplate = editor.getAttribute('data-move-up-label') || 'Move confirmation %d up';
+        var moveDownTemplate = editor.getAttribute('data-move-down-label') || 'Move confirmation %d down';
+        var nextIndex = 0;
+
+        if(!list || !template || !template.content || !addButton || !Number.isFinite(maximum) || maximum < 1){
+            return;
+        }
+
+        function items(){
+            return Array.prototype.slice.call(list.querySelectorAll('[data-ulp-terms-item]'));
+        }
+
+        function formatNumbered(value, number){
+            return String(value).replace('%d', String(number));
+        }
+
+        function announce(attribute){
+            if(status){
+                status.textContent = editor.getAttribute(attribute) || '';
+            }
+        }
+
+        function replaceItemIndex(element, index){
+            ['name', 'id', 'for', 'aria-controls', 'aria-labelledby'].forEach(function(attribute){
+                var value = element.getAttribute(attribute) || '';
+
+                if(attribute === 'name'){
+                    value = value.replace(/\[terms_page_ids\]\[[0-9]+\]/, '[terms_page_ids][' + index + ']');
+                }
+
+                if(value.indexOf('ulp-terms-confirmation-') !== -1){
+                    value = value.replace(/ulp-terms-confirmation-[0-9]+-/, 'ulp-terms-confirmation-' + index + '-');
+                }
+
+                if(value !== (element.getAttribute(attribute) || '')){
+                    element.setAttribute(attribute, value);
+                }
+            });
+        }
+
+        function updateState(){
+            var records = items();
+
+            records.forEach(function(item, index){
+                var number = index + 1;
+                var title = item.querySelector('[data-ulp-terms-title]');
+                var up = item.querySelector('[data-ulp-terms-up]');
+                var down = item.querySelector('[data-ulp-terms-down]');
+
+                item.querySelectorAll('[name], [id], label[for], [aria-controls], [aria-labelledby]').forEach(function(element){
+                    replaceItemIndex(element, index);
+                });
+
+                if(title){
+                    title.textContent = formatNumbered(titleTemplate, number);
+                }
+
+                if(up){
+                    up.disabled = index === 0;
+                    up.setAttribute('aria-label', formatNumbered(moveUpTemplate, number));
+                }
+
+                if(down){
+                    down.disabled = index === records.length - 1;
+                    down.setAttribute('aria-label', formatNumbered(moveDownTemplate, number));
+                }
+            });
+
+            nextIndex = records.length;
+            addButton.disabled = records.length >= maximum;
+            addButton.setAttribute('aria-disabled', addButton.disabled ? 'true' : 'false');
+
+            if(empty){
+                empty.hidden = records.length > 0;
+            }
+        }
+
+        addButton.addEventListener('click', function(){
+            if(items().length >= maximum){
+                announce('data-limit-message');
+                updateState();
+                return;
+            }
+
+            var fragment = template.content.cloneNode(true);
+
+            fragment.querySelectorAll('[name], [id], label[for], [aria-controls], [aria-labelledby]').forEach(function(element){
+                ['name', 'id', 'for', 'aria-controls', 'aria-labelledby'].forEach(function(attribute){
+                    var value = element.getAttribute(attribute);
+
+                    if(value && value.indexOf('__INDEX__') !== -1){
+                        element.setAttribute(attribute, value.replaceAll('__INDEX__', String(nextIndex)));
+                    }
+                });
+            });
+
+            list.appendChild(fragment);
+            updateState();
+
+            var item = items().slice(-1)[0];
+
+            if(item){
+                item.querySelectorAll('[data-ulp-language-editor]').forEach(initializeLanguageEditor);
+                var field = item.querySelector('select');
+
+                if(field){
+                    field.focus();
+                }
+            }
+
+            announce('data-added-message');
+        });
+
+        list.addEventListener('click', function(event){
+            var remove = event.target.closest('[data-ulp-remove-terms]');
+            var up = event.target.closest('[data-ulp-terms-up]');
+            var down = event.target.closest('[data-ulp-terms-down]');
+            var action = remove || up || down;
+
+            if(!action || !list.contains(action)){
+                return;
+            }
+
+            var item = action.closest('[data-ulp-terms-item]');
+
+            if(!item){
+                return;
+            }
+
+            if(remove){
+                item.parentNode.removeChild(item);
+                updateState();
+                announce('data-removed-message');
+                addButton.focus();
+                return;
+            }
+
+            if(up && item.previousElementSibling){
+                list.insertBefore(item, item.previousElementSibling);
+            }else if(down && item.nextElementSibling){
+                list.insertBefore(item.nextElementSibling, item);
+            }else{
+                return;
+            }
+
+            updateState();
+            announce('data-moved-message');
+            action.focus();
+        });
+
+        var form = editor.closest('form');
+
+        if(form){
+            form.addEventListener('submit', updateState);
+        }
+
+        editor.classList.add('is-enhanced');
+        updateState();
+    });
+
     var refreshCategorySelects = function(){};
     var categoryEditor = typeof document.querySelector === 'function'
         ? document.querySelector('[data-ulc-categories]')
