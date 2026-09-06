@@ -18,6 +18,10 @@ const normalizeCacheName = (value = 'bundle') => {
     .replace(/^-+|-+$/g, '') || 'bundle';
 };
 
+const escapeRegularExpression = (value = '') => {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+};
+
 const fileBelongsToItem = (filename = '', item) => {
   return filename.includes(`/${item}/`) || filename.includes(`\\${item}\\`);
 };
@@ -317,6 +321,36 @@ class BuildOutputCleanupPlugin {
   }
 }
 
+class TemplateOnlyOutputCleanupPlugin {
+  constructor(items){
+    this.items = items;
+  }
+
+  apply(compiler){
+    const pluginName = 'ReactWPTemplateOnlyOutputCleanupPlugin';
+
+    compiler.hooks.afterEmit.tapPromise(pluginName, async () => {
+      const outputPath = compiler.options.output.path;
+
+      await Promise.all(this.items.flatMap((itemName) => {
+        const assetsPath = path.join(outputPath, itemName, 'assets', 'js');
+        const generatedEntry = path.join(assetsPath, `${itemName}.min.js`);
+        const legacyDevelopmentEntry = path.join(assetsPath, `${itemName}.js`);
+
+        return [
+          fs.promises.rm(path.join(assetsPath, 'chunks'), { recursive: true, force: true }),
+          fs.promises.rm(path.join(assetsPath, 'entrypoints.json'), { force: true }),
+          ...[generatedEntry, legacyDevelopmentEntry].flatMap((entryPath) => {
+            return ['', '.br', '.gz', '.map', '.LICENSE.txt'].map((suffix) => {
+              return fs.promises.rm(`${entryPath}${suffix}`, { force: true });
+            });
+          })
+        ];
+      }));
+    });
+  }
+}
+
 const assetGenerator = (items, folder) => ({
   filename: (pathData) => {
     const file = pathData.filename || '';
@@ -343,6 +377,7 @@ export const createBundleConfig = ({
   inputDirectory,
   outputDirectory,
   templateDirectory,
+  templateOnlyItems = [],
   publicPath,
   extraEntries = () => [],
   copyPatterns = [],
@@ -353,6 +388,10 @@ export const createBundleConfig = ({
     const isProduction = mode === 'production';
     const filesystemCacheDirectory = resolveFromConfig('node_modules', '.cache', 'webpack');
     const filesystemCacheName = `${normalizeCacheName(cacheName)}-${mode}`;
+    const copiedItems = [...new Set([...items, ...templateOnlyItems])];
+    const templateOnlyJavascriptPattern = templateOnlyItems.length
+      ? new RegExp(`^(?:${templateOnlyItems.map(escapeRegularExpression).join('|')})[\\\\/]`)
+      : undefined;
 
     return {
       mode,
@@ -442,10 +481,13 @@ export const createBundleConfig = ({
           isProduction,
           cleanupAlternateEntry: optimizeInitialBundle
         }),
+        ...(templateOnlyItems.length
+          ? [new TemplateOnlyOutputCleanupPlugin(templateOnlyItems)]
+          : []),
         new CopyPlugin({
           patterns: [
             ...copyPatterns,
-            ...items.map((itemName) => ({
+            ...copiedItems.map((itemName) => ({
               from: resolveFromConfig(templateDirectory, itemName, 'template'),
               to: resolveFromConfig(outputDirectory, itemName),
               noErrorOnMissing: true
@@ -516,7 +558,9 @@ export const createBundleConfig = ({
                   }
                 ]
               }),
-              new TerserPlugin()
+              new TerserPlugin({
+                exclude: templateOnlyJavascriptPattern
+              })
             ]
           : []
       },

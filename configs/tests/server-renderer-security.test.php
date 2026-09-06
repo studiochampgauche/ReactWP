@@ -52,7 +52,9 @@ $assert_same = static function($expected, $actual, $message){
 };
 
 $endpoint_method = new ReflectionMethod(ServerRenderer::class, 'endpoint_allowed');
-$endpoint_method->setAccessible(true);
+if(PHP_VERSION_ID < 80100){
+    $endpoint_method->setAccessible(true);
+}
 
 putenv('RWP_SSR_SECRET=short');
 $assert_same(false, $endpoint_method->invoke(null, 'https://renderer.example.com/render'), 'Remote SSR must reject weak secrets.');
@@ -66,7 +68,9 @@ $assert_same(false, $endpoint_method->invoke(null, 'https://renderer.example.com
 $assert_same(true, $endpoint_method->invoke(null, 'https://renderer.example.com/render'), 'Explicitly allowed HTTPS SSR with a strong secret should work.');
 
 $cache_key_method = new ReflectionMethod(ServerRenderer::class, 'cache_route_key');
-$cache_key_method->setAccessible(true);
+if(PHP_VERSION_ID < 80100){
+    $cache_key_method->setAccessible(true);
+}
 $route = [
     'lang' => 'en',
     'path' => '/projects/',

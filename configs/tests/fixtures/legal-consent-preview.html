@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Aperçu du gestionnaire de consentement</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: #f8f3e8;
+            background: linear-gradient(135deg, #482c8f, #0d6a65);
+            font: 18px/1.6 Georgia, serif;
+        }
+
+        main {
+            width: min(60rem, calc(100% - 3rem));
+            margin-inline: auto;
+            padding-block: 5rem 12rem;
+        }
+
+        button {
+            border: 0;
+            border-radius: 999px;
+            padding: 0.75rem 1rem;
+            color: #482c8f;
+            background: #f8f3e8;
+            font: inherit;
+        }
+    </style>
+    <script>
+        window.UniversalLegalConsentConfig = {
+            version: 1,
+            cookieName: 'ulp_preview_consent_20260831b',
+            cookiePath: '/',
+            durationDays: 180,
+            policyVersion: 'preview-1',
+            respectGpc: true,
+            showRevisitButton: location.search.indexOf('no-revisit') === -1,
+            termsRequired: true,
+            stylesheetUrl: location.search.indexOf('cdn-stylesheet') !== -1
+                ? 'http://localhost:8765/src/plugins/universal-legal-pages/template/assets/css/consent-manager.css'
+                : location.origin + '/src/plugins/universal-legal-pages/template/assets/css/consent-manager.css',
+            legalLinks: [
+                {url: 'https://example.test/confidentialite', label: 'Politique de confidentialité'},
+                {url: 'https://example.test/cookies', label: 'Politique de cookies'},
+                {url: 'https://example.test/conditions', label: 'Conditions d’utilisation'}
+            ],
+            termsLink: {url: 'https://example.test/conditions', label: 'Conditions d’utilisation'},
+            integrations: {
+                googleAnalytics: '',
+                googleTagManager: '',
+                googleAds: '',
+                metaPixel: ''
+            },
+            strings: {
+                title: 'Vos choix de confidentialité',
+                message: 'Nous utilisons des témoins facultatifs seulement avec votre accord.',
+                legalLinksLabel: 'Documents légaux',
+                actions: {
+                    acceptAll: 'Tout accepter',
+                    rejectAll: 'Tout refuser',
+                    customize: 'Personnaliser',
+                    save: 'Enregistrer mes choix',
+                    close: 'Fermer',
+                    revisit: 'Gérer mes cookies'
+                },
+                dialog: {
+                    title: 'Préférences de confidentialité',
+                    description: 'Choisissez les catégories facultatives que vous autorisez. Vous pourrez modifier ce choix plus tard.'
+                },
+                categories: {
+                    necessary: {label: 'Nécessaires', description: 'Requis pour le fonctionnement et la sécurité du site. Toujours actif.'},
+                    preferences: {label: 'Préférences', description: 'Mémorise vos préférences d’affichage et de fonctionnement.'},
+                    analytics: {label: 'Analyse', description: 'Mesure l’utilisation du site afin de l’améliorer.'},
+                    marketing: {label: 'Marketing', description: 'Mesure les campagnes et permet la personnalisation publicitaire.'}
+                },
+                terms: {
+                    label: 'Je confirme avoir lu et accepté',
+                    description: 'Cette acceptation est conservée dans ce navigateur avec vos choix de confidentialité.',
+                    requiredError: 'Veuillez accepter les conditions pour enregistrer ce choix.'
+                },
+                gpc: {
+                    notice: 'Votre navigateur indique une préférence globale de confidentialité. Le marketing demeure désactivé.'
+                },
+                error: {
+                    generic: 'Impossible d’enregistrer ce choix. Veuillez réessayer.'
+                }
+            }
+        };
+
+        if(location.search.indexOf('forged-consent') !== -1){
+            document.cookie = window.UniversalLegalConsentConfig.cookieName
+                + '='
+                + encodeURIComponent(JSON.stringify({
+                    version: 1,
+                    policyVersion: 'preview-1',
+                    necessary: true,
+                    preferences: false,
+                    analytics: true,
+                    marketing: false,
+                    terms: false,
+                    gpc: false,
+                    timestamp: new Date().toISOString()
+                }))
+                + '; Path=/; SameSite=Lax';
+        }
+
+        window.UniversalLegalConsent = [];
+        window.UniversalLegalConsent.push(['registerIntegration', {
+            id: 'preview-analytics',
+            categories: ['analytics'],
+            mode: 'all',
+            load: function(consent){
+                document.body.setAttribute('data-preview-integration', consent.analytics ? 'loaded' : 'blocked');
+            },
+            update: function(consent){
+                document.body.setAttribute('data-preview-integration-update', consent.analytics ? 'granted' : 'revoked');
+            }
+        }]);
+    </script>
+</head>
+<body>
+    <main>
+        <h1>Un thème volontairement très différent</h1>
+        <p>Cette page sert à vérifier que l’interface légale demeure lisible et indépendante du CSS du site hôte.</p>
+        <button type="button">Action du thème</button>
+    </main>
+    <script src="/src/plugins/universal-legal-pages/template/assets/js/consent-manager.js"></script>
+</body>
+</html>

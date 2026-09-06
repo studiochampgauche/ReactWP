@@ -9,11 +9,16 @@ const plugins = [
 	'reactwp-seo'
 ];
 
+const templateOnlyPlugins = [
+	'universal-legal-pages'
+];
+
 export default createBundleConfig({
 	cacheName: 'plugins',
 	items: plugins,
 	inputDirectory: '../src/plugins',
 	outputDirectory: '../dist/wp-content/plugins',
 	templateDirectory: '../src/plugins',
+	templateOnlyItems: templateOnlyPlugins,
 	publicPath: '/wp-content/plugins/'
 });

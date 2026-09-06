@@ -170,6 +170,14 @@ export const useRouteTransition = () => {
         Loader.setRoute(currentRoute);
     }, [currentRoute]);
 
+    useEffect(() => {
+        const language = currentRoute?.lang;
+
+        if(typeof language === 'string' && language){
+            window.UniversalLegalConsent?.setLanguage?.(language);
+        }
+    }, [currentRoute?.lang]);
+
     useLayoutEffect(() => {
         const pendingRoute = pendingRouteRef.current;
 

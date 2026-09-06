@@ -23,7 +23,8 @@
     "build:themes:js": "webpack --mode development --config webpack.themes.config.js",
     "build:themes:css": "node ./scripts/build-theme-styles.mjs build",
     "build:render": "webpack --mode development --config webpack.render.config.js",
-    "build:plugins": "webpack --mode development --config webpack.plugins.config.js",
+    "build:plugins": "npm run build:legal-pages-translations && webpack --mode development --config webpack.plugins.config.js",
+    "build:legal-pages-translations": "node ./scripts/build-legal-pages-translations.mjs",
     "build:mu-plugins": "webpack --mode development --config webpack.mu-plugins.config.js",
     "watch": "node ./scripts/project-pipeline.mjs watch",
     "watch:themes": "node ./scripts/theme-pipeline.mjs watch",
@@ -54,7 +55,7 @@
     "test:legal-pages": "npm run prod:plugins && node ./scripts/run-php-tests.mjs ./tests/legal-pages.test.php ./tests/legal-consent.test.php && node --test ./tests/legal-pages-build.test.mjs ./tests/legal-consent-assets.test.mjs",
     "test:security": "node ./scripts/run-php-tests.mjs && node --test ./tests/get-core-security.test.mjs",
     "report:themes": "node ./scripts/report-bundle-sizes.mjs",
-    "prod:plugins": "webpack --mode production --config webpack.plugins.config.js",
+    "prod:plugins": "npm run build:legal-pages-translations && webpack --mode production --config webpack.plugins.config.js",
     "prod:mu-plugins": "webpack --mode production --config webpack.mu-plugins.config.js",
     "get:core": "node ./scripts/get-core.mjs"
   },

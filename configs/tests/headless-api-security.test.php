@@ -43,7 +43,9 @@ $assert_same = static function($expected, $actual, $message){
 };
 
 $normalize = new ReflectionMethod(HeadlessApi::class, 'normalize_origin');
-$normalize->setAccessible(true);
+if(PHP_VERSION_ID < 80100){
+    $normalize->setAccessible(true);
+}
 
 $assert_same(
     'https://frontend.example:8443',

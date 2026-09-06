@@ -12,6 +12,9 @@ Keep the WordPress admin, content model, plugins, users, previews, and permalink
 
 [Documentation](https://reactwp.com/docs/intro/) | [Installation](https://reactwp.com/docs/getting-started/) | [Rendering](https://reactwp.com/docs/hybrid-rendering/) | [Headless API](https://reactwp.com/docs/headless-api/) | [GitHub](https://github.com/studiochampgauche/ReactWP)
 
+> [!WARNING]
+> **Universal Legal Pages is experimental.** This new bundled plugin has not yet undergone exhaustive testing. While this notice remains, use it with caution, verify its behavior and configuration for each project before relying on it in production, and do not treat it as a substitute for legal advice.
+
 ## Why ReactWP
 
 - **WordPress stays WordPress.** Editors keep familiar pages, posts, menus, ACF fields, users, plugins, and project settings.

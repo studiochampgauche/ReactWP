@@ -96,7 +96,9 @@ namespace {
     require_once __DIR__ . '/../../src/mu-plugins/plugins/reactwp/template/inc/runtime/PublicPayload.php';
 
     $method = new ReflectionMethod(ReactWP\Runtime\PublicPayload::class, 'value');
-    $method->setAccessible(true);
+    if(PHP_VERSION_ID < 80100){
+        $method->setAccessible(true);
+    }
     $payload = $method->invoke(null, [
         'publicPost' => new WP_Post(1),
         'privatePost' => new WP_Post(2, 'private'),
@@ -113,7 +115,9 @@ namespace {
     }
 
     $route_method = new ReflectionMethod(ReactWP\Runtime\PublicPayload::class, 'route_object');
-    $route_method->setAccessible(true);
+    if(PHP_VERSION_ID < 80100){
+        $route_method->setAccessible(true);
+    }
     $route = $route_method->invoke(null, [
         'id' => 1,
         'template' => '../Unsafe',

@@ -84,7 +84,9 @@ foreach([
 }
 
 $method = new ReflectionMethod(StaticRegenerator::class, 'remove');
-$method->setAccessible(true);
+if(PHP_VERSION_ID < 80100){
+    $method->setAccessible(true);
+}
 $assert($method->invoke(null, ['key' => 'en:/']) === true, 'Static removal should complete successfully.');
 
 foreach([
