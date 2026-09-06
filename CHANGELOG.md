@@ -2,6 +2,62 @@
 
 This file tracks notable project-level changes for `reactwp`.
 
+## 2026-09-06
+
+### Added
+
+- Added an ordered explicit-acceptance editor to Universal Legal Pages with up to 50 separate required confirmations, accessible add/remove/reorder controls, one legal document per ReactWP language and automatic migration from the former single-document setting.
+
+### Changed
+
+- Reworked the Universal Legal Pages consent administration into six focused sections selected from one compact navigation control while keeping one global asynchronous save action and a no-JavaScript Settings API fallback.
+- Made consent categories administrator-owned and multilingual. Fresh installations now contain only the immutable Necessary category; optional categories can be created, renamed, reordered or removed, and their assignment is the complete loading rule for detected, predefined and custom integrations.
+- Expanded the consent interface and legal-link editors to cover all visitor-facing text, ordered per-language legal pages, custom theme styling, custom consent triggers, predefined Google and Meta adapters, and bounded custom integrations.
+- Changed explicit acceptance so every configured document renders as its own checkbox and all confirmations must be accepted before optional choices can be saved. Active confirmation-list changes now invalidate older consent automatically.
+- Kept detected scripts as administrator-only reports until trusted project code supplies a managed adapter, while detected managed embeds remain blocked until an administrator classifies and approves them.
+
+### Fixed
+
+- Prevented the complete consent settings form from flashing before its section selector initializes.
+- Removed dormant YouTube, Vimeo and unapproved external-service choices from the visitor dialog; services now appear only after real detection and administrator approval.
+- Removed the **Reject all** action when no optional category or service is available.
+- Corrected checkbox/link alignment, close-button centring, legal-link tab behavior, English fallback copy, French catalogues and several misleading consent-section descriptions.
+
+## 2026-09-05
+
+### Added
+
+- Added the experimental bundled **Universal Legal Pages** plugin with a portable `legal_page` post type, isolated public document template, WordPress-native editing and publication workflows, and dedicated legal-page styling.
+- Added a Shadow DOM consent banner and preferences dialog with versioned first-party storage, Global Privacy Control support, category and individual-service choices, per-language ReactWP copy and legal links, plus a theme stylesheet override and declarative `data-ulc-open` trigger.
+- Added consent-aware adapters for Google Analytics 4, Google Tag Manager Consent Mode v2, standalone Google Ads remarketing and Meta Pixel, together with bounded custom integrations and a trusted integration API.
+- Added fail-closed discovery and placeholders for YouTube, Vimeo and unknown external iframes, reporting-only WordPress script inventory, English source copy, complete French Canadian/French catalogues and focused PHP/JavaScript/build regressions.
+
+### Changed
+
+- Extended the plugin production pipeline with deterministic translation catalogue generation and synchronized the ReactWP route transition with consent-interface language changes.
+- Added an experimental-plugin warning to the repository README while Universal Legal Pages awaits broader production testing.
+
+## 2026-09-03
+
+### Changed
+
+- Tightened the frontend expert workflow so a website subject informs content and functional requirements without automatically dictating industry-themed visual styling; explicit art direction, brand evidence and inspected references now remain authoritative.
+
+### Fixed
+
+- Updated the locked `fast-uri` dependency from 3.1.5 to 3.1.7 so the npm audit no longer reports the addressed host-confusion and SSRF advisories.
+
+## 2026-09-01
+
+### Added
+
+- Added the dedicated `npm run test:legal-pages` production-build and regression command used by the bundled legal-page plugin workflow.
+
+### Changed
+
+- Expanded the frontend expert workflow with a static 2D composition gate, explicit desktop/mobile evidence, a bounded primary-reference system, redesign feedback ledgers and safeguards against turning multi-page products into one-page sites merely because a visual reference uses that structure.
+- Refreshed Browserslist and its compatibility data, and updated the pinned build toolchain to Sass Loader 17.0.1 and Webpack 5.110.3.
+
 ## 2026-08-29
 
 ### Added
