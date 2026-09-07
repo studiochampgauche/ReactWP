@@ -6,6 +6,7 @@ This file tracks notable project-level changes for `reactwp`.
 
 ### Added
 
+- Added the experimental bundled **Universal SMTP** plugin with authenticated SMTP delivery through WordPress `wp_mail()`, encrypted stored passwords or a `wp-config.php` password override, configurable sender behavior, redacted delivery status, a rate-limited test-email workflow, English source copy, French catalogues and focused security regressions.
 - Added an ordered explicit-acceptance editor to Universal Legal Pages with up to 50 separate required confirmations, accessible add/remove/reorder controls, one legal document per ReactWP language and automatic migration from the former single-document setting.
 
 ### Changed

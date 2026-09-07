@@ -1,0 +1,733 @@
+.usmtp-admin {
+    --usmtp-canvas: #f2f2ef;
+    --usmtp-surface: #ffffff;
+    --usmtp-ink: #050505;
+    --usmtp-muted: #686868;
+    --usmtp-border: #050505;
+    --usmtp-soft-border: #c9c9c9;
+    --usmtp-section-space: 30px;
+
+    max-width: 1240px;
+    margin-top: 28px;
+    color: var(--usmtp-ink);
+}
+
+.usmtp-admin,
+.usmtp-admin * {
+    box-sizing: border-box;
+}
+
+.usmtp-admin [hidden] {
+    display: none !important;
+}
+
+.usmtp-admin__hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(190px, auto);
+    gap: 32px;
+    align-items: end;
+    margin: 0 0 24px;
+    padding: 38px 40px;
+    overflow: hidden;
+    border: 2px solid var(--usmtp-border);
+    border-radius: 16px;
+    background: var(--usmtp-ink);
+    color: var(--usmtp-surface);
+}
+
+.usmtp-admin__hero-copy {
+    max-width: 690px;
+}
+
+.usmtp-admin__context {
+    margin: 0 0 9px;
+    color: var(--usmtp-surface);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+.usmtp-admin__hero h1 {
+    max-width: 760px;
+    margin: 0;
+    padding: 0;
+    color: var(--usmtp-surface);
+    font-size: clamp(30px, 3vw, 44px);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.06;
+}
+
+.usmtp-admin__lead {
+    max-width: 680px;
+    margin: 18px 0 0;
+    color: #b8b8b8;
+    font-size: 16px;
+    line-height: 1.65;
+}
+
+.usmtp-admin > .notice,
+.usmtp-admin > [id^='setting-error-'] {
+    margin: 0 0 20px;
+    border-left-color: var(--usmtp-ink);
+}
+
+.usmtp-admin__status {
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+    justify-self: end;
+    min-height: 44px;
+    margin: 0;
+    padding: 9px 14px;
+    border: 1px solid #5c5c5c;
+    border-radius: 8px;
+    color: var(--usmtp-surface);
+    font-size: 13px;
+    font-weight: 650;
+    line-height: 1.35;
+}
+
+.usmtp-admin__status > span {
+    width: 9px;
+    height: 9px;
+    flex: 0 0 auto;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    background: transparent;
+    content: '';
+}
+
+.usmtp-admin__status.is-enabled > span,
+.usmtp-admin__status[data-status='enabled'] > span {
+    background: currentColor;
+}
+
+.usmtp-admin__form {
+    display: grid;
+    gap: 20px;
+}
+
+.usmtp-admin__form + .usmtp-admin-section {
+    margin-top: 20px;
+}
+
+.usmtp-admin-section {
+    display: grid;
+    grid-template-columns: minmax(220px, 0.34fr) minmax(0, 1fr);
+    width: 100%;
+    overflow: hidden;
+    border: 2px solid var(--usmtp-border);
+    border-radius: 14px;
+    background: var(--usmtp-surface);
+    box-shadow: none;
+}
+
+.usmtp-admin-section__header {
+    min-width: 0;
+    padding-block: var(--usmtp-section-space);
+    padding-inline: 28px;
+    border-right: 2px solid var(--usmtp-border);
+    background: var(--usmtp-canvas);
+}
+
+.usmtp-admin-section__header h2 {
+    margin: 0;
+    color: var(--usmtp-ink);
+    font-size: 19px;
+    font-weight: 650;
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+}
+
+.usmtp-admin-section__header p {
+    max-width: 34ch;
+    margin: 11px 0 0;
+    color: var(--usmtp-muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.usmtp-admin-section__body {
+    min-width: 0;
+    padding-block: var(--usmtp-section-space);
+    padding-inline: 30px;
+}
+
+.usmtp-admin__field-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    width: 100%;
+}
+
+.usmtp-admin-section__body > .usmtp-admin__checkbox + .usmtp-admin__field-grid,
+.usmtp-admin__dependent {
+    margin-top: 24px;
+}
+
+.usmtp-admin__field {
+    display: grid;
+    gap: 7px;
+    align-content: start;
+    min-width: 0;
+}
+
+.usmtp-admin__field--wide {
+    grid-column: 1 / -1;
+}
+
+.usmtp-admin__field > label {
+    color: var(--usmtp-ink);
+    font-weight: 650;
+    line-height: 1.4;
+}
+
+.usmtp-admin input[type='text'],
+.usmtp-admin input[type='email'],
+.usmtp-admin input[type='password'],
+.usmtp-admin input[type='number'],
+.usmtp-admin select,
+.usmtp-admin textarea {
+    width: 100%;
+    max-width: 580px;
+    min-height: 44px;
+    margin: 0;
+    border: 2px solid #505050;
+    border-radius: 8px;
+    background-color: var(--usmtp-surface);
+    color: var(--usmtp-ink);
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+.usmtp-admin input[type='text'],
+.usmtp-admin input[type='email'],
+.usmtp-admin input[type='password'],
+.usmtp-admin input[type='number'] {
+    padding: 0 12px;
+}
+
+.usmtp-admin input[type='number'] {
+    width: 116px;
+}
+
+.usmtp-admin select {
+    padding-inline: 10px 32px;
+}
+
+.usmtp-admin input[type='checkbox'] {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 auto;
+    margin: 1px 9px 0 0;
+    border-color: var(--usmtp-border);
+    accent-color: var(--usmtp-ink);
+}
+
+.usmtp-admin input[type='checkbox']:checked {
+    border-color: var(--usmtp-border);
+    background-color: var(--usmtp-ink);
+}
+
+.usmtp-admin input[type='checkbox']:checked::before {
+    width: 22px;
+    height: 22px;
+    margin: -2px 0 0 -2px;
+}
+
+.usmtp-admin__checkbox-label {
+    display: grid;
+    gap: 3px;
+    align-content: center;
+    max-width: 680px;
+    min-height: 44px;
+    padding: 0;
+    color: var(--usmtp-ink);
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.usmtp-admin__checkbox-label small {
+    color: var(--usmtp-muted);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.usmtp-admin .description {
+    max-width: 680px;
+    margin: 8px 0 0;
+    color: var(--usmtp-muted);
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.usmtp-admin__input-suffix {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    max-width: 680px;
+}
+
+.usmtp-admin__input-suffix input[type='number'] {
+    flex: 0 0 116px;
+}
+
+.usmtp-admin__input-suffix span {
+    color: var(--usmtp-muted);
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.usmtp-admin__checkbox {
+    display: grid;
+    grid-template-columns: 20px minmax(0, 1fr);
+    gap: 0 9px;
+    align-items: start;
+    max-width: 680px;
+}
+
+.usmtp-admin__checkbox > input[type='checkbox'] {
+    margin: 12px 0 0;
+}
+
+.usmtp-admin__checkbox-list {
+    display: grid;
+    gap: 0;
+    max-width: 680px;
+    margin-top: 24px;
+    border-top: 1px solid var(--usmtp-soft-border);
+}
+
+.usmtp-admin__checkbox-list > .usmtp-admin__checkbox {
+    padding-block: 13px;
+    border-bottom: 1px solid var(--usmtp-soft-border);
+}
+
+.usmtp-admin__password-status,
+.usmtp-admin [data-usmtp-password-status] {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    min-height: 32px;
+    color: var(--usmtp-muted);
+    font-size: 12px;
+    font-weight: 650;
+    line-height: 1.4;
+}
+
+.usmtp-admin__password-status::before,
+.usmtp-admin [data-usmtp-password-status]::before {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: currentColor;
+    content: '';
+}
+
+.usmtp-admin__password-options {
+    display: grid;
+    gap: 3px;
+    width: 100%;
+    margin-top: 4px;
+}
+
+.usmtp-admin__password-options label {
+    display: inline-flex;
+    align-items: flex-start;
+    min-height: 44px;
+    padding: 10px 0;
+    line-height: 1.5;
+}
+
+.usmtp-admin__dependent.is-authentication-disabled .usmtp-admin__field:not(.usmtp-admin__field--wide) {
+    display: none;
+}
+
+.usmtp-admin__dependent.is-authentication-disabled .usmtp-admin__field--wide > input[type='password'],
+.usmtp-admin__dependent.is-authentication-disabled .usmtp-admin__field--wide > .description {
+    display: none;
+}
+
+.usmtp-admin [aria-invalid='true'] {
+    border-color: var(--usmtp-ink);
+    outline: 3px double var(--usmtp-ink);
+    outline-offset: 2px;
+}
+
+.usmtp-admin__notice {
+    position: fixed;
+    z-index: 100000;
+    inset-block-start: 48px;
+    inset-inline-end: 24px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 16px;
+    align-items: center;
+    width: min(420px, calc(100vw - 48px));
+    max-height: calc(100vh - 96px);
+    padding: 16px 18px;
+    overflow: auto;
+    border: 2px solid var(--usmtp-border);
+    border-radius: 8px;
+    background: var(--usmtp-surface);
+    color: var(--usmtp-ink);
+    box-shadow: none;
+}
+
+.usmtp-admin__notice[hidden] {
+    display: none;
+}
+
+.usmtp-admin__notice--success {
+    background: var(--usmtp-ink);
+    color: var(--usmtp-surface);
+}
+
+.usmtp-admin__notice--error {
+    border-width: 4px;
+}
+
+.usmtp-admin__notice--pending [data-usmtp-notice-message]::before,
+.usmtp-admin__notice--pending > p::before {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 10px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    content: '';
+    animation: usmtp-admin-spin 700ms linear infinite;
+}
+
+.usmtp-admin__notice p {
+    margin: 0;
+    color: inherit;
+    font-size: 14px;
+    font-weight: 650;
+    line-height: 1.5;
+}
+
+.usmtp-admin .usmtp-admin__notice button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 8px 12px;
+    border: 2px solid currentColor;
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-weight: 650;
+    cursor: pointer;
+}
+
+.usmtp-admin__last-status {
+    max-width: 680px;
+    margin: 0 0 24px;
+    padding: 16px 18px;
+    border-left: 4px solid var(--usmtp-ink);
+    background: var(--usmtp-canvas);
+}
+
+.usmtp-admin__last-status h3 {
+    margin: 0 0 7px;
+    color: var(--usmtp-ink);
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.usmtp-admin__last-status p {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    margin: 0;
+    color: var(--usmtp-muted);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.usmtp-admin__last-status strong {
+    color: var(--usmtp-ink);
+}
+
+.usmtp-admin__test-form {
+    display: grid;
+    gap: 18px;
+    max-width: 680px;
+}
+
+.usmtp-admin__test-fields {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: end;
+}
+
+.usmtp-admin__test-field {
+    display: grid;
+    gap: 7px;
+    min-width: 0;
+}
+
+.usmtp-admin__test-field label {
+    color: var(--usmtp-ink);
+    font-weight: 650;
+    line-height: 1.4;
+}
+
+.usmtp-admin__test-field input[type='email'] {
+    max-width: none;
+}
+
+.usmtp-admin__actions {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px 18px 28px;
+    border: 2px solid var(--usmtp-border);
+    border-radius: 12px;
+    background: var(--usmtp-surface);
+}
+
+.usmtp-admin__actions > p:not(.submit) {
+    max-width: 680px;
+    margin: 0;
+    color: var(--usmtp-muted);
+}
+
+.usmtp-admin__actions .submit {
+    margin: 0;
+    padding: 0;
+}
+
+.usmtp-admin .button,
+.usmtp-admin .button-primary {
+    min-height: 44px;
+    padding-inline: 18px;
+    border: 2px solid var(--usmtp-ink);
+    border-radius: 8px;
+    box-shadow: none;
+    font-weight: 650;
+    line-height: 40px;
+    transition: background-color 140ms ease, color 140ms ease, opacity 140ms ease;
+}
+
+.usmtp-admin .button {
+    background: var(--usmtp-surface);
+    color: var(--usmtp-ink);
+}
+
+.usmtp-admin .button-primary {
+    background: var(--usmtp-ink);
+    color: var(--usmtp-surface);
+}
+
+.usmtp-admin .button:disabled,
+.usmtp-admin .button-primary:disabled {
+    border-color: #8a8a8a;
+    background: #e2e2e2;
+    color: #555555;
+    opacity: 1;
+    cursor: wait;
+}
+
+.usmtp-admin__credit {
+    display: flex;
+    justify-content: flex-start;
+    padding: 16px 2px 0;
+    text-align: left;
+}
+
+.usmtp-admin__credit p {
+    margin: 0;
+    color: var(--usmtp-muted);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.usmtp-admin__credit a {
+    color: var(--usmtp-ink);
+    font-weight: 650;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+}
+
+.usmtp-admin :where(a, button, input, select, textarea):focus-visible,
+.usmtp-admin__notice:focus-visible {
+    outline: 3px solid var(--usmtp-ink);
+    outline-offset: 3px;
+    box-shadow: none;
+}
+
+.usmtp-admin__hero :where(a, button, input, select, textarea):focus-visible {
+    outline-color: var(--usmtp-surface);
+}
+
+@keyframes usmtp-admin-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .usmtp-admin .button:not(:disabled):hover {
+        border-color: var(--usmtp-ink);
+        background: var(--usmtp-ink);
+        color: var(--usmtp-surface);
+    }
+
+    .usmtp-admin .button-primary:not(:disabled):hover {
+        border-color: var(--usmtp-ink);
+        background: var(--usmtp-ink);
+        color: var(--usmtp-surface);
+        opacity: 0.68;
+    }
+
+    .usmtp-admin__notice--success button:hover {
+        background: var(--usmtp-surface);
+        color: var(--usmtp-ink);
+    }
+
+    .usmtp-admin__notice--pending button:hover,
+    .usmtp-admin__notice--error button:hover,
+    .usmtp-admin__credit a:hover {
+        opacity: 0.62;
+    }
+}
+
+@media (max-width: 1080px) {
+    .usmtp-admin-section {
+        grid-template-columns: minmax(190px, 0.3fr) minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 782px) {
+    .usmtp-admin {
+        --usmtp-section-space: 24px;
+
+        margin-top: 20px;
+    }
+
+    .usmtp-admin__hero {
+        grid-template-columns: minmax(0, 1fr);
+        padding: 28px;
+    }
+
+    .usmtp-admin__status {
+        justify-self: start;
+    }
+
+    .usmtp-admin-section {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .usmtp-admin-section__header {
+        padding-inline: 24px;
+        border-right: 0;
+        border-bottom: 2px solid var(--usmtp-border);
+    }
+
+    .usmtp-admin-section__header p {
+        max-width: 62ch;
+    }
+
+    .usmtp-admin-section__body {
+        padding-inline: 24px;
+    }
+
+    .usmtp-admin__field-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .usmtp-admin__field--wide {
+        grid-column: auto;
+    }
+
+    .usmtp-admin input[type='text'],
+    .usmtp-admin input[type='email'],
+    .usmtp-admin input[type='password'],
+    .usmtp-admin select {
+        max-width: none;
+    }
+}
+
+@media (max-width: 560px) {
+    .usmtp-admin__hero {
+        gap: 24px;
+        padding: 24px 20px;
+    }
+
+    .usmtp-admin__hero h1 {
+        font-size: 30px;
+    }
+
+    .usmtp-admin__notice {
+        inset-block-start: 62px;
+        inset-inline: 16px;
+        width: auto;
+        max-height: calc(100vh - 78px);
+    }
+
+    .usmtp-admin-section__header,
+    .usmtp-admin-section__body {
+        padding-inline: 20px;
+    }
+
+    .usmtp-admin__test-fields {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .usmtp-admin__test-fields .button {
+        width: 100%;
+    }
+
+    .usmtp-admin__actions {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 14px;
+        padding: 20px;
+    }
+
+    .usmtp-admin__actions .button-primary {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .usmtp-admin *,
+    .usmtp-admin *::before,
+    .usmtp-admin *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+    }
+
+    .usmtp-admin__notice--pending [data-usmtp-notice-message]::before,
+    .usmtp-admin__notice--pending > p::before {
+        animation: none;
+        border-right-color: currentColor;
+    }
+}
+
+@media (forced-colors: active) {
+    .usmtp-admin__hero,
+    .usmtp-admin-section,
+    .usmtp-admin__actions,
+    .usmtp-admin__notice,
+    .usmtp-admin .button,
+    .usmtp-admin .button-primary {
+        border-color: CanvasText;
+    }
+
+    .usmtp-admin__status > span,
+    .usmtp-admin__password-status::before,
+    .usmtp-admin [data-usmtp-password-status]::before {
+        forced-color-adjust: none;
+    }
+}

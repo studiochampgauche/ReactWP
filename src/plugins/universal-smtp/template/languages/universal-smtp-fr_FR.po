@@ -1,0 +1,424 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Universal SMTP 1.0.0\n"
+"Report-Msgid-Bugs-To:\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Domain: universal-smtp\n"
+"Language: fr_FR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#, php-format
+#: init.php:1739
+msgid "%d recipient"
+msgstr "%d destinataire"
+
+#, php-format
+#: init.php:1740
+msgid "%d recipients"
+msgstr "%d destinataires"
+
+#: init.php:644
+msgid "A From email address is required when SMTP delivery is enabled."
+msgstr "Une adresse d’expédition est requise lorsque l’envoi SMTP est activé."
+
+#: init.php:667
+msgid "A From name is required when SMTP delivery is enabled."
+msgstr "Un nom d’expéditeur est requis lorsque l’envoi SMTP est activé."
+
+#: init.php:491
+msgid "A required settings field is missing."
+msgstr "Un champ de configuration obligatoire est manquant."
+
+#: init.php:1662
+msgid "A stored password is configured."
+msgstr "Un mot de passe enregistré est configuré."
+
+#: init.php:627
+msgid "A valid SMTP password is required when authentication is enabled."
+msgstr "Un mot de passe SMTP valide est requis lorsque l’authentification est activée."
+
+#: init.php:518
+msgid "An SMTP host is required when SMTP delivery is enabled."
+msgstr "Un hôte SMTP est requis lorsque l’envoi SMTP est activé."
+
+#: init.php:578
+msgid "An SMTP username is required when authentication is enabled."
+msgstr "Un nom d’utilisateur SMTP est requis lorsque l’authentification est activée."
+
+#: init.php:1626
+msgid "Authenticate with the SMTP server"
+msgstr "S’authentifier auprès du serveur SMTP"
+
+#: init.php:1619
+msgid "Authentication"
+msgstr "Authentification"
+
+#: init.php:1631
+msgid "Authentication type"
+msgstr "Méthode d’authentification"
+
+#: init.php:1633
+msgid "Automatic"
+msgstr "Automatique"
+
+#: init.php:551
+msgid "Choose a supported SMTP authentication type."
+msgstr "Choisissez une méthode d’authentification SMTP prise en charge."
+
+#: init.php:556
+msgid "Choose an SMTP authentication type."
+msgstr "Choisissez une méthode d’authentification SMTP."
+
+#: init.php:534
+msgid "Choose STARTTLS, implicit TLS, or no encryption."
+msgstr "Choisissez STARTTLS, TLS implicite ou aucun chiffrement."
+
+#: init.php:1578
+msgid "Choose the SMTP server, transport security, and maximum time WordPress may wait for the connection."
+msgstr "Choisissez le serveur SMTP, la sécurité du transport et le délai maximal pendant lequel WordPress peut attendre la connexion."
+
+#: init.php:1671
+msgid "Clear the stored password when saving"
+msgstr "Effacer le mot de passe enregistré lors de la sauvegarde"
+
+#: init.php:1555
+msgid "Connect WordPress to the mail server that should deliver its messages, while keeping credentials and delivery details out of the browser."
+msgstr "Connectez WordPress au serveur de messagerie qui doit livrer ses messages, tout en gardant les identifiants et les détails d’envoi hors du navigateur."
+
+#: init.php:1577
+msgid "Connection"
+msgstr "Connexion"
+
+#: init.php:1607
+msgid "Connection timeout"
+msgstr "Délai de connexion"
+
+#: init.php:1714
+msgid "Delivery failure notices may be returned to this address when the provider supports it."
+msgstr "Les avis de non-livraison peuvent être retournés à cette adresse lorsque le fournisseur le permet."
+
+#: init.php:1568
+msgid "Dismiss this notice"
+msgstr "Fermer cet avis"
+
+#: init.php:1323
+msgid "Enable SMTP and complete the required settings before sending a test email."
+msgstr "Activez l’envoi SMTP et remplissez les réglages obligatoires avant d’envoyer un courriel de test."
+
+#: init.php:1584
+msgid "Enable SMTP delivery"
+msgstr "Activer l’envoi SMTP"
+
+#: init.php:1598
+msgid "Encryption"
+msgstr "Chiffrement"
+
+#: init.php:1591
+msgid "Enter a hostname or IP address only, such as smtp.example.com. Do not include https://, a path, or credentials."
+msgstr "Saisissez uniquement un nom d’hôte ou une adresse IP, par exemple smtp.example.com. N’incluez pas https://, de chemin ni d’identifiants."
+
+#: init.php:607
+msgid "Enter a new password or clear the stored password, but not both."
+msgstr "Saisissez un nouveau mot de passe ou effacez celui enregistré, mais pas les deux."
+
+#: init.php:661
+msgid "Enter a plain-text From name of no more than 120 characters."
+msgstr "Saisissez un nom d’expéditeur en texte brut de 120 caractères ou moins."
+
+#: init.php:689
+msgid "Enter a timeout from 5 to 60 seconds."
+msgstr "Saisissez un délai de 5 à 60 secondes."
+
+#: init.php:638
+msgid "Enter a valid From email address."
+msgstr "Saisissez une adresse d’expédition valide."
+
+#: init.php:1303 init.php:1304 init.php:1314 init.php:1315 init.php:1504
+msgid "Enter a valid recipient email address."
+msgstr "Saisissez une adresse courriel de destinataire valide."
+
+#: init.php:516
+msgid "Enter a valid SMTP hostname or IP address without a scheme, path, or credentials."
+msgstr "Saisissez un nom d’hôte SMTP ou une adresse IP valide, sans schéma, chemin ni identifiants."
+
+#: init.php:526
+msgid "Enter an SMTP port from 1 to 65535."
+msgstr "Saisissez un port SMTP de 1 à 65 535."
+
+#: init.php:571
+msgid "Enter an SMTP username without control characters."
+msgstr "Saisissez un nom d’utilisateur SMTP sans caractères de contrôle."
+
+#: init.php:1736
+msgid "Failed"
+msgstr "Échec"
+
+#: init.php:1701
+msgid "Force the From email address"
+msgstr "Forcer l’adresse d’expédition"
+
+#: init.php:1707
+msgid "Force the From name"
+msgstr "Forcer le nom d’expéditeur"
+
+#: init.php:1689
+msgid "From email"
+msgstr "Adresse d’expédition"
+
+#: init.php:1693
+msgid "From name"
+msgstr "Nom d’expéditeur"
+
+#: init.php:1601
+msgid "Implicit TLS"
+msgstr "TLS implicite"
+
+#: init.php:1659
+msgid "Leave this field empty to preserve the current password. Its value is never displayed."
+msgstr "Laissez ce champ vide pour conserver le mot de passe actuel. Sa valeur n’est jamais affichée."
+
+#: init.php:1734
+msgid "Most recent delivery status"
+msgstr "État de l’envoi le plus récent"
+
+#: init.php:1663
+msgid "No password is configured."
+msgstr "Aucun mot de passe n’est configuré."
+
+#: init.php:1602
+msgid "None"
+msgstr "Aucun"
+
+#: init.php:1644
+msgid "Password"
+msgstr "Mot de passe"
+
+#: init.php:1594
+msgid "Port"
+msgstr "Port"
+
+#: init.php:1702
+msgid "Prevent themes and other plugins from replacing the configured address."
+msgstr "Empêcher les thèmes et les autres extensions de remplacer l’adresse configurée."
+
+#: init.php:1708
+msgid "Prevent themes and other plugins from replacing the configured name."
+msgstr "Empêcher les thèmes et les autres extensions de remplacer le nom configuré."
+
+#: init.php:1620
+msgid "Provide credentials only when the SMTP server requires them. The stored password is encrypted and never returned to this page."
+msgstr "Fournissez des identifiants uniquement lorsque le serveur SMTP les exige. Le mot de passe enregistré est chiffré et n’est jamais renvoyé à cette page."
+
+#: init.php:1750
+msgid "Recipient email"
+msgstr "Adresse courriel du destinataire"
+
+#: init.php:1722
+msgid "Save settings"
+msgstr "Enregistrer les réglages"
+
+#: init.php:1460
+msgid "Saving…"
+msgstr "Enregistrement…"
+
+#: init.php:1610
+msgid "seconds"
+msgstr "secondes"
+
+#: init.php:1729
+msgid "Send one plain-text message through the saved configuration. This confirms the WordPress mail flow, not inbox placement."
+msgstr "Envoyez un message en texte brut au moyen de la configuration enregistrée. Cela confirme le flux de messagerie WordPress, mais pas le placement dans la boîte de réception."
+
+#: init.php:1753
+msgid "Send test email"
+msgstr "Envoyer le courriel de test"
+
+#: init.php:1683
+msgid "Sender identity"
+msgstr "Identité de l’expéditeur"
+
+#: init.php:1461
+msgid "Sending…"
+msgstr "Envoi…"
+
+#: init.php:1736
+msgid "Sent"
+msgstr "Envoyé"
+
+#: init.php:1684
+msgid "Set the default address and name shown as the sender, then decide whether other WordPress code may replace them."
+msgstr "Définissez l’adresse et le nom d’expédition par défaut, puis décidez si un autre code WordPress peut les remplacer."
+
+#: init.php:864 init.php:1462
+msgid "Settings saved."
+msgstr "Réglages enregistrés."
+
+#: init.php:1421 init.php:1422
+msgid "SMTP"
+msgstr "SMTP"
+
+#: init.php:1339
+msgid "SMTP configuration test"
+msgstr "Test de configuration SMTP"
+
+#: init.php:1554
+msgid "SMTP delivery"
+msgstr "Envoi SMTP"
+
+#: init.php:1523
+msgid "SMTP delivery is disabled."
+msgstr "L’envoi SMTP est désactivé."
+
+#: init.php:1589
+msgid "SMTP host"
+msgstr "Hôte SMTP"
+
+#: init.php:1527
+msgid "SMTP is enabled and ready to handle WordPress email."
+msgstr "SMTP est activé et prêt à traiter les courriels de WordPress."
+
+#: init.php:1528
+msgid "SMTP is enabled, but required settings are missing or invalid."
+msgstr "SMTP est activé, mais des réglages obligatoires sont manquants ou invalides."
+
+#: init.php:1600
+msgid "STARTTLS (recommended)"
+msgstr "STARTTLS (recommandé)"
+
+#: init.php:1728
+msgid "Test delivery"
+msgstr "Tester l’envoi"
+
+#: init.php:1463
+msgid "Test email sent."
+msgstr "Courriel de test envoyé."
+
+#: init.php:1356 init.php:1502
+msgid "Test email sent. Confirm that it reached the intended mailbox."
+msgstr "Courriel de test envoyé. Confirmez qu’il est arrivé dans la boîte de réception prévue."
+
+#: init.php:585
+msgid "The clear-password setting is invalid."
+msgstr "Le réglage d’effacement du mot de passe est invalide."
+
+#: init.php:486
+msgid "The complete settings form is required."
+msgstr "Le formulaire de configuration complet est requis."
+
+#: init.php:672
+msgid "The force From email setting is invalid."
+msgstr "Le réglage pour forcer l’adresse d’expédition est invalide."
+
+#: init.php:673
+msgid "The force From name setting is invalid."
+msgstr "Le réglage pour forcer le nom d’expéditeur est invalide."
+
+#: init.php:616
+msgid "The password could not be encrypted. The previous password was preserved."
+msgstr "Le mot de passe n’a pas pu être chiffré. Le mot de passe précédent a été conservé."
+
+#: init.php:1664
+msgid "The password is managed by the UNIVERSAL_SMTP_PASSWORD constant."
+msgstr "Le mot de passe est géré par la constante UNIVERSAL_SMTP_PASSWORD."
+
+#: init.php:480
+msgid "The request contains a field that cannot be changed here."
+msgstr "La requête contient un champ qui ne peut pas être modifié ici."
+
+#: init.php:1464
+msgid "The request could not be completed. Try again."
+msgstr "La requête n’a pas pu être traitée. Réessayez."
+
+#: init.php:674
+msgid "The Return-Path setting is invalid."
+msgstr "Le réglage Return-Path est invalide."
+
+#: init.php:787
+msgid "The settings are invalid."
+msgstr "Les réglages sont invalides."
+
+#: init.php:707
+msgid "The settings could not be saved."
+msgstr "Les réglages n’ont pas pu être enregistrés."
+
+#: init.php:842
+msgid "The settings could not be saved. Review the highlighted fields."
+msgstr "Les réglages n’ont pas pu être enregistrés. Vérifiez les champs mis en évidence."
+
+#: init.php:849 init.php:854
+msgid "The settings could not be saved. Try again."
+msgstr "Les réglages n’ont pas pu être enregistrés. Réessayez."
+
+#: init.php:544
+msgid "The SMTP authentication setting is invalid."
+msgstr "Le réglage d’authentification SMTP est invalide."
+
+#: init.php:502
+msgid "The SMTP enabled setting is invalid."
+msgstr "Le réglage d’activation SMTP est invalide."
+
+#: init.php:593
+msgid "The SMTP password is invalid."
+msgstr "Le mot de passe SMTP est invalide."
+
+#: init.php:609
+msgid "The SMTP password is managed by the UNIVERSAL_SMTP_PASSWORD constant."
+msgstr "Le mot de passe SMTP est géré par la constante UNIVERSAL_SMTP_PASSWORD."
+
+#: init.php:601
+msgid "The SMTP password must be no more than 1024 bytes and cannot contain line breaks or null bytes."
+msgstr "Le mot de passe SMTP ne doit pas dépasser 1 024 octets et ne peut contenir ni saut de ligne ni octet nul."
+
+#: init.php:455
+msgid "The submitted settings are invalid."
+msgstr "Les réglages soumis sont invalides."
+
+#: init.php:1348 init.php:1505
+msgid "The test email could not be sent. Verify the settings and try again."
+msgstr "Le courriel de test n’a pas pu être envoyé. Vérifiez les réglages et réessayez."
+
+#: init.php:1340
+msgid "This message confirms that WordPress reached the configured SMTP mail flow."
+msgstr "Ce message confirme que WordPress a transmis un message au flux SMTP configuré."
+
+#: init.php:1332 init.php:1503
+msgid "Too many test emails were requested. Try again later."
+msgstr "Trop de courriels de test ont été demandés. Réessayez plus tard."
+
+#: init.php:1553
+msgid "Universal SMTP"
+msgstr "Universal SMTP"
+
+#: init.php:1604
+msgid "Use the exact mode required by the provider. No encryption sends mail-server credentials and content without transport protection."
+msgstr "Utilisez exactement le mode exigé par le fournisseur. Sans chiffrement, les identifiants du serveur de messagerie et le contenu sont transmis sans protection du transport."
+
+#: init.php:1713
+msgid "Use the From email as the Return-Path"
+msgstr "Utiliser l’adresse d’expédition comme Return-Path"
+
+#: init.php:1640
+msgid "Username"
+msgstr "Nom d’utilisateur"
+
+#: init.php:1585
+msgid "WordPress continues to use its normal mail flow while PHPMailer sends through this server."
+msgstr "WordPress continue d’utiliser son flux d’envoi habituel tandis que PHPMailer transmet les messages par ce serveur."
+
+#: init.php:810 init.php:1535
+msgid "You do not have permission to manage these settings."
+msgstr "Vous n’avez pas l’autorisation de gérer ces réglages."
+
+#: init.php:1398
+msgid "You do not have permission to send a test email."
+msgstr "Vous n’avez pas l’autorisation d’envoyer un courriel de test."
+
+#: init.php:1721
+msgid "You may move between sections before saving. All settings are saved together."
+msgstr "Vous pouvez passer d’une section à l’autre avant d’enregistrer. Tous les réglages sont enregistrés ensemble."
+
+#: init.php:826 init.php:1371
+msgid "Your session has expired. Reload the page and try again."
+msgstr "Votre session a expiré. Rechargez la page et réessayez."

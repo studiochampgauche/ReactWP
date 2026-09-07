@@ -10,7 +10,8 @@ const plugins = [
 ];
 
 const templateOnlyPlugins = [
-	'universal-legal-pages'
+	'universal-legal-pages',
+	'universal-smtp'
 ];
 
 export default createBundleConfig({
