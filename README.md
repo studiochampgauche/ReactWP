@@ -15,9 +15,6 @@ Keep the WordPress admin, content model, plugins, users, previews, and permalink
 > [!WARNING]
 > **Universal Legal Pages is experimental.** This new bundled plugin has not yet undergone exhaustive testing. While this notice remains, use it with caution, verify its behavior and configuration for each project before relying on it in production, and do not treat it as a substitute for legal advice.
 
-> [!WARNING]
-> **Universal SMTP is experimental.** This new bundled plugin has not yet undergone exhaustive testing. While this notice remains, use it with caution and verify its configuration and email delivery for each project before relying on it in production.
-
 ## Why ReactWP
 
 - **WordPress stays WordPress.** Editors keep familiar pages, posts, menus, ACF fields, users, plugins, and project settings.
