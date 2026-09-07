@@ -583,11 +583,14 @@ $malformed_cases = [
     ['payload' => smtp_valid_input(['auth_type' => 'xoauth2']), 'code' => 'invalid_auth_type'],
     ['payload' => smtp_valid_input(['authenticate' => ['1']]), 'code' => 'invalid_authenticate'],
     ['payload' => smtp_valid_input(['username' => "mail\nuser"]), 'code' => 'invalid_username'],
+    ['payload' => smtp_valid_input(['username' => '<script>alert(1)</script>']), 'code' => 'invalid_username'],
     ['payload' => smtp_valid_input(['username' => str_repeat('u', 321)]), 'code' => 'invalid_username'],
     ['payload' => smtp_valid_input(['from_email' => 'not-an-email']), 'code' => 'invalid_from_email'],
+    ['payload' => smtp_valid_input(['from_email' => 'mail@example.com"><script>alert(1)</script>']), 'code' => 'invalid_from_email'],
     ['payload' => smtp_valid_input(['from_email' => ['mail@example.com']]), 'code' => 'invalid_from_email'],
     ['payload' => smtp_valid_input(['from_email' => str_repeat('a', 243) . '@example.com']), 'code' => 'invalid_from_email'],
     ['payload' => smtp_valid_input(['from_name' => '<b>Example</b>']), 'code' => 'invalid_from_name'],
+    ['payload' => smtp_valid_input(['from_name' => '<script>alert(1)</script>']), 'code' => 'invalid_from_name'],
     ['payload' => smtp_valid_input(['from_name' => str_repeat('a', 121)]), 'code' => 'invalid_from_name'],
     ['payload' => smtp_valid_input(['password' => "line\nbreak"]), 'code' => 'invalid_password'],
     ['payload' => smtp_valid_input(['password' => "null\0byte"]), 'code' => 'invalid_password'],
@@ -881,7 +884,15 @@ Universal_SMTP::render_settings_page();
 $markup = ob_get_clean();
 foreach([
     'class="wrap usmtp-admin"',
-    'data-status="enabled"',
+    'data-usmtp-section-switcher',
+    'data-usmtp-section-navigation',
+    'data-usmtp-section-select',
+    'id="usmtp-settings-form"',
+    'id="usmtp-settings-panel-connection"',
+    'id="usmtp-settings-panel-authentication"',
+    'id="usmtp-settings-panel-sender"',
+    'id="usmtp-settings-panel-test"',
+    'data-usmtp-section-panel',
     'data-usmtp-settings-form',
     'data-usmtp-notice',
     'data-usmtp-notice-message',
@@ -900,12 +911,28 @@ foreach([
     'universal_smtp_options[authenticate]',
     'universal_smtp_options[password]',
     'universal_smtp_options[clear_password]',
+    'form="usmtp-settings-form"',
 ] as $needle){
     smtp_assert(strpos($markup, $needle) !== false, 'Missing required admin markup: ' . $needle . '.');
 }
+smtp_assert_same(4, substr_count($markup, 'data-usmtp-section-panel'), 'Every SMTP administration section must belong to the section selector.');
+smtp_assert(strpos($markup, 'usmtp-admin__status') === false, 'The removed configuration-status block must not be rendered.');
 smtp_assert(strpos($markup, 'ajax replacement') === false, 'The admin HTML must never display a stored password.');
 smtp_assert(strpos($markup, $active['password_ciphertext']) === false, 'The admin HTML must never display encrypted password storage.');
 smtp_assert(strpos($markup, 'https://champgauche.studio') !== false, 'The Studio Champ Gauche credit is missing.');
+
+$malicious_stored = $active;
+$malicious_stored['username'] = '"><script>alert(1)</script>';
+$malicious_stored['from_name'] = '"><img src=x onerror=alert(1)>';
+smtp_set_options($malicious_stored);
+ob_start();
+Universal_SMTP::render_settings_page();
+$escaped_markup = ob_get_clean();
+smtp_assert(strpos($escaped_markup, '<script>') === false, 'Stored username markup must never reach the admin HTML sink.');
+smtp_assert(strpos($escaped_markup, '<img src=x') === false, 'Stored sender-name markup must never reach the admin HTML sink.');
+smtp_assert(strpos($escaped_markup, '&lt;script&gt;') !== false, 'Stored username text must be escaped for its HTML attribute sink.');
+smtp_assert(strpos($escaped_markup, '&lt;img src=x onerror=alert(1)&gt;') !== false, 'Stored sender-name text must be escaped for its HTML attribute sink.');
+smtp_set_options($active);
 
 define('UNIVERSAL_SMTP_PASSWORD', 'constant exact secret');
 smtp_set_options($active);

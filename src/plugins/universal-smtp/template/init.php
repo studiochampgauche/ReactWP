@@ -567,8 +567,9 @@ final class Universal_SMTP{
                 !$valid
                 || self::character_length($username) > self::MAX_USERNAME_CHARACTERS
                 || self::has_plain_text_controls($username)
+                || (function_exists('wp_strip_all_tags') && wp_strip_all_tags($username) !== $username)
             ){
-                $errors[] = self::error_item('username', 'invalid_username', __('Enter an SMTP username without control characters.', 'universal-smtp'));
+                $errors[] = self::error_item('username', 'invalid_username', __('Enter a plain-text SMTP username without HTML or control characters.', 'universal-smtp'));
             }else{
                 $candidate['username'] = $username;
             }
@@ -898,6 +899,7 @@ final class Universal_SMTP{
         return $options['username'] !== ''
             && self::character_length($options['username']) <= self::MAX_USERNAME_CHARACTERS
             && !self::has_plain_text_controls($options['username'])
+            && (!function_exists('wp_strip_all_tags') || wp_strip_all_tags($options['username']) === $options['username'])
             && in_array($options['auth_type'], ['auto', 'login', 'plain', 'cram-md5'], true)
             && self::runtime_password($options) !== null;
 
@@ -1517,18 +1519,6 @@ final class Universal_SMTP{
 
     }
 
-    private static function status_label($options){
-
-        if(!$options['enabled']){
-            return __('SMTP delivery is disabled.', 'universal-smtp');
-        }
-
-        return self::configuration_is_complete($options)
-            ? __('SMTP is enabled and ready to handle WordPress email.', 'universal-smtp')
-            : __('SMTP is enabled, but required settings are missing or invalid.', 'universal-smtp');
-
-    }
-
     public static function render_settings_page(){
 
         if(!current_user_can('manage_options')){
@@ -1538,9 +1528,6 @@ final class Universal_SMTP{
         $options = self::get_options(true);
         $password_state = self::password_state($options);
         $last_status = self::get_last_status();
-        $configuration_status = !$options['enabled']
-            ? 'disabled'
-            : (self::configuration_is_complete($options) ? 'enabled' : 'incomplete');
         $test_email = function_exists('wp_get_current_user')
             ? (string)wp_get_current_user()->user_email
             : '';
@@ -1554,10 +1541,6 @@ final class Universal_SMTP{
                     <h1><?php esc_html_e('SMTP delivery', 'universal-smtp'); ?></h1>
                     <p class="usmtp-admin__lead"><?php esc_html_e('Connect WordPress to the mail server that should deliver its messages, while keeping credentials and delivery details out of the browser.', 'universal-smtp'); ?></p>
                 </div>
-                <div class="usmtp-admin__status <?php echo $configuration_status === 'enabled' ? 'is-enabled' : ''; ?>" data-status="<?php echo esc_attr($configuration_status); ?>" role="status">
-                    <span aria-hidden="true"></span>
-                    <strong><?php echo esc_html(self::status_label($options)); ?></strong>
-                </div>
             </header>
 
             <?php settings_errors(self::OPTION_NAME); ?>
@@ -1568,11 +1551,22 @@ final class Universal_SMTP{
                 <button type="button" data-usmtp-notice-dismiss aria-label="<?php echo esc_attr(__('Dismiss this notice', 'universal-smtp')); ?>">&times;</button>
             </div>
 
-            <form class="usmtp-admin__form" method="post" action="<?php echo esc_url(admin_url('options.php')); ?>" data-usmtp-settings-form>
-                <?php settings_fields(self::SETTINGS_GROUP); ?>
-                <input type="hidden" name="<?php echo esc_attr(self::OPTION_NAME . '[_present]'); ?>" value="1">
+            <div class="usmtp-admin__settings" data-usmtp-section-switcher>
+                <div class="usmtp-admin__section-navigation" data-usmtp-section-navigation>
+                    <label for="usmtp-settings-section"><?php esc_html_e('Settings section', 'universal-smtp'); ?></label>
+                    <select id="usmtp-settings-section" data-usmtp-section-select>
+                        <option value="usmtp-settings-panel-connection"><?php esc_html_e('Connection', 'universal-smtp'); ?></option>
+                        <option value="usmtp-settings-panel-authentication"><?php esc_html_e('Authentication', 'universal-smtp'); ?></option>
+                        <option value="usmtp-settings-panel-sender"><?php esc_html_e('Sender identity', 'universal-smtp'); ?></option>
+                        <option value="usmtp-settings-panel-test"><?php esc_html_e('Test delivery', 'universal-smtp'); ?></option>
+                    </select>
+                </div>
 
-                <section class="usmtp-admin-section" aria-labelledby="usmtp-connection-title">
+                <form id="usmtp-settings-form" class="usmtp-admin__form" method="post" action="<?php echo esc_url(admin_url('options.php')); ?>" data-usmtp-settings-form>
+                    <?php settings_fields(self::SETTINGS_GROUP); ?>
+                    <input type="hidden" name="<?php echo esc_attr(self::OPTION_NAME . '[_present]'); ?>" value="1">
+
+                <section id="usmtp-settings-panel-connection" class="usmtp-admin-section" aria-labelledby="usmtp-connection-title" data-usmtp-section-panel>
                     <header class="usmtp-admin-section__header">
                         <h2 id="usmtp-connection-title"><?php esc_html_e('Connection', 'universal-smtp'); ?></h2>
                         <p><?php esc_html_e('Choose the SMTP server, transport security, and maximum time WordPress may wait for the connection.', 'universal-smtp'); ?></p>
@@ -1614,7 +1608,7 @@ final class Universal_SMTP{
                     </div>
                 </section>
 
-                <section class="usmtp-admin-section" aria-labelledby="usmtp-authentication-title">
+                <section id="usmtp-settings-panel-authentication" class="usmtp-admin-section usmtp-admin-section--initially-hidden" aria-labelledby="usmtp-authentication-title" data-usmtp-section-panel>
                     <header class="usmtp-admin-section__header">
                         <h2 id="usmtp-authentication-title"><?php esc_html_e('Authentication', 'universal-smtp'); ?></h2>
                         <p><?php esc_html_e('Provide credentials only when the SMTP server requires them. The stored password is encrypted and never returned to this page.', 'universal-smtp'); ?></p>
@@ -1678,7 +1672,7 @@ final class Universal_SMTP{
                     </div>
                 </section>
 
-                <section class="usmtp-admin-section" aria-labelledby="usmtp-sender-title">
+                <section id="usmtp-settings-panel-sender" class="usmtp-admin-section usmtp-admin-section--initially-hidden" aria-labelledby="usmtp-sender-title" data-usmtp-section-panel>
                     <header class="usmtp-admin-section__header">
                         <h2 id="usmtp-sender-title"><?php esc_html_e('Sender identity', 'universal-smtp'); ?></h2>
                         <p><?php esc_html_e('Set the default address and name shown as the sender, then decide whether other WordPress code may replace them.', 'universal-smtp'); ?></p>
@@ -1717,13 +1711,9 @@ final class Universal_SMTP{
                     </div>
                 </section>
 
-                <footer class="usmtp-admin__actions">
-                    <p><?php esc_html_e('You may move between sections before saving. All settings are saved together.', 'universal-smtp'); ?></p>
-                    <?php submit_button(__('Save settings', 'universal-smtp'), 'primary', 'submit', false, ['data-usmtp-save' => '']); ?>
-                </footer>
-            </form>
+                </form>
 
-            <section class="usmtp-admin-section" aria-labelledby="usmtp-test-title">
+            <section id="usmtp-settings-panel-test" class="usmtp-admin-section usmtp-admin-section--initially-hidden" aria-labelledby="usmtp-test-title" data-usmtp-section-panel>
                 <header class="usmtp-admin-section__header">
                     <h2 id="usmtp-test-title"><?php esc_html_e('Test delivery', 'universal-smtp'); ?></h2>
                     <p><?php esc_html_e('Send one plain-text message through the saved configuration. This confirms the WordPress mail flow, not inbox placement.', 'universal-smtp'); ?></p>
@@ -1755,6 +1745,12 @@ final class Universal_SMTP{
                     </form>
                 </div>
             </section>
+
+                <footer class="usmtp-admin__actions">
+                    <p><?php esc_html_e('You may move between sections before saving. All settings are saved together.', 'universal-smtp'); ?></p>
+                    <?php submit_button(__('Save settings', 'universal-smtp'), 'primary', 'submit', false, ['data-usmtp-save' => '', 'form' => 'usmtp-settings-form']); ?>
+                </footer>
+            </div>
 
             <footer class="usmtp-admin__credit">
                 <p>&copy; <a href="<?php echo esc_url('https://champgauche.studio'); ?>" target="_blank" rel="noopener noreferrer">Studio Champ Gauche</a></p>

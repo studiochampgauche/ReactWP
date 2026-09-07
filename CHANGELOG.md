@@ -6,12 +6,16 @@ This file tracks notable project-level changes for `reactwp`.
 
 ### Added
 
-- Added the experimental bundled **Universal SMTP** plugin with authenticated SMTP delivery through WordPress `wp_mail()`, encrypted stored passwords or a `wp-config.php` password override, configurable sender behavior, redacted delivery status, a rate-limited test-email workflow, English source copy, French catalogues and focused security regressions.
+- Added the bundled **Universal SMTP** plugin with authenticated SMTP delivery through WordPress `wp_mail()`, encrypted stored passwords or a `wp-config.php` password override, configurable sender behavior, redacted delivery status, a rate-limited test-email workflow, English source copy, French catalogues and focused security regressions.
 - Added an ordered explicit-acceptance editor to Universal Legal Pages with up to 50 separate required confirmations, accessible add/remove/reorder controls, one legal document per ReactWP language and automatic migration from the former single-document setting.
 
 ### Changed
 
+- Grouped every Universal SMTP administration section behind one compact selector while keeping unsaved values mounted and one global settings-save action available across sections.
 - Added the localized WordPress last-modified date beneath the title of every standalone Universal Legal Pages document, using semantic and context-escaped `<time>` markup.
+- Released Universal Legal Pages 1.5.1 with an exact, complete, 4 MiB-bounded version-2 consent settings contract. Unknown, missing, outdated, oversized, malformed, HTML-bearing, or otherwise invalid values now preserve the complete previous option instead of producing a partial update.
+- Clarified that custom integration `init_code` is the consent settings' only intentionally executable value, is public browser code, requires both `manage_options` and `unfiltered_html`, and must never contain secrets.
+- Canonicalized Universal Legal Pages titles to plain text and filtered their rich content through `wp_kses_post()` before storage across editor, REST, import and other WordPress insertion paths, while retaining the standalone template's output sanitization.
 - Reworked the Universal Legal Pages consent administration into six focused sections selected from one compact navigation control while keeping one global asynchronous save action and a no-JavaScript Settings API fallback.
 - Made consent categories administrator-owned and multilingual. Fresh installations now contain only the immutable Necessary category; optional categories can be created, renamed, reordered or removed, and their assignment is the complete loading rule for detected, predefined and custom integrations.
 - Expanded the consent interface and legal-link editors to cover all visitor-facing text, ordered per-language legal pages, custom theme styling, custom consent triggers, predefined Google and Meta adapters, and bounded custom integrations.
@@ -20,6 +24,7 @@ This file tracks notable project-level changes for `reactwp`.
 
 ### Fixed
 
+- Made the Universal Legal Pages AJAX save verify the canonical option read back from WordPress and return the explicit `settings_persistence_failed` error instead of reporting success when the database does not persist the requested settings.
 - Prevented the complete consent settings form from flashing before its section selector initializes.
 - Removed dormant YouTube, Vimeo and unapproved external-service choices from the visitor dialog; services now appear only after real detection and administrator approval.
 - Removed the **Reject all** action when no optional category or service is available.
@@ -29,7 +34,7 @@ This file tracks notable project-level changes for `reactwp`.
 
 ### Added
 
-- Added the experimental bundled **Universal Legal Pages** plugin with a portable `legal_page` post type, isolated public document template, WordPress-native editing and publication workflows, and dedicated legal-page styling.
+- Added the bundled **Universal Legal Pages** plugin with a portable `legal_page` post type, isolated public document template, WordPress-native editing and publication workflows, and dedicated legal-page styling.
 - Added a Shadow DOM consent banner and preferences dialog with versioned first-party storage, Global Privacy Control support, category and individual-service choices, per-language ReactWP copy and legal links, plus a theme stylesheet override and declarative `data-ulc-open` trigger.
 - Added consent-aware adapters for Google Analytics 4, Google Tag Manager Consent Mode v2, standalone Google Ads remarketing and Meta Pixel, together with bounded custom integrations and a trusted integration API.
 - Added fail-closed discovery and placeholders for YouTube, Vimeo and unknown external iframes, reporting-only WordPress script inventory, English source copy, complete French Canadian/French catalogues and focused PHP/JavaScript/build regressions.
@@ -37,7 +42,6 @@ This file tracks notable project-level changes for `reactwp`.
 ### Changed
 
 - Extended the plugin production pipeline with deterministic translation catalogue generation and synchronized the ReactWP route transition with consent-interface language changes.
-- Added an experimental-plugin warning to the repository README while Universal Legal Pages awaits broader production testing.
 
 ## 2026-09-03
 

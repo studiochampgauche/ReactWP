@@ -23,7 +23,7 @@
 
 .usmtp-admin__hero {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(190px, auto);
+    grid-template-columns: minmax(0, 1fr);
     gap: 32px;
     align-items: end;
     margin: 0 0 24px;
@@ -74,44 +74,55 @@
     border-left-color: var(--usmtp-ink);
 }
 
-.usmtp-admin__status {
-    display: inline-flex;
-    gap: 10px;
-    align-items: center;
-    justify-self: end;
-    min-height: 44px;
-    margin: 0;
-    padding: 9px 14px;
-    border: 1px solid #5c5c5c;
-    border-radius: 8px;
-    color: var(--usmtp-surface);
-    font-size: 13px;
-    font-weight: 650;
-    line-height: 1.35;
-}
-
-.usmtp-admin__status > span {
-    width: 9px;
-    height: 9px;
-    flex: 0 0 auto;
-    border: 2px solid currentColor;
-    border-radius: 50%;
-    background: transparent;
-    content: '';
-}
-
-.usmtp-admin__status.is-enabled > span,
-.usmtp-admin__status[data-status='enabled'] > span {
-    background: currentColor;
-}
-
 .usmtp-admin__form {
     display: grid;
     gap: 20px;
 }
 
-.usmtp-admin__form + .usmtp-admin-section {
-    margin-top: 20px;
+.usmtp-admin__settings {
+    display: grid;
+    gap: 20px;
+}
+
+.usmtp-admin__section-navigation {
+    display: none;
+    grid-template-columns: minmax(180px, 0.3fr) minmax(0, 1fr);
+    gap: 24px;
+    align-items: center;
+    padding: 18px 22px;
+    border: 2px solid var(--usmtp-border);
+    border-radius: 14px;
+    background: var(--usmtp-ink);
+    color: var(--usmtp-surface);
+}
+
+.js .usmtp-admin__section-navigation {
+    display: grid;
+}
+
+.js .usmtp-admin-section--initially-hidden,
+.usmtp-admin-section[hidden],
+.usmtp-admin__form[hidden] {
+    display: none;
+}
+
+.usmtp-admin__section-navigation label {
+    margin: 0;
+    color: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.usmtp-admin .usmtp-admin__section-navigation select {
+    justify-self: end;
+    width: 100%;
+    max-width: 520px;
+    min-height: 48px;
+    margin: 0;
+    border-color: var(--usmtp-surface);
+    background-color: var(--usmtp-surface);
+    color: var(--usmtp-ink);
 }
 
 .usmtp-admin-section {
@@ -620,8 +631,15 @@
         padding: 28px;
     }
 
-    .usmtp-admin__status {
-        justify-self: start;
+    .usmtp-admin__section-navigation {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 10px;
+        padding: 18px;
+    }
+
+    .usmtp-admin .usmtp-admin__section-navigation select {
+        justify-self: stretch;
+        max-width: none;
     }
 
     .usmtp-admin-section {
@@ -717,6 +735,7 @@
 
 @media (forced-colors: active) {
     .usmtp-admin__hero,
+    .usmtp-admin__section-navigation,
     .usmtp-admin-section,
     .usmtp-admin__actions,
     .usmtp-admin__notice,
@@ -725,7 +744,6 @@
         border-color: CanvasText;
     }
 
-    .usmtp-admin__status > span,
     .usmtp-admin__password-status::before,
     .usmtp-admin [data-usmtp-password-status]::before {
         forced-color-adjust: none;

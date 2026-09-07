@@ -26,15 +26,15 @@ Open Settings > SMTP to enable SMTP delivery and configure:
 
 The password can be stored encrypted in the WordPress database or supplied through the `UNIVERSAL_SMTP_PASSWORD` constant in `wp-config.php`. The constant takes precedence when it is defined. Do not commit an SMTP password to source control. Encryption at rest reduces raw database exposure; it does not protect the password when WordPress, PHP, or the server runtime is compromised. The encryption key is derived from the WordPress authentication salts. If those salts change, the stored password becomes unreadable and Universal SMTP stops applying the SMTP configuration until an administrator saves the password again, unless a valid runtime constant supplies it.
 
-The administration screen saves through authenticated WordPress AJAX when JavaScript is available and keeps the native WordPress form submission as a fallback. Only users with `manage_options` can view or change the configuration, send a test email, or view the most recent delivery status.
+The administration screen groups connection, authentication, sender, and test-delivery sections behind one selector. Switching sections preserves unsaved values, and the global Save settings button submits all configuration fields. Saving uses authenticated WordPress AJAX when JavaScript is available and keeps the native WordPress form submission as a fallback. Only users with `manage_options` can view or change the configuration, send a test email, or view the most recent delivery status.
+
+Every submitted setting is checked against an exact field allowlist, scalar type, length and field-specific grammar before the complete configuration is stored. HTML is rejected from plain-text fields, and saved values are escaped again for their exact administration-screen output context. Passwords retain their exact permitted characters because they are encrypted and never rendered.
 
 The test-email tool uses the same `wp_mail()` path as the site and is limited, per administrator, to five attempts in ten minutes. Its quota lock is stored in the WordPress database; every web instance must share that database for the limit to be enforced strictly across the deployment. The last-delivery status contains only the outcome, time, a generic result code, and recipient count. Universal SMTP does not log message recipients, subjects, bodies, or SMTP credentials.
 
 Universal SMTP does not disable TLS certificate verification and does not prevent administrators from using an authorized internal SMTP host. Configuration and test access must remain limited to trusted administrators.
 
 This plugin is not an email delivery service. The site operator remains responsible for valid provider credentials, provider sending limits, mailbox or relay configuration, and the domain's SPF, DKIM, and DMARC records. A successful connection or test does not guarantee inbox placement.
-
-Universal SMTP is experimental and has not yet undergone exhaustive testing. While this notice remains, use it with caution and verify the complete configuration and delivery path for each project before relying on it in production.
 
 == Installation ==
 
@@ -86,4 +86,4 @@ Deactivating or uninstalling Universal SMTP preserves its settings, encrypted pa
 == Changelog ==
 
 = 1.0.0 =
-* Initial experimental release with SMTP routing, sender controls, protected credentials, test delivery, and bounded delivery status.
+* Initial release with SMTP routing, sender controls, protected credentials, test delivery, and bounded delivery status.

@@ -79,6 +79,64 @@
         }
     }
 
+    function initializeSectionSwitcher(container){
+        if(!container || container.__usmtpSectionSwitcherReady === true){
+            return;
+        }
+
+        var navigation = container.querySelector('[data-usmtp-section-navigation]');
+        var select = container.querySelector('[data-usmtp-section-select]');
+        var panels = Array.prototype.slice.call(container.querySelectorAll('[data-usmtp-section-panel]'));
+        var optionCount = select && select.options
+            ? select.options.length
+            : (select ? select.querySelectorAll('option').length : 0);
+
+        if(!navigation || !select || panels.length === 0 || optionCount !== panels.length){
+            return;
+        }
+
+        function activatePanel(index){
+            var activeIndex = index >= 0 && index < panels.length ? index : 0;
+            var activePanel = panels[activeIndex];
+
+            panels.forEach(function(panel, panelIndex){
+                panel.classList.remove('usmtp-admin-section--initially-hidden');
+                panel.hidden = panelIndex !== activeIndex;
+            });
+
+            var settingsForm = container.querySelector('[data-usmtp-settings-form]');
+
+            if(settingsForm && typeof settingsForm.contains === 'function'){
+                settingsForm.hidden = !settingsForm.contains(activePanel);
+            }
+
+            select.selectedIndex = activeIndex;
+        }
+
+        function activatePanelForElement(element){
+            var panelIndex = panels.findIndex(function(panel){
+                return panel === element
+                    || (typeof panel.contains === 'function' && panel.contains(element));
+            });
+
+            if(panelIndex >= 0){
+                activatePanel(panelIndex);
+            }
+        }
+
+        select.addEventListener('change', function(){
+            activatePanel(select.selectedIndex);
+        });
+
+        container.addEventListener('invalid', function(event){
+            activatePanelForElement(event.target);
+        }, true);
+
+        container.__usmtpActivatePanelForElement = activatePanelForElement;
+        container.__usmtpSectionSwitcherReady = true;
+        activatePanel(typeof select.selectedIndex === 'number' ? select.selectedIndex : 0);
+    }
+
     function initialize(root){
         if(!root || root.__universalSmtpReady === true){
             return;
@@ -91,6 +149,7 @@
                 : {});
         var settingsForm = root.querySelector('[data-usmtp-settings-form]');
         var testForm = root.querySelector('[data-usmtp-test-form]');
+        var sectionSwitcher = root.querySelector('[data-usmtp-section-switcher]');
         var notice = root.querySelector('[data-usmtp-notice]');
         var noticeMessage = notice
             ? (notice.querySelector('[data-usmtp-notice-message]') || notice.querySelector('p'))
@@ -98,6 +157,8 @@
         var noticeDismiss = notice ? notice.querySelector('[data-usmtp-notice-dismiss]') : null;
         var ajaxUrl = typeof config.ajaxUrl === 'string' ? config.ajaxUrl : '';
         var optionName = typeof config.optionName === 'string' ? config.optionName : '';
+
+        initializeSectionSwitcher(sectionSwitcher);
 
         function showNotice(state, content, focus){
             if(!notice || !noticeMessage){
@@ -196,6 +257,15 @@
 
                 if(field){
                     field.setAttribute('aria-invalid', 'true');
+
+                    if(
+                        !hasFieldError
+                        && sectionSwitcher
+                        && typeof sectionSwitcher.__usmtpActivatePanelForElement === 'function'
+                    ){
+                        sectionSwitcher.__usmtpActivatePanelForElement(field);
+                    }
+
                     hasFieldError = true;
                 }
             });
@@ -299,7 +369,7 @@
 
             synchronizeAuthentication();
 
-            var saveControl = settingsForm.querySelector('[data-usmtp-save]');
+            var saveControl = root.querySelector('[data-usmtp-save]');
             var saveLabel = controlLabel(saveControl);
             var saving = false;
 

@@ -46,6 +46,7 @@ class FakeElement {
     this.disabled = false;
     this.hidden = false;
     this.focused = false;
+    this.selectedIndex = 0;
   }
 
   append(...children){
@@ -95,6 +96,7 @@ class FakeElement {
   descendants(){
     return this.children.flatMap((child) => [child, ...child.descendants()]);
   }
+  contains(element){ return element === this || this.descendants().includes(element); }
   querySelectorAll(selector){ return this.descendants().filter((element) => element.matches(selector)); }
   querySelector(selector){ return this.querySelectorAll(selector)[0] || null; }
 }
@@ -131,7 +133,28 @@ const createFixture = ({ajaxUrl = '/wp-admin/admin-ajax.php', passwordManaged = 
   const dismiss = element('button', {'data-usmtp-notice-dismiss': ''});
   notice.append(noticeMessage, dismiss);
 
+  const sectionSwitcher = element('div', {'data-usmtp-section-switcher': ''});
+  const sectionNavigation = element('div', {'data-usmtp-section-navigation': ''});
+  const sectionSelect = element('select', {'data-usmtp-section-select': ''});
+  ['Connection', 'Authentication', 'Sender identity', 'Test delivery'].forEach((label) => {
+    sectionSelect.append(element('option', {text: label}));
+  });
+  sectionNavigation.append(sectionSelect);
+
   const settingsForm = element('form', {'data-usmtp-settings-form': ''});
+  const connectionPanel = element('section', {'data-usmtp-section-panel': ''});
+  const authenticationPanel = element('section', {
+    'data-usmtp-section-panel': '',
+    class: 'usmtp-admin-section--initially-hidden'
+  });
+  const senderPanel = element('section', {
+    'data-usmtp-section-panel': '',
+    class: 'usmtp-admin-section--initially-hidden'
+  });
+  const testPanel = element('section', {
+    'data-usmtp-section-panel': '',
+    class: 'usmtp-admin-section--initially-hidden'
+  });
   const host = element('input', {name: 'universal_smtp_options[host]', value: 'smtp.example.test'});
   const auth = element('input', {
     name: 'universal_smtp_options[authenticate]',
@@ -151,17 +174,21 @@ const createFixture = ({ajaxUrl = '/wp-admin/admin-ajax.php', passwordManaged = 
   const configuredState = element('span', {'data-usmtp-password-state': 'configured'});
   const emptyState = element('span', {'data-usmtp-password-state': 'empty'});
   passwordStatus.append(configuredState, emptyState);
-  const save = element('button', {'data-usmtp-save': '', text: 'Save settings'});
+  const save = element('button', {'data-usmtp-save': '', form: 'usmtp-settings-form', text: 'Save settings'});
   authFields.append(authType, username, password);
   if(!passwordManaged) authFields.append(clearPassword);
   authFields.append(passwordStatus);
-  settingsForm.append(host, auth, authFields, save);
+  connectionPanel.append(host);
+  authenticationPanel.append(auth, authFields);
+  settingsForm.append(connectionPanel, authenticationPanel, senderPanel);
 
   const testForm = element('form', {'data-usmtp-test-form': ''});
   const recipient = element('input', {name: 'recipient', value: 'owner@example.test'});
   const sendTest = element('button', {'data-usmtp-test': '', text: 'Send test'});
   testForm.append(recipient, sendTest);
-  root.append(notice, settingsForm, testForm);
+  testPanel.append(testForm);
+  sectionSwitcher.append(sectionNavigation, settingsForm, testPanel, save);
+  root.append(notice, sectionSwitcher);
 
   const requests = [];
   const responses = [];
@@ -197,6 +224,13 @@ const createFixture = ({ajaxUrl = '/wp-admin/admin-ajax.php', passwordManaged = 
     notice,
     noticeMessage,
     dismiss,
+    sectionSwitcher,
+    sectionNavigation,
+    sectionSelect,
+    connectionPanel,
+    authenticationPanel,
+    senderPanel,
+    testPanel,
     settingsForm,
     host,
     auth,
@@ -245,6 +279,34 @@ test('authentication and write-only password states initialize without a delayed
   assert.equal(fixture.password.disabled, false);
 });
 
+test('section selector keeps drafts mounted and the global save action available', () => {
+  const fixture = createFixture();
+
+  assert.equal(fixture.connectionPanel.hidden, false);
+  assert.equal(fixture.authenticationPanel.hidden, true);
+  assert.equal(fixture.senderPanel.hidden, true);
+  assert.equal(fixture.testPanel.hidden, true);
+
+  fixture.sectionSelect.selectedIndex = 1;
+  fixture.sectionSelect.dispatch('change');
+  assert.equal(fixture.connectionPanel.hidden, true);
+  assert.equal(fixture.authenticationPanel.hidden, false);
+  assert.equal(fixture.password.value, 'not-a-real-secret');
+  assert.equal(fixture.save.hidden, false);
+  assert.equal(fixture.save.getAttribute('form'), 'usmtp-settings-form');
+
+  fixture.sectionSelect.selectedIndex = 3;
+  fixture.sectionSelect.dispatch('change');
+  assert.equal(fixture.testPanel.hidden, false);
+  assert.equal(fixture.authenticationPanel.hidden, true);
+  assert.equal(fixture.settingsForm.hidden, true, 'The empty settings-form grid must not add space before the test panel.');
+
+  fixture.sectionSwitcher.dispatch('invalid', {target: fixture.password});
+  assert.equal(fixture.authenticationPanel.hidden, false, 'An invalid field must reveal its owning settings section.');
+  assert.equal(fixture.settingsForm.hidden, false);
+  assert.equal(fixture.sectionSelect.selectedIndex, 1);
+});
+
 test('a constant-managed password remains unavailable across authentication changes', () => {
   const fixture = createFixture({passwordManaged: true});
 
@@ -285,6 +347,8 @@ test('settings save uses the AJAX contract, clears the secret, and restores its 
 
 test('settings validation errors preserve fields, mark their control, and focus the notice', async () => {
   const fixture = createFixture();
+  fixture.sectionSelect.selectedIndex = 2;
+  fixture.sectionSelect.dispatch('change');
   fixture.responses.push({
     success: false,
     data: {
@@ -302,6 +366,7 @@ test('settings validation errors preserve fields, mark their control, and focus 
   assert.equal(fixture.host.getAttribute('aria-invalid'), 'true');
   assert.equal(fixture.host.value, 'smtp.example.test');
   assert.equal(fixture.password.value, 'not-a-real-secret', 'A rejected save must preserve the replacement for correction.');
+  assert.equal(fixture.connectionPanel.hidden, false, 'A server-side error must reveal the section containing its field.');
 });
 
 test('test email handles success, field errors, and a network failure without duplicate state', async () => {
@@ -354,6 +419,9 @@ test('admin styles provide scoped monochrome, responsive, focus, and reduced-mot
   assert.match(stylesheet, /\.usmtp-admin__checkbox-list\s*\{/u);
   assert.match(stylesheet, /\.usmtp-admin__input-suffix\s*\{/u);
   assert.match(stylesheet, /\.usmtp-admin__last-status\s*\{/u);
+  assert.match(stylesheet, /\.js \.usmtp-admin__section-navigation\s*\{[\s\S]*?display:\s*grid;/u);
+  assert.match(stylesheet, /\.js \.usmtp-admin-section--initially-hidden/u);
+  assert.match(stylesheet, /\.usmtp-admin-section\[hidden\]/u);
   assert.match(stylesheet, /\.usmtp-admin__dependent\.is-authentication-disabled/u);
   assert.match(stylesheet, /padding-block:\s*var\(--usmtp-section-space\);/u);
   assert.match(stylesheet, /min-height:\s*44px;/u);

@@ -9,20 +9,20 @@ msgstr ""
 "Language:\n"
 
 #, php-format
-#: init.php:1739
+#: init.php:1729
 msgid "%d recipient"
 msgstr ""
 
 #, php-format
-#: init.php:1740
+#: init.php:1730
 msgid "%d recipients"
 msgstr ""
 
-#: init.php:644
+#: init.php:645
 msgid "A From email address is required when SMTP delivery is enabled."
 msgstr ""
 
-#: init.php:667
+#: init.php:668
 msgid "A From name is required when SMTP delivery is enabled."
 msgstr ""
 
@@ -30,11 +30,11 @@ msgstr ""
 msgid "A required settings field is missing."
 msgstr ""
 
-#: init.php:1662
+#: init.php:1656
 msgid "A stored password is configured."
 msgstr ""
 
-#: init.php:627
+#: init.php:628
 msgid "A valid SMTP password is required when authentication is enabled."
 msgstr ""
 
@@ -42,23 +42,23 @@ msgstr ""
 msgid "An SMTP host is required when SMTP delivery is enabled."
 msgstr ""
 
-#: init.php:578
+#: init.php:579
 msgid "An SMTP username is required when authentication is enabled."
 msgstr ""
 
-#: init.php:1626
+#: init.php:1620
 msgid "Authenticate with the SMTP server"
 msgstr ""
 
-#: init.php:1619
+#: init.php:1559 init.php:1613
 msgid "Authentication"
 msgstr ""
 
-#: init.php:1631
+#: init.php:1625
 msgid "Authentication type"
 msgstr ""
 
-#: init.php:1633
+#: init.php:1627
 msgid "Automatic"
 msgstr ""
 
@@ -74,67 +74,71 @@ msgstr ""
 msgid "Choose STARTTLS, implicit TLS, or no encryption."
 msgstr ""
 
-#: init.php:1578
+#: init.php:1572
 msgid "Choose the SMTP server, transport security, and maximum time WordPress may wait for the connection."
 msgstr ""
 
-#: init.php:1671
+#: init.php:1665
 msgid "Clear the stored password when saving"
 msgstr ""
 
-#: init.php:1555
+#: init.php:1542
 msgid "Connect WordPress to the mail server that should deliver its messages, while keeping credentials and delivery details out of the browser."
 msgstr ""
 
-#: init.php:1577
+#: init.php:1558 init.php:1571
 msgid "Connection"
 msgstr ""
 
-#: init.php:1607
+#: init.php:1601
 msgid "Connection timeout"
 msgstr ""
 
-#: init.php:1714
+#: init.php:1708
 msgid "Delivery failure notices may be returned to this address when the provider supports it."
 msgstr ""
 
-#: init.php:1568
+#: init.php:1551
 msgid "Dismiss this notice"
 msgstr ""
 
-#: init.php:1323
+#: init.php:1325
 msgid "Enable SMTP and complete the required settings before sending a test email."
 msgstr ""
 
-#: init.php:1584
+#: init.php:1578
 msgid "Enable SMTP delivery"
 msgstr ""
 
-#: init.php:1598
+#: init.php:1592
 msgid "Encryption"
 msgstr ""
 
-#: init.php:1591
+#: init.php:1585
 msgid "Enter a hostname or IP address only, such as smtp.example.com. Do not include https://, a path, or credentials."
 msgstr ""
 
-#: init.php:607
+#: init.php:608
 msgid "Enter a new password or clear the stored password, but not both."
 msgstr ""
 
-#: init.php:661
+#: init.php:662
 msgid "Enter a plain-text From name of no more than 120 characters."
 msgstr ""
 
-#: init.php:689
+#: init.php:572
+msgid "Enter a plain-text SMTP username without HTML or control characters."
+msgstr ""
+
+#: init.php:690
 msgid "Enter a timeout from 5 to 60 seconds."
 msgstr ""
 
-#: init.php:638
+#: init.php:639
 msgid "Enter a valid From email address."
 msgstr ""
 
-#: init.php:1303 init.php:1304 init.php:1314 init.php:1315 init.php:1504
+#: init.php:1305 init.php:1306 init.php:1316 init.php:1317 init.php:1506
 msgid "Enter a valid recipient email address."
 msgstr ""
 
@@ -146,159 +150,147 @@ msgstr ""
 msgid "Enter an SMTP port from 1 to 65535."
 msgstr ""
 
-#: init.php:571
-msgid "Enter an SMTP username without control characters."
-msgstr ""
-
-#: init.php:1736
+#: init.php:1726
 msgid "Failed"
 msgstr ""
 
-#: init.php:1701
+#: init.php:1695
 msgid "Force the From email address"
 msgstr ""
 
-#: init.php:1707
+#: init.php:1701
 msgid "Force the From name"
 msgstr ""
 
-#: init.php:1689
+#: init.php:1683
 msgid "From email"
 msgstr ""
 
-#: init.php:1693
+#: init.php:1687
 msgid "From name"
 msgstr ""
 
-#: init.php:1601
+#: init.php:1595
 msgid "Implicit TLS"
 msgstr ""
 
-#: init.php:1659
+#: init.php:1653
 msgid "Leave this field empty to preserve the current password. Its value is never displayed."
 msgstr ""
 
-#: init.php:1734
+#: init.php:1724
 msgid "Most recent delivery status"
 msgstr ""
 
-#: init.php:1663
+#: init.php:1657
 msgid "No password is configured."
 msgstr ""
 
-#: init.php:1602
+#: init.php:1596
 msgid "None"
 msgstr ""
 
-#: init.php:1644
+#: init.php:1638
 msgid "Password"
 msgstr ""
 
-#: init.php:1594
+#: init.php:1588
 msgid "Port"
 msgstr ""
 
-#: init.php:1702
+#: init.php:1696
 msgid "Prevent themes and other plugins from replacing the configured address."
 msgstr ""
 
-#: init.php:1708
+#: init.php:1702
 msgid "Prevent themes and other plugins from replacing the configured name."
 msgstr ""
 
-#: init.php:1620
+#: init.php:1614
 msgid "Provide credentials only when the SMTP server requires them. The stored password is encrypted and never returned to this page."
 msgstr ""
 
-#: init.php:1750
+#: init.php:1740
 msgid "Recipient email"
 msgstr ""
 
-#: init.php:1722
+#: init.php:1751
 msgid "Save settings"
 msgstr ""
 
-#: init.php:1460
+#: init.php:1462
 msgid "Saving…"
 msgstr ""
 
-#: init.php:1610
+#: init.php:1604
 msgid "seconds"
 msgstr ""
 
-#: init.php:1729
+#: init.php:1719
 msgid "Send one plain-text message through the saved configuration. This confirms the WordPress mail flow, not inbox placement."
 msgstr ""
 
-#: init.php:1753
+#: init.php:1743
 msgid "Send test email"
 msgstr ""
 
-#: init.php:1683
+#: init.php:1560 init.php:1677
 msgid "Sender identity"
 msgstr ""
 
-#: init.php:1461
+#: init.php:1463
 msgid "Sending…"
 msgstr ""
 
-#: init.php:1736
+#: init.php:1726
 msgid "Sent"
 msgstr ""
 
-#: init.php:1684
+#: init.php:1678
 msgid "Set the default address and name shown as the sender, then decide whether other WordPress code may replace them."
 msgstr ""
 
-#: init.php:864 init.php:1462
+#: init.php:865 init.php:1464
 msgid "Settings saved."
 msgstr ""
 
-#: init.php:1421 init.php:1422
+#: init.php:1556
+msgid "Settings section"
+msgstr ""
+
+#: init.php:1423 init.php:1424
 msgid "SMTP"
 msgstr ""
 
-#: init.php:1339
+#: init.php:1341
 msgid "SMTP configuration test"
 msgstr ""
 
-#: init.php:1554
+#: init.php:1541
 msgid "SMTP delivery"
 msgstr ""
 
-#: init.php:1523
-msgid "SMTP delivery is disabled."
-msgstr ""
-
-#: init.php:1589
+#: init.php:1583
 msgid "SMTP host"
 msgstr ""
 
-#: init.php:1527
-msgid "SMTP is enabled and ready to handle WordPress email."
-msgstr ""
-
-#: init.php:1528
-msgid "SMTP is enabled, but required settings are missing or invalid."
-msgstr ""
-
-#: init.php:1600
+#: init.php:1594
 msgid "STARTTLS (recommended)"
 msgstr ""
 
-#: init.php:1728
+#: init.php:1561 init.php:1718
 msgid "Test delivery"
 msgstr ""
 
-#: init.php:1463
+#: init.php:1465
 msgid "Test email sent."
 msgstr ""
 
-#: init.php:1356 init.php:1502
+#: init.php:1358 init.php:1504
 msgid "Test email sent. Confirm that it reached the intended mailbox."
 msgstr ""
 
-#: init.php:585
+#: init.php:586
 msgid "The clear-password setting is invalid."
 msgstr ""
 
@@ -306,19 +298,19 @@ msgstr ""
 msgid "The complete settings form is required."
 msgstr ""
 
-#: init.php:672
+#: init.php:673
 msgid "The force From email setting is invalid."
 msgstr ""
 
-#: init.php:673
+#: init.php:674
 msgid "The force From name setting is invalid."
 msgstr ""
 
-#: init.php:616
+#: init.php:617
 msgid "The password could not be encrypted. The previous password was preserved."
 msgstr ""
 
-#: init.php:1664
+#: init.php:1658
 msgid "The password is managed by the UNIVERSAL_SMTP_PASSWORD constant."
 msgstr ""
 
@@ -326,27 +318,27 @@ msgstr ""
 msgid "The request contains a field that cannot be changed here."
 msgstr ""
 
-#: init.php:1464
+#: init.php:1466
 msgid "The request could not be completed. Try again."
 msgstr ""
 
-#: init.php:674
+#: init.php:675
 msgid "The Return-Path setting is invalid."
 msgstr ""
 
-#: init.php:787
+#: init.php:788
 msgid "The settings are invalid."
 msgstr ""
 
-#: init.php:707
+#: init.php:708
 msgid "The settings could not be saved."
 msgstr ""
 
-#: init.php:842
+#: init.php:843
 msgid "The settings could not be saved. Review the highlighted fields."
 msgstr ""
 
-#: init.php:849 init.php:854
+#: init.php:850 init.php:855
 msgid "The settings could not be saved. Try again."
 msgstr ""
 
@@ -358,15 +350,15 @@ msgstr ""
 msgid "The SMTP enabled setting is invalid."
 msgstr ""
 
-#: init.php:593
+#: init.php:594
 msgid "The SMTP password is invalid."
 msgstr ""
 
-#: init.php:609
+#: init.php:610
 msgid "The SMTP password is managed by the UNIVERSAL_SMTP_PASSWORD constant."
 msgstr ""
 
-#: init.php:601
+#: init.php:602
 msgid "The SMTP password must be no more than 1024 bytes and cannot contain line breaks or null bytes."
 msgstr ""
 
@@ -374,50 +366,50 @@ msgstr ""
 msgid "The submitted settings are invalid."
 msgstr ""
 
-#: init.php:1348 init.php:1505
+#: init.php:1350 init.php:1507
 msgid "The test email could not be sent. Verify the settings and try again."
 msgstr ""
 
-#: init.php:1340
+#: init.php:1342
 msgid "This message confirms that WordPress reached the configured SMTP mail flow."
 msgstr ""
 
-#: init.php:1332 init.php:1503
+#: init.php:1334 init.php:1505
 msgid "Too many test emails were requested. Try again later."
 msgstr ""
 
-#: init.php:1553
+#: init.php:1540
 msgid "Universal SMTP"
 msgstr ""
 
-#: init.php:1604
+#: init.php:1598
 msgid "Use the exact mode required by the provider. No encryption sends mail-server credentials and content without transport protection."
 msgstr ""
 
-#: init.php:1713
+#: init.php:1707
 msgid "Use the From email as the Return-Path"
 msgstr ""
 
-#: init.php:1640
+#: init.php:1634
 msgid "Username"
 msgstr ""
 
-#: init.php:1585
+#: init.php:1579
 msgid "WordPress continues to use its normal mail flow while PHPMailer sends through this server."
 msgstr ""
 
-#: init.php:810 init.php:1535
+#: init.php:811 init.php:1525
 msgid "You do not have permission to manage these settings."
 msgstr ""
 
-#: init.php:1398
+#: init.php:1400
 msgid "You do not have permission to send a test email."
 msgstr ""
 
-#: init.php:1721
+#: init.php:1750
 msgid "You may move between sections before saving. All settings are saved together."
 msgstr ""
 
-#: init.php:826 init.php:1371
+#: init.php:827 init.php:1373
 msgid "Your session has expired. Reload the page and try again."
 msgstr ""
