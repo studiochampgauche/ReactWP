@@ -10,7 +10,7 @@
  * Text Domain: universal-legal-pages
  * Domain Path: /languages
  * Update URI: false
- * Version: 1.5.0
+ * Version: 1.5.1
  */
 
 if(!defined('ABSPATH')){
@@ -28,7 +28,7 @@ final class Universal_Legal_Pages{
     const SETTINGS_GROUP = 'universal_legal_pages_settings';
     const SETTINGS_SLUG = 'universal-legal-pages-consent';
     const AJAX_SAVE_ACTION = 'ulp_save_consent_settings';
-    const VERSION = '1.5.0';
+    const VERSION = '1.5.1';
     const MAX_REACTWP_LANGUAGES = 32;
     const MAX_CONSENT_PAGES = 1000;
     const MAX_TERMS_CONFIRMATIONS = 50;
@@ -43,10 +43,13 @@ final class Universal_Legal_Pages{
     const MAX_CUSTOM_SCRIPT_URL_BYTES = 2048;
     const MAX_CUSTOM_INIT_CODE_BYTES = 8192;
     const MAX_CUSTOM_PUBLIC_BYTES = 131072;
+    const MAX_SETTINGS_PAYLOAD_BYTES = 4194304;
     const DETECTED_SERVICES_OPTION = 'universal_legal_pages_detected_services';
     const CONSENT_THEME_STYLESHEET = 'universal-legal-pages/consent-manager.css';
 
     private static $settings_page_hook = '';
+    private static $validation_failed = false;
+    private static $last_sanitized_options = null;
 
     public static function boot(){
 
@@ -62,6 +65,7 @@ final class Universal_Legal_Pages{
 
         add_filter('template_include', [__CLASS__, 'use_plugin_template'], PHP_INT_MAX);
         add_filter('body_class', [__CLASS__, 'add_body_class']);
+        add_filter('wp_insert_post_data', [__CLASS__, 'sanitize_legal_page_post_data'], 10, 2);
         add_filter('the_content', [__CLASS__, 'filter_external_iframes'], PHP_INT_MAX);
         add_filter('embed_oembed_html', [__CLASS__, 'filter_external_iframes'], PHP_INT_MAX);
 
@@ -136,6 +140,28 @@ final class Universal_Legal_Pages{
             ],
             'delete_with_user' => false,
         ]);
+
+    }
+
+    public static function sanitize_legal_page_post_data($data, $postarr = []){
+
+        if(!is_array($data) || ($data['post_type'] ?? '') !== self::POST_TYPE){
+            return $data;
+        }
+
+        $title = isset($data['post_title']) && is_string($data['post_title'])
+            ? wp_unslash($data['post_title'])
+            : '';
+        $content = isset($data['post_content']) && is_string($data['post_content'])
+            ? wp_unslash($data['post_content'])
+            : '';
+
+        // wp_insert_post_data receives slashed values and expects slashed values back.
+        // KSES preserves WordPress block delimiters while removing executable markup.
+        $data['post_title'] = wp_slash(sanitize_text_field($title));
+        $data['post_content'] = wp_slash(wp_kses_post($content));
+
+        return $data;
 
     }
 
@@ -913,6 +939,14 @@ final class Universal_Legal_Pages{
 
         $invalid = !is_array($value) || count($value) > self::MAX_SERVICES;
         $services = [];
+
+        if(!$invalid){
+            $submitted_ids = array_keys($value);
+            $expected_ids = array_keys($registry);
+            sort($submitted_ids, SORT_STRING);
+            sort($expected_ids, SORT_STRING);
+            $invalid = $submitted_ids !== $expected_ids;
+        }
 
         if(!$invalid){
             foreach($value as $id => $settings){
@@ -1801,6 +1835,24 @@ final class Universal_Legal_Pages{
 
     }
 
+    private static function normalize_stored_boolean($value, $default){
+
+        if(is_bool($value)){
+            return $value;
+        }
+
+        if($value === 1 || $value === '1'){
+            return true;
+        }
+
+        if($value === 0 || $value === '0'){
+            return false;
+        }
+
+        return (bool)$default;
+
+    }
+
     public static function get_options(){
 
         $stored = get_option(self::OPTION_NAME, []);
@@ -1828,7 +1880,10 @@ final class Universal_Legal_Pages{
         $options = array_merge($defaults, $stored);
 
         foreach(['consent_enabled', 'terms_required', 'respect_gpc', 'show_revisit_button'] as $boolean_key){
-            $options[$boolean_key] = (bool)$options[$boolean_key];
+            $options[$boolean_key] = self::normalize_stored_boolean(
+                $options[$boolean_key],
+                $defaults[$boolean_key]
+            );
         }
 
         $legacy_terms_page_id = is_scalar($options['terms_page_id']) ? absint($options['terms_page_id']) : 0;
@@ -1940,14 +1995,18 @@ final class Universal_Legal_Pages{
             )
             : $legacy_categories;
 
-        $policy_version = is_scalar($options['policy_version'])
-            ? trim((string)$options['policy_version'])
+        $policy_version = is_string($options['policy_version'])
+            ? trim($options['policy_version'])
             : '';
         $options['policy_version'] = preg_match('/\A[A-Za-z0-9._-]{1,32}\z/', $policy_version)
             ? $policy_version
             : $defaults['policy_version'];
 
-        $duration = is_scalar($options['duration_days']) ? (int)$options['duration_days'] : 0;
+        $duration = is_int($options['duration_days'])
+            ? $options['duration_days']
+            : (is_string($options['duration_days']) && preg_match('/\A[1-9]\d{1,2}\z/', $options['duration_days'])
+                ? (int)$options['duration_days']
+                : 0);
         $options['duration_days'] = $duration >= 30 && $duration <= 365
             ? $duration
             : $defaults['duration_days'];
@@ -1960,8 +2019,8 @@ final class Universal_Legal_Pages{
         ];
 
         foreach($integration_patterns as $integration_key => $pattern){
-            $value = is_scalar($options[$integration_key])
-                ? strtoupper(trim((string)$options[$integration_key]))
+            $value = is_string($options[$integration_key])
+                ? strtoupper(trim($options[$integration_key]))
                 : '';
             $options[$integration_key] = preg_match($pattern, $value) ? $value : '';
         }
@@ -2017,6 +2076,22 @@ final class Universal_Legal_Pages{
         if(is_int($value) && $value > 0){
             return $value;
         }
+
+        if(!is_string($value) || !preg_match('/\A[1-9][0-9]*\z/', $value)){
+            return 0;
+        }
+
+        $maximum = (string)PHP_INT_MAX;
+
+        if(strlen($value) > strlen($maximum) || (strlen($value) === strlen($maximum) && strcmp($value, $maximum) > 0)){
+            return 0;
+        }
+
+        return (int)$value;
+
+    }
+
+    private static function parse_submitted_positive_integer_id($value){
 
         if(!is_string($value) || !preg_match('/\A[1-9][0-9]*\z/', $value)){
             return 0;
@@ -2214,7 +2289,10 @@ final class Universal_Legal_Pages{
         $input = array_key_exists(self::OPTION_NAME, $_POST)
             ? wp_unslash($_POST[self::OPTION_NAME])
             : null;
+        self::$last_sanitized_options = null;
         update_option(self::OPTION_NAME, $input);
+        $expected = self::$last_sanitized_options;
+        $stored = get_option(self::OPTION_NAME, null);
         $options = self::get_options();
 
         $all_errors = get_settings_errors(self::OPTION_NAME);
@@ -2222,6 +2300,18 @@ final class Universal_Legal_Pages{
             is_array($all_errors) ? $all_errors : [],
             is_array($before_errors) ? count($before_errors) : 0
         );
+
+        if(empty($new_errors) && (!is_array($expected) || $stored !== $expected)){
+            self::add_field_error(
+                'settings_persistence_failed',
+                __('The settings could not be saved. Your previous settings remain unchanged.', 'universal-legal-pages')
+            );
+            $all_errors = get_settings_errors(self::OPTION_NAME);
+            $new_errors = array_slice(
+                is_array($all_errors) ? $all_errors : [],
+                is_array($before_errors) ? count($before_errors) : 0
+            );
+        }
         $custom_integrations_valid = true;
 
         foreach($new_errors as $error){
@@ -2241,7 +2331,7 @@ final class Universal_Legal_Pages{
         ];
 
         if(!empty($new_errors)){
-            $payload['message'] = __('The settings were saved with validation errors. Review the messages and try again.', 'universal-legal-pages');
+            $payload['message'] = __('The settings were not saved because some values are invalid or incomplete. Review the messages and try again.', 'universal-legal-pages');
             wp_send_json_error($payload, 422);
             return;
         }
@@ -2316,6 +2406,118 @@ final class Universal_Legal_Pages{
         }
 
         return substr($value, 0, $maximum);
+
+    }
+
+    private static function writable_consent_string_schema(){
+
+        return array_filter(self::consent_string_schema(), function($field){
+            return isset($field['group']) && $field['group'] !== 'categories';
+        });
+
+    }
+
+    private static function validate_settings_transport($input, $languages){
+
+        if(!is_array($input)){
+            self::add_field_error(
+                'invalid_settings_shape',
+                __('Settings submitted are invalid.', 'universal-legal-pages')
+            );
+            return false;
+        }
+
+        $encoded = wp_json_encode($input);
+
+        if(!is_string($encoded) || strlen($encoded) > self::MAX_SETTINGS_PAYLOAD_BYTES){
+            self::add_field_error(
+                'invalid_settings_size',
+                __('Settings submitted are too large or contain invalid text.', 'universal-legal-pages')
+            );
+            return false;
+        }
+
+        $allowed = [
+            'settings_contract',
+            'consent_enabled',
+            'terms_required',
+            'respect_gpc',
+            'show_revisit_button',
+            'policy_version',
+            'duration_days',
+            'consent_categories_present',
+            'consent_categories',
+            'services_present',
+            'services',
+            'ga4_measurement_id',
+            'ga4_category',
+            'gtm_container_id',
+            'gtm_category',
+            'google_ads_id',
+            'google_ads_category',
+            'meta_pixel_id',
+            'meta_pixel_category',
+        ];
+        $required = [
+            'settings_contract',
+            'policy_version',
+            'duration_days',
+            'consent_categories_present',
+            'consent_categories',
+            'services_present',
+            'services',
+            'ga4_measurement_id',
+            'ga4_category',
+            'gtm_container_id',
+            'gtm_category',
+            'google_ads_id',
+            'google_ads_category',
+            'meta_pixel_id',
+            'meta_pixel_category',
+        ];
+
+        if(empty($languages)){
+            $allowed = array_merge($allowed, ['consent_strings', 'consent_page_ids', 'terms_page_ids']);
+            $required = array_merge($required, ['consent_strings', 'consent_page_ids', 'terms_page_ids']);
+        }else{
+            $allowed = array_merge($allowed, ['consent_string_translations', 'consent_link_translations']);
+            $required = array_merge($required, ['consent_string_translations', 'consent_link_translations']);
+        }
+
+        if(current_user_can('manage_options') && current_user_can('unfiltered_html')){
+            $allowed = array_merge($allowed, ['custom_integrations_present', 'custom_integrations']);
+            $required = array_merge($required, ['custom_integrations_present', 'custom_integrations']);
+        }
+
+        foreach(array_keys($input) as $key){
+            if(!is_string($key) || !in_array($key, $allowed, true)){
+                self::add_field_error(
+                    'invalid_settings_fields',
+                    __('Settings submitted contain an unknown field.', 'universal-legal-pages')
+                );
+                return false;
+            }
+        }
+
+        foreach($required as $key){
+            if(!array_key_exists($key, $input)){
+                self::add_field_error(
+                    'incomplete_settings',
+                    __('Settings submitted are incomplete. Reload the page and try again.', 'universal-legal-pages')
+                );
+                return false;
+            }
+        }
+
+        if($input['settings_contract'] !== '2'){
+            self::add_field_error(
+                'invalid_settings_contract',
+                __('The settings form is outdated. Reload the page and try again.', 'universal-legal-pages')
+            );
+            return false;
+        }
+
+        return true;
 
     }
 
@@ -2827,7 +3029,9 @@ final class Universal_Legal_Pages{
 
     private static function consent_string_value_is_valid($value, $maximum, $textarea){
 
-        if(!is_string($value) || preg_match('//u', $value) !== 1){
+        if(!is_string($value)
+            || strlen($value) > ($maximum * 4)
+            || preg_match('//u', $value) !== 1){
             return false;
         }
 
@@ -2850,20 +3054,14 @@ final class Universal_Legal_Pages{
     private static function sanitize_consent_strings($value, $previous, $error_code, $language_label = ''){
 
         $expected = self::default_consent_strings();
+        $submitted_structure = $expected;
+        unset($submitted_structure['categories']);
         $invalid_field = '';
 
-        // Category copy has its own ordered registry. Preserve the legacy bundle so
-        // older saved options and public integrations remain backward compatible.
-        if(is_array($value)){
-            $value['categories'] = isset($previous['categories']) && is_array($previous['categories'])
-                ? $previous['categories']
-                : $expected['categories'];
-        }
-
-        if(!self::consent_string_structure_is_exact($value, $expected)){
+        if(!self::consent_string_structure_is_exact($value, $submitted_structure)){
             $invalid_field = __('Text structure', 'universal-legal-pages');
         }else{
-            foreach(self::consent_string_schema() as $path => $field){
+            foreach(self::writable_consent_string_schema() as $path => $field){
                 if(!self::consent_string_value_is_valid(
                     self::nested_string_value($value, $path),
                     $field['maximum'],
@@ -2891,9 +3089,9 @@ final class Universal_Legal_Pages{
             return is_array($previous) ? $previous : $expected;
         }
 
-        $sanitized = $expected;
+        $sanitized = self::normalize_stored_consent_strings($previous, $expected);
 
-        foreach(self::consent_string_schema() as $path => $field){
+        foreach(self::writable_consent_string_schema() as $path => $field){
             self::set_nested_string_value(
                 $sanitized,
                 $path,
@@ -3088,6 +3286,7 @@ final class Universal_Legal_Pages{
 
     private static function add_field_error($code, $message){
 
+        self::$validation_failed = true;
         add_settings_error(self::OPTION_NAME, $code, $message, 'error');
 
     }
@@ -3098,7 +3297,7 @@ final class Universal_Legal_Pages{
             return false;
         }
 
-        if(in_array($input[$key], ['1', 1, true], true)){
+        if($input[$key] === '1'){
             return true;
         }
 
@@ -3182,12 +3381,20 @@ final class Universal_Legal_Pages{
 
     private static function sanitize_consent_page_ids($value, $previous){
 
-        $invalid = !is_array($value) || count($value) > self::MAX_CONSENT_PAGES;
+        $invalid = !is_array($value)
+            || !array_key_exists('_present', $value)
+            || $value['_present'] !== '1';
         $normalized = [];
 
         if(!$invalid){
+            unset($value['_present']);
+            $invalid = count($value) > self::MAX_CONSENT_PAGES
+                || array_keys($value) !== (count($value) > 0 ? range(0, count($value) - 1) : []);
+        }
+
+        if(!$invalid){
             foreach($value as $raw_id){
-                $id = self::parse_positive_integer_id($raw_id);
+                $id = self::parse_submitted_positive_integer_id($raw_id);
 
                 if($id === 0 || in_array($id, $normalized, true) || !self::is_published_legal_page($id)){
                     $invalid = true;
@@ -3215,7 +3422,7 @@ final class Universal_Legal_Pages{
 
         if(!is_array($value)
             || !array_key_exists('_present', $value)
-            || !in_array($value['_present'], ['1', 1, true], true)){
+            || $value['_present'] !== '1'){
             return null;
         }
 
@@ -3234,7 +3441,7 @@ final class Universal_Legal_Pages{
         $normalized = [];
 
         foreach($value as $raw_id){
-            $id = self::parse_positive_integer_id($raw_id);
+            $id = self::parse_submitted_positive_integer_id($raw_id);
 
             if($id === 0 || in_array($id, $normalized, true) || !self::is_published_legal_page($id)){
                 return null;
@@ -3285,18 +3492,25 @@ final class Universal_Legal_Pages{
 
                 if(
                     !is_array($bundle)
-                    || !in_array($bundle_keys, [
-                        ['consent_page_ids', 'terms_page_ids'],
-                        ['terms_page_ids'],
-                    ], true)
+                    || $bundle_keys !== ['consent_page_ids', 'terms_page_ids']
                 ){
                     $invalid = true;
                     break;
                 }
 
-                $page_ids = $bundle['consent_page_ids'] ?? [];
+                $page_ids = $bundle['consent_page_ids'];
 
-                if(!is_array($page_ids) || count($page_ids) > self::MAX_CONSENT_PAGES){
+                if(!is_array($page_ids)
+                    || !array_key_exists('_present', $page_ids)
+                    || $page_ids['_present'] !== '1'){
+                    $invalid = true;
+                    break;
+                }
+
+                unset($page_ids['_present']);
+
+                if(count($page_ids) > self::MAX_CONSENT_PAGES
+                    || array_keys($page_ids) !== (count($page_ids) > 0 ? range(0, count($page_ids) - 1) : [])){
                     $invalid = true;
                     break;
                 }
@@ -3304,7 +3518,7 @@ final class Universal_Legal_Pages{
                 $normalized_page_ids = [];
 
                 foreach($page_ids as $raw_id){
-                    $id = self::parse_positive_integer_id($raw_id);
+                    $id = self::parse_submitted_positive_integer_id($raw_id);
 
                     if($id === 0 || in_array($id, $normalized_page_ids, true) || !self::is_published_legal_page($id)){
                         $invalid = true;
@@ -3350,7 +3564,7 @@ final class Universal_Legal_Pages{
 
     private static function sanitize_integration_id($value, $previous, $pattern, $error_code, $field_label){
 
-        if(!is_scalar($value)){
+        if(!is_string($value)){
             self::add_field_error(
                 $error_code,
                 sprintf(__('The identifier for %s is invalid.', 'universal-legal-pages'), $field_label)
@@ -3359,7 +3573,7 @@ final class Universal_Legal_Pages{
             return (string)$previous;
         }
 
-        $value = strtoupper(trim((string)$value));
+        $value = strtoupper(trim($value));
 
         if($value === ''){
             return '';
@@ -3432,7 +3646,7 @@ final class Universal_Legal_Pages{
             return self::reject_custom_integrations($previous, 'forbidden_custom_integrations');
         }
 
-        if(!in_array($input['custom_integrations_present'], ['1', 1, true], true)){
+        if($input['custom_integrations_present'] !== '1'){
             return self::reject_custom_integrations($previous, 'invalid_custom_integrations');
         }
 
@@ -3559,13 +3773,11 @@ final class Universal_Legal_Pages{
 
         $previous = self::get_options();
         $defaults = self::default_options();
+        $languages = self::reactwp_languages();
+        self::$validation_failed = false;
+        self::$last_sanitized_options = $previous;
 
-        if(!is_array($input)){
-            self::add_field_error(
-                'invalid_settings_shape',
-                __('Settings submitted are invalid.', 'universal-legal-pages')
-            );
-
+        if(!self::validate_settings_transport($input, $languages)){
             return $previous;
         }
 
@@ -3575,33 +3787,12 @@ final class Universal_Legal_Pages{
         $options['respect_gpc'] = self::sanitize_checkbox_option($input, 'respect_gpc', $previous['respect_gpc'], __('Global Privacy Control', 'universal-legal-pages'));
         $options['show_revisit_button'] = self::sanitize_checkbox_option($input, 'show_revisit_button', $previous['show_revisit_button'], __('Management button', 'universal-legal-pages'));
 
-        $languages = self::reactwp_languages();
-
         if(!empty($languages)){
-            if(array_key_exists('consent_string_translations', $input)){
-                $options['consent_string_translations'] = self::sanitize_consent_string_translations(
-                    $input['consent_string_translations'],
-                    $previous['consent_string_translations'],
-                    $languages
-                );
-            }else{
-                $legacy_translations = self::sanitize_banner_translations(
-                    isset($input['banner_translations']) ? $input['banner_translations'] : null,
-                    $previous['banner_translations'],
-                    $languages
-                );
-                $options['consent_string_translations'] = [];
-
-                foreach($languages as $language){
-                    $code = $language['code'];
-                    $strings = isset($previous['consent_string_translations'][$code])
-                        ? $previous['consent_string_translations'][$code]
-                        : $previous['consent_strings'];
-                    $strings['title'] = $legacy_translations[$code]['title'];
-                    $strings['message'] = $legacy_translations[$code]['message'];
-                    $options['consent_string_translations'][$code] = $strings;
-                }
-            }
+            $options['consent_string_translations'] = self::sanitize_consent_string_translations(
+                $input['consent_string_translations'],
+                $previous['consent_string_translations'],
+                $languages
+            );
 
             $fallback_code = self::reactwp_language_code($languages);
             $first_language_code = $languages[0]['code'];
@@ -3617,69 +3808,22 @@ final class Universal_Legal_Pages{
         }else{
             $options['banner_translations'] = $previous['banner_translations'];
             $options['consent_string_translations'] = $previous['consent_string_translations'];
-
-            if(array_key_exists('consent_strings', $input)){
-                $options['consent_strings'] = self::sanitize_consent_strings(
-                    $input['consent_strings'],
-                    $previous['consent_strings'],
-                    'invalid_consent_strings'
-                );
-            }else{
-                $options['consent_strings'] = $previous['consent_strings'];
-                $options['consent_strings']['title'] = self::sanitize_plain_option(
-                    isset($input['banner_title']) ? $input['banner_title'] : '',
-                    $previous['banner_title'],
-                    $defaults['banner_title'],
-                    120,
-                    __('Title', 'universal-legal-pages')
-                );
-                $options['consent_strings']['message'] = self::sanitize_plain_option(
-                    isset($input['banner_message']) ? $input['banner_message'] : '',
-                    $previous['banner_message'],
-                    $defaults['banner_message'],
-                    600,
-                    __('Message', 'universal-legal-pages'),
-                    true
-                );
-            }
+            $options['consent_strings'] = self::sanitize_consent_strings(
+                $input['consent_strings'],
+                $previous['consent_strings'],
+                'invalid_consent_strings'
+            );
 
             $options['banner_title'] = $options['consent_strings']['title'];
             $options['banner_message'] = $options['consent_strings']['message'];
         }
 
         if(!empty($languages)){
-            if(array_key_exists('consent_link_translations', $input)){
-                $options['consent_link_translations'] = self::sanitize_consent_link_translations(
-                    $input['consent_link_translations'],
-                    $previous['consent_link_translations'],
-                    $languages
-                );
-            }else{
-                $legacy_page_ids = self::sanitize_consent_page_ids(
-                    isset($input['consent_page_ids']) ? $input['consent_page_ids'] : [],
-                    $previous['consent_page_ids']
-                );
-                $legacy_terms_page_ids = array_key_exists('terms_page_ids', $input)
-                    ? self::sanitize_terms_page_ids(
-                        $input['terms_page_ids'],
-                        $previous['terms_page_ids']
-                    )
-                    : array_values(array_filter([
-                        self::sanitize_legal_page_id(
-                            isset($input['terms_page_id']) ? $input['terms_page_id'] : 0,
-                            $previous['terms_page_id'],
-                            __('Terms', 'universal-legal-pages')
-                        ),
-                    ]));
-                $options['consent_link_translations'] = [];
-
-                foreach($languages as $language){
-                    $options['consent_link_translations'][$language['code']] = [
-                        'consent_page_ids' => $legacy_page_ids,
-                        'terms_page_ids' => $legacy_terms_page_ids,
-                    ];
-                }
-            }
+            $options['consent_link_translations'] = self::sanitize_consent_link_translations(
+                $input['consent_link_translations'],
+                $previous['consent_link_translations'],
+                $languages
+            );
 
             $fallback_code = self::reactwp_language_code($languages);
             $first_language_code = $languages[0]['code'];
@@ -3696,40 +3840,30 @@ final class Universal_Legal_Pages{
         }else{
             $options['consent_link_translations'] = $previous['consent_link_translations'];
             $options['consent_page_ids'] = self::sanitize_consent_page_ids(
-                isset($input['consent_page_ids']) ? $input['consent_page_ids'] : [],
+                $input['consent_page_ids'],
                 $previous['consent_page_ids']
             );
-            $options['terms_page_ids'] = array_key_exists('terms_page_ids', $input)
-                ? self::sanitize_terms_page_ids($input['terms_page_ids'], $previous['terms_page_ids'])
-                : array_values(array_filter([
-                    self::sanitize_legal_page_id(
-                        isset($input['terms_page_id']) ? $input['terms_page_id'] : 0,
-                        $previous['terms_page_id'],
-                        __('Terms', 'universal-legal-pages')
-                    ),
-                ]));
+            $options['terms_page_ids'] = self::sanitize_terms_page_ids(
+                $input['terms_page_ids'],
+                $previous['terms_page_ids']
+            );
             $options['terms_page_id'] = $options['terms_page_ids'][0] ?? 0;
         }
 
-        if(array_key_exists('consent_categories_present', $input)){
-            if(in_array($input['consent_categories_present'], ['1', 1, true], true)
-                && array_key_exists('consent_categories', $input)){
-                $options['consent_categories'] = self::sanitize_consent_categories(
-                    $input['consent_categories'],
-                    $previous['consent_categories'],
-                    $languages
-                );
-            }else{
-                $options['consent_categories'] = self::reject_consent_categories(
-                    $previous['consent_categories']
-                );
-            }
+        if($input['consent_categories_present'] === '1'){
+            $options['consent_categories'] = self::sanitize_consent_categories(
+                $input['consent_categories'],
+                $previous['consent_categories'],
+                $languages
+            );
         }else{
-            $options['consent_categories'] = $previous['consent_categories'];
+            $options['consent_categories'] = self::reject_consent_categories(
+                $previous['consent_categories']
+            );
         }
 
-        $policy_version = isset($input['policy_version']) && is_scalar($input['policy_version'])
-            ? trim((string)$input['policy_version'])
+        $policy_version = is_string($input['policy_version'])
+            ? trim($input['policy_version'])
             : '';
 
         if(!preg_match('/\A[A-Za-z0-9._-]{1,32}\z/', $policy_version)){
@@ -3742,11 +3876,11 @@ final class Universal_Legal_Pages{
             $options['policy_version'] = $policy_version;
         }
 
-        $duration = isset($input['duration_days']) && is_scalar($input['duration_days'])
-            ? (string)$input['duration_days']
+        $duration = is_string($input['duration_days'])
+            ? $input['duration_days']
             : '';
 
-        if(!preg_match('/\A\d{1,3}\z/', $duration) || (int)$duration < 30 || (int)$duration > 365){
+        if(!preg_match('/\A[1-9]\d{1,2}\z/', $duration) || (int)$duration < 30 || (int)$duration > 365){
             self::add_field_error(
                 'invalid_duration_days',
                 __('Consent duration must be between 30 and 365 days.', 'universal-legal-pages')
@@ -3804,14 +3938,24 @@ final class Universal_Legal_Pages{
             $options['consent_categories'],
             $previous['consent_categories']
         );
-        $options['services'] = array_key_exists('services', $input)
-            ? self::sanitize_service_settings(
+        $detected_registry = self::get_detected_service_registry();
+
+        if($input['services_present'] !== '1'){
+            self::add_field_error(
+                'invalid_services',
+                __('Service settings are invalid; the complete previous service registry was preserved.', 'universal-legal-pages')
+            );
+            $options['services'] = $previous['services'];
+        }elseif($input['services'] === '' && empty($detected_registry)){
+            $options['services'] = [];
+        }else{
+            $options['services'] = self::sanitize_service_settings(
                 $input['services'],
                 $previous['services'],
-                self::get_detected_service_registry(),
+                $detected_registry,
                 $options['consent_categories']
-            )
-            : $previous['services'];
+            );
+        }
 
         if(!self::category_references_are_valid(
             $options['consent_categories'],
@@ -3830,14 +3974,14 @@ final class Universal_Legal_Pages{
                 $options['consent_categories'],
                 $previous['consent_categories']
             );
-            $options['services'] = array_key_exists('services', $input)
-                ? self::sanitize_service_settings(
+            $options['services'] = $input['services'] === '' && empty($detected_registry)
+                ? []
+                : self::sanitize_service_settings(
                     $input['services'],
                     $previous['services'],
-                    self::get_detected_service_registry(),
+                    $detected_registry,
                     $options['consent_categories']
-                )
-                : $previous['services'];
+                );
         }
 
         $missing_terms_page = empty($options['terms_page_ids']);
@@ -3865,7 +4009,10 @@ final class Universal_Legal_Pages{
             $options['terms_required'] = false;
         }
 
-        return $options;
+        $sanitized = self::$validation_failed ? $previous : $options;
+        self::$last_sanitized_options = $sanitized;
+
+        return $sanitized;
 
     }
 
@@ -3986,6 +4133,7 @@ final class Universal_Legal_Pages{
         ?>
         <fieldset class="ulp-admin__page-fieldset" aria-describedby="<?php echo esc_attr($id_prefix . '-description'); ?>">
             <legend class="screen-reader-text"><?php esc_html_e('Documents displayed in the consent module', 'universal-legal-pages'); ?></legend>
+            <input type="hidden" name="<?php echo esc_attr(self::OPTION_NAME . '[' . $field_name . '][_present]'); ?>" value="1">
             <p id="<?php echo esc_attr($id_prefix . '-description'); ?>" class="description"><?php esc_html_e('Select the pages to display, then arrange them in the desired order by dragging and dropping or with the move up and move down buttons. This selection does not modify any theme menu.', 'universal-legal-pages'); ?></p>
             <?php if(empty($pages)) : ?>
                 <p class="ulp-admin__empty-state"><?php esc_html_e('Publish a legal page before adding it.', 'universal-legal-pages'); ?></p>
@@ -4188,6 +4336,11 @@ final class Universal_Legal_Pages{
             ? $options['services']
             : [];
         $categories = self::service_category_labels($options);
+
+        ?>
+        <input type="hidden" name="<?php echo esc_attr(self::OPTION_NAME . '[services_present]'); ?>" value="1">
+        <input type="hidden" name="<?php echo esc_attr(self::OPTION_NAME . '[services]'); ?>" value="">
+        <?php
 
         if(empty($registry)) : ?>
             <p class="ulp-admin__empty-state"><?php esc_html_e('No external service has been detected yet. Visit the public site while signed in as an administrator to inventory queued external scripts.', 'universal-legal-pages'); ?></p>
@@ -4937,6 +5090,7 @@ final class Universal_Legal_Pages{
             >
                 <?php settings_fields(self::SETTINGS_GROUP); ?>
                 <?php wp_nonce_field(self::AJAX_SAVE_ACTION, 'ulp_save_nonce'); ?>
+                <input type="hidden" name="<?php echo esc_attr(self::OPTION_NAME . '[settings_contract]'); ?>" value="2">
 
                 <div class="ulp-admin__settings" data-ulp-section-switcher>
                     <div
@@ -5176,7 +5330,7 @@ final class Universal_Legal_Pages{
             return null;
         }
 
-        $label = trim(wp_strip_all_tags(get_the_title($id)));
+        $label = self::trim_plain_text(get_the_title($id), 200);
 
         return [
             'url' => esc_url_raw($url),

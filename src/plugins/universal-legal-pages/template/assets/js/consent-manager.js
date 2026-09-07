@@ -23,6 +23,7 @@
     var SERVICE_PLACEHOLDER_SELECTOR = '[data-ulc-service][data-ulc-src]';
     var MAX_LEGAL_LINKS = 1000;
     var MAX_TERMS_LINKS = 50;
+    var MAX_LINK_LABEL_LENGTH = 200;
     var MAX_LANGUAGES = 32;
     var CONSENT_STRING_LIMITS = {
         title: 120,
@@ -303,10 +304,10 @@
 
             termsLink = termsLinks.length ? termsLinks[0] : null;
 
-            var strings = normalizeStrings(raw.strings);
+            var strings = normalizeConsentStringBundle(raw.strings);
             var categoryRegistry = normalizeCategories(raw.categories);
 
-            if(!categoryRegistry){
+            if(!strings || !categoryRegistry){
                 return null;
             }
 
@@ -674,9 +675,14 @@
         }
 
         var url = normalizeHttpUrl(raw.url);
-        var label = normalizedString(raw.label, '');
+        var label = typeof raw.label === 'string' ? raw.label.trim() : '';
 
-        if(!url || !label){
+        if(
+            !url
+            || !label
+            || unicodeLength(label) > MAX_LINK_LABEL_LENGTH
+            || /[<>\u0000-\u001F\u007F]/.test(label)
+        ){
             return null;
         }
 

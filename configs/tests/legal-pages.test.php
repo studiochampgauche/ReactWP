@@ -81,6 +81,22 @@ function sanitize_textarea_field($value){
     return trim(strip_tags((string)$value));
 }
 
+function wp_unslash($value){
+    if(is_array($value)){
+        return array_map('wp_unslash', $value);
+    }
+
+    return is_string($value) ? stripslashes($value) : $value;
+}
+
+function wp_slash($value){
+    if(is_array($value)){
+        return array_map('wp_slash', $value);
+    }
+
+    return is_string($value) ? addslashes($value) : $value;
+}
+
 function __($value){
     return $value;
 }
@@ -204,7 +220,9 @@ function wp_kses_post($value){
     global $kses_calls;
     $kses_calls++;
     $value = preg_replace('#<script\b[^>]*>.*?</script>#is', '', (string)$value);
-    return strip_tags($value, '<p><a><strong><em><ul><ol><li><blockquote><h2><h3><h4><h5><h6>');
+    $value = preg_replace('/\s+on[a-z0-9_-]+\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/iu', '', $value);
+    $value = preg_replace('/\s+(?:href|src)\s*=\s*(?:"\s*javascript:[^"]*"|\'\s*javascript:[^\']*\'|javascript:[^\s>]+)/iu', '', $value);
+    return $value;
 }
 
 function wp_kses($value, $allowed_html, $allowed_protocols = []){
@@ -248,8 +266,53 @@ require_once __DIR__ . '/../../src/plugins/universal-legal-pages/template/init.p
 legal_pages_assert(isset($actions['init']), 'The legal page post type is not registered on init.');
 legal_pages_assert(isset($actions['wp_enqueue_scripts']), 'The legal page stylesheet hook is missing.');
 legal_pages_assert(isset($filters['template_include']), 'The forced legal page template filter is missing.');
+legal_pages_assert(isset($filters['wp_insert_post_data']), 'The legal-page storage sanitizer hook is missing.');
 legal_pages_assert(count($activation_hooks) === 1, 'The activation hook is missing.');
 legal_pages_assert(count($deactivation_hooks) === 1, 'The deactivation hook is missing.');
+
+$storage_filter = $filters['wp_insert_post_data'][0];
+legal_pages_assert(
+    $storage_filter[0] === [Universal_Legal_Pages::class, 'sanitize_legal_page_post_data']
+        && $storage_filter[1] === 10
+        && $storage_filter[2] === 2,
+    'The legal-page storage sanitizer uses the wrong WordPress filter contract.'
+);
+
+$legal_post_data = [
+    'post_type' => 'legal_page',
+    'post_title' => wp_slash('<em>Terms</em> O\'Brien'),
+    'post_content' => wp_slash('<!-- wp:paragraph {"className":"notice"} --><p class="notice" onclick="alert(1)">Allowed <strong>rich</strong> <a href="javascript:alert(2)" onfocus="alert(3)">link</a>.</p><!-- /wp:paragraph --><script>alert(4)</script>'),
+    'post_status' => 'publish',
+];
+$sanitized_legal_post_data = Universal_Legal_Pages::sanitize_legal_page_post_data($legal_post_data);
+$stored_legal_title = wp_unslash($sanitized_legal_post_data['post_title']);
+$stored_legal_content = wp_unslash($sanitized_legal_post_data['post_content']);
+
+legal_pages_assert($stored_legal_title === 'Terms O\'Brien', 'Legal-page titles were not canonicalized to plain text before storage.');
+legal_pages_assert(
+    strpos($stored_legal_content, '<!-- wp:paragraph {"className":"notice"} -->') !== false
+        && strpos($stored_legal_content, '<p class="notice">Allowed <strong>rich</strong>') !== false
+        && strpos($stored_legal_content, '<!-- /wp:paragraph -->') !== false,
+    'Allowed rich HTML or Gutenberg block delimiters were damaged before storage.'
+);
+legal_pages_assert(
+    stripos($stored_legal_content, '<script') === false
+        && stripos($stored_legal_content, 'onclick=') === false
+        && stripos($stored_legal_content, 'onfocus=') === false
+        && stripos($stored_legal_content, 'javascript:') === false,
+    'Executable legal-page markup was retained in stored content.'
+);
+
+$ordinary_post_data = [
+    'post_type' => 'post',
+    'post_title' => wp_slash('<em>Editorial title</em>'),
+    'post_content' => wp_slash('<p onclick="editorialHook()">Editorial content</p><script>editorialScript()</script>'),
+];
+legal_pages_assert(
+    Universal_Legal_Pages::sanitize_legal_page_post_data($ordinary_post_data) === $ordinary_post_data,
+    'The legal-page storage policy modified another WordPress post type.'
+);
+$kses_calls = 0;
 
 Universal_Legal_Pages::register_post_type();
 

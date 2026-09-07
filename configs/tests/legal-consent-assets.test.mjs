@@ -427,24 +427,15 @@ const readStoredConsent = (document) => {
   return encoded ? JSON.parse(decodeURIComponent(encoded)) : null;
 };
 
-test('browser defaults fall back to English when localized consent copy is unavailable', () => {
+test('browser fails closed for an incomplete base copy contract and keeps emergency defaults in English', () => {
   const runtime = runConsentManager({
     config: createConsentConfig({strings: {}})
   });
-  const shadow = runtime.document.querySelector('[data-universal-legal-consent-root]').shadowRoot;
 
-  assert.equal(shadow.querySelector('.ulc-banner__title').textContent, 'Your privacy choices');
-  assert.equal(
-    shadow.querySelector('.ulc-banner__message').textContent,
-    'We use cookies required for the site to work and, with your consent, analytics and marketing tools.'
-  );
-  assert.equal(shadow.querySelector('[data-action="accept-all"]').textContent, 'Accept all');
-  assert.equal(shadow.querySelector('[data-action="reject-all"]').textContent, 'Reject all');
-  assert.equal(shadow.querySelector('[data-action="open-preferences"]').textContent, 'Customize');
-
-  runtime.window.UniversalLegalConsent.openPreferences();
-  assert.equal(shadow.querySelector('.ulc-dialog__title').textContent, 'Consent preferences');
-  assert.equal(shadow.querySelector('.ulc-dialog__footer').querySelector('.ulc-button--primary').textContent, 'Save my choices');
+  assert.equal(runtime.window.UniversalLegalConsent, undefined, 'Incomplete base copy must disable the manager instead of silently changing its public wording.');
+  assert.equal(runtime.document.querySelector('[data-universal-legal-consent-root]'), null);
+  assert.match(script, /var strings = normalizeConsentStringBundle\(raw\.strings\);/u, 'The base copy must cross the same exact browser contract as localized copy.');
+  assert.match(script, /normalizedString\(raw\.title, 'Your privacy choices'\)/u, 'Emergency source defaults must remain English.');
 
   for(const formerFrenchFallback of [
     'Vos choix de confidentialité',
@@ -454,6 +445,35 @@ test('browser defaults fall back to English when localized consent copy is unava
     'Impossible d’enregistrer ce choix. Veuillez réessayer.'
   ]){
     assert.equal(script.includes(formerFrenchFallback), false, `French browser fallback remains: ${formerFrenchFallback}`);
+  }
+});
+
+test('public legal-link labels use a 200-character Unicode plain-text contract', () => {
+  const maximumLabel = 'é'.repeat(200);
+  const valid = runConsentManager({
+    config: createConsentConfig({
+      legalLinks: [{label: maximumLabel, url: 'https://example.test/legal/privacy/'}]
+    })
+  });
+  const validHost = valid.document.querySelector('[data-universal-legal-consent-root]');
+
+  assert.ok(validHost, 'A legal-link label at the documented boundary must remain valid.');
+  assert.equal(validHost.shadowRoot.querySelector('.ulc-link').textContent, maximumLabel);
+  assert.match(script, /var MAX_LINK_LABEL_LENGTH = 200;/u, 'The legal-link label bound must remain explicit and reviewable.');
+  assert.match(script, /unicodeLength\(label\) > MAX_LINK_LABEL_LENGTH/u, 'Legal-link labels must be measured in Unicode characters.');
+
+  for(const label of [
+    'é'.repeat(201),
+    'Privacy\u0007policy',
+    '<strong>Privacy policy</strong>'
+  ]){
+    const invalid = runConsentManager({
+      config: createConsentConfig({
+        legalLinks: [{label, url: 'https://example.test/legal/privacy/'}]
+      })
+    });
+
+    assert.equal(invalid.window.UniversalLegalConsent, undefined, 'An invalid legal-link label must fail the complete public configuration closed.');
   }
 });
 
@@ -681,7 +701,7 @@ test('Google consent defaults are queued locally before any optional network req
         kind: 'integration',
         managed: true
       }],
-      strings: {}
+      strings: consentStrings('Privacy choices', 'Cookie settings')
     }
   };
 
@@ -809,10 +829,7 @@ test('ReactWP language changes are validated and survive pre-initialization rout
           termsLink: null
         }
       },
-      strings: {
-        title: 'English choices',
-        message: 'English message.'
-      }
+      strings: consentStrings('English choices', 'Cookie settings')
     }
   };
 
