@@ -4,7 +4,7 @@
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
     "require": {
-        "enshrined/svg-sanitize": "0.22.0"
+        "enshrined/svg-sanitize": "1.0.0"
     },
     "config": {
         "allow-plugins": {},
