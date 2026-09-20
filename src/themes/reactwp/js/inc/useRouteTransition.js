@@ -73,7 +73,7 @@ const scrollToRouteTarget = async (hash, smooth = false, attempts = 8) => {
     }
 };
 
-const onAnimationComplete = (animation, callback) => {
+const onAnimationComplete = (animation, callback, onError = callback) => {
     let called = false;
     const done = () => {
         if(called){
@@ -109,7 +109,7 @@ const onAnimationComplete = (animation, callback) => {
     }
 
     if(typeof animation.then === 'function'){
-        Promise.resolve(animation).finally(done);
+        Promise.resolve(animation).then(done, onError);
         return;
     }
 
@@ -128,6 +128,8 @@ export const useRouteTransition = () => {
     const [headerKey, setHeaderKey] = useState(resolveRouteKey(runtime.route));
     const pendingRouteRef = useRef(null);
     const firstLoadRef = useRef(true);
+    const interruptedLeaveRef = useRef(false);
+    const pageAnimationRef = useRef(null);
 
     const currentPath = normalizePath(location.pathname);
     const currentSearch = normalizeSearch(location.search || '');
@@ -162,6 +164,8 @@ export const useRouteTransition = () => {
         scroller.lock();
 
         return () => {
+            pageAnimationRef.current?.kill?.();
+            pageAnimationRef.current = null;
             scroller.kill();
         };
     }, []);
@@ -213,9 +217,15 @@ export const useRouteTransition = () => {
             let animation = PageTransitionAnimation.enter({
                 location
             });
+            pageAnimationRef.current = animation;
 
             onAnimationComplete(animation, () => {
                 animation?.kill?.();
+
+                if(pageAnimationRef.current === animation){
+                    pageAnimationRef.current = null;
+                }
+
                 animation = null;
 
                 requestAnimationFrame(() => {
@@ -306,6 +316,24 @@ export const useRouteTransition = () => {
         const nextRouteKey = createRouteKey(nextPath, nextSearch);
 
         if(nextRouteKey === currentRouteKey){
+            if(interruptedLeaveRef.current){
+                interruptedLeaveRef.current = false;
+                Loader.setRoute(currentRoute);
+                Loader.markRouteReady(resolveRouteKey(currentRoute));
+                let animation = PageTransitionAnimation.enter({ location: blocker.location });
+                pageAnimationRef.current = animation;
+
+                onAnimationComplete(animation, () => {
+                    animation?.kill?.();
+
+                    if(pageAnimationRef.current === animation){
+                        pageAnimationRef.current = null;
+                    }
+
+                    animation = null;
+                });
+            }
+
             blocker.proceed();
             requestAnimationFrame(() => {
                 scrollToRouteTarget(nextHash, true);
@@ -314,71 +342,114 @@ export const useRouteTransition = () => {
         }
 
         let cancelled = false;
+        let proceeded = false;
+        let animation = null;
+        let preparedRoute = null;
 
         const transition = async () => {
+            interruptedLeaveRef.current = false;
+            pageAnimationRef.current?.kill?.();
+            pageAnimationRef.current = null;
             Loader.setLabel(`Preparing ${nextPath}${nextSearch}`);
             scroller.lock();
 
-            const route = await fetchRoute(`${nextPath}${nextSearch}`);
-            const normalizedRoute = normalizeRoute(route, nextPath, nextSearch);
+            // Leave immediately; payload and critical assets load alongside it.
+            const leaveRequest = new Promise((resolve, reject) => {
+                animation = PageTransitionAnimation.leave({ blocker, location });
+                pageAnimationRef.current = animation;
 
-            pendingRouteRef.current = normalizedRoute;
-            Loader.setRoute(normalizedRoute);
-            const criticalRequest = Loader.prepareRoute(normalizedRoute);
+                onAnimationComplete(animation, () => {
+                    animation?.kill?.();
 
-            if(cancelled){
-                return;
-            }
+                    if(pageAnimationRef.current === animation){
+                        pageAnimationRef.current = null;
+                    }
 
-            let animation = PageTransitionAnimation.leave({
-                blocker,
-                location
+                    animation = null;
+
+                    if(cancelled){
+                        resolve();
+                        return;
+                    }
+
+                    window.gscroll?.paused?.(true);
+
+                    if(window.gscroll && !nextHash){
+                        window.gscroll.scrollTop(0);
+                        scroller.setLockScrollTop(0);
+                    } else if(!nextHash){
+                        window.scrollTo({ top: 0, behavior: 'auto' });
+                        scroller.setLockScrollTop(0);
+                    }
+
+                    resolve();
+                }, reject);
             });
 
-            onAnimationComplete(animation, () => {
-                animation?.kill?.();
-                animation = null;
+            const prepare = async () => {
+                const route = await fetchRoute(`${nextPath}${nextSearch}`);
 
                 if(cancelled){
                     return;
                 }
 
-                window.gscroll?.paused(true);
+                preparedRoute = normalizeRoute(route, nextPath, nextSearch);
+                pendingRouteRef.current = preparedRoute;
+                Loader.setRoute(preparedRoute);
+                await Loader.prepareRoute(preparedRoute);
+            };
 
-                if(window.gscroll && !nextHash){
-                    window.gscroll.scrollTop(0);
-                    scroller.setLockScrollTop(0);
-                } else if(!nextHash){
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'auto'
-                    });
-                    scroller.setLockScrollTop(0);
-                }
+            await Promise.all([leaveRequest, prepare()]);
 
-                Promise.resolve(criticalRequest).then(() => {
-                    if(cancelled){
-                        return;
-                    }
+            if(cancelled){
+                return;
+            }
 
-                    return Loader.waitForPaint(1).then(() => {
-                        if(cancelled){
-                            return;
-                        }
+            await Loader.waitForPaint(1);
 
-                        blocker.proceed();
-                    });
-                });
-            });
+            if(cancelled){
+                return;
+            }
+
+            proceeded = true;
+            blocker.proceed();
         };
 
         transition().catch((error) => {
+            if(cancelled){
+                return;
+            }
+
+            cancelled = true;
+            animation?.kill?.();
+
+            if(pageAnimationRef.current === animation){
+                pageAnimationRef.current = null;
+            }
+
+            animation = null;
             console.warn('ReactWP route transition failed.', error);
             window.location.assign(`${blocker.location.pathname}${nextSearch}${nextHash}`);
         });
 
         return () => {
             cancelled = true;
+            animation?.kill?.();
+
+            if(pageAnimationRef.current === animation){
+                pageAnimationRef.current = null;
+            }
+
+            animation = null;
+
+            if(!proceeded){
+                interruptedLeaveRef.current = true;
+                if(pendingRouteRef.current === preparedRoute){
+                    pendingRouteRef.current = null;
+                }
+
+                scroller.unlock();
+            }
         };
     }, [blocker, currentRouteKey]);
 
