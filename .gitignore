@@ -11,3 +11,12 @@ auth.json
 !.env.example
 *.pem
 *.key
+
+# Registry development stays local until it is ready to be versioned.
+/src/plugins/wp-registry*/
+/src/wp-registry*/
+/src/plugins/universal-registry*/
+/src/universal-registry*/
+/configs/*registry*
+/configs/scripts/*registry*
+/configs/tests/*registry*
