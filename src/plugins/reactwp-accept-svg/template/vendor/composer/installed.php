@@ -3,7 +3,7 @@
         'name' => 'reactwp/accept-svg',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '60d9d2b26b19019a6f152b04ff388fbad579e33d',
+        'reference' => 'e99fe9fa7261cd5b09e2692597f9a66fe3930d32',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'enshrined/svg-sanitize' => array(
-            'pretty_version' => '0.22.0',
-            'version' => '0.22.0.0',
-            'reference' => '0afa95ea74be155a7bcd6c6fb60c276c39984500',
+            'pretty_version' => '1.0.0',
+            'version' => '1.0.0.0',
+            'reference' => 'f3300fcd1bbf67d205b52217c75d0f7d6a8c47ff',
             'type' => 'library',
             'install_path' => __DIR__ . '/../enshrined/svg-sanitize',
             'aliases' => array(),
@@ -22,7 +22,7 @@
         'reactwp/accept-svg' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '60d9d2b26b19019a6f152b04ff388fbad579e33d',
+            'reference' => 'e99fe9fa7261cd5b09e2692597f9a66fe3930d32',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

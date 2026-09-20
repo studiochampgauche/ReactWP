@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "56adabc356c6f24fbcbf6fa5e7ee3091",
+    "content-hash": "53de3e0db491649b48cbfa837ac22c7e",
     "packages": [
         {
             "name": "enshrined/svg-sanitize",
@@ -55,10 +55,10 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": {},
-    "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.6.0"
 }
