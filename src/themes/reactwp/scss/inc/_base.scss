@@ -14,18 +14,12 @@ html{
 
 html,
 body{
-	&.has-smooth-scroll{
-		scrollbar-width: none;
-		-ms-overflow-style: none;
-		&.is-scroll-locked{
-			overflow: hidden;
-			overscroll-behavior: none;
-		}
-		&::-webkit-scrollbar{
-			width: 0;
-			height: 0;
-			display: none;
-		}
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+	&::-webkit-scrollbar{
+		width: 0;
+		height: 0;
+		display: none;
 	}
 }
 

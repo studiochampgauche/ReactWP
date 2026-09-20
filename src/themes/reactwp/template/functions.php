@@ -22,6 +22,15 @@ add_action('wp_head', function(){
         body{
             margin: 0;
             padding: 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        html::-webkit-scrollbar,
+        body::-webkit-scrollbar{
+            width: 0;
+            height: 0;
+            display: none;
         }
 
         html{
