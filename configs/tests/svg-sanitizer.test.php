@@ -135,6 +135,30 @@ try {
         $assert(file_get_contents($path) === $markup, 'Rejected XML must not replace the uploaded file.');
     }
 
+    foreach(['href', 'xlink:href', 'HrEf', 'xlink:HrEf'] as $attribute){
+        $cyclic = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><g id="loop"><use '
+            . $attribute . '="#loop" /></g></defs><rect width="10" height="10" /></svg>';
+        file_put_contents($path, $cyclic);
+        clearstatcache(true, $path);
+        $result = rwp_sanitize_svg_path($path);
+        $assert(
+            is_wp_error($result)
+                && $result->get_error_code() === 'reactwp_svg_invalid'
+                && $result->get_error_message() === 'The uploaded file is not a valid SVG.',
+            "Cyclic {$attribute} references must return the public invalid-SVG error without leaking an exception."
+        );
+        $assert(file_get_contents($path) === $cyclic, 'A sanitizer failure must leave the original file unchanged.');
+
+        $GLOBALS['svg_test_can_upload'] = true;
+        $file = ['name' => 'cyclic.svg', 'tmp_name' => $path, 'type' => 'image/svg+xml', 'size' => strlen($cyclic)];
+
+        foreach(['wp_handle_upload_prefilter', 'wp_handle_sideload_prefilter'] as $hook){
+            $rejected = $GLOBALS['svg_test_filters'][$hook]($file);
+            $assert(($rejected['error'] ?? '') === 'The uploaded file is not a valid SVG.', "{$hook} must reject cyclic {$attribute} references with a visitor-safe error.");
+            $assert(file_get_contents($path) === $cyclic, "{$hook} must preserve the original bytes when the sanitizer fails.");
+        }
+    }
+
     $oversized = '<svg>' . str_repeat(' ', 2 * 1024 * 1024) . '</svg>';
     file_put_contents($path, $oversized);
     clearstatcache(true, $path);

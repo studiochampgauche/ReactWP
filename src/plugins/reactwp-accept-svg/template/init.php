@@ -91,10 +91,14 @@ function rwp_sanitize_svg_path($path) {
         );
     }
 
-    $sanitizer = new ReactWP_SVG_Sanitizer();
-    $sanitizer->removeRemoteReferences(true);
-    $sanitizer->minify(true);
-    $sanitized = $sanitizer->sanitize($contents);
+    try {
+        $sanitizer = new ReactWP_SVG_Sanitizer();
+        $sanitizer->removeRemoteReferences(true);
+        $sanitizer->minify(true);
+        $sanitized = $sanitizer->sanitize($contents);
+    } catch(\Throwable $error) {
+        $sanitized = false;
+    }
 
     if(!is_string($sanitized) || trim($sanitized) === '' || !rwp_is_svg_document($sanitized)){
         return new WP_Error(
