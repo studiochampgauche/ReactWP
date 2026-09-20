@@ -5592,6 +5592,10 @@ final class Universal_Legal_Pages{
             true
         );
 
+        // Keep the consent download from blocking HTML parsing and theme preloaders.
+        // WordPress preserves dependency order; the inline bootstrap below stays synchronous.
+        wp_script_add_data(self::CONSENT_SCRIPT_HANDLE, 'strategy', 'defer');
+
         $bootstrap = 'window.UniversalLegalConsent=window.UniversalLegalConsent||{queue:[],pendingLanguage:null,registerIntegration:function(definition){this.queue.push(definition);},setLanguage:function(language){this.pendingLanguage=language;}};';
         $config = wp_json_encode(
             self::get_public_consent_config(),

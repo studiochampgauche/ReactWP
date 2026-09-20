@@ -115,7 +115,7 @@ The public API also provides `getConsent()`, `hasConsent(category)`, `openPrefer
 
 `<button type="button" data-ulc-open aria-haspopup="dialog">Manage my privacy choices</button>`
 
-The delegated trigger continues to work when the button is rendered after initialization or replaced during client-side navigation. Modified clicks on a link keep their normal browser behavior. The document emits `universal-legal-pages:ready` and `universal-legal-pages:change` CustomEvents with a copied consent detail object.
+The delegated trigger continues to work when the button is rendered after initialization or replaced during client-side navigation. The consent interface uses a fixed, pointer-transparent outer host so focusing its dialog does not make smooth-scroll themes move the background page; only the visible consent surfaces intercept pointer input. Modified clicks on a link keep their normal browser behavior. The document emits `universal-legal-pages:ready` and `universal-legal-pages:change` CustomEvents with a copied consent detail object.
 
 Custom adapters are trusted application code. They must use fixed reviewed vendor URLs, avoid secrets, define their real category requirements, handle revocation, and comply with the site's Content Security Policy.
 

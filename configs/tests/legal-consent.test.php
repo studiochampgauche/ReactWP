@@ -360,6 +360,15 @@ function wp_enqueue_script($handle, $src, $dependencies = [], $version = false, 
     $enqueued_scripts[$handle] = compact('src', 'dependencies', 'version', 'in_footer');
 }
 
+function wp_script_add_data($handle, $key, $value){
+    global $enqueued_scripts;
+    if(!isset($enqueued_scripts[$handle])){
+        return false;
+    }
+    $enqueued_scripts[$handle]['data'][$key] = $value;
+    return true;
+}
+
 function wp_add_inline_script($handle, $data, $position = 'after'){
     global $inline_scripts;
     $inline_scripts[$handle][] = compact('data', 'position');
@@ -1970,6 +1979,14 @@ consent_assert(isset($enqueued_scripts[Universal_Legal_Pages::CONSENT_SCRIPT_HAN
 consent_assert(
     $enqueued_scripts[Universal_Legal_Pages::CONSENT_SCRIPT_HANDLE]['src'] === 'https://example.test/wp-content/plugins/universal-legal-pages/assets/js/consent-manager.js',
     'The consent manager must load only its local portable script.'
+);
+consent_assert(
+    ($enqueued_scripts[Universal_Legal_Pages::CONSENT_SCRIPT_HANDLE]['data']['strategy'] ?? null) === 'defer',
+    'The consent manager must not block HTML parsing or theme preloaders.'
+);
+consent_assert(
+    $enqueued_scripts[Universal_Legal_Pages::CONSENT_SCRIPT_HANDLE]['in_footer'] === true,
+    'The deferred consent manager must keep its footer placement.'
 );
 consent_assert(count($inline_scripts[Universal_Legal_Pages::CONSENT_SCRIPT_HANDLE]) === 2, 'Consent bootstrap and public configuration must both be emitted before the manager.');
 consent_assert(
