@@ -76,7 +76,7 @@
     "react-dom": "19.3.0",
     "react-router": "8.4.0",
     "sass": "1.104.1",
-    "sass-loader": "17.0.1",
+    "sass-loader": "17.1.0",
     "sharp": "0.35.4",
     "style-loader": "4.0.0",
     "svgo": "4.1.0",
